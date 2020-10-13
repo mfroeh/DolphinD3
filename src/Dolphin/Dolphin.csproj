@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8F47C780-B17E-494A-A541-7BB5682E7568}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dolphin</RootNamespace>
+    <AssemblyName>Dolphin</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enum\LogLevel.cs" />
+    <Compile Include="EventArgs\BuffInformationEventArgs.cs" />
+    <Compile Include="ICacheService.cs" />
+    <Compile Include="ICaptureScreenService.cs" />
+    <Compile Include="IEventChannel.cs" />
+    <Compile Include="IEventGenerator.cs" />
+    <Compile Include="IEventSubscriber.cs" />
+    <Compile Include="IExtractInformationService.cs" />
+    <Compile Include="ILogService.cs" />
+    <Compile Include="IModelAdministrationService.cs" />
+    <Compile Include="EventArgs\LogInformationEventArgs.cs" />
+    <Compile Include="Model\Buff.cs" />
+    <Compile Include="Enum\BuffName.cs" />
+    <Compile Include="Model\Log.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Model\World.cs" />
+    <Compile Include="Enum\WorldLocation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\Skill.cs" />
+    <Compile Include="EventArgs\SkillInformationEventArgs.cs" />
+    <Compile Include="Enum\SkillName.cs" />
+    <Compile Include="EventArgs\WorldInformationEventArgs.cs" />
+    <Compile Include="WindowInformationHelper.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

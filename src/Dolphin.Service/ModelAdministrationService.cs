@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Dolphin.Service
@@ -13,6 +14,12 @@ namespace Dolphin.Service
 
         public Player Player { get; }
         public World World { get; }
+
+        public IEnumerable<SkillName> GetPossibleSkills()
+        {
+            foreach (var skillName in System.Enum.GetValues(typeof(SkillName)))
+                if ((SkillName)skillName != SkillName.None) yield return (SkillName)skillName;
+        }
 
         public Skill GetSkill(SkillName name)
         {

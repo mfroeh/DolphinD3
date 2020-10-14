@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Dolphin
 {
-    public interface ICacheService<TKey, TCacheValue>
+    public interface ICacheService
     {
-        IDictionary<TKey, TCacheValue> GetCache();
+        Task<IDictionary<string, object>> GetCache();
 
-        void AddToCache(TKey key, TCacheValue value);
+        Task Add<TKey, TValue>(TKey key, TValue value);
 
-        TCacheValue GetCachedValue(TKey key);
+        Task Add<TValue>(string key, TValue value);
+
+        Task<TValue> Get<TKey, TValue>(TKey key);
+
+        Task<TValue> Get<TValue>(string key);
     }
 }

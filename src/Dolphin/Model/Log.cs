@@ -4,6 +4,6 @@ namespace Dolphin
 {
     public class Log
     {
-        public IList<string> Entries { get; set; }
+        public IList<string> Entries { get; set; } = new List<string>();
     }
 }

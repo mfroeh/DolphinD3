@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.EventBus", "Dolphin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Service", "Dolphin.Service\Dolphin.Service.csproj", "{1966956E-6203-42F0-B3D4-376D17D83677}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Test", "Dolphin.Test\Dolphin.Test.csproj", "{27B05B32-B90E-45F7-90DD-3EDF40227DAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.DevTools", "Dolphin.DevTools\Dolphin.DevTools.csproj", "{58C007B8-52DB-4300-9950-1AD47F07F07D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{1966956E-6203-42F0-B3D4-376D17D83677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1966956E-6203-42F0-B3D4-376D17D83677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1966956E-6203-42F0-B3D4-376D17D83677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27B05B32-B90E-45F7-90DD-3EDF40227DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27B05B32-B90E-45F7-90DD-3EDF40227DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27B05B32-B90E-45F7-90DD-3EDF40227DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27B05B32-B90E-45F7-90DD-3EDF40227DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C007B8-52DB-4300-9950-1AD47F07F07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C007B8-52DB-4300-9950-1AD47F07F07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C007B8-52DB-4300-9950-1AD47F07F07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C007B8-52DB-4300-9950-1AD47F07F07D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

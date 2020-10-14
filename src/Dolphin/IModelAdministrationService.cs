@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Collections.Generic;
 
 namespace Dolphin
 {
@@ -12,5 +13,7 @@ namespace Dolphin
         Skill GetSkill(int index);
 
         void SetSkill(int index, Skill skill);
+
+        IEnumerable<SkillName> GetPossibleSkills(); // TODO: Make dependent on player class
     }
 }

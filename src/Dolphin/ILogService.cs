@@ -5,9 +5,9 @@ namespace Dolphin
 {
     public interface ILogService
     {
-        event EventHandler<LogInformationEventArgs> EntryAdded;
+        event EventHandler<LogEntryEventArgs> EntryAdded;
 
-        void AddEntry(object origin, string message, LogLevel logLevel, Exception ex = null);
+        void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Debug, Exception ex = null);
 
         void SaveLog(string path);
     }

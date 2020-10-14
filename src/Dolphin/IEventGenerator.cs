@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Dolphin
 {
     public interface IEventGenerator
     {
-        void InvokeChannelEvent(EventArgs e);
+        Task InvokeEventChannel(EventArgs e);
     }
 }

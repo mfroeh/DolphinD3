@@ -1,11 +1,12 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.IO;
 
 namespace Dolphin.Service
 {
     public class LogService : ILogService
     {
-        public event EventHandler<LogInformationEventArgs> EntryAdded;
+        public event EventHandler<LogEntryEventArgs> EntryAdded;
 
         private readonly Log log;
 
@@ -22,12 +23,12 @@ namespace Dolphin.Service
             var logMessage = $"[{currentTime}]---LogLevel: {logLevel}, Message: {message}, Exception: {ex}";
 
             log.Entries.Add(logMessage);
-            EntryAdded?.Invoke(this, new LogInformationEventArgs { Message = logMessage, LogLevel = logLevel });
+            EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = logMessage, LogLevel = logLevel });
         }
 
         public void SaveLog(string path)
         {
-            throw new NotImplementedException();
+            File.AppendAllLines(path, log.Entries);
         }
     }
 }

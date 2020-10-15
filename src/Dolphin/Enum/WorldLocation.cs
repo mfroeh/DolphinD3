@@ -2,8 +2,9 @@
 {
     public enum WorldLocation
     {
-        Unknown = 0,
+        None = 0,
         Town = 1,
-        Menu = 2
+        Rift = 2,
+        Menu = 3
     }
 }

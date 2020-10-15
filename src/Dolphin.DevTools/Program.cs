@@ -3,7 +3,6 @@ using Dolphin.EventBus;
 using Dolphin.Service;
 using System;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using Unity;
 using Unity.Lifetime;
@@ -24,29 +23,44 @@ namespace Dolphin.DevTools
             container.RegisterType<IResourceService, ResourceService>();
             container.RegisterType<IModelAdministrationService, ModelAdministrationService>();
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
-            container.RegisterType<ISaveSkillImages, SaveSkillImages>();
+            container.RegisterType<ISkillUtilityService, SkillUtilityService>();
+            container.RegisterType<IPlayerUtilityService, PlayerUtilityService>();
 
             var logService = container.Resolve<ILogService>();
             logService.EntryAdded += (o, e) =>
             {
-                //if (e.LogLevel == LogLevel.Info)
-                Console.WriteLine(e.Message);
+                if (e.LogLevel == LogLevel.Info)
+                    Console.WriteLine(e.Message);
             };
+            var service = container.Resolve<IPlayerUtilityService>();
 
-            var saveSkillImages = container.Resolve<ISaveSkillImages>();
+            await service.SaveSecondaryResource("Extracted");
 
             while (true)
             {
-                await saveSkillImages.SaveAllCurrentSkills("Extracted", true);
-                Thread.Sleep(500);
+                await service.TestSecondaryResource();
             }
-
             return 0;
         }
 
-        private static void SaveCurrentSkillImages()
+        public static async Task SavePlayerClass(UnityContainer container)
         {
+            var service = container.Resolve<IPlayerUtilityService>();
+            await service.SavePlayerClass("Extracted");
+        }
 
+        public static async Task TestPlayerClassRecognition(UnityContainer container)
+        {
+            var service = container.Resolve<IPlayerUtilityService>();
+            await service.TestPlayerClassRecognition();
+        }
+
+        public static async Task TestSkillRecoginition(ISkillUtilityService service, ILogService logService)
+        {
+            var watch = Stopwatch.StartNew();
+            await service.TestSkillRecognition();
+            watch.Stop();
+            logService.AddEntry(new object(), $"Took {watch.ElapsedMilliseconds}");
         }
     }
 }

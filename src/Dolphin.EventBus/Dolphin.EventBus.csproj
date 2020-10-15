@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventChannel.cs" />
+    <Compile Include="ExtractPlayerInformationService.cs" />
     <Compile Include="ExtractSkillInformationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

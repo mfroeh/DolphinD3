@@ -12,6 +12,8 @@ namespace Dolphin
 
         event EventHandler<HotkeyInformationEventArgs> HotkeyPressed;
 
+        event EventHandler<PlayerInformationEventArgs> PlayerInformationChanged;
+
         void InvokeSkillCanBeCasted(object sender, SkillInformationEventArgs e);
 
         void InvokeBuffInformationChanged(object sender, SkillInformationEventArgs e);
@@ -19,5 +21,7 @@ namespace Dolphin
         void InvokeWorldInformationChanged(object sender, SkillInformationEventArgs e);
 
         void InvokeHotkeyPressed(object sender, HotkeyInformationEventArgs e);
+
+        void InvokePlayerInformationChanged(object sender, PlayerInformationEventArgs e);
     }
 }

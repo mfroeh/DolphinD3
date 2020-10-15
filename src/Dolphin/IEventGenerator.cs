@@ -5,6 +5,6 @@ namespace Dolphin
 {
     public interface IEventGenerator
     {
-        Task InvokeEventChannel(EventArgs e);
+        Task GenerateEvent(EventArgs e);
     }
 }

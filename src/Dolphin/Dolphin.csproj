@@ -44,7 +44,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionFunction.cs" />
+    <Compile Include="Conditions.cs" />
     <Compile Include="Enum\LogLevel.cs" />
+    <Compile Include="Enum\PlayerClass.cs" />
+    <Compile Include="Enum\PlayerHealth.cs" />
+    <Compile Include="Enum\PlayerResource.cs" />
     <Compile Include="EventArgs\BuffInformationEventArgs.cs" />
     <Compile Include="EventArgs\HotkeyInformationEventArgs.cs" />
     <Compile Include="ICacheService.cs" />
@@ -62,6 +67,7 @@
     <Compile Include="Enum\BuffName.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="EventArgs\PlayerInformationEventArgs.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="Enum\WorldLocation.cs" />

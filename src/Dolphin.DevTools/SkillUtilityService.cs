@@ -1,27 +1,25 @@
 ﻿using Dolphin.Enum;
-using System;
 using System.Drawing;
 using System.Threading.Tasks;
 
 namespace Dolphin.DevTools
 {
-    public class SaveSkillImages : ISaveSkillImages
+    public class SkillUtilityService : ISkillUtilityService
     {
         private readonly ICaptureWindowService captureWindowService;
         private readonly IResourceService resourceService;
         private readonly ILogService logService;
 
-        public SaveSkillImages(ICaptureWindowService captureWindowService, IResourceService resourceService, ILogService logService)
+        public SkillUtilityService(ICaptureWindowService captureWindowService, IResourceService resourceService, ILogService logService)
         {
             this.captureWindowService = captureWindowService;
             this.resourceService = resourceService;
             this.logService = logService;
         }
 
-        public async Task SaveAllCurrentSkills(string path, bool byName)
+        public async Task SaveCurrentSkills(string path)
         {
             var handle = WindowHelper.GetHWND("Diablo III64");
-
             var picture = await captureWindowService.CaptureWindow(handle);
 
             if (picture == null)
@@ -35,37 +33,44 @@ namespace Dolphin.DevTools
                 var currentSkillBitmap = await GetSkillBitmap(i, picture);
 
                 var savePath = $"{path}/SkillName_{i}.png";
-                if (byName)
-                {
-                    var skillName = await GetSkillName(currentSkillBitmap, i);
-                    if (skillName != SkillName.None)
-                        savePath = $"{path}/SkillName_{skillName}.png";
-                }
                 currentSkillBitmap.Save(savePath);
             }
         }
 
-        private async Task<SkillName> GetSkillName(Bitmap picturePart, int index)
+        public async Task TestSkillRecognition()
         {
-            foreach (var skill in System.Enum.GetValues(typeof(SkillName)))
+            var handle = WindowHelper.GetHWND("Diablo III64");
+            var picture = await captureWindowService.CaptureWindow(handle);
+
+            if (picture == null)
             {
-                if ((SkillName)skill == SkillName.None) continue;
+                logService.AddEntry(this, "Picture was null, make sure to open Diablo first.");
+                return;
+            }
 
-                var bitmap = await resourceService.Load((SkillName)skill);
-                var similiaryPercentage = await ImageHelper.Compare(picturePart, bitmap, 0.5f);
-
-                if (similiaryPercentage > 0.9)
+            for (int i = 0; i < 6; i++)
+            {
+                var currentSkillBitmap = await GetSkillBitmap(i, picture);
+                var identified = false;
+                foreach (var skillName in System.Enum.GetValues(typeof(SkillName)))
                 {
-                    logService.AddEntry(this, $"Skill at index {index} has {similiaryPercentage} to {(SkillName)skill}.");
-                    if (similiaryPercentage >= 0.99f)
+                    if ((SkillName)skillName == SkillName.None) continue;
+
+                    var bitmap = await resourceService.Load((SkillName)skillName);
+                    var similiaryPercentage = await ImageHelper.Compare(currentSkillBitmap, bitmap, 0);
+
+                    if (similiaryPercentage > 0.9f)
                     {
-                        logService.AddEntry(this, $"Skill at index {index} is {(SkillName)skill}");
-                        return (SkillName)skill;
+                        identified = true;
+                        if (similiaryPercentage >= 0.99f)
+                            logService.AddEntry(this, $"Skill{i} is {skillName}.", LogLevel.Info);
+                        else
+                            logService.AddEntry(this, $"Skill{i} is {skillName}, but is either active or not castable.", LogLevel.Info);
                     }
                 }
+                if (!identified)
+                    logService.AddEntry(this, $"Couldn't identify Skill{i}.", LogLevel.Info);
             }
-            Console.WriteLine($"Could not identify skill at index {index}");
-            return default;
         }
 
         private async Task<Bitmap> GetSkillBitmap(int index, Bitmap fullBitmap)

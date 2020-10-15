@@ -2,6 +2,7 @@
 {
     public enum BuffName
     {
-        Companion = 0
+        None = 0,
+        Companion = 1
     }
 }

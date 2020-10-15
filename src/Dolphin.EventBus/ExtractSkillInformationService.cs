@@ -31,14 +31,14 @@ namespace Dolphin.EventBus
                     modelService.SetSkill(i, newSkill);
 
                     if (newSkill != null && newSkill.IsNotActiveAndCanBeCasted)
-                        await InvokeEventChannel(new SkillInformationEventArgs { Index = i, SkillName = newSkill.Name });
+                        await GenerateEvent(new SkillInformationEventArgs { Index = i, SkillName = newSkill.Name });
                 }
             }
             else
                 logService.AddEntry(this, "The given bitmap to extract from was null", LogLevel.Warning);
         }
 
-        public async Task InvokeEventChannel(EventArgs e)
+        public async Task GenerateEvent(EventArgs e)
         {
             eventChannel.InvokeSkillCanBeCasted(this, e as SkillInformationEventArgs);
         }

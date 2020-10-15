@@ -59,10 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISaveSkillImages.cs" />
+    <Compile Include="Interface\IPlayerUtilityService.cs" />
+    <Compile Include="Interface\ISkillUtilityService.cs" />
+    <Compile Include="PlayerUtilityService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveSkillImages.cs" />
+    <Compile Include="SkillUtilityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -50,7 +50,7 @@ namespace Dolphin.Service
                     cache.Remove(key);
             }
 
-            return default(TValue);
+            return default;
         }
 
         public async Task<IDictionary<string, object>> GetCache()
@@ -66,8 +66,14 @@ namespace Dolphin.Service
                 return $"SkillName_{skillName}";
             else if (key is WorldLocation location)
                 return $"WorldLocation_{location}";
+            else if (key is PlayerClass playerClass)
+                return $"PlayerClass_{playerClass}";
+            else if (key is PlayerHealth health)
+                return $"PlayerHealth_{health}";
+            else if (key is PlayerResource resource)
+                return $"PlayerResource_{resource}";
 
-            return "";
+            throw new NotImplementedException("Didnt implement GetTypeBasedKey for given enum in CacheService.cs yet.");
         }
     }
 }

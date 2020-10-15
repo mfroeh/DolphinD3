@@ -1,5 +1,5 @@
 ﻿using Dolphin.Enum;
-using System.Diagnostics;
+using System;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -43,8 +43,14 @@ namespace Dolphin.Service
                 return $"./Resource/Skill/SkillName_{skillName}.png";
             else if (enumValue is WorldLocation location)
                 return $"./Resource/Location/WorldLocation_{location}.png";
+            else if (enumValue is PlayerClass playerClass)
+                return $"./Resource/Player/PlayerClass/PlayerClass_{playerClass}.png";
+            else if (enumValue is PlayerHealth health)
+                return $"./Resource/Player/PlayerHealth/PlayerHealth_{health}.png";
+            else if (enumValue is PlayerResource resource)
+                return $"./Resource/Player/PlayerResource/PlayerResource_{resource}.png";
 
-            return null;
+            throw new NotImplementedException("Didnt implement GetTypeBasedPath for given enum in ResourceService.cs yet.");
         }
     }
 }

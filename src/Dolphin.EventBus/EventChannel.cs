@@ -12,6 +12,8 @@ namespace Dolphin.EventBus
 
         public event EventHandler<HotkeyInformationEventArgs> HotkeyPressed;
 
+        public event EventHandler<PlayerInformationEventArgs> PlayerInformationChanged;
+
         public void InvokeBuffInformationChanged(object sender, SkillInformationEventArgs e)
         {
             throw new NotImplementedException();
@@ -30,6 +32,11 @@ namespace Dolphin.EventBus
         public void InvokeHotkeyPressed(object sender, HotkeyInformationEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        public void InvokePlayerInformationChanged(object sender, PlayerInformationEventArgs e)
+        {
+            PlayerInformationChanged?.Invoke(this, e);
         }
     }
 }

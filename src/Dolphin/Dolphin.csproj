@@ -44,14 +44,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncEventHandler.cs" />
+    <Compile Include="EventArgs\PausedEventArgs.cs" />
+    <Compile Include="IActionExecutionService.cs" />
+    <Compile Include="InputHelper.cs" />
+    <Compile Include="_Action.cs" />
     <Compile Include="ConditionFunction.cs" />
-    <Compile Include="Conditions.cs" />
+    <Compile Include="Condition.cs" />
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\PlayerClass.cs" />
     <Compile Include="Enum\PlayerHealth.cs" />
     <Compile Include="Enum\PlayerResource.cs" />
     <Compile Include="EventArgs\BuffInformationEventArgs.cs" />
     <Compile Include="EventArgs\HotkeyInformationEventArgs.cs" />
+    <Compile Include="ConditionExtensionMethods.cs" />
+    <Compile Include="IActionAdministrationService.cs" />
     <Compile Include="ICacheService.cs" />
     <Compile Include="ICaptureWindowService.cs" />
     <Compile Include="IEventChannel.cs" />

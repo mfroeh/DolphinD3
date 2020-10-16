@@ -38,6 +38,7 @@ namespace Dolphin.EventBus
             await primaryTask;
             await healthTask;
             await secondaryTask;
+            logService.AddEntry(this, $"Player {modelService.Player.Class}, HP: {modelService.Player.HealthPercentage}, Primary: {modelService.Player.PrimaryRessourcePercentage}", LogLevel.Info);
         }
 
         public async Task GenerateEvent(EventArgs e)
@@ -119,7 +120,8 @@ namespace Dolphin.EventBus
 
                 matches[enumValue] = match;
             }
-            var bestMatch = matches.OrderBy(x => x.Value).Last();
+
+            var bestMatch = matches.OrderBy(x => x.Value).LastOrDefault();
             return Tuple.Create(bestMatch.Key, bestMatch.Value);
         }
     }

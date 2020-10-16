@@ -4,6 +4,7 @@ using Dolphin.Service;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Unity;
 using Unity.Lifetime;
 
@@ -25,6 +26,8 @@ namespace Dolphin.DevTools
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
             container.RegisterType<ISkillUtilityService, SkillUtilityService>();
             container.RegisterType<IPlayerUtilityService, PlayerUtilityService>();
+            container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("skill");
+            container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("player");
 
             var logService = container.Resolve<ILogService>();
             logService.EntryAdded += (o, e) =>
@@ -32,17 +35,40 @@ namespace Dolphin.DevTools
                 if (e.LogLevel == LogLevel.Info)
                     Console.WriteLine(e.Message);
             };
-            var service = container.Resolve<IPlayerUtilityService>();
 
-            await service.SaveSecondaryResource("Extracted");
+            var handle = WindowHelper.GetHWND("Diablo III64");
 
             while (true)
             {
-                await service.TestSecondaryResource();
+                await InputHelper.PressKey(handle, Keys.A);
+                await InputHelper.PressKey(handle, Keys.D2);
+                await InputHelper.PressKey(handle, Keys.D3);
+
+                await Task.Delay(500);
             }
+
             return 0;
         }
 
+        public static async Task TestPerformance(UnityContainer container)
+        {
+            var captureService = container.Resolve<ICaptureWindowService>();
+            var service1 = container.Resolve<IExtractInformationService>("skill");
+            var service2 = container.Resolve<IExtractInformationService>("player");
+
+            while (true)
+            {
+                var image = await captureService.CaptureWindow("Diablo III64");
+
+                var task1 = service1.Extract(image);
+                var task2 = service2.Extract(image);
+                var delay = Task.Delay(100);
+
+                await task1;
+                await task2;
+                await delay;
+            }
+        }
         public static async Task SavePlayerClass(UnityContainer container)
         {
             var service = container.Resolve<IPlayerUtilityService>();

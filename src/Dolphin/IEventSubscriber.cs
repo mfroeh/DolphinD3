@@ -1,6 +1,8 @@
-﻿namespace Dolphin
+﻿using System;
+
+namespace Dolphin
 {
-    internal class IEventSubscriber
+    public interface IEventSubscriber
     {
     }
 }

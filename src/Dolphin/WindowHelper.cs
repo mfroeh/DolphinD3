@@ -8,7 +8,7 @@ namespace Dolphin
 {
     public static class WindowHelper
     {
-        public static IntPtr GetHWND(string name)
+        public static IntPtr GetHWND(string name = "Diablo III64")
         {
             var processes = Process.GetProcessesByName(name);
 

@@ -37,7 +37,8 @@ namespace Dolphin.Service
                     break;
 
                 default:
-                    throw new NotImplementedException($"GetPossiblePrimaryResource() in ModelAdministrationService.cs is not yet implemented for class {Player.Class}.");
+                    yield break;
+                    // throw new NotImplementedException($"GetPossiblePrimaryResource() in ModelAdministrationService.cs is not yet implemented for class {Player.Class}.");
             }
         }
 
@@ -71,10 +72,12 @@ namespace Dolphin.Service
                     yield return SkillName.ShadowPower;
                     yield return SkillName.Strafe;
                     yield return SkillName.FanOfKnives;
+                    yield return SkillName.Vengance;
                     break;
 
                 default:
-                    throw new NotImplementedException($"GetPossibleSkills() in ModelAdministrationService.cs is not yet implemented for class {Player.Class}.");
+                    yield break;
+                    // throw new NotImplementedException($"GetPossibleSkills() in ModelAdministrationService.cs is not yet implemented for class {Player.Class}.");
             }
         }
 

@@ -1,5 +1,8 @@
 ﻿using AForge.Imaging;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Dolphin
@@ -8,7 +11,7 @@ namespace Dolphin
     {
         public static async Task<Bitmap> CropImage(Bitmap source, Rectangle section)
         {
-            var bitmap = new Bitmap(section.Width, section.Height);
+            var bitmap = new Bitmap(section.Width, section.Height, PixelFormat.Format24bppRgb);
             using (var g = Graphics.FromImage(bitmap))
             {
                 g.DrawImage(source, 0, 0, section, GraphicsUnit.Pixel);
@@ -16,17 +19,17 @@ namespace Dolphin
             }
         }
 
-        public static async Task<float> Compare(Bitmap image1, Bitmap image2, float threshold)
+        public static async Task<float> Compare(Bitmap image, Bitmap template, float threshold)
         {
-            return new ExhaustiveTemplateMatching(threshold)
-                .ProcessImage(await To24bppRgbFormat(image1), await To24bppRgbFormat(image2))[0]
+            var result = new ExhaustiveTemplateMatching(threshold)
+                .ProcessImage(image, template)[0]
                 .Similarity;
+            return result;
         }
 
         public static async Task<Bitmap> To24bppRgbFormat(Bitmap img)
         {
-            return img.Clone(new Rectangle(0, 0, img.Width, img.Height),
-                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            return img.Clone(new Rectangle(0, 0, img.Width, img.Height), PixelFormat.Format24bppRgb);
         }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dolphin.UI.Properties
+namespace Dolphin.Ui.Properties
 {
 
 

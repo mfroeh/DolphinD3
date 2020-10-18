@@ -1,6 +1,8 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Threading.Tasks;
 
 namespace Dolphin.Service
@@ -9,13 +11,11 @@ namespace Dolphin.Service
     {
         private readonly ICacheService cacheService;
         private readonly ILogService logService;
-        private readonly Settings settings; // TODO: Settings for path?
 
-        public ResourceService(ICacheService cacheService, ILogService logService, Settings settings)
+        public ResourceService(ICacheService cacheService, ILogService logService)
         {
             this.cacheService = cacheService;
             this.logService = logService;
-            this.settings = settings;
         }
 
         public async Task<Bitmap> Load<T>(T enumValue)
@@ -29,6 +29,10 @@ namespace Dolphin.Service
 
             var path = GetTypeBasedPath(enumValue);
             var bitmap = new Bitmap(path);
+
+            if (bitmap.PixelFormat != PixelFormat.Format24bppRgb)
+                bitmap = await ImageHelper.To24bppRgbFormat(bitmap);
+
             await cacheService.Add(enumValue, bitmap);
             logService.AddEntry(this, $"Loaded Image from [{path}] for {(T)enumValue} and added to Cache.");
 

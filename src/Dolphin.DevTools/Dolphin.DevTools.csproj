@@ -73,10 +73,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dolphin.EventBus\Dolphin.EventBus.csproj">
-      <Project>{088890c4-71eb-409d-b0fe-b9023d475b41}</Project>
-      <Name>Dolphin.EventBus</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
       <Project>{1966956e-6203-42f0-b3d4-376d17d83677}</Project>
       <Name>Dolphin.Service</Name>

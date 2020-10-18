@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Dolphin
 {
-    public delegate Task AsyncEventHandler<TEventArgs>(object sender, TEventArgs e) where TEventArgs : EventArgs;
+    public delegate Task AsyncEventHandler<TEvent>(TEvent e) where TEventArgs : IEvent;
 }

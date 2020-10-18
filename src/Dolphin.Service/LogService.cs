@@ -29,6 +29,12 @@ namespace Dolphin.Service
             }
 
             log.Entries.Add(fullMessage);
+            if (log.Entries.Count >= 100)
+            {
+                SaveLog("log.txt");
+                log.Entries.Clear();
+            }
+
             EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = currentTime });
         }
 

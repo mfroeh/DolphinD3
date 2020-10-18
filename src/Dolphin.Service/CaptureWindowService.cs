@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Dolphin
+namespace Dolphin.Service
 {
     public class CaptureWindowService : ICaptureWindowService
     {
@@ -27,7 +30,7 @@ namespace Dolphin
                 var rect = new Rectangle();
                 WindowHelper.GetWindowRect(hwnd, ref rect);
 
-                var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y);
+                var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
                 using (var graphics = Graphics.FromImage(bitmap))
                 {

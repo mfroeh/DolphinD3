@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin", "Dolphin\Dolphin.csproj", "{8F47C780-B17E-494A-A541-7BB5682E7568}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.EventBus", "Dolphin.EventBus\Dolphin.EventBus.csproj", "{088890C4-71EB-409D-B0FE-B9023D475B41}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Service", "Dolphin.Service\Dolphin.Service.csproj", "{1966956E-6203-42F0-B3D4-376D17D83677}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Test", "Dolphin.Test\Dolphin.Test.csproj", "{27B05B32-B90E-45F7-90DD-3EDF40227DAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.DevTools", "Dolphin.DevTools\Dolphin.DevTools.csproj", "{58C007B8-52DB-4300-9950-1AD47F07F07D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.UI", "Dolphin.UI\Dolphin.UI.csproj", "{850E15DF-BB8C-43F1-9873-0414FF784718}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.UI_", "Dolphin.UI_\Dolphin.UI_.csproj", "{850E15DF-BB8C-43F1-9873-0414FF784718}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Ui", "Dolphin.Ui\Dolphin.Ui.csproj", "{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		{8F47C780-B17E-494A-A541-7BB5682E7568}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F47C780-B17E-494A-A541-7BB5682E7568}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F47C780-B17E-494A-A541-7BB5682E7568}.Release|Any CPU.Build.0 = Release|Any CPU
-		{088890C4-71EB-409D-B0FE-B9023D475B41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{088890C4-71EB-409D-B0FE-B9023D475B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{088890C4-71EB-409D-B0FE-B9023D475B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{088890C4-71EB-409D-B0FE-B9023D475B41}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1966956E-6203-42F0-B3D4-376D17D83677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1966956E-6203-42F0-B3D4-376D17D83677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1966956E-6203-42F0-B3D4-376D17D83677}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{850E15DF-BB8C-43F1-9873-0414FF784718}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{850E15DF-BB8C-43F1-9873-0414FF784718}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{850E15DF-BB8C-43F1-9873-0414FF784718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

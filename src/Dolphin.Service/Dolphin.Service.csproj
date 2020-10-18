@@ -45,9 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionAdministrationService.cs" />
     <Compile Include="ActionExecutionService.cs" />
     <Compile Include="CacheService.cs" />
     <Compile Include="CaptureWindowService.cs" />
+    <Compile Include="EventChannel.cs" />
+    <Compile Include="ExtractPlayerInformationService.cs" />
+    <Compile Include="ExtractSkillInformationService.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="ModelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

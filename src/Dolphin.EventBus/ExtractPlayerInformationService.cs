@@ -54,6 +54,8 @@ namespace Dolphin.EventBus
 
         private async Task ExtractPlayerClass(Bitmap picturePart)
         {
+            var watch = Stopwatch.StartNew();
+
             var oldPlayerClass = modelService.Player.Class;
 
             var found = false;
@@ -61,8 +63,8 @@ namespace Dolphin.EventBus
             {
                 if (playerClass is PlayerClass.None) continue;
 
-                var bitmap = await resourceService.Load(playerClass);
-                var match = await ImageHelper.Compare(bitmap, picturePart, 0);
+                var template = await resourceService.Load(playerClass);
+                var match = await ImageHelper.Compare(picturePart, template, 0);
 
                 if (match >= 0.99)
                 {
@@ -78,6 +80,9 @@ namespace Dolphin.EventBus
 
             if (oldPlayerClass != modelService.Player.Class)
                 await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery= "PlayerClass" });
+
+            watch.Stop();
+            Trace.WriteLine($"Checking Player Stats takes {watch.ElapsedMilliseconds}");
         }
 
         private async Task ExtractHealthPercentage(Bitmap picturePart)
@@ -121,8 +126,8 @@ namespace Dolphin.EventBus
             var matches = new Dictionary<T, float>();
             foreach (var enumValue in possibleEnums)
             {
-                var bitmap = await resourceService.Load(enumValue);
-                var match = await ImageHelper.Compare(compareTo, bitmap, 0);
+                var template = await resourceService.Load(enumValue);
+                var match = await ImageHelper.Compare(compareTo, template, 0);
 
                 matches[enumValue] = match;
             }

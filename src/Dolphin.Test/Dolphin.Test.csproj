@@ -70,22 +70,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CancelActionException.cs" />
+    <Compile Include="Execute.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
-      <Project>{1966956e-6203-42f0-b3d4-376d17d83677}</Project>
-      <Name>Dolphin.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dolphin\Dolphin.csproj">
-      <Project>{8f47c780-b17e-494a-a541-7bb5682e7568}</Project>
-      <Name>Dolphin</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,35 +1,24 @@
-﻿using Dolphin.Enum;
-using Dolphin.EventBus;
-using Dolphin.Service;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Unity;
-using Unity.Lifetime;
 
-namespace Dolphin.UI
+namespace Dolphin.Ui
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
-        private readonly UnityContainer container;
-
-        public App() : base()
+        protected override void OnStartup(StartupEventArgs e)
         {
-            //var json = File.ReadAllText("settings.json");
-            // var settings = JsonConvert.DeserializeObject<Settings>(json);
-            #region Register
-            container = new UnityContainer();
+            base.OnStartup(e);
+
+            var container = new UnityContainer();
             container.RegisterType<IUnityContainer, UnityContainer>();
 
             container.RegisterInstance(new Log());
@@ -55,12 +44,7 @@ namespace Dolphin.UI
             container.RegisterType<ViewModelBase, MainWindowViewModel>("main");
             container.RegisterType<TabViewmodelBase, DataTabViewModel>("data");
             container.RegisterType<TabViewmodelBase, LogTabViewModel>("log");
-            #endregion
-        }
 
-        protected override void OnStartup(StartupEventArgs ev)
-        {
-            base.OnStartup(ev);
 
             var mainVM = container.Resolve<ViewModelBase>("main");
             MainWindow = new MainWindow { DataContext = mainVM };
@@ -88,13 +72,23 @@ namespace Dolphin.UI
             {
                 try
                 {
+                    var diabloHandle = IntPtr.Zero;
+                    while (diabloHandle == IntPtr.Zero)
+                    {
+                        logService.AddEntry(this, "Searching for Diablo64 Process", LogLevel.Info);
+                        diabloHandle = WindowHelper.GetHWND();
+                        Thread.Sleep(1000);
+                    }
+
+                    logService.AddEntry(this, $"Found Diablo Process!", LogLevel.Info);
+
                     while (true)
                     {
                         var image = await captureService.CaptureWindow("Diablo III64");
 
                         var task1 = extractSkillService.Extract(image);
                         var task2 = extractPlayerService.Extract(image);
-                        var delay = Task.Delay(100);
+                        var delay = Task.Delay(60);
 
                         await task1;
                         await task2;

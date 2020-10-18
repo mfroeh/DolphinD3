@@ -1,5 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -22,6 +24,7 @@ namespace Dolphin.EventBus
 
         public async Task Extract(Bitmap bitmap)
         {
+            var watch = Stopwatch.StartNew();
             if (bitmap != null)
             {
                 for (int i = 0; i < 6; i++)
@@ -35,11 +38,14 @@ namespace Dolphin.EventBus
 
                     modelService.SetSkill(i, newSkill);
                     if (newSkill != null && newSkill.IsNotActiveAndCanBeCasted) // newSkill != null && newSkill.IsNotActiveAndCanBeCasted
-                        await GenerateEvent(new SkillInformationEventArgs { Index = i, SkillName = newSkill.Name });
+                        GenerateEvent(new SkillInformationEventArgs { Index = i, SkillName = newSkill.Name });
                 }
             }
             else
                 logService.AddEntry(this, "Bitmap was null", LogLevel.Info);
+
+            watch.Stop();
+            Trace.WriteLine($"Checking Skills takes {watch.ElapsedMilliseconds}");
         }
 
         public async Task GenerateEvent(EventArgs e)

@@ -1,20 +1,23 @@
 ﻿using System.ComponentModel;
 
-namespace Dolphin.UI
+namespace Dolphin.Ui
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : IViewModelBase
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected readonly ISettingsService settingsService;
-        public ViewModelBase(ISettingsService settingsService)
-        {
-            this.settingsService = settingsService;
-        }
-
-        protected void RaisePropertyChanged(string propertyName)
+        public IViewModelBase Parent { get; set; }
+        public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void PropertySetter<T>(T value, string propertyName, bool raisePropertyChanged = true)
+        {
+            GetType().GetProperty(propertyName).SetValue(this, value);
+
+            if (raisePropertyChanged)
+                RaisePropertyChanged(propertyName);
         }
     }
 }

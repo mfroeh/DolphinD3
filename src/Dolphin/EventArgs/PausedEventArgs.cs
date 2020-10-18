@@ -1,6 +1,8 @@
-﻿namespace Dolphin.EventBus
+﻿using System;
+
+namespace Dolphin.EventBus
 {
-    internal class PausedEventArgs
+    public class PausedEventArgs : EventArgs
     {
     }
 }

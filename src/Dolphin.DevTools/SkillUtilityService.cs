@@ -76,31 +76,31 @@ namespace Dolphin.DevTools
         private async Task<Bitmap> GetSkillBitmap(int index, Bitmap fullBitmap)
         {
             var point = new Point { X = 0, Y = 0 };
-            var size = new Size { Height = 85, Width = 85 };
+            var size = new Size { Height = 20, Width = 40 };
             switch (index)
             {
                 case 0:
-                    point = new Point { X = 835, Y = 1330 };
+                    point = new Point { X = 846, Y = 1335 };
                     break;
 
                 case 1:
-                    point = new Point { X = 835 + 90, Y = 1330 };
+                    point = new Point { X = 935, Y = 1335 };
                     break;
 
                 case 2:
-                    point = new Point { X = 835 + 2 * 90, Y = 1330 };
+                    point = new Point { X = 1024, Y = 1335 };
                     break;
 
                 case 3:
-                    point = new Point { X = 835 + 3 * 90, Y = 1330 };
+                    point = new Point { X = 1113, Y = 1335 };
                     break;
 
                 case 4:
-                    point = new Point { X = 835 + 4 * 90, Y = 1330 };
+                    point = new Point { X = 1207, Y = 1335 };
                     break;
 
                 case 5:
-                    point = new Point { X = 835 + 5 * 90, Y = 1330 };
+                    point = new Point { X = 1293, Y = 1335 };
                     break;
             }
             return await ImageHelper.CropImage(fullBitmap, new Rectangle(point, size));

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Dolphin.EventBus
 {
     public class EventChannel : IEventChannel
     {
-        public event AsyncEventHandler<SkillInformationEventArgs> SkillCanBeCasted;
+        public event EventHandler<SkillInformationEventArgs> SkillCanBeCasted;
 
         public event EventHandler<BuffInformationEventArgs> BuffInformationChanged;
 
@@ -24,9 +25,9 @@ namespace Dolphin.EventBus
             throw new NotImplementedException();
         }
 
-        public async Task InvokeSkillCanBeCasted(object sender, SkillInformationEventArgs e)
+        public void InvokeSkillCanBeCasted(object sender, SkillInformationEventArgs e)
         {
-            await InvokeAllAsynchronus(SkillCanBeCasted, sender, e);
+            SkillCanBeCasted?.Invoke(sender, e);
         }
 
         public void InvokeWorldInformationChanged(object sender, SkillInformationEventArgs e)
@@ -48,6 +49,8 @@ namespace Dolphin.EventBus
         {
             if (subscribers.Contains(subscriber.GetHashCode())) return;
 
+            if (subscriber is EventHandler<SkillInformationEventArgs> skillHandler)
+                SkillCanBeCasted += skillHandler;
             else if (subscriber is EventHandler<BuffInformationEventArgs> buffHandler)
                 BuffInformationChanged += buffHandler;
             else if (subscriber is EventHandler<WorldInformationEventArgs> worldHandler)
@@ -62,9 +65,7 @@ namespace Dolphin.EventBus
         {
             if (subscribers.Contains(subscriber.GetHashCode())) return;
 
-            else if (subscriber is AsyncEventHandler<SkillInformationEventArgs> skillHandler)
-                SkillCanBeCasted += skillHandler;
-            else if (subscriber is AsyncEventHandler<HotkeyInformationEventArgs> hotkeyHandler)
+            if (subscriber is AsyncEventHandler<HotkeyInformationEventArgs> hotkeyHandler)
                 HotkeyPressed += hotkeyHandler;
 
             subscribers.Add(subscriber.GetHashCode());
@@ -74,6 +75,8 @@ namespace Dolphin.EventBus
         {
             if (!subscribers.Contains(subscriber.GetHashCode())) return;
 
+            if (subscriber is EventHandler<SkillInformationEventArgs> skillHandler)
+                SkillCanBeCasted += skillHandler;
             else if (subscriber is EventHandler<BuffInformationEventArgs> buffHandler)
                 BuffInformationChanged -= buffHandler;
             else if (subscriber is EventHandler<WorldInformationEventArgs> worldHandler)
@@ -88,9 +91,7 @@ namespace Dolphin.EventBus
         {
             if (!subscribers.Contains(subscriber.GetHashCode())) return;
 
-            if (subscriber is AsyncEventHandler<SkillInformationEventArgs> skillHandler)
-                SkillCanBeCasted -= skillHandler;
-            else if (subscriber is AsyncEventHandler<HotkeyInformationEventArgs> hotkeyHandler)
+            if (subscriber is AsyncEventHandler<HotkeyInformationEventArgs> hotkeyHandler)
                 HotkeyPressed -= hotkeyHandler;
 
             subscribers.Remove(subscriber.GetHashCode());

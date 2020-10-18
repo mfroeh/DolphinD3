@@ -1,0 +1,564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{850E15DF-BB8C-43F1-9873-0414FF784718}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Dolphin.UI</RootNamespace>
+    <AssemblyName>Dolphin.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="DataTab.xaml.cs">
+      <DependentUpon>DataTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Tab\DataTabViewModel.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="TabViewModelBase.cs" />
+    <Compile Include="Tab\LogTabViewModel.cs" />
+    <Compile Include="ViewModelBase.cs" />
+    <Page Include="DataTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dolphin.EventBus\Dolphin.EventBus.csproj">
+      <Project>{088890C4-71EB-409D-B0FE-B9023D475B41}</Project>
+      <Name>Dolphin.EventBus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
+      <Project>{1966956E-6203-42F0-B3D4-376D17D83677}</Project>
+      <Name>Dolphin.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dolphin\Dolphin.csproj">
+      <Project>{8f47c780-b17e-494a-a541-7bb5682e7568}</Project>
+      <Name>Dolphin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Unity">
+      <Version>5.11.7</Version>
+    </PackageReference>
+    <PackageReference Include="Unity.Abstractions">
+      <Version>5.11.6</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerClass\PlayerClass_DemonHunterFemale.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerClass\PlayerClass_DemonHunterMale.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_60.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_80.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_60.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_80.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_60.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_80.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Resource\UI\Skill\EmptyFrame.png" />
+    <Resource Include="Resource\UI\Skill\Preperation.png" />
+    <Resource Include="Resource\UI\Skill\ShadowPower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Acidcloud.png" />
+    <Resource Include="Resource\UI\Skill\Aggressio.png" />
+    <Resource Include="Resource\UI\Skill\Aggression.png" />
+    <Resource Include="Resource\UI\Skill\Akaratschampion.png" />
+    <Resource Include="Resource\UI\Skill\Ambush.png" />
+    <Resource Include="Resource\UI\Skill\Anatomy.png" />
+    <Resource Include="Resource\UI\Skill\Ancientspear.png" />
+    <Resource Include="Resource\UI\Skill\Arcaneaegis.png" />
+    <Resource Include="Resource\UI\Skill\Arcaneblast.png" />
+    <Resource Include="Resource\UI\Skill\Arcaneorb.png" />
+    <Resource Include="Resource\UI\Skill\Arcanestrike.png" />
+    <Resource Include="Resource\UI\Skill\Arcanetorrent.png" />
+    <Resource Include="Resource\UI\Skill\Archery.png" />
+    <Resource Include="Resource\UI\Skill\Archon.png" />
+    <Resource Include="Resource\UI\Skill\Armyofthedead.png" />
+    <Resource Include="Resource\UI\Skill\Assault.png" />
+    <Resource Include="Resource\UI\Skill\Astralpresence.png" />
+    <Resource Include="Resource\UI\Skill\Audacity.png" />
+    <Resource Include="Resource\UI\Skill\Awareness.png" />
+    <Resource Include="Resource\UI\Skill\Backtobasics.png" />
+    <Resource Include="Resource\UI\Skill\Badmedicine.png" />
+    <Resource Include="Resource\UI\Skill\Badtemper.png" />
+    <Resource Include="Resource\UI\Skill\Ballistics.png" />
+    <Resource Include="Resource\UI\Skill\Bash.png" />
+    <Resource Include="Resource\UI\Skill\Battlerage.png" />
+    <Resource Include="Resource\UI\Skill\Beasthunter.png" />
+    <Resource Include="Resource\UI\Skill\Bigbadvoodoo.png" />
+    <Resource Include="Resource\UI\Skill\Blackice.png" />
+    <Resource Include="Resource\UI\Skill\Blessed.png" />
+    <Resource Include="Resource\UI\Skill\Blessedshield.png" />
+    <Resource Include="Resource\UI\Skill\Blindingflash.png" />
+    <Resource Include="Resource\UI\Skill\Blizzard.png" />
+    <Resource Include="Resource\UI\Skill\Bloodrites.png" />
+    <Resource Include="Resource\UI\Skill\Bloodrush.png" />
+    <Resource Include="Resource\UI\Skill\Blunt.png" />
+    <Resource Include="Resource\UI\Skill\Blur.png" />
+    <Resource Include="Resource\UI\Skill\Bolas.png" />
+    <Resource Include="Resource\UI\Skill\Bombardment.png" />
+    <Resource Include="Resource\UI\Skill\Bonearmor.png" />
+    <Resource Include="Resource\UI\Skill\Bonespear.png" />
+    <Resource Include="Resource\UI\Skill\Bonespikes.png" />
+    <Resource Include="Resource\UI\Skill\Bonespirit.png" />
+    <Resource Include="Resource\UI\Skill\Breathofheaven.png" />
+    <Resource Include="Resource\UI\Skill\Calloftheancients.png" />
+    <Resource Include="Resource\UI\Skill\Caltrops.png" />
+    <Resource Include="Resource\UI\Skill\Careofthemaster.png" />
+    <Resource Include="Resource\UI\Skill\Casting.png" />
+    <Resource Include="Resource\UI\Skill\Chakram.png" />
+    <Resource Include="Resource\UI\Skill\Cleave.png" />
+    <Resource Include="Resource\UI\Skill\Cloakofshadows.png" />
+    <Resource Include="Resource\UI\Skill\Cloakofshadows1.png" />
+    <Resource Include="Resource\UI\Skill\Clusterarrow.png" />
+    <Resource Include="Resource\UI\Skill\Combinationstrike.png" />
+    <Resource Include="Resource\UI\Skill\Combinationstrikes.png" />
+    <Resource Include="Resource\UI\Skill\Commandgolem.png" />
+    <Resource Include="Resource\UI\Skill\Commandskeletons.png" />
+    <Resource Include="Resource\UI\Skill\Companion.png" />
+    <Resource Include="Resource\UI\Skill\Condemn.png" />
+    <Resource Include="Resource\UI\Skill\Conflagratio.png" />
+    <Resource Include="Resource\UI\Skill\Conflagration.png" />
+    <Resource Include="Resource\UI\Skill\Consecration.png" />
+    <Resource Include="Resource\UI\Skill\Corpseexplosion.png" />
+    <Resource Include="Resource\UI\Skill\Corpselance.png" />
+    <Resource Include="Resource\UI\Skill\Corpsespider.png" />
+    <Resource Include="Resource\UI\Skill\Counterattack.png" />
+    <Resource Include="Resource\UI\Skill\Creepingdeath.png" />
+    <Resource Include="Resource\UI\Skill\Cripplingwave.png" />
+    <Resource Include="Resource\UI\Skill\Criticalmass.png" />
+    <Resource Include="Resource\UI\Skill\Cruelty.png" />
+    <Resource Include="Resource\UI\Skill\Cyclonestrike.png" />
+    <Resource Include="Resource\UI\Skill\Damage.png" />
+    <Resource Include="Resource\UI\Skill\Dashingstrike.png" />
+    <Resource Include="Resource\UI\Skill\Deadlyreach.png" />
+    <Resource Include="Resource\UI\Skill\Deathnova.png" />
+    <Resource Include="Resource\UI\Skill\Deathpact.png" />
+    <Resource Include="Resource\UI\Skill\Decrepify.png" />
+    <Resource Include="Resource\UI\Skill\Demonbane.png" />
+    <Resource Include="Resource\UI\Skill\Determinatio.png" />
+    <Resource Include="Resource\UI\Skill\Determination.png" />
+    <Resource Include="Resource\UI\Skill\Devour.png" />
+    <Resource Include="Resource\UI\Skill\Diamondskin.png" />
+    <Resource Include="Resource\UI\Skill\Disintegrate.png" />
+    <Resource Include="Resource\UI\Skill\Disintegrationwave.png" />
+    <Resource Include="Resource\UI\Skill\Divinefortress.png" />
+    <Resource Include="Resource\UI\Skill\Drainpower.png" />
+    <Resource Include="Resource\UI\Skill\Earthenmight.png" />
+    <Resource Include="Resource\UI\Skill\Earthquake.png" />
+    <Resource Include="Resource\UI\Skill\Electrified.png" />
+    <Resource Include="Resource\UI\Skill\Electrocute.png" />
+    <Resource Include="Resource\UI\Skill\Elementalarrow.png" />
+    <Resource Include="Resource\UI\Skill\Elementalexposure.png" />
+    <Resource Include="Resource\UI\Skill\Empoweredarmor.png" />
+    <Resource Include="Resource\UI\Skill\Energyarmor.png" />
+    <Resource Include="Resource\UI\Skill\Energyreserves.png" />
+    <Resource Include="Resource\UI\Skill\Energytwister.png" />
+    <Resource Include="Resource\UI\Skill\Enlightened.png" />
+    <Resource Include="Resource\UI\Skill\Entanglingshot.png" />
+    <Resource Include="Resource\UI\Skill\Epiphany.png" />
+    <Resource Include="Resource\UI\Skill\Evasivefire.png" />
+    <Resource Include="Resource\UI\Skill\Exaltedsoul.png" />
+    <Resource Include="Resource\UI\Skill\Expertdefense.png" />
+    <Resource Include="Resource\UI\Skill\Explodingpalm.png" />
+    <Resource Include="Resource\UI\Skill\Explosiveblast.png" />
+    <Resource Include="Resource\UI\Skill\Fallingsword.png" />
+    <Resource Include="Resource\UI\Skill\Familiar.png" />
+    <Resource Include="Resource\UI\Skill\Fanaticism.png" />
+    <Resource Include="Resource\UI\Skill\Fanofknives.png" />
+    <Resource Include="Resource\UI\Skill\Ferocity.png" />
+    <Resource Include="Resource\UI\Skill\Fervor.png" />
+    <Resource Include="Resource\UI\Skill\Fetisharmy.png" />
+    <Resource Include="Resource\UI\Skill\Fetishleader.png" />
+    <Resource Include="Resource\UI\Skill\Finery.png" />
+    <Resource Include="Resource\UI\Skill\Firebats.png" />
+    <Resource Include="Resource\UI\Skill\Firebomb.png" />
+    <Resource Include="Resource\UI\Skill\Fistoftheheavens.png" />
+    <Resource Include="Resource\UI\Skill\Fistsofthunder.png" />
+    <Resource Include="Resource\UI\Skill\Flawlesstechnique.png" />
+    <Resource Include="Resource\UI\Skill\Fleet.png" />
+    <Resource Include="Resource\UI\Skill\Flightbeforefight.png" />
+    <Resource Include="Resource\UI\Skill\Focuseddiscipline.png" />
+    <Resource Include="Resource\UI\Skill\Fortune.png" />
+    <Resource Include="Resource\UI\Skill\Frailty.png" />
+    <Resource Include="Resource\UI\Skill\Frenzied.png" />
+    <Resource Include="Resource\UI\Skill\Frenziedattacks.png" />
+    <Resource Include="Resource\UI\Skill\Frenzy.png" />
+    <Resource Include="Resource\UI\Skill\Frostnova.png" />
+    <Resource Include="Resource\UI\Skill\Furiouscharge.png" />
+    <Resource Include="Resource\UI\Skill\Gargantuan.png" />
+    <Resource Include="Resource\UI\Skill\Glasscanno.png" />
+    <Resource Include="Resource\UI\Skill\Glasscannon.png" />
+    <Resource Include="Resource\UI\Skill\Graspofthedead.png" />
+    <Resource Include="Resource\UI\Skill\Graveinjustice.png" />
+    <Resource Include="Resource\UI\Skill\Grenades.png" />
+    <Resource Include="Resource\UI\Skill\Grimscythe.png" />
+    <Resource Include="Resource\UI\Skill\Groundstomp.png" />
+    <Resource Include="Resource\UI\Skill\Guidinglight.png" />
+    <Resource Include="Resource\UI\Skill\Hammeroftheancients.png" />
+    <Resource Include="Resource\UI\Skill\Harmony.png" />
+    <Resource Include="Resource\UI\Skill\Haunt.png" />
+    <Resource Include="Resource\UI\Skill\HealthPotion.png" />
+    <Resource Include="Resource\UI\Skill\Heavenlystrength.png" />
+    <Resource Include="Resource\UI\Skill\Heavensfury3.png" />
+    <Resource Include="Resource\UI\Skill\Hex.png" />
+    <Resource Include="Resource\UI\Skill\Hoarder.png" />
+    <Resource Include="Resource\UI\Skill\Holdyourground.png" />
+    <Resource Include="Resource\UI\Skill\Holycause.png" />
+    <Resource Include="Resource\UI\Skill\Horrify.png" />
+    <Resource Include="Resource\UI\Skill\Hotpursuit.png" />
+    <Resource Include="Resource\UI\Skill\Hungeringarrow.png" />
+    <Resource Include="Resource\UI\Skill\Hydra.png" />
+    <Resource Include="Resource\UI\Skill\Hysteria.png" />
+    <Resource Include="Resource\UI\Skill\Icearmor.png" />
+    <Resource Include="Resource\UI\Skill\Ignorepain.png" />
+    <Resource Include="Resource\UI\Skill\Impale.png" />
+    <Resource Include="Resource\UI\Skill\Indestructible.png" />
+    <Resource Include="Resource\UI\Skill\Innerrage.png" />
+    <Resource Include="Resource\UI\Skill\Innersanctuary.png" />
+    <Resource Include="Resource\UI\Skill\Insanecourage.png" />
+    <Resource Include="Resource\UI\Skill\Insurmountable.png" />
+    <Resource Include="Resource\UI\Skill\Intimidatio.png" />
+    <Resource Include="Resource\UI\Skill\Intimidation.png" />
+    <Resource Include="Resource\UI\Skill\Invulnerable.png" />
+    <Resource Include="Resource\UI\Skill\Ironmaide.png" />
+    <Resource Include="Resource\UI\Skill\Ironmaiden.png" />
+    <Resource Include="Resource\UI\Skill\Ironski.png" />
+    <Resource Include="Resource\UI\Skill\Ironskin.png" />
+    <Resource Include="Resource\UI\Skill\Judgment.png" />
+    <Resource Include="Resource\UI\Skill\Junglefortitude.png" />
+    <Resource Include="Resource\UI\Skill\Justice.png" />
+    <Resource Include="Resource\UI\Skill\Juststaydead.png" />
+    <Resource Include="Resource\UI\Skill\Killingspree.png" />
+    <Resource Include="Resource\UI\Skill\Knowledgeispower.png" />
+    <Resource Include="Resource\UI\Skill\Landofthedead.png" />
+    <Resource Include="Resource\UI\Skill\Lashingtailkick.png" />
+    <Resource Include="Resource\UI\Skill\Lawsoffate.png" />
+    <Resource Include="Resource\UI\Skill\Lawsofhope2.png" />
+    <Resource Include="Resource\UI\Skill\Lawsofjustice2.png" />
+    <Resource Include="Resource\UI\Skill\Lawsofvalor2.png" />
+    <Resource Include="Resource\UI\Skill\Leaderofthepack.png" />
+    <Resource Include="Resource\UI\Skill\Leap.png" />
+    <Resource Include="Resource\UI\Skill\Leech.png" />
+    <Resource Include="Resource\UI\Skill\Legendarymight.png" />
+    <Resource Include="Resource\UI\Skill\Lightningreflexes.png" />
+    <Resource Include="Resource\UI\Skill\Longarmofthelaw.png" />
+    <Resource Include="Resource\UI\Skill\Lordcommander.png" />
+    <Resource Include="Resource\UI\Skill\Lucky.png" />
+    <Resource Include="Resource\UI\Skill\Magicmissile.png" />
+    <Resource Include="Resource\UI\Skill\Magicweapon.png" />
+    <Resource Include="Resource\UI\Skill\Manaregeneratio.png" />
+    <Resource Include="Resource\UI\Skill\Manaregeneration.png" />
+    <Resource Include="Resource\UI\Skill\Markedfordeath.png" />
+    <Resource Include="Resource\UI\Skill\Marksma.png" />
+    <Resource Include="Resource\UI\Skill\Marksman.png" />
+    <Resource Include="Resource\UI\Skill\Massconfusion.png" />
+    <Resource Include="Resource\UI\Skill\Meditatio.png" />
+    <Resource Include="Resource\UI\Skill\Meditation.png" />
+    <Resource Include="Resource\UI\Skill\Meteor.png" />
+    <Resource Include="Resource\UI\Skill\Midnightfeast.png" />
+    <Resource Include="Resource\UI\Skill\Mindandbody.png" />
+    <Resource Include="Resource\UI\Skill\Mirrorimage.png" />
+    <Resource Include="Resource\UI\Skill\Momentum.png" />
+    <Resource Include="Resource\UI\Skill\Multishot.png" />
+    <Resource Include="Resource\UI\Skill\Mythicrhythm.png" />
+    <Resource Include="Resource\UI\Skill\Naturalleader.png" />
+    <Resource Include="Resource\UI\Skill\Neardeathexperience.png" />
+    <Resource Include="Resource\UI\Skill\Nephalemmajesty.png" />
+    <Resource Include="Resource\UI\Skill\Nervesofsteel.png" />
+    <Resource Include="Resource\UI\Skill\Nirvana.png" />
+    <Resource Include="Resource\UI\Skill\Normal-2047437116.png" />
+    <Resource Include="Resource\UI\Skill\Normal.png" />
+    <Resource Include="Resource\UI\Skill\Numbingtraps.png" />
+    <Resource Include="Resource\UI\Skill\Opportunity.png" />
+    <Resource Include="Resource\UI\Skill\Overpower.png" />
+    <Resource Include="Resource\UI\Skill\Paralysis.png" />
+    <Resource Include="Resource\UI\Skill\Phalanx3.png" />
+    <Resource Include="Resource\UI\Skill\Physicalattunement.png" />
+    <Resource Include="Resource\UI\Skill\Piercingattacks.png" />
+    <Resource Include="Resource\UI\Skill\Piranhas.png" />
+    <Resource Include="Resource\UI\Skill\Plagued.png" />
+    <Resource Include="Resource\UI\Skill\Plaguedcast.png" />
+    <Resource Include="Resource\UI\Skill\Plagueoftoads.png" />
+    <Resource Include="Resource\UI\Skill\Poisondart.png" />
+    <Resource Include="Resource\UI\Skill\Poundofflesh.png" />
+    <Resource Include="Resource\UI\Skill\Preparation.png" />
+    <Resource Include="Resource\UI\Skill\Provoke.png" />
+    <Resource Include="Resource\UI\Skill\Punish.png" />
+    <Resource Include="Resource\UI\Skill\Quickeni.png" />
+    <Resource Include="Resource\UI\Skill\Quickening.png" />
+    <Resource Include="Resource\UI\Skill\Rainofvengeance.png" />
+    <Resource Include="Resource\UI\Skill\Rampage.png" />
+    <Resource Include="Resource\UI\Skill\Rapidfire.png" />
+    <Resource Include="Resource\UI\Skill\Rapidreload.png" />
+    <Resource Include="Resource\UI\Skill\Rayoffrost.png" />
+    <Resource Include="Resource\UI\Skill\Reloaded.png" />
+    <Resource Include="Resource\UI\Skill\Rend.png" />
+    <Resource Include="Resource\UI\Skill\Renewal.png" />
+    <Resource Include="Resource\UI\Skill\Resonance.png" />
+    <Resource Include="Resource\UI\Skill\Resourcefulness.png" />
+    <Resource Include="Resource\UI\Skill\Revenge.png" />
+    <Resource Include="Resource\UI\Skill\Revive.png" />
+    <Resource Include="Resource\UI\Skill\Ritualofblood.png" />
+    <Resource Include="Resource\UI\Skill\Rituals.png" />
+    <Resource Include="Resource\UI\Skill\Sacrifice.png" />
+    <Resource Include="Resource\UI\Skill\Secondwind.png" />
+    <Resource Include="Resource\UI\Skill\Seismicslam.png" />
+    <Resource Include="Resource\UI\Skill\Selflesshealer.png" />
+    <Resource Include="Resource\UI\Skill\Sentry.png" />
+    <Resource Include="Resource\UI\Skill\Serenity.png" />
+    <Resource Include="Resource\UI\Skill\Sevensidedstrike.png" />
+    <Resource Include="Resource\UI\Skill\Sharpshooter.png" />
+    <Resource Include="Resource\UI\Skill\Shieldbash2.png" />
+    <Resource Include="Resource\UI\Skill\Shieldglare.png" />
+    <Resource Include="Resource\UI\Skill\Shieldofiro.png" />
+    <Resource Include="Resource\UI\Skill\Shieldofiron.png" />
+    <Resource Include="Resource\UI\Skill\Shockpulse.png" />
+    <Resource Include="Resource\UI\Skill\Simulacrum.png" />
+    <Resource Include="Resource\UI\Skill\Singleout.png" />
+    <Resource Include="Resource\UI\Skill\Siphonblood.png" />
+    <Resource Include="Resource\UI\Skill\Sixthsense.png" />
+    <Resource Include="Resource\UI\Skill\Skeletalmage.png" />
+    <Resource Include="Resource\UI\Skill\Slash.png" />
+    <Resource Include="Resource\UI\Skill\Slaughter.png" />
+    <Resource Include="Resource\UI\Skill\Slowtime.png" />
+    <Resource Include="Resource\UI\Skill\Smite.png" />
+    <Resource Include="Resource\UI\Skill\Smokescreen.png" />
+    <Resource Include="Resource\UI\Skill\Soulharvest.png" />
+    <Resource Include="Resource\UI\Skill\Spectralblade.png" />
+    <Resource Include="Resource\UI\Skill\Speed.png" />
+    <Resource Include="Resource\UI\Skill\Spiketrap.png" />
+    <Resource Include="Resource\UI\Skill\Spiritbarrage.png" />
+    <Resource Include="Resource\UI\Skill\Spiritualattunement.png" />
+    <Resource Include="Resource\UI\Skill\Spiritvessel.png" />
+    <Resource Include="Resource\UI\Skill\Spiritwalk.png" />
+    <Resource Include="Resource\UI\Skill\Sprint.png" />
+    <Resource Include="Resource\UI\Skill\Steadyaim.png" />
+    <Resource Include="Resource\UI\Skill\Steedcharge.png" />
+    <Resource Include="Resource\UI\Skill\Stormarmor.png" />
+    <Resource Include="Resource\UI\Skill\Strafe.png" />
+    <Resource Include="Resource\UI\Skill\Strengthinadversity.png" />
+    <Resource Include="Resource\UI\Skill\Strengthofspirit.png" />
+    <Resource Include="Resource\UI\Skill\Summonzombiedog.png" />
+    <Resource Include="Resource\UI\Skill\Superiorskill.png" />
+    <Resource Include="Resource\UI\Skill\Superstitious.png" />
+    <Resource Include="Resource\UI\Skill\Svg.png" />
+    <Resource Include="Resource\UI\Skill\Swarm.png" />
+    <Resource Include="Resource\UI\Skill\Sweepattack.png" />
+    <Resource Include="Resource\UI\Skill\Sweepingwind.png" />
+    <Resource Include="Resource\UI\Skill\Swordandboard.png" />
+    <Resource Include="Resource\UI\Skill\Sycophant.png" />
+    <Resource Include="Resource\UI\Skill\Tacticaladvantage.png" />
+    <Resource Include="Resource\UI\Skill\Telekinesis.png" />
+    <Resource Include="Resource\UI\Skill\Teleport.png" />
+    <Resource Include="Resource\UI\Skill\Tempestrush.png" />
+    <Resource Include="Resource\UI\Skill\Temporalflux.png" />
+    <Resource Include="Resource\UI\Skill\Temporalshift.png" />
+    <Resource Include="Resource\UI\Skill\Threateningshout.png" />
+    <Resource Include="Resource\UI\Skill\Thunderousblows.png" />
+    <Resource Include="Resource\UI\Skill\Tieredrift.png" />
+    <Resource Include="Resource\UI\Skill\Toughness.png" />
+    <Resource Include="Resource\UI\Skill\Toweringshield.png" />
+    <Resource Include="Resource\UI\Skill\Unbreakablewill.png" />
+    <Resource Include="Resource\UI\Skill\Unstableenergy.png" />
+    <Resource Include="Resource\UI\Skill\Untouchable.png" />
+    <Resource Include="Resource\UI\Skill\Unwaveringwill.png" />
+    <Resource Include="Resource\UI\Skill\V2.png" />
+    <Resource Include="Resource\UI\Skill\Vault.png" />
+    <Resource Include="Resource\UI\Skill\Vengeance.png" />
+    <Resource Include="Resource\UI\Skill\Vigilant.png" />
+    <Resource Include="Resource\UI\Skill\Wallofzombies.png" />
+    <Resource Include="Resource\UI\Skill\Wandspecializatio.png" />
+    <Resource Include="Resource\UI\Skill\Wandspecialization.png" />
+    <Resource Include="Resource\UI\Skill\Warpaint.png" />
+    <Resource Include="Resource\UI\Skill\Waveofforce.png" />
+    <Resource Include="Resource\UI\Skill\Waveoflight.png" />
+    <Resource Include="Resource\UI\Skill\Wayofthehundredfists.png" />
+    <Resource Include="Resource\UI\Skill\Weakspot.png" />
+    <Resource Include="Resource\UI\Skill\Weaponthrow.png" />
+    <Resource Include="Resource\UI\Skill\Whirlwind.png" />
+    <Resource Include="Resource\UI\Skill\Wormhole.png" />
+    <Resource Include="Resource\UI\Skill\Wrathful.png" />
+    <Resource Include="Resource\UI\Skill\Wrathoftheberserker.png" />
+    <Resource Include="Resource\UI\Skill\Yearsoftraini.png" />
+    <Resource Include="Resource\UI\Skill\Yearsoftraining.png" />
+    <Resource Include="Resource\UI\Skill\Zombiecharger.png" />
+    <Resource Include="Resource\UI\Skill\Zombiedogspawner.png" />
+    <Resource Include="Resource\UI\Skill\Zombiemaster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\BarbarianFemale.png" />
+    <Resource Include="Resource\UI\Class\BarbarianMale.png" />
+    <Resource Include="Resource\UI\Class\DemonHunterFemale.png" />
+    <Resource Include="Resource\UI\Class\DemonHunterMale.png" />
+    <Resource Include="Resource\UI\Class\MonkFemale.png" />
+    <Resource Include="Resource\UI\Class\MonkMale.png" />
+    <Resource Include="Resource\UI\Class\WitchDoctorFemale.png" />
+    <Resource Include="Resource\UI\Class\WitchDoctorMale.png" />
+    <Resource Include="Resource\UI\Class\WizardFemale.png" />
+    <Resource Include="Resource\UI\Class\WizardMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_ShadowPower.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Companion.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Skill\SkillName_FanOfKnives.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Strafe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Vengeance.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Preperation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsInput;
 
 namespace Dolphin
 {
@@ -22,14 +23,17 @@ namespace Dolphin
         private const uint WM_KEYDOWN = 0x0100;
         private const uint WM_KEYUP = 0x0101;
 
-        public static async Task MouseClick(IntPtr handle, MouseButtons button, Point point)
+        public static void MouseClick(IntPtr handle, MouseButtons button, Point point)
         {
             var lParam = MakeLParam(point);
+
             switch (button)
             {
                 case MouseButtons.Left:
+                    InputSimulator.SimulateKeyDown(VirtualKeyCode.SHIFT);
                     PostMessage(handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
                     PostMessage(handle, WM_LBUTTONUP, 0, lParam);
+                    InputSimulator.SimulateKeyUp(VirtualKeyCode.SHIFT);
                     break;
                 case MouseButtons.Right:
                     PostMessage(handle, WM_RBUTTONDOWN, MK_RBUTTON, lParam);
@@ -45,7 +49,7 @@ namespace Dolphin
             }
         }
 
-        public static async Task PressKey(IntPtr handle, Keys key, bool pressAlt = false)
+        public static void PressKey(IntPtr handle, Keys key, bool pressAlt = false)
         {
             var lParam = 0;
             if (pressAlt) // TODO: Untested, what cases to we need?

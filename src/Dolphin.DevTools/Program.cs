@@ -22,7 +22,7 @@ namespace Dolphin.DevTools
             container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IEventChannel, EventChannel>(new ContainerControlledLifetimeManager());
             container.RegisterType<IResourceService, ResourceService>();
-            container.RegisterType<IModelAdministrationService, ModelAdministrationService>();
+            container.RegisterType<IModelService, ModelService>();
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
             container.RegisterType<ISkillUtilityService, SkillUtilityService>();
             container.RegisterType<IPlayerUtilityService, PlayerUtilityService>();
@@ -37,15 +37,15 @@ namespace Dolphin.DevTools
             };
 
             var handle = WindowHelper.GetHWND("Diablo III64");
+            var service = container.Resolve<ISkillUtilityService>();
+            await service.SaveCurrentSkills("Extracted");
 
-            while (true)
-            {
-                await InputHelper.PressKey(handle, Keys.A);
-                await InputHelper.PressKey(handle, Keys.D2);
-                await InputHelper.PressKey(handle, Keys.D3);
+            //while (true) {
+            //    var t = service.TestSkillRecognition();
 
-                await Task.Delay(500);
-            }
+            //    await t;
+            //    await Task.Delay(200);
+            //}
 
             return 0;
         }

@@ -8,6 +8,6 @@
         Preperation = 3,
         ShadowPower = 4,
         Strafe = 5,
-        Vengance = 6
+        Vengeance = 6
     }
 }

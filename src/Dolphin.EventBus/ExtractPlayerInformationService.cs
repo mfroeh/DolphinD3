@@ -1,6 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +11,11 @@ namespace Dolphin.EventBus
     public class ExtractPlayerInformationService : IExtractInformationService, IEventGenerator
     {
         private readonly IEventChannel eventChannel;
-        private readonly IModelAdministrationService modelService;
+        private readonly IModelService modelService;
         private readonly IResourceService resourceService;
         private readonly ILogService logService;
 
-        public ExtractPlayerInformationService(IEventChannel eventChannel, IModelAdministrationService modelService, IResourceService resourceService, ILogService logService)
+        public ExtractPlayerInformationService(IEventChannel eventChannel, IModelService modelService, IResourceService resourceService, ILogService logService)
         {
             this.eventChannel = eventChannel;
             this.modelService = modelService;
@@ -24,21 +25,26 @@ namespace Dolphin.EventBus
 
         public async Task Extract(Bitmap picture)
         {
-            var classPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 90, Y = 100 }, new Size { Width = 10, Height = 10 }));
-            var healthPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 43, Y = 164 }, new Size { Width = 81, Height = 5 }));
-            var primaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1830, Y = 1230 }, new Size { Height = 194, Width = 2 }));
-            var secondaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1850, Y = 1230 }, new Size { Height = 194, Width = 2 }));
+            if (picture != null)
+            {
+                var classPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 90, Y = 100 }, new Size { Width = 10, Height = 10 }));
+                var healthPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 43, Y = 164 }, new Size { Width = 81, Height = 5 }));
+                var primaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1830, Y = 1230 }, new Size { Height = 194, Width = 2 }));
+                var secondaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1850, Y = 1230 }, new Size { Height = 194, Width = 2 }));
 
-            var classTask = ExtractPlayerClass(await classPart);
-            var healthTask = ExtractHealthPercentage(await healthPart);
-            var primaryTask = ExtractPrimaryResourcePercentage(await primaryPart);
-            var secondaryTask = ExtractSecondaryResourcePercentage(await secondaryPart);
+                var classTask = ExtractPlayerClass(await classPart);
+                var healthTask = ExtractHealthPercentage(await healthPart);
+                var primaryTask = ExtractPrimaryResourcePercentage(await primaryPart);
+                var secondaryTask = ExtractSecondaryResourcePercentage(await secondaryPart);
 
-            await classTask;
-            await primaryTask;
-            await healthTask;
-            await secondaryTask;
-            logService.AddEntry(this, $"Player {modelService.Player.Class}, HP: {modelService.Player.HealthPercentage}, Primary: {modelService.Player.PrimaryRessourcePercentage}", LogLevel.Info);
+                await classTask;
+                await primaryTask;
+                await healthTask;
+                await secondaryTask;
+                logService.AddEntry(this, $"Player {modelService.Player.Class}, HP: {modelService.Player.HealthPercentage}, Primary: {modelService.Player.PrimaryRessourcePercentage}", LogLevel.Info);
+            }
+            else
+                logService.AddEntry(this, $"Bitmap was null", LogLevel.Info);
         }
 
         public async Task GenerateEvent(EventArgs e)
@@ -71,7 +77,7 @@ namespace Dolphin.EventBus
             logService.AddEntry(this, $"Current playerclass is {modelService.Player.Class}.");
 
             if (oldPlayerClass != modelService.Player.Class)
-                await GenerateEvent(new PlayerInformationEventArgs { });
+                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery= "PlayerClass" });
         }
 
         private async Task ExtractHealthPercentage(Bitmap picturePart)
@@ -83,7 +89,7 @@ namespace Dolphin.EventBus
             modelService.SetPlayerHealth(healthEnum.Item1);
 
             if (currentHealth != modelService.Player.HealthPercentage)
-                await GenerateEvent(new PlayerInformationEventArgs { });
+                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery = "PlayerHealth"});
         }
 
         private async Task ExtractPrimaryResourcePercentage(Bitmap picturePart)
@@ -95,7 +101,7 @@ namespace Dolphin.EventBus
             modelService.SetPlayerPrimaryResource(primaryEnum.Item1);
 
             if (currentPrimary != modelService.Player.PrimaryRessourcePercentage)
-                await GenerateEvent(new PlayerInformationEventArgs { });
+                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery = "PlayerResourcePrimary" });
         }
 
         private async Task ExtractSecondaryResourcePercentage(Bitmap picturePart)
@@ -107,7 +113,7 @@ namespace Dolphin.EventBus
             modelService.SetPlayerSecondaryResource(secondaryEnum.Item1);
 
             if (currentSecondary != modelService.Player.SecondaryRessourcePercentage)
-                await GenerateEvent(new PlayerInformationEventArgs { });
+                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery = "PlayerResourceSecondary"});
         }
 
         private async Task<Tuple<T, float>> GetHighestMatch<T>(Bitmap compareTo, IEnumerable<T> possibleEnums)

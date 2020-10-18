@@ -21,7 +21,7 @@ namespace Dolphin
 
         public static bool VenganceFunction(Player p, World w)
         {
-            if (w.IsRiftOrGrift() && p.NotDead() && p.SkillNotActiveAndCanBeCasted(SkillName.Vengance))
+            if (w.IsRiftOrGrift() && p.NotDead() && p.SkillNotActiveAndCanBeCasted(SkillName.Vengeance))
                 return true;
             return false;
         }

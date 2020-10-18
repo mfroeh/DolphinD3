@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,8 +30,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="InputSimulator, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Desktop\D3Helper-CraftAndParagorn-2.6.1-master\D3Helper.Public-master\D3Helper\InputSimulator.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -48,6 +54,8 @@
     <Compile Include="EventArgs\PausedEventArgs.cs" />
     <Compile Include="IActionExecutionService.cs" />
     <Compile Include="InputHelper.cs" />
+    <Compile Include="ISettingsService.cs" />
+    <Compile Include="Settings\UISettings.cs" />
     <Compile Include="_Action.cs" />
     <Compile Include="ConditionFunction.cs" />
     <Compile Include="Condition.cs" />
@@ -67,7 +75,7 @@
     <Compile Include="IExtractInformationService.cs" />
     <Compile Include="ILogService.cs" />
     <Compile Include="ImageHelper.cs" />
-    <Compile Include="IModelAdministrationService.cs" />
+    <Compile Include="IModelService.cs" />
     <Compile Include="EventArgs\LogEntryEventArgs.cs" />
     <Compile Include="IResourceService.cs" />
     <Compile Include="Model\Buff.cs" />

@@ -13,7 +13,7 @@ namespace Dolphin.EventBus
 {
     public class ActionAdministrationService : IActionAdministrationService, IEventSubscriber
     {
-        private AsyncEventHandler<SkillInformationEventArgs> SkillCanBeCastedHandler;
+        private EventHandler<SkillInformationEventArgs> SkillCanBeCastedHandler;
         private EventHandler<WorldInformationEventArgs> LocationChangedHandler;
         private AsyncEventHandler<HotkeyInformationEventArgs> HotkeyPressedHandler;
         private EventHandler<PausedEventArgs> PausedHandler; // This subscribes to the event in the viewmodel
@@ -34,6 +34,7 @@ namespace Dolphin.EventBus
             LocationChangedHandler = LocationChanged;
 
             eventChannel.Subscribe(SkillCanBeCastedHandler);
+            eventChannel.Subscribe(LocationChangedHandler);
         }
 
         // TODO:
@@ -45,7 +46,7 @@ namespace Dolphin.EventBus
             }
         }
 
-        private async Task SkillCanBeCasted(object sender, SkillInformationEventArgs e)
+        private void SkillCanBeCasted(object sender, SkillInformationEventArgs e)
         {
             if (!settings.EnabledSkills.Contains(e.SkillName)) return;
             if (e.Index == -1) logService.AddEntry(this, "Recived SkillInformationEventArgs with Index - 1", LogLevel.Warning); // return;
@@ -65,7 +66,7 @@ namespace Dolphin.EventBus
                 logService.AddEntry(this, $"{e.SkillName} has no Condition defined, defaulting to just return true.", LogLevel.Info);
                 condition = (p, w) => true;
             }
-            await actionService.Execute(action, condition);
+            actionService.Execute(action, condition);
         }
     }
 }

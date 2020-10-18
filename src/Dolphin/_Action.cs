@@ -1,11 +1,6 @@
-﻿using AForge.Math.Metrics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace Dolphin
 {
@@ -13,22 +8,22 @@ namespace Dolphin
     {
         public static Action GetSkillCastAction(IntPtr handle, Keys key)
         {
-            if (handle == IntPtr.Zero) return () => Console.WriteLine("Got empty handle");
+            if (handle == IntPtr.Zero) return () => { Console.WriteLine("Got empty handle"); };
 
-            return async () =>
+            return () =>
             {
-                await InputHelper.PressKey(handle, key);
+                InputHelper.PressKey(handle, key);
             };
         }
 
         public static Action GetSkillCastAction(IntPtr handle, MouseButtons button)
         {
-            if (handle == IntPtr.Zero) return () => Console.WriteLine("Got empty handle");
+            if (handle == IntPtr.Zero) return () => { Console.WriteLine("Got empty handle"); };
 
             var cursorPOs = InputHelper.GetCursorPos();
-            return async () =>
+            return () =>
             {
-                await InputHelper.MouseClick(handle, button, cursorPOs);
+                InputHelper.MouseClick(handle, button, cursorPOs );
             };
         }
     }

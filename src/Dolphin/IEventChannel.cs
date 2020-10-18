@@ -5,7 +5,7 @@ namespace Dolphin
 {
     public interface IEventChannel
     {
-        event AsyncEventHandler<SkillInformationEventArgs> SkillCanBeCasted;
+        event EventHandler<SkillInformationEventArgs> SkillCanBeCasted;
 
         event EventHandler<BuffInformationEventArgs> BuffInformationChanged;
 
@@ -15,7 +15,7 @@ namespace Dolphin
 
         event EventHandler<PlayerInformationEventArgs> PlayerInformationChanged;
 
-        Task InvokeSkillCanBeCasted(object sender, SkillInformationEventArgs e);
+        void InvokeSkillCanBeCasted(object sender, SkillInformationEventArgs e);
 
         void InvokeBuffInformationChanged(object sender, SkillInformationEventArgs e);
 

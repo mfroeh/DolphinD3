@@ -20,10 +20,16 @@ namespace Dolphin.Service
             // TODO: Add the origin to the logmesasge (Filename or something)
 
             var currentTime = DateTime.Now;
-            var logMessage = $"[{currentTime}]---LogLevel: {logLevel}, Message: {message}, Exception: {ex}";
+            var fullMessage = $"[{currentTime}]---LogLevel: {logLevel}, Message: {message}";
 
-            log.Entries.Add(logMessage);
-            EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = logMessage, LogLevel = logLevel });
+            if (ex != null)
+            {
+                fullMessage += $", Exception: {ex}";
+                message += $", Exception: {ex}";
+            }
+
+            log.Entries.Add(fullMessage);
+            EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = currentTime });
         }
 
         public void SaveLog(string path)

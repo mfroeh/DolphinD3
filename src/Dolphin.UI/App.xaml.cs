@@ -19,94 +19,107 @@ namespace Dolphin.Ui
             base.OnStartup(e);
 
             var container = new UnityContainer();
-            container.RegisterType<IUnityContainer, UnityContainer>();
 
-            container.RegisterInstance(new Log());
-            container.RegisterInstance(new Player());
-            container.RegisterInstance(new World());
-            // container.RegisterInstance(settings);
-            container.RegisterInstance(new Settings());
+            container.RegisterType<IViewModelBase, MainViewModel>("main");
+            container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
 
-            container.RegisterType<IEventChannel, EventChannel>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("player"); // Generator
-            container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("skill"); // Generator
-            container.RegisterType<IActionAdministrationService, ActionAdministrationService>(); // Subscriber
+            container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
 
-            container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
-
-            container.RegisterType<IResourceService, ResourceService>();
-            container.RegisterType<ICaptureWindowService, CaptureWindowService>();
-            container.RegisterType<IModelService, ModelService>();
-            container.RegisterType<ISettingsService, SettingsService>();
-            container.RegisterType<IActionExecutionService, ActionExecutionService>();
-
-            container.RegisterType<ViewModelBase, MainWindowViewModel>("main");
-            container.RegisterType<TabViewmodelBase, DataTabViewModel>("data");
-            container.RegisterType<TabViewmodelBase, LogTabViewModel>("log");
-
-
-            var mainVM = container.Resolve<ViewModelBase>("main");
+            var mainVM = container.Resolve<IViewModelBase>("main");
             MainWindow = new MainWindow { DataContext = mainVM };
-            MainWindow.Title = "Blub";
-            MainWindow.Closed += (_, __) =>
-            {
-                throw new Exception("Main window closed");
-            };
             MainWindow.Show();
-
-            var logService = container.Resolve<ILogService>();
-            logService.EntryAdded += (o, e) =>
-            {
-                if (e.LogLevel == LogLevel.Erorr)
-                    Console.WriteLine(e.Message);
-            };
-
-            var extractSkillService = container.Resolve<IExtractInformationService>("skill");
-            var extractPlayerService = container.Resolve<IExtractInformationService>("player");
-            var captureService = container.Resolve<ICaptureWindowService>();
-
-            var actionAdministrationService = container.Resolve<IActionAdministrationService>();
-
-            var task = Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    var diabloHandle = IntPtr.Zero;
-                    while (diabloHandle == IntPtr.Zero)
-                    {
-                        logService.AddEntry(this, "Searching for Diablo64 Process", LogLevel.Info);
-                        diabloHandle = WindowHelper.GetHWND();
-                        Thread.Sleep(1000);
-                    }
-
-                    logService.AddEntry(this, $"Found Diablo Process!", LogLevel.Info);
-
-                    while (true)
-                    {
-                        var image = await captureService.CaptureWindow("Diablo III64");
-
-                        var task1 = extractSkillService.Extract(image);
-                        var task2 = extractPlayerService.Extract(image);
-                        var delay = Task.Delay(60);
-
-                        await task1;
-                        await task2;
-                        await delay;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logService.AddEntry(this, $"Caught Exception in Mainloop", LogLevel.Erorr, ex);
-                }
-                finally
-                {
-                    //var _json = JsonConvert.SerializeObject(settings);
-                    //File.WriteAllText(_json, "settings.json");
-                    logService.SaveLog("log.txt");
-                    // MainWindow.Close();
-                }
-            }, TaskCreationOptions.LongRunning);
         }
+
+        /*
+        var container = new UnityContainer();
+        container.RegisterType<IUnityContainer, UnityContainer>();
+
+        container.RegisterInstance(new Log());
+        container.RegisterInstance(new Player());
+        container.RegisterInstance(new World());
+        // container.RegisterInstance(settings);
+        container.RegisterInstance(new Settings());
+
+        container.RegisterType<IEventChannel, EventChannel>(new ContainerControlledLifetimeManager());
+        container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("player"); // Generator
+        container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("skill"); // Generator
+        container.RegisterType<IActionAdministrationService, ActionAdministrationService>(); // Subscriber
+
+        container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
+        container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
+
+        container.RegisterType<IResourceService, ResourceService>();
+        container.RegisterType<ICaptureWindowService, CaptureWindowService>();
+        container.RegisterType<IModelService, ModelService>();
+        container.RegisterType<ISettingsService, SettingsService>();
+        container.RegisterType<IActionExecutionService, ActionExecutionService>();
+
+        container.RegisterType<ViewModelBase, MainWindowViewModel>("main");
+        container.RegisterType<TabViewmodelBase, DataTabViewModel>("data");
+        container.RegisterType<TabViewmodelBase, LogTabViewModel>("log");
+
+
+        var mainVM = container.Resolve<ViewModelBase>("main");
+        MainWindow = new MainWindow { DataContext = mainVM };
+        MainWindow.Title = "Blub";
+        MainWindow.Closed += (_, __) =>
+        {
+            throw new Exception("Main window closed");
+        };
+        MainWindow.Show();
+
+        var logService = container.Resolve<ILogService>();
+        logService.EntryAdded += (o, e) =>
+        {
+            if (e.LogLevel == LogLevel.Erorr)
+                Console.WriteLine(e.Message);
+        };
+
+        var extractSkillService = container.Resolve<IExtractInformationService>("skill");
+        var extractPlayerService = container.Resolve<IExtractInformationService>("player");
+        var captureService = container.Resolve<ICaptureWindowService>();
+
+        var actionAdministrationService = container.Resolve<IActionAdministrationService>();
+
+        var task = Task.Factory.StartNew(async () =>
+        {
+            try
+            {
+                var diabloHandle = IntPtr.Zero;
+                while (diabloHandle == IntPtr.Zero)
+                {
+                    logService.AddEntry(this, "Searching for Diablo64 Process", LogLevel.Info);
+                    diabloHandle = WindowHelper.GetHWND();
+                    Thread.Sleep(1000);
+                }
+
+                logService.AddEntry(this, $"Found Diablo Process!", LogLevel.Info);
+
+                while (true)
+                {
+                    var image = await captureService.CaptureWindow("Diablo III64");
+
+                    var task1 = extractSkillService.Extract(image);
+                    var task2 = extractPlayerService.Extract(image);
+                    var delay = Task.Delay(60);
+
+                    await task1;
+                    await task2;
+                    await delay;
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.AddEntry(this, $"Caught Exception in Mainloop", LogLevel.Erorr, ex);
+            }
+            finally
+            {
+                //var _json = JsonConvert.SerializeObject(settings);
+                //File.WriteAllText(_json, "settings.json");
+                logService.SaveLog("log.txt");
+                // MainWindow.Close();
+            }
+        }, TaskCreationOptions.LongRunning);
+    }*/
     }
 }

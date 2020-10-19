@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TabControl 
+        <TabControl>
+            <TabItem Header="Hotkey" DataContext="{Binding Children[0]}">
+                <local:HotkeyTabView></local:HotkeyTabView>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

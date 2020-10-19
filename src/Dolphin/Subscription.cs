@@ -27,8 +27,15 @@ namespace Dolphin
         public Guid Id { get; } = Guid.NewGuid();
     }
 
+    // TODO
+
     public static class SubscriptionExtensionMethods
     {
+        public static void ReactAsync<T>(this EventHandler<T> handler, T @event) where T : IEvent
+        {
+            Execute.AndForgetAsync(() => handler.Invoke(null, @event));
+        }
+
         public static void ReactAsync<T>(this Subscription<T> sub, T @event) where T : IEvent
         {
             if (sub.CancellableHandler != null)

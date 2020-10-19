@@ -9,11 +9,14 @@ namespace Dolphin.NewEventBus
 {
     public class HotkeyExecutionService : IEventSubscriber
     {
-        private readonly Subscription<HotkeyPressedEvent> executeMacroLong;
-        private readonly Subscription<HotkeyPressedEvent> executeHotkeyShort;
+        private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
+        private readonly Subscription<HotkeyPressedEvent> executeMacro;
         private readonly Subscription<HotkeyPressedEvent> cancelExecutionSubscriber;
 
         private object longMacroLock;
+        private bool executing;
+
+        private CancellationTokenSource tokenSource;
 
         private readonly IEventBus eventBus;
 
@@ -21,8 +24,8 @@ namespace Dolphin.NewEventBus
         {
             this.eventBus = eventBus;
 
-            executeMacroLong = new Subscription<HotkeyPressedEvent>(ExecuteMacroLong);
-            executeHotkeyShort = new Subscription<HotkeyPressedEvent>(ExecuteMacroShort);
+            executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
+            executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
             cancelExecutionSubscriber = new Subscription<HotkeyPressedEvent>(CancelExecution);
         }
 
@@ -36,33 +39,47 @@ namespace Dolphin.NewEventBus
             throw new NotImplementedException();
         }
 
-        public void ExecuteMacroShort(object o, HotkeyPressedEvent e)
+        public void ExecuteMacro(object o, HotkeyPressedEvent e)
         {
             // Execute macro
         }
 
         // TODO: This might not need the lock / the lock is actually bad. Potentially all the delegates get staggered up.
-        public void ExecuteMacroLong(HotkeyPressedEvent e, CancellationToken token)
+        public void ExecuteMacroCancelable(HotkeyPressedEvent e, CancellationToken token)
         {
-            if (longMacroLock == null)
+            var isExecuting = tokenSource != null;
+            if (!executing)
             {
-                lock (longMacroLock)
+                executing = true;
+                tokenSource = new CancellationTokenSource();
+                // Do stuff x.GetMacro(tokenSource);
+                // action GetMacro(TokenSOurce tokenSource) {
+                //
+                //  checkCanceled(tokenSource.Token)
+                //      if (token.isCanceld)
+                //          tokenSource.dispose()
+                //          tokenSource = null
+                //          isExecuting = false;
+                //          return
+                //      
+                //  tokenSource.dispose()
+                //  tokenSource = null
+                //  isExecuting = false;
+                //}
+                //
+                longMacroLock = new object();
+                Action a = () =>
                 {
-                    longMacroLock = new object();
-                    Action a = () =>
-                    {
-                        Console.WriteLine("Executing the macro.");    // Execute the macro
-                        longMacroLock = null;
-                    };
-                    a.Invoke();
-                }
+                    Console.WriteLine("Executing the macro.");    // Execute the macro
+                    longMacroLock = null;
+                };
+                a.Invoke();
             }
         }
 
         public void CancelExecution(object o, HotkeyPressedEvent e)
         {
-            // cancel all 
-            executeMacroLong.CancelReaction();
+            tokenSource.Cancel();
         }
     }
 }

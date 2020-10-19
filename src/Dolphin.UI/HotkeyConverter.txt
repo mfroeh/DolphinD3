@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using WK.Libraries.HotkeyListenerNS;
+
+namespace Dolphin.Ui
+{
+    internal class HotkeyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var hotkey = value as Hotkey;
+
+            return hotkey.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var hotkeyString = value as string;
+
+            var hotkey = new HotkeySelector();
+
+            return null;
+        }
+    }
+}

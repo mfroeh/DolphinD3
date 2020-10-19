@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Dolphin.UI
+namespace Dolphin.Ui
 {
     /// <summary>
     /// A command whose sole purpose is to 

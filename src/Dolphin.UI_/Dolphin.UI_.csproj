@@ -61,7 +61,6 @@
     <Compile Include="DataTab.xaml.cs">
       <DependentUpon>DataTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RelayCommand.cs" />
     <Compile Include="Tab\DataTabViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="TabViewModelBase.cs" />

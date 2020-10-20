@@ -1,73 +1,89 @@
 ﻿using Dolphin.Enum;
-using System;
-using System.Collections;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Dolphin.Service
 {
-    public class ExtractSkillInformationService : IExtractInformationService, IEventGenerator
+    public class ExtractSkillInformationService : IExtractInformationService, IEventPublisher<SkillCanBeCastedEvent>, IEventPublisher<SkillRecognitionChangedEvent>
     {
-        private readonly IEventChannel eventChannel;
+        private readonly IEventBus eventBus;
+
+        // TODO: Get this from somewhere else
+        private readonly IDictionary<int, Point> leftUpperCorners = new Dictionary<int, Point>
+                                                                        {
+                                                                            { 0, new Point { X = 846, Y = 1335 } },
+                                                                            { 1, new Point { X = 935, Y = 1335 } },
+                                                                            { 2, new Point { X = 1024, Y = 1335 } },
+                                                                            { 3, new Point { X = 1113, Y = 1335 } },
+                                                                            { 4, new Point { X = 1207, Y = 1335 } },
+                                                                            { 5, new Point { X = 1293, Y = 1335 } },
+                                                                        };
+
+        private readonly ILogService logService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
-        private readonly ILogService logService;
 
-        public ExtractSkillInformationService(IEventChannel eventChannel, IModelService modelService, IResourceService resourceService, ILogService logService)
+        public ExtractSkillInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ILogService logService)
         {
-            this.eventChannel = eventChannel;
+            this.eventBus = eventBus;
             this.modelService = modelService;
             this.resourceService = resourceService;
             this.logService = logService;
         }
 
-        public async Task Extract(Bitmap bitmap)
+        public void Extract(Bitmap bitmap)
         {
-            var watch = Stopwatch.StartNew();
-            if (bitmap != null)
+            if (bitmap == null)
             {
-                for (int i = 0; i < 6; i++)
+                logService.AddEntry(this, "Bitmap was null");
+                return;
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                var oldSkill = modelService.GetSkill(i);
+
+                var visibleSkillBitmap = GetSkillBitmap(i, bitmap);
+                var newSkill = ExtractSkill(visibleSkillBitmap, i);
+
+                modelService.SetSkill(i, newSkill);
+
+                if (newSkill?.IsNotActiveAndCanBeCasted == true)
                 {
-                    var currentSkillBitmap = await GetSkillBitmap(i, bitmap);
-                    var newSkill = await ExtractSkill(currentSkillBitmap, i);
-                    var currentSkill = modelService.GetSkill(i);
+                    Publish(new SkillCanBeCastedEvent { SkillIndex = i, SkillName = newSkill.Name });
+                }
 
-                    if (newSkill?.Name != currentSkill?.Name)
-                        GeneratePlayerInformationChangedEvent(new PlayerInformationEventArgs { SkillIndexChanged = i });
-
-                    modelService.SetSkill(i, newSkill);
-                    if (newSkill != null && newSkill.IsNotActiveAndCanBeCasted) // newSkill != null && newSkill.IsNotActiveAndCanBeCasted
-                        GenerateEvent(new SkillInformationEventArgs { Index = i, SkillName = newSkill.Name });
+                if (newSkill?.Name != oldSkill?.Name)
+                {
+                    Publish(new SkillRecognitionChangedEvent { Index = i, NewSkillName = newSkill?.Name ?? SkillName.None });
                 }
             }
-            else
-                logService.AddEntry(this, "Bitmap was null", LogLevel.Info);
-
-            watch.Stop();
-            Trace.WriteLine($"Checking Skills takes {watch.ElapsedMilliseconds}");
         }
 
-        public async Task GenerateEvent(EventArgs e)
+        public void Publish(SkillCanBeCastedEvent @event)
         {
-            eventChannel.InvokeSkillCanBeCasted(this, e as SkillInformationEventArgs);
+            eventBus.Publish(@event);
         }
 
-        private void GeneratePlayerInformationChangedEvent(PlayerInformationEventArgs e)
+        public void Publish(SkillRecognitionChangedEvent @event)
         {
-            logService.AddEntry(this, $"Skill{e.SkillIndexChanged} has changed!", LogLevel.Erorr);
-            eventChannel.InvokePlayerInformationChanged(this, e);
+            eventBus.Publish(@event);
         }
 
-        // Returns null, if he cant identify the skill
-        private async Task<Skill> ExtractSkill(Bitmap picturePart, int index)
+        private bool CanCast(Bitmap bitmap)
+        {
+            // TODO:
+            return default;
+        }
+
+        private Skill ExtractSkill(Bitmap picturePart, int index)
         {
             foreach (var skillName in modelService.GetPossibleSkills())
             {
-                var bitmap = await resourceService.Load(skillName);
-                var similiaryPercentage = await ImageHelper.Compare(picturePart, bitmap, 0);
+                var template = resourceService.Load(skillName);
+                var similiaryPercentage = ImageHelper.Compare(picturePart, template);
 
-                // TODO: If similarityPercentage is > some value but not 1, then it must either be on not castable (due to either resources or cooldown) or it is currently still active.
+                // If similarityPercentage is > some value but not 1, then it must either be on not castable (due to resources / cooldown) or it is active
                 if (similiaryPercentage > 0.95f)
                 {
                     var skill = new Skill { Name = skillName, Index = index };
@@ -75,62 +91,34 @@ namespace Dolphin.Service
                     if (similiaryPercentage >= 0.9975f)
                     {
                         skill.IsNotActiveAndCanBeCasted = true;
-                        logService.AddEntry(this, $"Skill{index} is {skillName}.", LogLevel.Info);
+                        logService.AddEntry(this, $"Skill{index} is {skillName}.");
                     }
                     else
                     {
-                        logService.AddEntry(this, $"Skill{index} is {skillName}, but is either active or not castable.", LogLevel.Info);
+                        logService.AddEntry(this, $"Skill{index} is {skillName}, but is either active or not castable.");
                     }
+
                     return skill;
                 }
             }
-            logService.AddEntry(this, $"Couldn't identify Skill{index}.", LogLevel.Info);
+
+            logService.AddEntry(this, $"Couldn't identify Skill{index}.");
+
             return null;
         }
 
-        private bool CanCast(Bitmap bitmap)
+        private Bitmap GetSkillBitmap(int index, Bitmap fullBitmap)
         {
-            // TODO: 
-            return default;
+            var size = new Size { Height = 20, Width = 40 };
+            var rect = new Rectangle(leftUpperCorners[index], size);
+
+            return ImageHelper.CropImage(fullBitmap, rect);
         }
 
         private bool IsActive(Bitmap bitmap)
         {
-            // TODO: 
+            // TODO:
             return default;
-        }
-
-        private async Task<Bitmap> GetSkillBitmap(int index, Bitmap fullBitmap)
-        {
-            var point = new Point { X = 0, Y = 0 };
-            var size = new Size { Height = 20, Width = 40 };
-            switch (index)
-            {
-                case 0:
-                    point = new Point { X = 846, Y = 1335 };
-                    break;
-
-                case 1:
-                    point = new Point { X = 935, Y = 1335 };
-                    break;
-
-                case 2:
-                    point = new Point { X = 1024, Y = 1335 };
-                    break;
-
-                case 3:
-                    point = new Point { X = 1113, Y = 1335 };
-                    break;
-
-                case 4:
-                    point = new Point { X = 1207, Y = 1335 };
-                    break;
-
-                case 5:
-                    point = new Point { X = 1293, Y = 1335 };
-                    break;
-            }
-            return await ImageHelper.CropImage(fullBitmap, new Rectangle(point, size));
         }
     }
 }

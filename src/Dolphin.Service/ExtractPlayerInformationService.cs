@@ -1,138 +1,137 @@
 ﻿using Dolphin.Enum;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Dolphin.Service
 {
-    public class ExtractPlayerInformationService : IExtractInformationService, IEventGenerator
+    public class ExtractPlayerInformationService : IExtractInformationService, IEventPublisher<PlayerInformationChangedEvent>
     {
-        private readonly IEventChannel eventChannel;
+        private readonly IEventBus eventBus;
+        private readonly ILogService logService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
-        private readonly ILogService logService;
 
-        public ExtractPlayerInformationService(IEventChannel eventChannel, IModelService modelService, IResourceService resourceService, ILogService logService)
+        public ExtractPlayerInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ILogService logService)
         {
-            this.eventChannel = eventChannel;
+            this.eventBus = eventBus;
             this.modelService = modelService;
             this.resourceService = resourceService;
             this.logService = logService;
         }
 
-        public async Task Extract(Bitmap picture)
+        public void Extract(Bitmap picture)
         {
-            if (picture != null)
+            if (picture == null)
             {
-                var classPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 90, Y = 100 }, new Size { Width = 10, Height = 10 }));
-                var healthPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 43, Y = 164 }, new Size { Width = 81, Height = 5 }));
-                var primaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1830, Y = 1230 }, new Size { Height = 194, Width = 2 }));
-                var secondaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1850, Y = 1230 }, new Size { Height = 194, Width = 2 }));
-
-                var classTask = ExtractPlayerClass(await classPart);
-                var healthTask = ExtractHealthPercentage(await healthPart);
-                var primaryTask = ExtractPrimaryResourcePercentage(await primaryPart);
-                var secondaryTask = ExtractSecondaryResourcePercentage(await secondaryPart);
-
-                await classTask;
-                await primaryTask;
-                await healthTask;
-                await secondaryTask;
-                logService.AddEntry(this, $"Player {modelService.Player.Class}, HP: {modelService.Player.HealthPercentage}, Primary: {modelService.Player.PrimaryRessourcePercentage}", LogLevel.Info);
+                logService.AddEntry(this, $"Bitmap was null");
+                return;
             }
-            else
-                logService.AddEntry(this, $"Bitmap was null", LogLevel.Info);
+
+            var classPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 90, Y = 100 }, new Size { Width = 10, Height = 10 }));
+            var healthPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 43, Y = 164 }, new Size { Width = 81, Height = 5 }));
+            var primaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1830, Y = 1230 }, new Size { Height = 194, Width = 2 }));
+            var secondaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1850, Y = 1230 }, new Size { Height = 194, Width = 2 }));
+
+            var classChanged = ExtractPlayerClass(classPart);
+            var healthChanged = ExtractHealth(healthPart);
+            var primaryResourceChanged = ExtractPrimaryResource(primaryPart);
+            var secondaryResourceChanged = ExtractSecondaryResource(secondaryPart);
+
+            var @event = new PlayerInformationChangedEvent();
+            if (classChanged) @event.ChangedProperties.Add(nameof(Player.Class));
+            if (healthChanged) @event.ChangedProperties.Add(nameof(Player.HealthPercentage));
+            if (primaryResourceChanged) @event.ChangedProperties.Add(nameof(Player.PrimaryResourcePercentage));
+            if (secondaryResourceChanged) @event.ChangedProperties.Add(nameof(Player.SecondaryRessourcePercentage));
+
+            if (@event.ChangedProperties.Any())
+            {
+                Publish(@event);
+            }
+
+            logService.AddEntry(this, $"Extracted Playerinformation: [Class:{modelService.Player.Class}, HP: {modelService.Player.HealthPercentage}, PrimaryResource: {modelService.Player.PrimaryResourcePercentage}].");
         }
 
-        public async Task GenerateEvent(EventArgs e)
+        public void Publish(PlayerInformationChangedEvent @event)
         {
-            eventChannel.InvokePlayerInformationChanged(this, e as PlayerInformationEventArgs);
+            eventBus.Publish(@event);
         }
 
-        private async Task ExtractPlayerClass(Bitmap picturePart)
+        private bool ExtractHealth(Bitmap picturePart)
         {
-            var watch = Stopwatch.StartNew();
+            var oldHealth = modelService.Player.HealthPercentage;
 
-            var oldPlayerClass = modelService.Player.Class;
+            var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleHealthEnum());
+            logService.AddEntry(this, $"Player health is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.");
 
-            var found = false;
+            modelService.SetPlayerHealth(compareResult.Item1);
+
+            return oldHealth != modelService.Player.HealthPercentage;
+        }
+
+        private bool ExtractPlayerClass(Bitmap picturePart)
+        {
+            var oldClass = modelService.Player.Class;
+
+            var newPlayerClass = PlayerClass.None;
             foreach (var playerClass in System.Enum.GetValues(typeof(PlayerClass)).Cast<PlayerClass>())
             {
                 if (playerClass is PlayerClass.None) continue;
 
-                var template = await resourceService.Load(playerClass);
-                var match = await ImageHelper.Compare(picturePart, template, 0);
+                var template = resourceService.Load(playerClass);
+                var match = ImageHelper.Compare(picturePart, template);
 
                 if (match >= 0.99)
                 {
-                    modelService.Player.Class = playerClass;
-                    found = true;
+                    newPlayerClass = playerClass;
                     break;
                 }
             }
 
-            if (!found)
-                modelService.Player.Class = PlayerClass.None;
-            logService.AddEntry(this, $"Current playerclass is {modelService.Player.Class}.");
+            modelService.Player.Class = newPlayerClass;
+            logService.AddEntry(this, $"Extracted player class is {newPlayerClass}.");
 
-            if (oldPlayerClass != modelService.Player.Class)
-                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery= "PlayerClass" });
-
-            watch.Stop();
-            Trace.WriteLine($"Checking Player Stats takes {watch.ElapsedMilliseconds}");
+            return newPlayerClass != oldClass;
         }
 
-        private async Task ExtractHealthPercentage(Bitmap picturePart)
+        private bool ExtractPrimaryResource(Bitmap picturePart)
         {
-            var healthEnum = await GetHighestMatch(picturePart, modelService.GetPossibleHealthPercentage());
-            logService.AddEntry(this, $"Player health is most likley to be {healthEnum.Item1}, with odds of {healthEnum.Item2 * 100}%.");
+            var oldPrimary = modelService.Player.PrimaryResourcePercentage;
 
-            var currentHealth = modelService.Player.HealthPercentage;
-            modelService.SetPlayerHealth(healthEnum.Item1);
+            var compareResult = GetHighestMatch(picturePart, modelService.GetPossiblePrimaryResourceEnum());
+            logService.AddEntry(this, $"Player primary resource is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.");
 
-            if (currentHealth != modelService.Player.HealthPercentage)
-                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery = "PlayerHealth"});
+            modelService.SetPlayerPrimaryResource(compareResult.Item1);
+
+            return oldPrimary != modelService.Player.PrimaryResourcePercentage;
         }
 
-        private async Task ExtractPrimaryResourcePercentage(Bitmap picturePart)
+        private bool ExtractSecondaryResource(Bitmap picturePart)
         {
-            var primaryEnum = await GetHighestMatch(picturePart, modelService.GetPossiblePrimaryResource());
-            logService.AddEntry(this, $"Player primary resource is most likley to be {primaryEnum.Item1}, with odds of {primaryEnum.Item2 * 100}%.");
+            var oldSecondary = modelService.Player.SecondaryRessourcePercentage;
 
-            var currentPrimary = modelService.Player.PrimaryRessourcePercentage;
-            modelService.SetPlayerPrimaryResource(primaryEnum.Item1);
+            var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleSecondary());
+            logService.AddEntry(this, $"Player secondary resource is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.");
 
-            if (currentPrimary != modelService.Player.PrimaryRessourcePercentage)
-                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery = "PlayerResourcePrimary" });
+            modelService.SetPlayerSecondaryResource(compareResult.Item1);
+
+            return oldSecondary != modelService.Player.SecondaryRessourcePercentage;
         }
 
-        private async Task ExtractSecondaryResourcePercentage(Bitmap picturePart)
-        {
-            var secondaryEnum = await GetHighestMatch(picturePart, modelService.GetPossibleSecondaryResource());
-            logService.AddEntry(this, $"Player secondary resource is most likley to be {secondaryEnum.Item1}, with odds of {secondaryEnum.Item2 * 100}%.");
-
-            var currentSecondary = modelService.Player.SecondaryRessourcePercentage;
-            modelService.SetPlayerSecondaryResource(secondaryEnum.Item1);
-
-            if (currentSecondary != modelService.Player.SecondaryRessourcePercentage)
-                await GenerateEvent(new PlayerInformationEventArgs { ChangedPropery = "PlayerResourceSecondary"});
-        }
-
-        private async Task<Tuple<T, float>> GetHighestMatch<T>(Bitmap compareTo, IEnumerable<T> possibleEnums)
+        private Tuple<T, float> GetHighestMatch<T>(Bitmap compareTo, IEnumerable<T> possibleEnums)
         {
             var matches = new Dictionary<T, float>();
             foreach (var enumValue in possibleEnums)
             {
-                var template = await resourceService.Load(enumValue);
-                var match = await ImageHelper.Compare(compareTo, template, 0);
+                var template = resourceService.Load(enumValue);
+                var match = ImageHelper.Compare(compareTo, template);
 
                 matches[enumValue] = match;
             }
 
             var bestMatch = matches.OrderBy(x => x.Value).LastOrDefault();
+
             return Tuple.Create(bestMatch.Key, bestMatch.Value);
         }
     }

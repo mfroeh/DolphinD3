@@ -6,18 +6,18 @@ namespace Dolphin.Service
 {
     public class LogService : ILogService
     {
-        public event EventHandler<LogEntryEventArgs> EntryAdded;
+        private readonly Log internalLog;
 
-        private readonly Log log;
-
-        public LogService(Log log)
+        public LogService(Log internalLog)
         {
-            this.log = log;
+            this.internalLog = internalLog;
         }
 
-        public void AddEntry(object origin, string message, LogLevel logLevel, Exception ex = null)
+        public event EventHandler<LogEntryEventArgs> EntryAdded;
+
+        public void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
-            // TODO: Add the origin to the logmesasge (Filename or something)
+            // TODO: Add the origin to the logmesasge (Filename or something) origin.GetType().Namespace
 
             var currentTime = DateTime.Now;
             var fullMessage = $"[{currentTime}]---LogLevel: {logLevel}, Message: {message}";
@@ -28,19 +28,19 @@ namespace Dolphin.Service
                 message += $", Exception: {ex}";
             }
 
-            log.Entries.Add(fullMessage);
-            if (log.Entries.Count >= 100)
+            internalLog.Entries.Add(fullMessage);
+            if (internalLog.Entries.Count >= 100)
             {
                 SaveLog("log.txt");
-                log.Entries.Clear();
+                internalLog.Entries.Clear();
             }
 
-            EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = currentTime });
+            Execute.AndForgetAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = currentTime }));
         }
 
         public void SaveLog(string path)
         {
-            File.AppendAllLines(path, log.Entries);
+            File.AppendAllLines(path, internalLog.Entries);
         }
     }
 }

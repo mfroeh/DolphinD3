@@ -1,20 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Dolphin.Enum;
 
 namespace Dolphin.Service
 {
-    public class SettingsService : ISettingsService
+    public class SettingsService : EventSubscriberBase, ISettingsService, IEventPublisher<PausedEvent>
     {
-        public Settings Settings { get; }
-        public UISettings UISettings { get; }
+        private readonly Subscription<HotkeyPressedEvent> hotkeySubscription;
 
-        public SettingsService(Settings settings)
+        private readonly ILogService logService;
+
+        public SettingsService(IEventBus eventBus, Settings settings, ILogService logService) : base(eventBus)
         {
             Settings = settings;
-            UISettings = settings.UISettings;
+            this.logService = logService;
+
+            hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
+            Subscribe(hotkeySubscription);
+        }
+
+        public Settings Settings { get; }
+
+        public void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)
+        {
+            var pauseHotkey = Settings.Hotkeys[HotkeyName.Pause];
+
+            if (@event.PressedHotkey == pauseHotkey)
+            {
+                Settings.IsPaused = !Settings.IsPaused;
+
+                Publish(new PausedEvent { IsPaused = Settings.IsPaused });
+            }
+        }
+
+        public void Publish(PausedEvent @event)
+        {
+            eventBus.Publish(@event);
+        }
+
+        public bool SkillIsEnabled(SkillName skill)
+        {
+            return Settings.EnabledSkills.Contains(skill);
         }
     }
 }

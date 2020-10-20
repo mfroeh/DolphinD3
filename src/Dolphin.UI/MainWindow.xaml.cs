@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdonisUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Dolphin.Ui
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : AdonisUI.Controls.AdonisWindow
     {
         public MainWindow()
         {
@@ -30,6 +31,24 @@ namespace Dolphin.Ui
             base.OnClosed(e);
 
             Application.Current.Shutdown();
+        }
+
+        public bool IsDark
+        {
+            get => (bool)GetValue(IsDarkProperty);
+            set => SetValue(IsDarkProperty, value);
+        }
+
+        public static readonly DependencyProperty IsDarkProperty = DependencyProperty.Register("IsDark", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, OnIsDarkChanged));
+
+        private static void OnIsDarkChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((MainWindow)d).ChangeTheme((bool)e.OldValue);
+        }
+
+        private void ChangeTheme(bool oldValue)
+        {
+            ResourceLocator.SetColorScheme(Application.Current.Resources, oldValue ? ResourceLocator.LightColorScheme : ResourceLocator.DarkColorScheme);
         }
     }
 }

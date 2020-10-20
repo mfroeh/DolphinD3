@@ -33,30 +33,20 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ActionAdministrationService.cs" />
-    <Compile Include="ActionExecutionService.cs" />
     <Compile Include="CacheService.cs" />
     <Compile Include="CaptureWindowService.cs" />
-    <Compile Include="EventChannel.cs" />
+    <Compile Include="EventBus.cs" />
     <Compile Include="ExtractPlayerInformationService.cs" />
     <Compile Include="ExtractSkillInformationService.cs" />
+    <Compile Include="HotkeyExecutionService.cs" />
+    <Compile Include="HotkeyListenerService.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="ModelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceService.cs" />
     <Compile Include="SettingsService.cs" />
+    <Compile Include="SkillCastingService.cs" />
+    <Compile Include="SkillExecutionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dolphin\Dolphin.csproj">
@@ -65,8 +55,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AForge.Imaging">
-      <Version>2.2.5</Version>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HotkeyListener">
+      <Version>1.5.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

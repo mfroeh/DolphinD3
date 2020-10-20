@@ -8,29 +8,30 @@ namespace Dolphin
 {
     public static class WindowHelper
     {
+        [DllImport("user32.dll")]
+        public static extern bool GetClientRect(IntPtr hwnd, ref Rectangle rect);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
         public static IntPtr GetHWND(string name = "Diablo III64")
         {
             var processes = Process.GetProcessesByName(name);
-
             if (processes.Any())
+            {
                 return processes.First().MainWindowHandle;
-            else
-                return IntPtr.Zero;
+            }
+
+            return IntPtr.Zero;
         }
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rect);
 
         public static bool IsForeground(IntPtr hwnd)
         {
             return GetForegroundWindow() == hwnd;
         }
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        public static extern bool GetClientRect(IntPtr hwnd, ref Rectangle rect);
-
-        [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rect);
 
         [DllImport("user32.dll")]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace Dolphin.Service
 {
@@ -16,34 +13,35 @@ namespace Dolphin.Service
             this.logService = logService;
         }
 
-        public async Task<Bitmap> CaptureWindow(string processName)
+        public Bitmap CaptureWindow(string processName)
         {
             var hwnd = WindowHelper.GetHWND(processName);
-            return await CaptureWindow(hwnd);
+
+            return CaptureWindow(hwnd);
         }
 
-        public async Task<Bitmap> CaptureWindow(IntPtr hwnd)
+        public Bitmap CaptureWindow(IntPtr hwnd)
         {
-            if (hwnd != IntPtr.Zero)
+            if (hwnd == IntPtr.Zero)
             {
-                logService.AddEntry(this, $"Got handle ({hwnd})");
-                var rect = new Rectangle();
-                WindowHelper.GetWindowRect(hwnd, ref rect);
+                logService.AddEntry(this, $"Got empty handle when trying to capture window.");
 
-                var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-                using (var graphics = Graphics.FromImage(bitmap))
-                {
-                    var dc = graphics.GetHdc();
-                    WindowHelper.PrintWindow(hwnd, dc, 0);
-
-                    graphics.ReleaseHdc();
-                }
-                //var grayBitmap = Grayscale.CommonAlgorithms.BT709.Apply(bitmap);
-                return bitmap;
+                return null;
             }
-            logService.AddEntry(this, $"Got empty handle when trying to capture window.");
-            return null;
+
+            var rect = new Rectangle();
+            WindowHelper.GetWindowRect(hwnd, ref rect);
+
+            var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y, PixelFormat.Format24bppRgb);
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                var dc = graphics.GetHdc();
+                WindowHelper.PrintWindow(hwnd, dc, 0);
+
+                graphics.ReleaseHdc();
+            }
+
+            return bitmap;
         }
     }
 }

@@ -7,114 +7,54 @@ namespace Dolphin.Service
 {
     public class ModelService : IModelService
     {
-        public ModelService(Player player, World world)
+        private readonly ILogService logService;
+
+        public ModelService(Player player, World world, ILogService logService)
         {
             Player = player;
             World = world;
+
+            this.logService = logService;
         }
 
         public Player Player { get; }
+
         public World World { get; }
 
-        public IEnumerable<PlayerHealth> GetPossibleHealthPercentage()
+        public IEnumerable<PlayerHealth> GetPossibleHealthEnum()
         {
             foreach (var health in System.Enum.GetValues(typeof(PlayerHealth)).Cast<PlayerHealth>())
                 if (health != PlayerHealth.None) yield return health;
         }
 
-        public IEnumerable<PlayerResource> GetPossiblePrimaryResource()
+        public IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum()
         {
-            switch (Player.Class)
+            foreach (var @enum in StaticResource.ResourceByClass[Player.Class])
             {
-                case PlayerClass.DemonHunterFemale:
-                case PlayerClass.DemonHunterMale:
-                    yield return PlayerResource.PrimaryHatred_100;
-                    yield return PlayerResource.PrimaryHatred_80;
-                    yield return PlayerResource.PrimaryHatred_60;
-                    yield return PlayerResource.PrimaryHatred_40;
-                    yield return PlayerResource.PrimaryHatred_20;
-                    yield return PlayerResource.PrimaryHatred_0;
-                    break;
-
-                default:
-                    yield break;
-                    // throw new NotImplementedException($"GetPossiblePrimaryResource() in ModelAdministrationService.cs is not yet implemented for class {Player.Class}.");
+                if (!nameof(@enum).StartsWith("Secondary"))
+                {
+                    yield return @enum;
+                }
             }
         }
 
-        public IEnumerable<PlayerResource> GetPossibleSecondaryResource()
+        public IEnumerable<Enum.PlayerResource> GetPossibleSecondary()
         {
-            switch (Player.Class)
+            foreach (var @enum in StaticResource.ResourceByClass[Player.Class])
             {
-                case PlayerClass.DemonHunterFemale:
-                case PlayerClass.DemonHunterMale:
-                    yield return PlayerResource.SecondaryDiscipline_100;
-                    yield return PlayerResource.SecondaryDiscipline_80;
-                    yield return PlayerResource.SecondaryDiscipline_60;
-                    yield return PlayerResource.SecondaryDiscipline_40;
-                    yield return PlayerResource.SecondaryDiscipline_20;
-                    yield return PlayerResource.SecondaryDiscipline_0;
-                    break;
-
-                default:
-                    yield break;
+                if (!nameof(@enum).StartsWith("Primary"))
+                {
+                    yield return @enum;
+                }
             }
         }
 
         public IEnumerable<SkillName> GetPossibleSkills()
         {
-            switch (Player.Class)
+            foreach (var @enum in StaticResource.SkillsByClass[Player.Class])
             {
-                case PlayerClass.DemonHunterFemale:
-                case PlayerClass.DemonHunterMale:
-                    yield return SkillName.Companion;
-                    yield return SkillName.Preperation;
-                    yield return SkillName.ShadowPower;
-                    yield return SkillName.Strafe;
-                    yield return SkillName.FanOfKnives;
-                    yield return SkillName.Vengeance;
-                    break;
-
-                default:
-                    yield break;
-                    // throw new NotImplementedException($"GetPossibleSkills() in ModelAdministrationService.cs is not yet implemented for class {Player.Class}.");
+                yield return @enum;
             }
-        }
-
-        public void SetPlayerHealth(PlayerHealth health)
-        {
-            if (health == PlayerHealth.None)
-                Player.HealthPercentage = 0;
-            else
-                Player.HealthPercentage = int.Parse(health.ToString().Split('_')[1]);
-        }
-
-        public void SetPlayerPrimaryResource(PlayerResource primary)
-        {
-            if (primary.ToString().StartsWith("Secondary")) throw new Exception("Recived secondary resource in SetPlayerPrimaryResource()");
-
-            if (primary == PlayerResource.None)
-                Player.PrimaryRessourcePercentage = 0;
-            else
-                Player.PrimaryRessourcePercentage = int.Parse(primary.ToString().Split('_')[1]);
-        }
-
-        public void SetPlayerSecondaryResource(PlayerResource secondary)
-        {
-            if (secondary.ToString().StartsWith("Primary")) throw new Exception("Recived primary resource in SetPlayerSecondaryResource()");
-
-            if (secondary == PlayerResource.None)
-                Player.SecondaryRessourcePercentage = 0;
-            else
-                Player.SecondaryRessourcePercentage = int.Parse(secondary.ToString().Split('_')[1]);
-        }
-
-        public void SetSkill(int index, Skill skill)
-        {
-            if (index >= Player.Skills.Count)
-                Player.Skills.Add(skill);
-            else
-                Player.Skills[index] = skill;
         }
 
         public Skill GetSkill(SkillName name)
@@ -124,10 +64,61 @@ namespace Dolphin.Service
 
         public Skill GetSkill(int index)
         {
-            if (index < Player.Skills.Count)
-                return Player.Skills[index];
+            if (index < Player.Skills.Count) return Player.Skills[index];
+
+            return null;
+        }
+
+        public void SetPlayerHealth(PlayerHealth health)
+        {
+            if (health == PlayerHealth.None)
+            {
+                Player.HealthPercentage = 0;
+            }
             else
-                return null;
+            {
+                Player.HealthPercentage = int.Parse(health.ToString().Split('_')[1]);
+            }
+        }
+
+        public void SetPlayerPrimaryResource(Enum.PlayerResource primary)
+        {
+            if (primary.ToString().StartsWith("Secondary")) throw new Exception("Recived secondary resource in SetPlayerPrimaryResource()");
+
+            if (primary == Enum.PlayerResource.None)
+            {
+                Player.PrimaryResourcePercentage = 0;
+            }
+            else
+            {
+                Player.PrimaryResourcePercentage = int.Parse(primary.ToString().Split('_')[1]);
+            }
+        }
+
+        public void SetPlayerSecondaryResource(Enum.PlayerResource secondary)
+        {
+            if (secondary.ToString().StartsWith("Primary")) throw new Exception("Recived primary resource in SetPlayerSecondaryResource()");
+
+            if (secondary == Enum.PlayerResource.None)
+            {
+                Player.SecondaryRessourcePercentage = 0;
+            }
+            else
+            {
+                Player.SecondaryRessourcePercentage = int.Parse(secondary.ToString().Split('_')[1]);
+            }
+        }
+
+        public void SetSkill(int index, Skill skill)
+        {
+            if (index >= Player.Skills.Count)
+            {
+                Player.Skills.Add(skill);
+            }
+            else
+            {
+                Player.Skills[index] = skill;
+            }
         }
     }
 }

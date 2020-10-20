@@ -2,7 +2,7 @@
 
 namespace Dolphin
 {
-    public class UISettings
+    public class UiSettings
     {
         public LogLevel DisplayLogLevel { get; set; } = LogLevel.Warning;
     }

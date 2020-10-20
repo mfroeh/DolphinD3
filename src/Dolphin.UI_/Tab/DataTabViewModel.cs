@@ -48,7 +48,7 @@ namespace Dolphin.UI
 
         public int PlayerHealth => modelService.Player.HealthPercentage;
 
-        public int PlayerResourcePrimary => modelService.Player.PrimaryRessourcePercentage;
+        public int PlayerResourcePrimary => modelService.Player.PrimaryResourcePercentage;
 
         public int PlayerResourceSecondary => modelService.Player.SecondaryRessourcePercentage;
 

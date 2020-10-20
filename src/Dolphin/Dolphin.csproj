@@ -38,71 +38,56 @@
       <HintPath>..\..\..\..\..\Desktop\D3Helper-CraftAndParagorn-2.6.1-master\D3Helper.Public-master\D3Helper\InputSimulator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncEventHandler.cs" />
-    <Compile Include="EventArgs\PausedEventArgs.cs" />
-    <Compile Include="IActionExecutionService.cs" />
-    <Compile Include="NewEventBus\EventBus.cs" />
-    <Compile Include="NewEventBus\Execute.cs" />
-    <Compile Include="NewEventBus\HotkeyChangedEventArgs.cs" />
-    <Compile Include="NewEventBus\HotkeyExecutionService.cs" />
-    <Compile Include="NewEventBus\HotkeyListenerService.cs" />
-    <Compile Include="NewEventBus\HotkeyPressedEvent.cs" />
-    <Compile Include="NewEventBus\IEvent.cs" />
-    <Compile Include="NewEventBus\IEventBus.cs" />
+    <Compile Include="Enum\HotkeyName.cs" />
+    <Compile Include="EventSubscriberBase.cs" />
+    <Compile Include="Event\PausedEvent.cs" />
+    <Compile Include="Event\SkillRecognitionChangedEvent.cs" />
+    <Compile Include="StaticResource\ConditionDonor.cs" />
+    <Compile Include="Execute.cs" />
+    <Compile Include="HotkeyChangedEventArgs.cs" />
+    <Compile Include="Event\HotkeyPressedEvent.cs" />
+    <Compile Include="Interface\IEvent.cs" />
+    <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="InputHelper.cs" />
-    <Compile Include="ISettingsService.cs" />
-    <Compile Include="NewEventBus\IEventPublisher.cs" />
-    <Compile Include="NewEventBus\SkillCanBeCastedEvent.cs" />
-    <Compile Include="NewEventBus\SkillExecutionService.cs" />
-    <Compile Include="Settings\UISettings.cs" />
+    <Compile Include="Interface\ISettingsService.cs" />
+    <Compile Include="Interface\IEventPublisher.cs" />
+    <Compile Include="StaticResource\Macro.cs" />
+    <Compile Include="StaticResource\MacroDonor.cs" />
+    <Compile Include="Event\PlayerInformationChangedEvent.cs" />
+    <Compile Include="Event\SkillCanBeCastedEvent.cs" />
+    <Compile Include="Settings\UiSettings.cs" />
     <Compile Include="Subscription.cs" />
-    <Compile Include="_Action.cs" />
-    <Compile Include="ConditionFunction.cs" />
-    <Compile Include="Condition.cs" />
+    <Compile Include="StaticResource\SkillDonor.cs" />
+    <Compile Include="StaticResource\Condition.cs" />
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\PlayerClass.cs" />
     <Compile Include="Enum\PlayerHealth.cs" />
     <Compile Include="Enum\PlayerResource.cs" />
-    <Compile Include="EventArgs\BuffInformationEventArgs.cs" />
-    <Compile Include="EventArgs\HotkeyInformationEventArgs.cs" />
-    <Compile Include="ConditionExtensionMethods.cs" />
-    <Compile Include="IActionAdministrationService.cs" />
-    <Compile Include="ICacheService.cs" />
-    <Compile Include="ICaptureWindowService.cs" />
-    <Compile Include="IEventChannel.cs" />
-    <Compile Include="IEventGenerator.cs" />
-    <Compile Include="NewEventBus\IEventSubscriber.cs" />
-    <Compile Include="IExtractInformationService.cs" />
-    <Compile Include="ILogService.cs" />
+    <Compile Include="Interface\ICacheService.cs" />
+    <Compile Include="Interface\ICaptureWindowService.cs" />
+    <Compile Include="Interface\IEventSubscriber.cs" />
+    <Compile Include="Interface\IExtractInformationService.cs" />
+    <Compile Include="Interface\ILogService.cs" />
     <Compile Include="ImageHelper.cs" />
-    <Compile Include="IModelService.cs" />
-    <Compile Include="EventArgs\LogEntryEventArgs.cs" />
-    <Compile Include="IResourceService.cs" />
+    <Compile Include="Interface\IModelService.cs" />
+    <Compile Include="LogEntryEventArgs.cs" />
+    <Compile Include="Interface\IResourceService.cs" />
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Enum\BuffName.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Player.cs" />
-    <Compile Include="EventArgs\PlayerInformationEventArgs.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="Enum\WorldLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Skill.cs" />
-    <Compile Include="EventArgs\SkillInformationEventArgs.cs" />
     <Compile Include="Enum\SkillName.cs" />
-    <Compile Include="EventArgs\WorldInformationEventArgs.cs" />
+    <Compile Include="StaticResource\StaticResource.cs" />
     <Compile Include="WindowHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +97,1153 @@
     <PackageReference Include="HotkeyListener">
       <Version>1.5.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerClass\PlayerClass_DemonHunterFemale.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerClass\PlayerClass_DemonHunterMale.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_60.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerHealth\PlayerHealth_H_80.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_60.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_PrimaryHatred_80.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_100.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_20.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_60.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Player\PlayerResource\PlayerResource_SecondaryDiscipline_80.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Companion.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_FanOfKnives.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Preperation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_ShadowPower.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Strafe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Skill\SkillName_Vengeance.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\BarbarianFemale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\BarbarianMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\DemonHunterFemale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\DemonHunterMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\MonkFemale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\MonkMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\WitchDoctorFemale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\WitchDoctorMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\WizardFemale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Class\WizardMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Acidcloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Aggressio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Aggression.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Akaratschampion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ambush.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Anatomy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ancientspear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Arcaneaegis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Arcaneblast.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Arcaneorb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Arcanestrike.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Arcanetorrent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Archery.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Archon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Armyofthedead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Assault.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Astralpresence.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Audacity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Awareness.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Backtobasics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Badmedicine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Badtemper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ballistics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Battlerage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Beasthunter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bigbadvoodoo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blackice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blessed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blessedshield.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blindingflash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blizzard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bloodrites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bloodrush.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blunt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Blur.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bolas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bombardment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bonearmor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bonespear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bonespikes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Bonespirit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Breathofheaven.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Calloftheancients.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Caltrops.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Careofthemaster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Casting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Chakram.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Cleave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Cloakofshadows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Cloakofshadows1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Clusterarrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Combinationstrike.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Combinationstrikes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Commandgolem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Commandskeletons.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Companion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Condemn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Conflagratio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Conflagration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Consecration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Corpseexplosion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Corpselance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Corpsespider.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Counterattack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Creepingdeath.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Cripplingwave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Criticalmass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Cruelty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Cyclonestrike.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Damage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Dashingstrike.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Deadlyreach.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Deathnova.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Deathpact.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Decrepify.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Demonbane.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Determinatio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Determination.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Devour.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Diamondskin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Disintegrate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Disintegrationwave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Divinefortress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Drainpower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Earthenmight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Earthquake.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Electrified.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Electrocute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Elementalarrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Elementalexposure.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Empoweredarmor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\EmptyFrame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Energyarmor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Energyreserves.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Energytwister.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Enlightened.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Entanglingshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Epiphany.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Evasivefire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Exaltedsoul.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Expertdefense.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Explodingpalm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Explosiveblast.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fallingsword.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Familiar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fanaticism.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fanofknives.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ferocity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fervor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fetisharmy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fetishleader.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Finery.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Firebats.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Firebomb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fistoftheheavens.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fistsofthunder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Flawlesstechnique.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fleet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Flightbeforefight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Focuseddiscipline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Fortune.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Frailty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Frenzied.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Frenziedattacks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Frenzy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Frostnova.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Furiouscharge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Gargantuan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Glasscanno.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Glasscannon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Graspofthedead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Graveinjustice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Grenades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Grimscythe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Groundstomp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Guidinglight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hammeroftheancients.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Harmony.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Haunt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\HealthPotion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Heavenlystrength.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Heavensfury3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hoarder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Holdyourground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Holycause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Horrify.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hotpursuit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hungeringarrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hydra.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Hysteria.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Icearmor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ignorepain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Impale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Indestructible.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Innerrage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Innersanctuary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Insanecourage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Insurmountable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Intimidatio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Intimidation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Invulnerable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ironmaide.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ironmaiden.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ironski.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ironskin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Judgment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Junglefortitude.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Justice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Juststaydead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Killingspree.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Knowledgeispower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Landofthedead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lashingtailkick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lawsoffate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lawsofhope2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lawsofjustice2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lawsofvalor2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Leaderofthepack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Leap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Leech.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Legendarymight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lightningreflexes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Longarmofthelaw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lordcommander.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Lucky.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Magicmissile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Magicweapon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Manaregeneratio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Manaregeneration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Markedfordeath.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Marksma.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Marksman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Massconfusion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Meditatio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Meditation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Meteor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Midnightfeast.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Mindandbody.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Mirrorimage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Momentum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Multishot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Mythicrhythm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Naturalleader.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Neardeathexperience.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Nephalemmajesty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Nervesofsteel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Nirvana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Normal-2047437116.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Numbingtraps.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Opportunity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Overpower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Paralysis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Phalanx3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Physicalattunement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Piercingattacks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Piranhas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Plagued.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Plaguedcast.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Plagueoftoads.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Poisondart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Poundofflesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Preparation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Preperation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Provoke.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Punish.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Quickeni.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Quickening.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rainofvengeance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rampage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rapidfire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rapidreload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rayoffrost.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Reloaded.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rend.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Renewal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Resonance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Resourcefulness.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Revenge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Revive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Ritualofblood.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Rituals.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sacrifice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Secondwind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Seismicslam.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Selflesshealer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sentry.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Serenity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sevensidedstrike.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\ShadowPower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sharpshooter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Shieldbash2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Shieldglare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Shieldofiro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Shieldofiron.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Shockpulse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Simulacrum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Singleout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Siphonblood.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sixthsense.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Skeletalmage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Slash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Slaughter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Slowtime.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Smite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Smokescreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Soulharvest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Spectralblade.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Speed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Spiketrap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Spiritbarrage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Spiritualattunement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Spiritvessel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Spiritwalk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sprint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Steadyaim.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Steedcharge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Stormarmor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Strafe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Strengthinadversity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Strengthofspirit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Summonzombiedog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Superiorskill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Superstitious.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Svg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Swarm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sweepattack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sweepingwind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Swordandboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Sycophant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Tacticaladvantage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Telekinesis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Teleport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Tempestrush.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Temporalflux.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Temporalshift.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Threateningshout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Thunderousblows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Tieredrift.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Toughness.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Toweringshield.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Unbreakablewill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Unstableenergy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Untouchable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Unwaveringwill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\V2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Vault.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Vengeance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Vigilant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wallofzombies.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wandspecializatio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wandspecialization.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Warpaint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Waveofforce.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Waveoflight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wayofthehundredfists.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Weakspot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Weaponthrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Whirlwind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wormhole.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wrathful.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Wrathoftheberserker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Yearsoftraini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Yearsoftraining.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Zombiecharger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Zombiedogspawner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\UI\Skill\Zombiemaster.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

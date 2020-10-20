@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Security.Policy;
 using System.Windows.Input;
 using Unity;
 
@@ -8,7 +9,7 @@ namespace Dolphin.Ui
 {
     public class MainViewModel : ViewModelBase
     {
-        public ICollection<IViewModelBase> Children { get; } = new ObservableCollection<IViewModelBase>();
+        private string status = "Ready";
 
         public MainViewModel(IUnityContainer container)
         {
@@ -16,7 +17,8 @@ namespace Dolphin.Ui
             tab0.Parent = this;
             Children.Add(tab0);
         }
+        public ICollection<IViewModelBase> Children { get; } = new ObservableCollection<IViewModelBase>();
 
-        public ICommand Command => new RelayCommand((_) => Trace.WriteLine("Wrong vm"));
+        public string Status { get { return status; } set { status = value; RaisePropertyChanged("Status"); } }
     }
 }

@@ -21,7 +21,7 @@ namespace Dolphin.Service
 
         public void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)
         {
-            var pauseHotkey = Settings.Hotkeys[HotkeyName.Pause];
+            var pauseHotkey = Settings.Hotkeys[ActionName.Pause];
 
             if (@event.PressedHotkey == pauseHotkey)
             {
@@ -34,6 +34,11 @@ namespace Dolphin.Service
         public void Publish(PausedEvent @event)
         {
             eventBus.Publish(@event);
+        }
+
+        public void SetHotkeyValue(ActionName key, WK.Libraries.HotkeyListenerNS.Hotkey value)
+        {
+            Settings.Hotkeys[key] = value;
         }
 
         public bool SkillIsEnabled(SkillName skill)

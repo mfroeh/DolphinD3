@@ -43,10 +43,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enum\HotkeyName.cs" />
+    <Compile Include="Enum\ActionName.cs" />
     <Compile Include="EventSubscriberBase.cs" />
     <Compile Include="Event\PausedEvent.cs" />
     <Compile Include="Event\SkillRecognitionChangedEvent.cs" />
+    <Compile Include="Settings\MacroSettings.cs" />
     <Compile Include="StaticResource\ConditionDonor.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="HotkeyChangedEventArgs.cs" />

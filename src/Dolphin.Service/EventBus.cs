@@ -21,7 +21,7 @@ namespace Dolphin.Service
         {
             lock (subscribers)
             {
-                subscribers.Add((Subscription<IEvent>)(object)subscriber);
+                //   subscribers.Add((Subscription<IEvent>)(object)subscriber);
             }
         }
 
@@ -29,7 +29,7 @@ namespace Dolphin.Service
         {
             lock (subscribers)
             {
-                subscribers.Remove((Subscription<IEvent>)(object)subscriber);
+                //  subscribers.Remove((Subscription<IEvent>)(object)subscriber);
             }
         }
     }

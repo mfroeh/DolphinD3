@@ -1,6 +1,6 @@
 ﻿namespace Dolphin.Enum
 {
-    public enum HotkeyName
+    public enum ActionName
     {
         None = 0,
         Pause = 1,

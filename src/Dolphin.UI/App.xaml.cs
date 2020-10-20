@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dolphin.Service;
+using Dolphin.Ui.Dialog;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -6,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Unity;
+using Unity.Lifetime;
 
 namespace Dolphin.Ui
 {
@@ -20,8 +23,16 @@ namespace Dolphin.Ui
 
             var container = new UnityContainer();
 
+            container.RegisterInstance(new Settings());
+
+            container.RegisterType<IEventBus, EventBus>(new ContainerControlledLifetimeManager());
+
+            container.RegisterType<ISettingsService, SettingsService>();
+            container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
+
             container.RegisterType<IViewModelBase, MainViewModel>("main");
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
+            container.RegisterType<IViewModelBase, ChangeHotkeyDialogViewModel>("changeHotkey");
 
             container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
 
@@ -57,7 +68,6 @@ namespace Dolphin.Ui
         container.RegisterType<ViewModelBase, MainWindowViewModel>("main");
         container.RegisterType<TabViewmodelBase, DataTabViewModel>("data");
         container.RegisterType<TabViewmodelBase, LogTabViewModel>("log");
-
 
         var mainVM = container.Resolve<ViewModelBase>("main");
         MainWindow = new MainWindow { DataContext = mainVM };

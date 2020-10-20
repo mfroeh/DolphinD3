@@ -7,19 +7,23 @@
         xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
         xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:HotkeyConverter x:Key="HotkeyConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <TabControl Margin="{adonisUi:Space}">
-                <TabItem Header="Hotkey" DataContext="{Binding Children[0]}">
-                    <local:HotkeyTabView></local:HotkeyTabView>
-                </TabItem>
-            </TabControl>
-        </Grid>
-
+        <ScrollViewer>
+            <Grid Grid.Row="0">
+                <TabControl Margin="{adonisUi:Space}">
+                    <TabItem Header="Hotkey" DataContext="{Binding Children[0]}">
+                        <local:HotkeyTabView></local:HotkeyTabView>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </ScrollViewer>
         <StatusBar Grid.Row="1">
             <StatusBarItem>
                 <TextBlock Text="{Binding Status}"></TextBlock>
@@ -29,11 +33,11 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Light"
                                                    VerticalAlignment="Center"
-                                                   Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                                                   Margin="{adonisUi:Space 0, 0, 1, 0}" />
 
                     <ToggleButton Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}"
                                                       IsChecked="{Binding IsDark, RelativeSource={RelativeSource FindAncestor, AncestorType=local:MainWindow}}"
-                                                      Content="Dark"/>
+                                                      Content="Dark" />
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>

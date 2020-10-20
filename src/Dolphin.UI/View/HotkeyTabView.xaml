@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Dolphin.Ui.HotkeyTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Dolphin.Ui"
              mc:Ignorable="d"
              xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
@@ -10,7 +10,11 @@
              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
              xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="777" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <local:HotkeyConverter x:Key="HotkeyConverter"></local:HotkeyConverter>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -22,23 +26,203 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Hotkeys1" Margin="{adonisUi:Space}">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="General" Margin="{adonisUi:Space}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Row="0" Grid.Column="0" IsReadOnly="True" Margin="{adonisUi:Space}">Hotkey Binding 0</TextBox>
-                <Button Grid.Row="0" Grid.Column="2" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space}" >Change</Button>
+                <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Left click</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
 
-                <TextBox Grid.Row="1" Grid.Column="0" IsReadOnly="True" Margin="{adonisUi:Space}">Hotkey Binding1</TextBox>
-                <Button Grid.Row="1" Grid.Column="2" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space}">Change</Button>
+                <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Right click</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}" Text="{Binding Hotkeys[CubeConverter]}"></TextBox>
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">Change</Button>
+
+                <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Normalize difficulty</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}" Text="{Binding Hotkeys[CubeConverter]}"></TextBox>
+                <Button Grid.Row="2" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">Change</Button>
+
+                <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Swap armour</Label>
+                <TextBox Grid.Row="3" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}" Text="{Binding Hotkeys[CubeConverter]}"></TextBox>
+                <Button Grid.Row="3" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">Change</Button>
+
+                <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Pause Dolphin</Label>
+                <TextBox Grid.Row="4" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}" Text="{Binding Hotkeys[CubeConverter]}"></TextBox>
+                <Button Grid.Row="4" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">Change</Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Traveling" Margin="{adonisUi:Space}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Next Pool</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Act 1 town</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Act 2 town</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="2" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Act 3/4 town</Label>
+                <TextBox Grid.Row="3" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="3" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Act 5 town</Label>
+                <TextBox Grid.Row="4" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="4" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="During rift" Margin="{adonisUi:Space}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Open rift</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Upgrade gem</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Leave game</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="2" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">Gem options</Label>
+                <WrapPanel Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">
+                    <CheckBox Content="Empowered" VerticalAlignment="Center" IsChecked="{Binding x}" Margin="{adonisUi:Space Left=0,Bottom=0}"></CheckBox>
+                    <CheckBox Content="Choose gem" IsChecked="{Binding x}"  VerticalAlignment="Center"  Margin="{adonisUi:Space Bottom=0, Left=0, Right=.5}"></CheckBox>
+                </WrapPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Post rift" Margin="{adonisUi:Space}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Salvage</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Drop inventory</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Gamble</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="2" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Spare columns</Label>
+                <ComboBox Grid.Row="3" Grid.Column="3"
+                                      SelectedIndex="{Binding x}"
+                                      adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
+                                      adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
+                                      Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Gamble item</Label>
+                <ComboBox Grid.Row="4" Grid.Column="3"
+                                      SelectedIndex="{Binding x}"
+                                      adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
+                                      adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
+                                      Margin="{adonisUi:Space Left=0,Bottom=0,  Right=.5}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Grid.Column="0" Header="Cube converter" Margin="{adonisUi:Space}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Single slot</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Dual slot</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Reforge/convert set</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" MinWidth="70" IsReadOnly="True" HorizontalAlignment="Center" Text="{Binding Hotkeys[Pause]}" Margin="{adonisUi:Space Left=0,Bottom=0}"></TextBox>
+                <Button Grid.Row="2" Grid.Column="3" Command="{Binding ChangeHotkeyCommand}" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">Change</Button>
+
+                <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="{adonisUi:Space Left=0,Bottom=0}">Converting speed</Label>
+                <WrapPanel Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal" Margin="{adonisUi:Space Left=0,Bottom=0, Right=.5}">
+                    <RadioButton IsChecked="{Binding x}" Content="Fast" Margin="{adonisUi:Space Left=1,Bottom=0}"></RadioButton>
+                    <RadioButton IsChecked="{Binding x}" Content="Normal" Margin="{adonisUi:Space Left=1,Bottom=0}"></RadioButton>
+                    <RadioButton IsChecked="{Binding x}" Content="Slow" Margin="{adonisUi:Space Left=1,Bottom=0, Right=0.5}"></RadioButton>
+                </WrapPanel>
             </Grid>
         </GroupBox>
     </Grid>

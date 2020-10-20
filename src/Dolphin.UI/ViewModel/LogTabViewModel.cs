@@ -1,23 +1,36 @@
-﻿using System;
+﻿using Dolphin.Enum;
+using Dolphin.Service;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace Dolphin.Ui
 {
+    public class LogEntry
+    {
+        public LogLevel LogLevel { get; set; }
+
+        public string Message { get; set; }
+
+        public string Time { get; set; }
+    }
+
     public class LogTabViewModel : ViewModelBase
     {
-        // private readonly ILogService logService;
-
         private readonly object logLock = new object();
+        private readonly ILogService logService;
 
-        public LogTabViewModel()// ISettingsService settingsService, ILogService logService) : base(settingsService)
+        private readonly ISettingsService settingsService;
+
+        public LogTabViewModel(ISettingsService settingsService, ILogService logService)
         {
             this.logService = logService;
-
+            this.settingsService = settingsService;
             logService.EntryAdded += OnEntryAdded;
-            Title = "Log";
 
             BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
         }
@@ -26,15 +39,17 @@ namespace Dolphin.Ui
         {
             get
             {
-                return settingsService.UISettings.DisplayLogLevel;
+                return settingsService.Settings.UiSettings.DisplayLogLevel;
             }
             set
             {
-                settingsService.UISettings.DisplayLogLevel = value;
+                settingsService.Settings.UiSettings.DisplayLogLevel = value;
                 LogMessages.Clear(); // TODO: remove later
                 RaisePropertyChanged("DisplayLogLevel");
             }
         }
+
+        public ICollection<LogEntry> LogMessages { get; } = new ObservableCollection<LogEntry>();
 
         public IEnumerable<LogLevel> PossibleLogLevel
         {
@@ -44,8 +59,6 @@ namespace Dolphin.Ui
             }
         }
 
-        public ICollection<LogEntry> LogMessages { get; } = new ObservableCollection<LogEntry>();
-
         private void OnEntryAdded(object sender, LogEntryEventArgs e)
         {
             if (e.LogLevel.CompareTo(DisplayLogLevel) <= 0)
@@ -54,12 +67,4 @@ namespace Dolphin.Ui
             }
         }
     }
-
-    public class LogEntry
-    {
-        public string Message { get; set; }
-        public LogLevel LogLevel { get; set; }
-        public string Time { get; set; }
-    }
-}
 }

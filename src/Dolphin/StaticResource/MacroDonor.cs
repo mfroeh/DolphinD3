@@ -6,7 +6,7 @@ namespace Dolphin
 {
     public static class MacroDonor
     {
-        public static Action<IntPtr, CancellationTokenSource> GetCancellableMacro(HotkeyName macro, Settings settings = null)
+        public static Action<IntPtr, CancellationTokenSource> GetCancellableMacro(ActionName macro, Settings settings = null)
         {
             if (settings == null)
             {
@@ -18,7 +18,7 @@ namespace Dolphin
             return null;
         }
 
-        public static Action<IntPtr> GetMacro(HotkeyName macro, Settings settings = null)
+        public static Action<IntPtr> GetMacro(ActionName macro, Settings settings = null)
         {
             if (settings == null)
             {

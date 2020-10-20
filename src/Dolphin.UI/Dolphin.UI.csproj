@@ -57,35 +57,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LogTabViewModel.cs" />
+    <Compile Include="ObservableDictionary.cs" />
+    <Compile Include="ViewModel\LogTabViewModel.cs" />
     <Compile Include="View\HotkeyTabView.xaml.cs">
       <DependentUpon>HotkeyTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LogTabView.xaml.cs">
       <DependentUpon>LogTabView.xaml</DependentUpon>
     </Compile>
-    <Content Include="HotkeyConverter.txt" />
-    <Compile Include="HotkeyInput\ChangeHotkeyDialog.xaml.cs">
+    <Compile Include="HotkeyConverter.cs" />
+    <Compile Include="Dialog\ChangeHotkeyDialog.xaml.cs">
       <DependentUpon>ChangeHotkeyDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HotkeyInput\ChangeHotkeyDialogViewModel.cs" />
-    <Compile Include="HotkeyInput\InputControlHotkey.cs" />
-    <Compile Include="HotkeyTabView.xaml.cs">
-      <DependentUpon>HotkeyTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HotkeyTabViewModel.cs" />
+    <Compile Include="Dialog\ChangeHotkeyDialogViewModel.cs" />
+    <Compile Include="ViewModel\HotkeyTabViewModel.cs" />
     <Compile Include="IViewModelBase.cs" />
-    <Compile Include="MainViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="LogTabView.xaml.cs">
-      <DependentUpon>LogTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModelBase.cs" />
-    <Page Include="HotkeyInput\ChangeHotkeyDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HotkeyTabView.xaml">
+    <Page Include="Dialog\ChangeHotkeyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,10 +91,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="LogTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\HotkeyTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -147,6 +133,9 @@
     <PackageReference Include="AdonisUI.ClassicTheme">
       <Version>1.16.0</Version>
     </PackageReference>
+    <PackageReference Include="Extended.Wpf.Toolkit">
+      <Version>4.0.1</Version>
+    </PackageReference>
     <PackageReference Include="HotkeyListener">
       <Version>1.5.0</Version>
     </PackageReference>
@@ -163,9 +152,16 @@
       <Version>5.11.6</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Dialog\" />
-    <Folder Include="ViewModel\" />
+    <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
+      <Project>{1966956e-6203-42f0-b3d4-376d17d83677}</Project>
+      <Name>Dolphin.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dolphin\Dolphin.csproj">
+      <Project>{8f47c780-b17e-494a-a541-7bb5682e7568}</Project>
+      <Name>Dolphin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

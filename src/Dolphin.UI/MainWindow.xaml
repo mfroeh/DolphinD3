@@ -36,7 +36,7 @@
                                                    Margin="{adonisUi:Space 0, 0, 1, 0}" />
 
                     <ToggleButton Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}"
-                                                      IsChecked="{Binding IsDark, RelativeSource={RelativeSource FindAncestor, AncestorType=local:MainWindow}}"
+                                                      IsChecked="{Binding IsDark}"
                                                       Content="Dark" />
                 </StackPanel>
             </StatusBarItem>

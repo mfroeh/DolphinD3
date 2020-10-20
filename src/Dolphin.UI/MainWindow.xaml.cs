@@ -32,23 +32,5 @@ namespace Dolphin.Ui
 
             Application.Current.Shutdown();
         }
-
-        public bool IsDark
-        {
-            get => (bool)GetValue(IsDarkProperty);
-            set => SetValue(IsDarkProperty, value);
-        }
-
-        public static readonly DependencyProperty IsDarkProperty = DependencyProperty.Register("IsDark", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, OnIsDarkChanged));
-
-        private static void OnIsDarkChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((MainWindow)d).ChangeTheme((bool)e.OldValue);
-        }
-
-        private void ChangeTheme(bool oldValue)
-        {
-            ResourceLocator.SetColorScheme(Application.Current.Resources, oldValue ? ResourceLocator.LightColorScheme : ResourceLocator.DarkColorScheme);
-        }
     }
 }

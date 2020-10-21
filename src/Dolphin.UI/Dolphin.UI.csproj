@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EnumBooleanConverter.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="ViewModel\LogTabViewModel.cs" />
     <Compile Include="View\HotkeyTabView.xaml.cs">
@@ -65,7 +66,6 @@
     <Compile Include="View\LogTabView.xaml.cs">
       <DependentUpon>LogTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HotkeyConverter.cs" />
     <Compile Include="Dialog\ChangeHotkeyDialog.xaml.cs">
       <DependentUpon>ChangeHotkeyDialog.xaml</DependentUpon>
     </Compile>

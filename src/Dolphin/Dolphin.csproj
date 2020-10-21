@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\ActionName.cs" />
+    <Compile Include="Enum\ConvertingSpeed.cs" />
+    <Compile Include="Enum\ItemType.cs" />
     <Compile Include="EventSubscriberBase.cs" />
     <Compile Include="Event\PausedEvent.cs" />
     <Compile Include="Event\SkillRecognitionChangedEvent.cs" />

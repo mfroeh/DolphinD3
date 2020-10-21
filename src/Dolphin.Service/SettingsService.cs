@@ -19,16 +19,21 @@ namespace Dolphin.Service
 
         public Settings Settings { get; }
 
-        public void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)
+        private void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)
         {
             var pauseHotkey = Settings.Hotkeys[ActionName.Pause];
 
             if (@event.PressedHotkey == pauseHotkey)
             {
-                Settings.IsPaused = !Settings.IsPaused;
-
-                Publish(new PausedEvent { IsPaused = Settings.IsPaused });
+                NegateIsPaused();
             }
+        }
+
+        public void NegateIsPaused()
+        {
+            Settings.IsPaused = !Settings.IsPaused;
+
+            Publish(new PausedEvent { IsPaused = Settings.IsPaused });
         }
 
         public void Publish(PausedEvent @event)

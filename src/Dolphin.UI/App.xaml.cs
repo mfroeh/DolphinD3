@@ -27,6 +27,12 @@ namespace Dolphin.Ui
 
             container.RegisterType<IEventBus, EventBus>(new ContainerControlledLifetimeManager());
 
+            var eventBus = container.Resolve<IEventBus>();
+            var subscription = new Subscription<PausedEvent>((object o, IEvent x) => Console.WriteLine());
+
+            var cast = (ISubscription<IEvent>)subscription;
+            eventBus.Subscribe(subscription);
+
             container.RegisterType<ISettingsService, SettingsService>();
             container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
 

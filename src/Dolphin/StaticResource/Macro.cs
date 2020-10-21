@@ -25,8 +25,8 @@ namespace Dolphin
             if (tokenSource.Token.IsCancellationRequested)
             {
                 Trace.WriteLine("Cancellation requested!");
-                tokenSource.Dispose();
                 tokenSource = null;
+                tokenSource.Dispose();
 
                 return true;
             }

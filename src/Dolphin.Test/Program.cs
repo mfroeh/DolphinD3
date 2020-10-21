@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Dolphin.Service;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -9,50 +10,27 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Unity.Lifetime;
 using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Test
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
-            var hotkeySelector = new HotkeySelector();
+            var container = new UnityContainer();
 
-            var hk = new Hotkey(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift, System.Windows.Forms.Keys.A);
+            container.RegisterInstance(new Settings());
 
-            var key = KeyInterop.KeyFromVirtualKey((int)hk.KeyCode);
+            container.RegisterType<EventBus, EventBus>(new ContainerControlledLifetimeManager());
 
-            var modifiers = hk.Modifiers.ToWinforms();
+            var eventBus = container.Resolve<IEventBus>();
+            var subscription = new Subscription<PausedEvent>((object o, IEvent x) => Console.WriteLine());
 
-            Trace.WriteLine(hk);
+            var cast = (ISubscription<IEvent>)subscription;
+            eventBus.Subscribe(subscription);
         }
 
-        public static System.Windows.Forms.Keys ToWinforms(this System.Windows.Input.ModifierKeys modifier)
-        {
-            var retVal = System.Windows.Forms.Keys.None;
-            if (modifier.HasFlag(System.Windows.Input.ModifierKeys.Alt))
-            {
-                retVal |= System.Windows.Forms.Keys.Alt;
-            }
-            if (modifier.HasFlag(System.Windows.Input.ModifierKeys.Control))
-            {
-                retVal |= System.Windows.Forms.Keys.Control;
-            }
-            if (modifier.HasFlag(System.Windows.Input.ModifierKeys.None))
-            {
-                // Pointless I know
-                retVal |= System.Windows.Forms.Keys.None;
-            }
-            if (modifier.HasFlag(System.Windows.Input.ModifierKeys.Shift))
-            {
-                retVal |= System.Windows.Forms.Keys.Shift;
-            }
-            if (modifier.HasFlag(System.Windows.Input.ModifierKeys.Windows))
-            {
-                // Not supported lel
-            }
-            return retVal;
-        }
     }
 }

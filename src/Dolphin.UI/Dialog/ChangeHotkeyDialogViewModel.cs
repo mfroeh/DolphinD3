@@ -1,8 +1,11 @@
-﻿using MvvmDialogs;
+﻿using Dolphin.Enum;
+using MvvmDialogs;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Xaml;
 using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Ui.Dialog
@@ -51,6 +54,8 @@ namespace Dolphin.Ui.Dialog
 
         public ICommand SaveCommand => new RelayCommand(SaveCommandAction);
 
+        public ActionName EditingAction { get; set; }
+
         public void SetHotkey(Hotkey currentHotkey)
         {
             oldHotkey = currentHotkey;
@@ -59,12 +64,24 @@ namespace Dolphin.Ui.Dialog
 
         private void SaveCommandAction(object o)
         {
-            if (settingsService.Settings.Hotkeys.Values.Contains(Hotkey) && Hotkey != null)
+            if (Hotkey != null)
             {
-                var actionName = settingsService.Settings.Hotkeys.Where(item => item.Value == Hotkey).First().Key; // TODO: Also need the actionname here
-                var result = ShowWarningMessageBox($"{Hotkey} is already allocated to {actionName}. Delete existing allocation?");
+                var actionWithSameHotkey = ActionName.None;
+                foreach (var item in settingsService.Settings.Hotkeys.Where(item => item.Key != EditingAction))
+                {
+                    if (item.Value == Hotkey)
+                    {
+                        actionWithSameHotkey = item.Key;
+                        break;
+                    }
+                }
 
-                if (!result) return;
+                if (actionWithSameHotkey != ActionName.None)
+                {
+                    var result = ShowWarningMessageBox($"{Hotkey} is already allocated to {actionWithSameHotkey}. Delete existing allocation?");
+
+                    if (!result) return;
+                }
             }
 
             DialogResult = true;

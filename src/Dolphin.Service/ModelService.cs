@@ -29,7 +29,7 @@ namespace Dolphin.Service
 
         public IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum()
         {
-            foreach (var @enum in StaticResource.ResourceByClass[Player.Class])
+            foreach (var @enum in StaticResource.ResourceDictionary[Player.Class])
             {
                 if (!nameof(@enum).StartsWith("Secondary"))
                 {
@@ -40,7 +40,7 @@ namespace Dolphin.Service
 
         public IEnumerable<Enum.PlayerResource> GetPossibleSecondary()
         {
-            foreach (var @enum in StaticResource.ResourceByClass[Player.Class])
+            foreach (var @enum in StaticResource.ResourceDictionary[Player.Class])
             {
                 if (!nameof(@enum).StartsWith("Primary"))
                 {
@@ -51,7 +51,7 @@ namespace Dolphin.Service
 
         public IEnumerable<SkillName> GetPossibleSkills()
         {
-            foreach (var @enum in StaticResource.SkillsByClass[Player.Class])
+            foreach (var @enum in StaticResource.SkillDictionary[Player.Class])
             {
                 yield return @enum;
             }

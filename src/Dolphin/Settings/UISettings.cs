@@ -4,8 +4,10 @@ namespace Dolphin
 {
     public class UiSettings
     {
-        public LogLevel DisplayLogLevel { get; set; } = LogLevel.Warning;
+        public LogLevel DisplayLogLevel { get; set; }
 
         public bool IsDark { get; set; }
+
+        public bool LogPaused { get; set; }
     }
 }

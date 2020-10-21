@@ -9,6 +9,8 @@ namespace Dolphin
 
         void SetHotkeyValue(ActionName key, Hotkey value);
 
+        void NegateIsPaused();
+
         bool SkillIsEnabled(SkillName skill);
     }
 }

@@ -21,7 +21,7 @@ namespace Dolphin.Service
             this.travelService = travelService;
         }
 
-        public Action FindAction(ActionName actionName)
+        public Action FindAction(ActionName actionName, IntPtr handle)
         {
             if (cancellableMacros.Contains(actionName))
             {
@@ -31,43 +31,43 @@ namespace Dolphin.Service
             switch (actionName)
             {
                 case ActionName.RightClick:
-                    return () => RightClick(WindowHelper.GetHWND());
+                    return () => RightClick(handle);
 
                 case ActionName.LeftClick:
-                    return () => LeftClick(WindowHelper.GetHWND());
+                    return () => LeftClick(handle);
 
                 case ActionName.DropInventory:
-                    return () => DropInventory(WindowHelper.GetHWND());
+                    return () => DropInventory(handle);
 
                 case ActionName.Salvage:
-                    return () => Salvage(WindowHelper.GetHWND());
+                    return () => Salvage(handle);
 
                 case ActionName.OpenGrift:
-                    return () => OpenGrift(WindowHelper.GetHWND());
+                    return () => OpenGrift(handle);
 
                 case ActionName.LeaveGame:
-                    return () => LeaveGame(WindowHelper.GetHWND());
+                    return () => LeaveGame(handle);
 
                 case ActionName.Reforge:
-                    return () => Reforge(WindowHelper.GetHWND());
+                    return () => Reforge(handle);
 
                 case ActionName.TravelAct1:
                 case ActionName.TravelAct2:
                 case ActionName.TravelAct34:
                 case ActionName.TravelAct5:
-                    return () => TravelTown(WindowHelper.GetHWND(), actionName);
+                    return () => TravelTown(handle, actionName);
 
                 case ActionName.TravelPool:
-                    return () => TravelPool(WindowHelper.GetHWND());
+                    return () => TravelPool(handle);
 
                 case ActionName.NormalizeDifficulty:
-                    return () => LowerDifficulty(WindowHelper.GetHWND());
+                    return () => LowerDifficulty(handle);
 
                 case ActionName.SwapArmour:
-                    return () => SwapArmour(WindowHelper.GetHWND());
+                    return () => SwapArmour(handle);
 
                 case ActionName.Gamble:
-                    return () => Gamble(WindowHelper.GetHWND());
+                    return () => Gamble(handle);
 
                 default:
                     throw new NotImplementedException($"Non cancellable Macro not implemented for {actionName}");
@@ -75,25 +75,25 @@ namespace Dolphin.Service
             }
         }
 
-        public Action FindAction(ActionName actionName, CancellationTokenSource tokenSource)
+        public Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource)
         {
             if (!cancellableMacros.Contains(actionName))
             {
                 logService.AddEntry(this, $"Tried to recive cancellable Macro {actionName} which is not avalible as a cancellable macro. This will still work.");
 
-                return FindAction(actionName);
+                return FindAction(actionName, handle);
             }
 
             switch (actionName)
             {
                 case ActionName.CubeConverterDualSlot:
-                    return () => CubeConverterDualSlot(WindowHelper.GetHWND(), tokenSource);
+                    return () => CubeConverterDualSlot(handle, tokenSource);
 
                 case ActionName.CubeConverterSingleSlot:
-                    return () => CubeConverterSingleSlot(WindowHelper.GetHWND(), tokenSource);
+                    return () => CubeConverterSingleSlot(handle, tokenSource);
 
                 case ActionName.UpgradeGem:
-                    return () => UpgradeGem(WindowHelper.GetHWND(), tokenSource);
+                    return () => UpgradeGem(handle, tokenSource);
 
                 default:
                     throw new NotImplementedException($"Cancellable Macro not implemented for {actionName}");
@@ -103,12 +103,21 @@ namespace Dolphin.Service
 
         private static bool IsCancelled(CancellationTokenSource tokenSource)
         {
-            if (tokenSource.Token.IsCancellationRequested)
+            try
             {
-                Trace.WriteLine("Cancellation requested!");
-            }
 
-            return tokenSource.Token.IsCancellationRequested;
+                if (tokenSource.Token.IsCancellationRequested)
+                {
+                    Trace.WriteLine("Cancellation requested!");
+                }
+
+                return tokenSource.Token.IsCancellationRequested;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Exception when trying to see if TokenSource was canceled, {ex}");
+                return true;
+            }
         }
 
         private static void LeftClick(IntPtr handle)
@@ -235,9 +244,9 @@ namespace Dolphin.Service
             var step = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryStepSize);
 
             var cursorPos = InputHelper.GetCursorPos();
-            WindowHelper.ScreenToClient(handle, ref cursorPos);
+            WindowHelper.ScreenToClient(handle, ref cursorPos); //  x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
 
-            var columnIterations = 10 - settingsService.MacroSettings.SpareColumns; //  x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+            var columnIterations = 10 - settingsService.MacroSettings.SpareColumns;
 
             InputHelper.SendKey(handle, Keys.C);
 

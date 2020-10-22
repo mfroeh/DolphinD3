@@ -19,6 +19,10 @@ namespace Dolphin.Service
 
         public Settings Settings { get; }
 
+        public MacroSettings MacroSettings => Settings.MacroSettings;
+
+        public UiSettings UiSettings => Settings.UiSettings;
+
         private void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)
         {
             var pauseHotkey = Settings.Hotkeys[ActionName.Pause];

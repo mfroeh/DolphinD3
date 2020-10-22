@@ -6,8 +6,8 @@ namespace Dolphin
 {
     public interface IMacroFinderService
     {
-        Action FindAction(ActionName actionName);
+        Action FindAction(ActionName actionName, IntPtr handle);
 
-        Action FindAction(ActionName actionName, CancellationTokenSource tokenSource);
+        Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource);
     }
 }

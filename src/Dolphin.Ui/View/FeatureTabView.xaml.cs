@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace Dolphin.Ui.View
 {
     /// <summary>
-    /// Interaction logic for FeaturesTabView.xaml
+    /// Interaction logic for FeatureTabView.xaml
     /// </summary>
     public partial class FeatureTabView : UserControl
     {

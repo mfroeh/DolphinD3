@@ -1,6 +1,8 @@
 ﻿using Dolphin.Enum;
 using System;
 using System.Threading;
+using System.Windows.Forms;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Service
 {
@@ -8,25 +10,34 @@ namespace Dolphin.Service
     {
         private readonly Subscription<HotkeyPressedEvent> cancelExecutionSubscriber;
         private readonly Subscription<HotkeyPressedEvent> executeMacro;
-        private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
+        // private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
+        private readonly IMacroFinderService macroFinderService;
+        private readonly ISettingsService settingsService;
         private bool executing;
         private CancellationTokenSource tokenSource;
-        private readonly ISettingsService settingsService;
-        private readonly IMacroFinderService macroFinderService;
 
         public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IMacroFinderService macroFinderService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.macroFinderService = macroFinderService;
 
-            executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
+            // executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
             executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
             cancelExecutionSubscriber = new Subscription<HotkeyPressedEvent>(CancelExecution);
         }
 
+        /// <summary>
+        /// Cancels the current cancellable Action
+        /// TODO: Test this
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="e"></param>
         public void CancelExecution(object o, HotkeyPressedEvent e)
         {
-            tokenSource.Cancel();
+            if (e.PressedHotkey == new Hotkey(Keys.Escape))
+            {
+                tokenSource.Cancel();
+            }
         }
 
         public void ExecuteMacro(object o, HotkeyPressedEvent e)
@@ -34,45 +45,43 @@ namespace Dolphin.Service
             if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
+            var handle = WindowHelper.GetHWND();
 
-            var macro = MacroDonor.GiveMacro(actionName, settingsService.Settings);
-
-            if (macro != null)
+            if (handle != IntPtr.Zero)
             {
-                var handle = WindowHelper.GetHWND();
-
-                Execute.AndForgetAsync(() => macro.Invoke(handle));
+                var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
+                Execute.AndForgetAsync(macro);
             }
         }
 
         // TODO: This might not need the lock / the lock is actually bad. Potentially all the delegates get staggered up.
-        public void ExecuteMacroCancelable(HotkeyPressedEvent e, CancellationToken token)
+        public void ExecuteMacroCancelable(HotkeyPressedEvent e, CancellationTokenSource tokenSource)
         {
-            if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
+            //if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
 
-            var isExecuting = tokenSource != null;
-            if (!executing)
-            {
-                var actionName = settingsService.GetActionName(e.PressedHotkey);
-                var macro = MacroDonor.GiveCancellableMacro(actionName, settingsService.Settings);
+            //var isExecuting = tokenSource != null;
+            //if (!executing)
+            //{
+            //    var actionName = settingsService.GetActionName(e.PressedHotkey);
+            //    var macro = MacroDonor.GiveCancellableMacro(actionName, settingsService.Settings);
 
-                if (macro != null)
-                {
-                    var handle = WindowHelper.GetHWND();
-                    tokenSource = new CancellationTokenSource();
+            //    if (macro != null)
+            //    {
+            //        var handle = WindowHelper.GetHWND();
+            //        tokenSource = new CancellationTokenSource();
 
-                    Action action = () =>
-                    {
-                        executing = true;
-                        macro.Invoke(handle, tokenSource);
-                        tokenSource = null;
-                        tokenSource.Dispose();
-                        executing = false;
-                    };
+            //        Action action = () =>
+            //        {
+            //            executing = true;
+            //            macro.Invoke(handle, tokenSource);
+            //            tokenSource = null;
+            //            tokenSource.Dispose();
+            //            executing = false;
+            //        };
 
-                    Execute.AndForgetAsync(action);
-                }
-            }
+            //        Execute.AndForgetAsync(action);
+            //    }
+            //}
         }
     }
 }

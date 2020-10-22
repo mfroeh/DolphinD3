@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.ViewModel
 {
     public class LogEntry
     {
@@ -37,15 +38,12 @@ namespace Dolphin.Ui
 
         public LogLevel DisplayLogLevel
         {
-            get
-            {
-                return settingsService.Settings.UiSettings.DisplayLogLevel;
-            }
+            get => settingsService.Settings.UiSettings.DisplayLogLevel;
             set
             {
                 settingsService.Settings.UiSettings.DisplayLogLevel = value;
                 LogMessages.Clear(); // TODO: remove later
-                RaisePropertyChanged("DisplayLogLevel");
+                RaisePropertyChanged(nameof(DisplayLogLevel));
             }
         }
 
@@ -56,6 +54,14 @@ namespace Dolphin.Ui
             get
             {
                 return System.Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
+            }
+        }
+
+        public ICommand AddEntryCommand
+        {
+            get
+            {
+                return new RelayCommand((_) => logService.AddEntry(this, "Test message", LogLevel.Error));
             }
         }
 

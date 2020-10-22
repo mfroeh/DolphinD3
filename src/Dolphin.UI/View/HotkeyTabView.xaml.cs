@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.View
 {
     /// <summary>
     /// Interaction logic for HotkeyTabUserControl.xaml

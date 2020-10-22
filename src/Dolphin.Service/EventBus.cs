@@ -4,7 +4,7 @@ namespace Dolphin.Service
 {
     public class EventBus : IEventBus
     {
-        private readonly IList<Subscription<IEvent>> subscribers = new List<Subscription<IEvent>>();
+        private readonly IList<ISubscription> subscribers = new List<ISubscription>();
 
         public void Publish<T>(T @event) where T : IEvent
         {
@@ -12,7 +12,7 @@ namespace Dolphin.Service
             {
                 if (sub.EventType == typeof(T))
                 {
-                    sub.ReactAsync(@event);
+                    ((Subscription<T>)sub).Handler.Invoke(this, @event);
                 }
             }
         }
@@ -21,7 +21,7 @@ namespace Dolphin.Service
         {
             lock (subscribers)
             {
-                subscribers.Add((Subscription<IEvent>)(object)subscriber);
+                subscribers.Add(subscriber);
             }
         }
 
@@ -29,7 +29,7 @@ namespace Dolphin.Service
         {
             lock (subscribers)
             {
-                subscribers.Remove((Subscription<IEvent>)(object)subscriber);
+                subscribers.Remove(subscriber);
             }
         }
     }

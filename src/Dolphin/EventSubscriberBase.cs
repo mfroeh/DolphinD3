@@ -9,12 +9,12 @@
             this.eventBus = eventBus;
         }
 
-        protected void Subscribe<T>(Subscription<T> subscription) where T : IEvent
+        protected void SubscribeBus<T>(Subscription<T> subscription) where T : IEvent
         {
             eventBus.Subscribe(subscription);
         }
 
-        protected void Unsubscribe<T>(Subscription<T> subscription) where T : IEvent
+        protected void UnsubscribeBus<T>(Subscription<T> subscription) where T : IEvent
         {
             eventBus.Unsubscribe(subscription);
         }

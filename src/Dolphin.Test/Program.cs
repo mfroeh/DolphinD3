@@ -1,16 +1,4 @@
-﻿using Dolphin.Service;
-using Newtonsoft.Json;
-using System;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using Unity.Lifetime;
+﻿using System;
 using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Test
@@ -19,18 +7,26 @@ namespace Dolphin.Test
     {
         public static void Main(string[] args)
         {
-            var container = new UnityContainer();
+            var x = new Hotkey();
+            var y = new Hotkey();
 
-            container.RegisterInstance(new Settings());
-
-            container.RegisterType<EventBus, EventBus>(new ContainerControlledLifetimeManager());
-
-            var eventBus = container.Resolve<IEventBus>();
-            var subscription = new Subscription<PausedEvent>((object o, IEvent x) => Console.WriteLine());
-
-            var cast = (ISubscription<IEvent>)subscription;
-            eventBus.Subscribe(subscription);
+            x = null;
+            // System.Console.WriteLine(hotkey.Equals(null));
+            System.Console.WriteLine(x == y);
+            Console.ReadLine();
         }
 
+    }
+
+    public interface Interface { }
+
+    public class InterfaceImplementationA : Interface { }
+
+    public interface IGenric
+    {
+    }
+
+    public class Generic<T> : IGenric where T : Interface
+    {
     }
 }

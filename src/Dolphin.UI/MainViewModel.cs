@@ -25,11 +25,19 @@ namespace Dolphin.Ui
             tab0.Parent = this;
             Children.Add(tab0);
 
+            var tab1 = container.Resolve<IViewModelBase>("featureTab");
+            tab1.Parent = this;
+            Children.Add(tab1);
+
+            var tab2 = container.Resolve<IViewModelBase>("logTab");
+            tab2.Parent = this;
+            Children.Add(tab2);
+
             IsDark = settingsService.Settings.UiSettings.IsDark;
             Status = "Ready";
 
             pauseSubscription = new Subscription<PausedEvent>(OnPause);
-            Subscribe(pauseSubscription);
+            SubscribeBus(pauseSubscription);
         }
 
         public ICollection<IViewModelBase> Children { get; } = new ObservableCollection<IViewModelBase>();
@@ -59,12 +67,12 @@ namespace Dolphin.Ui
             RaisePropertyChanged("Status");
         }
 
-        private void Subscribe<T>(Subscription<T> subscription) where T : IEvent
+        private void SubscribeBus<T>(Subscription<T> subscription) where T : IEvent
         {
             eventBus.Subscribe(subscription);
         }
 
-        private void Unsubscribe<T>(Subscription<T> subscription) where T : IEvent
+        private void UnsubscribeBus<T>(Subscription<T> subscription) where T : IEvent
         {
             eventBus.Unsubscribe(subscription);
         }

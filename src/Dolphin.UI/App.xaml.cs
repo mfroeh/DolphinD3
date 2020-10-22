@@ -1,5 +1,6 @@
 ﻿using Dolphin.Service;
 using Dolphin.Ui.Dialog;
+using Dolphin.Ui.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Unity;
 using Unity.Lifetime;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Ui
 {
@@ -22,25 +24,40 @@ namespace Dolphin.Ui
             base.OnStartup(e);
 
             var container = new UnityContainer();
-
+            container.RegisterInstance(new Player());
+            container.RegisterInstance(new World());
             container.RegisterInstance(new Settings());
+            container.RegisterInstance(new Log());
+            container.RegisterInstance(new HotkeyListener());
 
             container.RegisterType<IEventBus, EventBus>(new ContainerControlledLifetimeManager());
+            
+            container.RegisterType<IEventPublisher<PlayerInformationChangedEvent>, ExtractPlayerInformationService>("extractPlayerInformation");
+            container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
+            container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>();
+            container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
 
-            var eventBus = container.Resolve<IEventBus>();
-            var subscription = new Subscription<PausedEvent>((object o, IEvent x) => Console.WriteLine());
+            container.RegisterType<IEventSubscriber, MacroExecutionService>();
+            container.RegisterType<IEventSubscriber, SkillCastingService>();
 
-            var cast = (ISubscription<IEvent>)subscription;
-            eventBus.Subscribe(subscription);
 
-            container.RegisterType<ISettingsService, SettingsService>();
+            container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ICaptureWindowService, CaptureWindowService>();
             container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IModelService, ModelService>();
+            container.RegisterType<IResourceService, ResourceService>();
+            container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
+
 
             container.RegisterType<IViewModelBase, MainViewModel>("main");
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
+            container.RegisterType<IViewModelBase, FeatureTabViewModel>("featureTab");
+            container.RegisterType<IViewModelBase, LogTabViewModel>("logTab");
             container.RegisterType<IViewModelBase, ChangeHotkeyDialogViewModel>("changeHotkey");
 
             container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
+
+            container.AddExtension(new Diagnostic());
 
             var mainVM = container.Resolve<IViewModelBase>("main");
             MainWindow = new MainWindow { DataContext = mainVM };

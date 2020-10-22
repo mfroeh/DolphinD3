@@ -34,7 +34,7 @@ namespace Dolphin
                 {
                     if (@enum != ActionName.None)
                     {
-                        dict[@enum] = @enum == ActionName.Pause ? new Hotkey("F10") : null;
+                        dict[@enum] = @enum == ActionName.Pause ? new Hotkey(Keys.Control, Keys.C) : null;
                     }
                 }
                 return dict;

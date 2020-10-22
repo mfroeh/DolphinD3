@@ -6,18 +6,21 @@ namespace Dolphin.Service
     public class SkillCastingService : EventSubscriberBase
     {
         private readonly ILogService logService;
+        private readonly IConditionFinderService conditionFinderService;
         private readonly IModelService modelService;
         private readonly ISettingsService settingsService;
         private readonly Subscription<SkillCanBeCastedEvent> skillSubscription;
 
-        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IModelService modelService, ILogService logService) : base(eventBus)
+        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService,
+                                    IModelService modelService, ILogService logService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.modelService = modelService;
             this.logService = logService;
+            this.conditionFinderService = conditionFinderService;
 
             skillSubscription = new Subscription<SkillCanBeCastedEvent>(CastSkill);
-            Subscribe(skillSubscription);
+            SubscribeBus(skillSubscription);
         }
 
         private void CastSkill(object o, SkillCanBeCastedEvent @event)

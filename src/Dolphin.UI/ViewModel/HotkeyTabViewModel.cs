@@ -1,22 +1,22 @@
 ﻿using Dolphin.Enum;
+using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using MvvmDialogs;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using Unity;
 using WK.Libraries.HotkeyListenerNS;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.ViewModel
 {
     public class HotkeyTabViewModel : ViewModelBase
     {
         private readonly IDialogService dialogService;
         private readonly ISettingsService settingsService;
         private readonly IUnityContainer unityContainer;
-
+        private readonly IEventPublisher<HotkeyPressedEvent> hotkeyListener;
         private ICommand changeHotkeyCommand;
 
         private ItemType selectedItem;
@@ -26,11 +26,12 @@ namespace Dolphin.Ui
         private bool pickGem;
         private ConvertingSpeed convertingSpeed;
 
-        public HotkeyTabViewModel(IUnityContainer unityContainer, IDialogService dialogService, ISettingsService settingsService)
+        public HotkeyTabViewModel(IUnityContainer unityContainer, IDialogService dialogService, ISettingsService settingsService, [Dependency("hotkeyListener")] IEventPublisher<HotkeyPressedEvent> hotkeyListener)
         {
             this.unityContainer = unityContainer;
             this.dialogService = dialogService;
             this.settingsService = settingsService;
+            this.hotkeyListener = hotkeyListener;
 
             Hotkeys = new ObservableDictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
             ItemTypes = StaticResource.ItemTypeList;
@@ -144,9 +145,15 @@ namespace Dolphin.Ui
                 Hotkeys[actionAllocationToChange] = hotkey;
 
                 RaisePropertyChanged("Hotkeys");
+                NotifyHotkeysChanged(settingsService.Settings.Hotkeys.Values.ToList());
             }
 
             settingsService.NegateIsPaused();
+        }
+
+        private void NotifyHotkeysChanged(IList<Hotkey> newHotkeys)
+        {
+            ((HotkeyListenerService)hotkeyListener).RefreshHotkeys(newHotkeys);
         }
     }
 }

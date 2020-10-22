@@ -5,7 +5,7 @@ using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin
 {
-    public static class StaticResource
+    public static class StaticResour // Makethis go await
     {
         public static IList<ItemType> ItemTypeList
         {
@@ -36,7 +36,7 @@ namespace Dolphin
         public static IDictionary<PlayerClass, IList<SkillName>> SkillDictionary = new Dictionary<PlayerClass, IList<SkillName>>
         {
             { PlayerClass.DemonHunterFemale, new List<SkillName> {
-                SkillName.Companion, SkillName.FanOfKnives, SkillName.Preperation, SkillName.ShadowPower, SkillName.Strafe, SkillName.Vengeance
+                SkillName.Companion, SkillName.FanOfKnives, SkillName.Preperation, SkillName.ShadowPower, SkillName.Vengeance
             } },
         };
     }

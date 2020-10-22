@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Dolphin.Ui.View
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for FeaturesTabView.xaml
     /// </summary>
-    public partial class LogTabView : UserControl
+    public partial class FeatureTabView : UserControl
     {
-        public LogTabView()
+        public FeatureTabView()
         {
             InitializeComponent();
         }

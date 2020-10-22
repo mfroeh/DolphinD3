@@ -35,5 +35,40 @@ namespace Dolphin
 
         [DllImport("user32.dll")]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sourceCoordinate">Source coordinate in 1920x1080</param>
+        /// <returns></returns>
+        public static Point TransformCoordinate(Point sourceCoordinate, CoordinatePosition coordinatePosition = default)
+        {
+            var clientRect = new Rectangle();
+            GetClientRect(GetHWND(), ref clientRect);
+
+            var scaledY = clientRect.Height / 1080 * sourceCoordinate.Y;
+            
+            int scaledX;
+            if (coordinatePosition == CoordinatePosition.Left)
+            {
+                scaledX = clientRect.Height / 1080 * sourceCoordinate.X;
+            }
+            else if (coordinatePosition == CoordinatePosition.Right)
+            {
+                scaledX = clientRect.Width - (1920 - sourceCoordinate.X) * clientRect.Height / 1080;
+            }
+            else
+            {
+                scaledX = sourceCoordinate.X * clientRect.Height / 1080 + (clientRect.Width - 1920 * clientRect.Height / 1080) / 2;
+            }
+
+            return new Point { X = scaledX, Y = scaledY };
+        }
+    }
+
+    public enum CoordinatePosition
+    {
+        Left = 0,
+        Right = 1,
+        Other = 2
     }
 }

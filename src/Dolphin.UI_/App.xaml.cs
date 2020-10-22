@@ -74,7 +74,7 @@ namespace Dolphin.UI
             var logService = container.Resolve<ILogService>();
             logService.EntryAdded += (o, e) =>
             {
-                if (e.LogLevel == LogLevel.Erorr)
+                if (e.LogLevel == LogLevel.Error)
                     Console.WriteLine(e.Message);
             };
 
@@ -113,7 +113,7 @@ namespace Dolphin.UI
                 }
                 catch (Exception ex)
                 {
-                    logService.AddEntry(this, $"Caught Exception in Mainloop", LogLevel.Erorr, ex);
+                    logService.AddEntry(this, $"Caught Exception in Mainloop", LogLevel.Error, ex);
                 }
                 finally
                 {

@@ -52,6 +52,11 @@ namespace Dolphin
             }
         }
 
+        public static void MouseClick(IntPtr handle, MouseButtons button, int x, int y)
+        {
+            MouseClick(handle, button, new Point(x, y));
+        }
+
         public static void PressKey(IntPtr handle, Keys key, bool pressAlt = false)
         {
             var lParam = 0;

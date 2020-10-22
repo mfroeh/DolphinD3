@@ -14,7 +14,7 @@ namespace Dolphin.Service
             this.logService = logService;
 
             hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
-            Subscribe(hotkeySubscription);
+            SubscribeBus(hotkeySubscription);
         }
 
         public Settings Settings { get; }
@@ -49,6 +49,16 @@ namespace Dolphin.Service
         public bool SkillIsEnabled(SkillName skill)
         {
             return Settings.EnabledSkills.Contains(skill);
+        }
+
+        public ActionName GetActionName(WK.Libraries.HotkeyListenerNS.Hotkey hotkey)
+        {
+            foreach (var item in Settings.Hotkeys)
+            {
+                if (item.Value == hotkey) return item.Key;
+            }
+
+            return default;
         }
     }
 }

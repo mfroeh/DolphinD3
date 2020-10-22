@@ -1,33 +1,59 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Reflection;
 using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Service
 {
-    public class HotkeyListenerService : IEventPublisher<HotkeyPressedEvent>
+    public class HotkeyListenerService : EventSubscriberBase, IEventPublisher<HotkeyPressedEvent>
     {
-        private readonly IEventBus eventBus;
         private readonly HotkeyListener hotkeyListener;
+        private readonly ISettingsService settingsService; // TODO: Remove if not needed
 
-        private IList<Hotkey> hotkeys = new List<Hotkey>();
+        private readonly Subscription<PausedEvent> pausedSubscription;
 
-        public HotkeyListenerService(IEventBus eventBus, HotkeyListener hotkeyListener)
+        public HotkeyListenerService(IEventBus eventBus, ISettingsService settingsService, HotkeyListener hotkeyListener) : base(eventBus)
         {
-            this.eventBus = eventBus;
             this.hotkeyListener = hotkeyListener;
+            this.settingsService = settingsService;
 
             hotkeyListener.HotkeyPressed += OnHotkeyPressed;
-            // Add all the hotkeys
+
+            pausedSubscription = new Subscription<PausedEvent>(PausedHandler);
+            SubscribeBus(pausedSubscription);
+
+            foreach (var hotkey in settingsService.Settings.Hotkeys.Values.ToList().Where(x => x != null))
+            {
+                AddHotkey(hotkey);
+            }
+        }
+
+        private void PausedHandler(object o, PausedEvent @event)
+        {
+            if (@event.IsPaused)
+            {
+                SuspendListener();
+            }
+            else
+            {
+                ResumeListener();
+            }
+        }
+
+        public void RefreshHotkeys(IList<Hotkey> newHotkeys)
+        {
+            hotkeyListener.RemoveAll();
+
+            foreach (var hotkey in newHotkeys)
+            {
+                if (hotkey != null) AddHotkey(hotkey);
+            }
         }
 
         public void AddHotkey(Hotkey hotkey)
         {
-            hotkeys.Add(hotkey);
-            // Also add
-        }
-
-        public void OnHotkeyChanged(object o, HotkeyChangedEventArgs e)
-        {
-            // remove a hotkey, add a hotkey, ...
+            hotkeyListener.Add(hotkey);
         }
 
         public void OnHotkeyPressed(object o, HotkeyEventArgs e)
@@ -38,11 +64,6 @@ namespace Dolphin.Service
         public void Publish(HotkeyPressedEvent @event)
         {
             eventBus.Publish(@event);
-        }
-
-        public void RemoveHotkey(Hotkey hotkey)
-        {
-            hotkeys.Remove(hotkey);
         }
 
         public void ResumeListener()

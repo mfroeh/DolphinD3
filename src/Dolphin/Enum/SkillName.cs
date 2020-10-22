@@ -7,7 +7,6 @@
         FanOfKnives = 2,
         Preperation = 3,
         ShadowPower = 4,
-        Strafe = 5,
-        Vengeance = 6
+        Vengeance = 5
     }
 }

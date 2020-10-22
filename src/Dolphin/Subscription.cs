@@ -32,7 +32,12 @@ namespace Dolphin
         }
     }
 
-    public class Subscription<T> where T : IEvent
+    public interface ISubscription
+    {
+        public Type EventType { get; }
+    }
+
+    public class Subscription<T> : ISubscription where T : IEvent
     {
         public Subscription(CancellableEventHandler<T> cancelableHandler)
         {

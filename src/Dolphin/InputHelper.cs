@@ -28,7 +28,7 @@ namespace Dolphin
             return point;
         }
 
-        public static void MouseClick(IntPtr handle, MouseButtons button, Point point)
+        public static void SendClick(IntPtr handle, MouseButtons button, Point point)
         {
             var lParam = MakeLParam(point);
             switch (button)
@@ -52,12 +52,20 @@ namespace Dolphin
             }
         }
 
-        public static void MouseClick(IntPtr handle, MouseButtons button, int x, int y)
+        public static void SendClick(IntPtr handle, MouseButtons button, int x, int y)
         {
-            MouseClick(handle, button, new Point(x, y));
+            SendClick(handle, button, new Point(x, y));
         }
 
-        public static void PressKey(IntPtr handle, Keys key, bool pressAlt = false)
+        public static void SendClickAtCursorPos(IntPtr handle, MouseButtons button)
+        {
+            var cursorPos = GetCursorPos();
+            WindowHelper.ScreenToClient(handle, ref cursorPos);
+
+            SendClick(handle, button, cursorPos);
+        }
+
+        public static void SendKey(IntPtr handle, Keys key, bool pressAlt = false)
         {
             var lParam = 0;
             if (pressAlt)

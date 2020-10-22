@@ -47,6 +47,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonCoordinate.cs" />
     <Compile Include="Enum\ActionName.cs" />
     <Compile Include="Enum\ConvertingSpeed.cs" />
     <Compile Include="Enum\ItemType.cs" />
@@ -56,23 +57,20 @@
     <Compile Include="HotkeysChangedEventArgs.cs" />
     <Compile Include="IConditionFinderService.cs" />
     <Compile Include="IMacroFinderService.cs" />
-    <Compile Include="ITravelService.cs" />
+    <Compile Include="ITravelInformationService.cs" />
     <Compile Include="Settings\MacroSettings.cs" />
     <Compile Include="Execute.cs" />
-    <Compile Include="HotkeyChangedEventArgs.cs" />
     <Compile Include="Event\HotkeyPressedEvent.cs" />
     <Compile Include="Interface\IEvent.cs" />
     <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="InputHelper.cs" />
     <Compile Include="Interface\ISettingsService.cs" />
     <Compile Include="Interface\IEventPublisher.cs" />
-    <Compile Include="StaticResource\Macro.cs" />
     <Compile Include="Event\PlayerInformationChangedEvent.cs" />
     <Compile Include="Event\SkillCanBeCastedEvent.cs" />
     <Compile Include="Settings\UiSettings.cs" />
     <Compile Include="Subscription.cs" />
-    <Compile Include="StaticResource\SkillDonor.cs" />
-    <Compile Include="StaticResource\Condition.cs" />
+    <Compile Include="Condition.cs" />
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\PlayerClass.cs" />
     <Compile Include="Enum\PlayerHealth.cs" />
@@ -96,7 +94,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Skill.cs" />
     <Compile Include="Enum\SkillName.cs" />
-    <Compile Include="StaticResource\StaticResource.cs" />
     <Compile Include="WindowHelper.cs" />
   </ItemGroup>
   <ItemGroup>

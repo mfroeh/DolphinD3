@@ -45,7 +45,8 @@ namespace Dolphin
         {
             ConvertingSpeed = ConvertingSpeed.Normal,
             SelectedGambleItem = ItemType.OneHandedWeapon,
-            SpareColumns = 1
+            SpareColumns = 1,
+            SwapItemsAmount = 3
         };
 
         public static IList<Keys> SkillKeybindigns = new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };

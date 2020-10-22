@@ -7,6 +7,22 @@ namespace Dolphin.Service
 {
     public class ModelService : IModelService
     {
+        private static readonly IDictionary<PlayerClass, IList<Enum.PlayerResource>> ResourceDictionary = new Dictionary<PlayerClass, IList<Enum.PlayerResource>>
+        {
+            { PlayerClass.DemonHunterFemale, new List<Enum.PlayerResource>
+            {
+                Enum.PlayerResource.PrimaryHatred_0, Enum.PlayerResource.PrimaryHatred_20, Enum.PlayerResource.PrimaryHatred_40, Enum.PlayerResource.PrimaryHatred_60, Enum.PlayerResource.PrimaryHatred_80, Enum.PlayerResource.PrimaryHatred_100,
+                Enum.PlayerResource.SecondaryDiscipline_0, Enum.PlayerResource.SecondaryDiscipline_20, Enum.PlayerResource.SecondaryDiscipline_40, Enum.PlayerResource.SecondaryDiscipline_60, Enum.PlayerResource.SecondaryDiscipline_80, Enum.PlayerResource.SecondaryDiscipline_100
+            } },
+        };
+
+        private static readonly IDictionary<PlayerClass, IList<SkillName>> SkillDictionary = new Dictionary<PlayerClass, IList<SkillName>>
+        {
+            { PlayerClass.DemonHunterFemale, new List<SkillName> {
+                SkillName.Companion, SkillName.FanOfKnives, SkillName.Preperation, SkillName.ShadowPower, SkillName.Vengeance
+            } },
+        };
+
         private readonly ILogService logService;
 
         public ModelService(Player player, World world, ILogService logService)
@@ -29,7 +45,7 @@ namespace Dolphin.Service
 
         public IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum()
         {
-            foreach (var @enum in StaticResource.ResourceDictionary[Player.Class])
+            foreach (var @enum in ResourceDictionary[Player.Class])
             {
                 if (!nameof(@enum).StartsWith("Secondary"))
                 {
@@ -40,7 +56,7 @@ namespace Dolphin.Service
 
         public IEnumerable<Enum.PlayerResource> GetPossibleSecondary()
         {
-            foreach (var @enum in StaticResource.ResourceDictionary[Player.Class])
+            foreach (var @enum in ResourceDictionary[Player.Class])
             {
                 if (!nameof(@enum).StartsWith("Primary"))
                 {
@@ -51,7 +67,7 @@ namespace Dolphin.Service
 
         public IEnumerable<SkillName> GetPossibleSkills()
         {
-            foreach (var @enum in StaticResource.SkillDictionary[Player.Class])
+            foreach (var @enum in SkillDictionary[Player.Class])
             {
                 yield return @enum;
             }

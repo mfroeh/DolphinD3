@@ -34,7 +34,7 @@ namespace Dolphin.Ui.ViewModel
             this.hotkeyListener = hotkeyListener;
 
             Hotkeys = new ObservableDictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
-            ItemTypes = StaticResource.ItemTypeList;
+            ItemTypes = System.Enum.GetValues(typeof(ItemType)).Cast<ItemType>().ToList();
 
             selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
             spareColumns = settingsService.Settings.MacroSettings.SpareColumns;

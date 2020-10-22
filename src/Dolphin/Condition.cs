@@ -56,7 +56,10 @@ namespace Dolphin
             var skill = p.Skills.Where(x => x.Name == name).FirstOrDefault();
 
             if (skill != null && skill.IsNotActiveAndCanBeCasted)
+            {
                 return true;
+            }
+
             return false;
         }
     }

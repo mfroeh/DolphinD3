@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dolphin.Enum;
+using System;
 using System.Threading;
 
 namespace Dolphin.Service
@@ -30,6 +31,8 @@ namespace Dolphin.Service
 
         public void ExecuteMacro(object o, HotkeyPressedEvent e)
         {
+            if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
+
             var actionName = settingsService.GetActionName(e.PressedHotkey);
 
             var macro = MacroDonor.GiveMacro(actionName, settingsService.Settings);
@@ -45,6 +48,8 @@ namespace Dolphin.Service
         // TODO: This might not need the lock / the lock is actually bad. Potentially all the delegates get staggered up.
         public void ExecuteMacroCancelable(HotkeyPressedEvent e, CancellationToken token)
         {
+            if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
+
             var isExecuting = tokenSource != null;
             if (!executing)
             {

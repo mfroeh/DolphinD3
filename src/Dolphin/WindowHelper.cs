@@ -36,6 +36,9 @@ namespace Dolphin
         [DllImport("user32.dll")]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
+        [DllImport("user32.dll")]
+        public static extern bool ScreenToClient(IntPtr hwnd, ref Point point);
+
         /// <summary>
         /// </summary>
         /// <param name="sourceCoordinate">Source coordinate in 1920x1080</param>
@@ -46,7 +49,7 @@ namespace Dolphin
             GetClientRect(GetHWND(), ref clientRect);
 
             var scaledY = clientRect.Height / 1080 * sourceCoordinate.Y;
-            
+
             int scaledX;
             if (coordinatePosition == CoordinatePosition.Left)
             {
@@ -69,6 +72,6 @@ namespace Dolphin
     {
         Left = 0,
         Right = 1,
-        Other = 2
+        Middle = 2
     }
 }

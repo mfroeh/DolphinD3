@@ -48,6 +48,7 @@
     <Compile Include="ResourceService.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="SkillCastingService.cs" />
+    <Compile Include="TravelInformationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dolphin\Dolphin.csproj">

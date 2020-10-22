@@ -13,5 +13,7 @@ namespace Dolphin
         public ItemType SelectedGambleItem { get; set; }
 
         public uint SpareColumns { get; set; }
+
+        public uint SwapItemsAmount { get; set; }
     }
 }

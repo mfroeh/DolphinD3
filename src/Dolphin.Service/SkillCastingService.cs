@@ -1,21 +1,18 @@
-﻿using Dolphin.Enum;
-using System;
+﻿using System;
+using System.Windows.Forms;
 
 namespace Dolphin.Service
 {
     public class SkillCastingService : EventSubscriberBase
     {
-        private readonly ILogService logService;
         private readonly IConditionFinderService conditionFinderService;
-        private readonly IModelService modelService;
+        private readonly ILogService logService;
         private readonly ISettingsService settingsService;
         private readonly Subscription<SkillCanBeCastedEvent> skillSubscription;
 
-        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService,
-                                    IModelService modelService, ILogService logService) : base(eventBus)
+        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService, ILogService logService) : base(eventBus)
         {
             this.settingsService = settingsService;
-            this.modelService = modelService;
             this.logService = logService;
             this.conditionFinderService = conditionFinderService;
 
@@ -28,30 +25,24 @@ namespace Dolphin.Service
             if (!settingsService.SkillIsEnabled(@event.SkillName)) return;
 
             IntPtr handle = WindowHelper.GetHWND();
-            Action action;
 
+            Action action;
             if (@event.SkillIndex <= 3)
             {
                 var key = settingsService.Settings.SkillKeybindings[@event.SkillIndex];
-                action = SkillDonor.GetAction(handle, key);
+                action = () => InputHelper.SendKey(handle, key);
             }
             else if (@event.SkillIndex == 4)
             {
-                action = SkillDonor.GetAction(handle, System.Windows.Forms.MouseButtons.Left);
+                action = () => InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
             }
             else
             {
-                action = SkillDonor.GetAction(handle, System.Windows.Forms.MouseButtons.Right);
+                action = () => InputHelper.SendClickAtCursorPos(handle, MouseButtons.Right);
             }
 
-            var condition = ConditionDonor.GiveCondition(@event.SkillName);
-            if (condition == null)
-            {
-                logService.AddEntry(this, $"{@event.SkillName} has no condition defined, defaulting to just return true.", LogLevel.Info);
-                condition = (_, __) => true;
-            }
-
-            if (condition.Invoke(modelService.Player, modelService.World))
+            var condition = conditionFinderService.FindCondition(@event.SkillName);
+            if (condition.Invoke())
             {
                 Execute.AndForgetAsync(action);
             }

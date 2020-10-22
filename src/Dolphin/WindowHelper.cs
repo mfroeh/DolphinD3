@@ -6,6 +6,13 @@ using System.Runtime.InteropServices;
 
 namespace Dolphin
 {
+    public enum CoordinatePosition
+    {
+        Left = 0,
+        Right = 1,
+        Middle = 2
+    }
+
     public static class WindowHelper
     {
         [DllImport("user32.dll")]
@@ -66,12 +73,5 @@ namespace Dolphin
 
             return new Point { X = scaledX, Y = scaledY };
         }
-    }
-
-    public enum CoordinatePosition
-    {
-        Left = 0,
-        Right = 1,
-        Middle = 2
     }
 }

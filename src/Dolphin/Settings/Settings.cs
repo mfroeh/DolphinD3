@@ -24,7 +24,7 @@ namespace Dolphin
         public static UiSettings UiSettings = new UiSettings
         {
             DisplayLogLevel = LogLevel.Warning,
-            LogPaused = true,
+            LogPaused = false,
             IsDark = false
         };
 

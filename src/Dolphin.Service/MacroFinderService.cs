@@ -250,7 +250,7 @@ namespace Dolphin.Service
 
             var columnIterations = 10 - settingsService.MacroSettings.SpareColumns;
 
-            InputHelper.SendKey(handle, Keys.C);
+            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
 
             for (int i = 0; i < 6; i++)
             {
@@ -371,7 +371,7 @@ namespace Dolphin.Service
             var step = transformService.TransformSize(CommonSize.InventoryStepSize, RelativeCoordinatePosition.Right);
             var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
 
-            InputHelper.SendKey(handle, Keys.C);
+            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
 
             for (int i = 0; i < settingsService.MacroSettings.SwapItemsAmount; i++)
             {
@@ -402,7 +402,7 @@ namespace Dolphin.Service
             var mapAct = transformService.TransformCoordinate(_mapAct, RelativeCoordinatePosition.Middle);
             var mapTown = transformService.TransformCoordinate(_mapTown, RelativeCoordinatePosition.Middle);
 
-            InputHelper.SendKey(handle, Keys.M);
+            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenMap));
             InputHelper.SendClick(handle, MouseButtons.Left, backwards);
             InputHelper.SendClick(handle, MouseButtons.Left, mapAct);
             InputHelper.SendClick(handle, MouseButtons.Left, mapTown);
@@ -427,7 +427,7 @@ namespace Dolphin.Service
                 if (iterations - i == 3)
                 {
                     if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendKey(handle, Keys.T);
+                    InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.TeleportToTown));
                 }
 
                 if (IsCancelled(tokenSource)) return;

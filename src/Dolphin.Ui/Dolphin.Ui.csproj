@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resource\dolphin_icon-icons.com_60855.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HotkeyListener, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,6 +78,8 @@
     <Compile Include="View\SettingsTabView.xaml.cs">
       <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
+    <Resource Include="Resource\dolphin_88287.ico" />
+    <Resource Include="Resource\dolphin_icon-icons.com_60855.ico" />
     <Content Include="old\DataTabViewModel.txt" />
     <Compile Include="EnumBooleanConverter.cs" />
     <Compile Include="ObservableDictionary.cs" />

@@ -11,6 +11,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="C"
+            Command="{Binding ClipLogEntryCommand}"
+            Modifiers="Ctrl" />
+    </UserControl.InputBindings>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -38,6 +45,7 @@
         </WrapPanel>
         <Grid Grid.Row="0" Grid.Column="1">
             <DataGrid
+                MaxHeight="300"
                 Margin="{adonisUi:Space}"
                 AutoGenerateColumns="False"
                 EnableColumnVirtualization="True"
@@ -45,6 +53,8 @@
                 FrozenColumnCount="1"
                 HorizontalScrollBarVisibility="Visible"
                 ItemsSource="{Binding LogMessages}"
+                SelectedItem="{Binding SelectedLogItem}"
+                SelectionMode="Single"
                 VerticalScrollBarVisibility="Visible">
 
                 <DataGrid.Columns>
@@ -58,6 +68,12 @@
                         MinWidth="100"
                         Binding="{Binding LogLevel}"
                         Header="Severity"
+                        IsReadOnly="True" />
+
+                    <DataGridTextColumn
+                        MinWidth="150"
+                        Binding="{Binding Type}"
+                        Header="Origin"
                         IsReadOnly="True" />
 
                     <DataGridTextColumn

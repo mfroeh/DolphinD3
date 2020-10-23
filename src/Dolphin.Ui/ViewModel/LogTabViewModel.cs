@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -9,11 +10,15 @@ namespace Dolphin.Ui.ViewModel
 {
     public class LogEntry
     {
+        public string FullMessage { get; set; }
+
         public LogLevel LogLevel { get; set; }
 
         public string Message { get; set; }
 
         public string Time { get; set; }
+
+        public string Type { get; set; }
     }
 
     public class LogTabViewModel : ViewModelBase
@@ -22,6 +27,12 @@ namespace Dolphin.Ui.ViewModel
         private readonly ILogService logService;
 
         private readonly ISettingsService settingsService;
+
+        private ICommand clipLogEntryCommand;
+
+        private LogLevel displayLogLevel;
+
+        private bool logPaused;
 
         public LogTabViewModel(ISettingsService settingsService, ILogService logService)
         {
@@ -35,7 +46,15 @@ namespace Dolphin.Ui.ViewModel
             logPaused = settingsService.UiSettings.LogPaused;
         }
 
-        private LogLevel displayLogLevel;
+        public ICommand ClipLogEntryCommand
+        {
+            get
+            {
+                clipLogEntryCommand = clipLogEntryCommand ?? new RelayCommand((o) => Clipboard.SetData(DataFormats.Text, SelectedLogItem.FullMessage));
+                return clipLogEntryCommand;
+            }
+        }
+
         public LogLevel DisplayLogLevel
         {
             get => displayLogLevel;
@@ -49,7 +68,6 @@ namespace Dolphin.Ui.ViewModel
 
         public ObservableCollection<LogEntry> LogMessages { get; } = new ObservableCollection<LogEntry>();
 
-        private bool logPaused;
         public bool LogPaused
         {
             get => logPaused;
@@ -69,6 +87,12 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public LogEntry SelectedLogItem
+        {
+            get;
+            set;
+        }
+
         private void OnEntryAdded(object sender, LogEntryEventArgs e)
         {
             if (!LogPaused)
@@ -80,7 +104,7 @@ namespace Dolphin.Ui.ViewModel
                         LogMessages.Clear();
                     }
 
-                    LogMessages.Add(new LogEntry { Message = e.Message, LogLevel = e.LogLevel, Time = e.Time.ToString("HH:mm:ss") }); // TODO: Prepend
+                    LogMessages.Add(new LogEntry { Message = e.Message, LogLevel = e.LogLevel, Time = e.Time.ToString("HH:mm:ss"), FullMessage = e.FullMessage, Type = e.Type }); // TODO: Prepend
                 }
             }
         }

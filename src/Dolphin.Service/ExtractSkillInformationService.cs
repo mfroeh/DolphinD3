@@ -8,7 +8,7 @@ namespace Dolphin.Service
     {
         private readonly IEventBus eventBus;
 
-        // TODO: Get this from somewhere else
+        // TODO: [CaptureWindowService] Get this from somewhere else
         private readonly IDictionary<int, Point> leftUpperCorners = new Dictionary<int, Point>
                                                                         {
                                                                             { 0, new Point { X = 846, Y = 1335 } },
@@ -20,15 +20,17 @@ namespace Dolphin.Service
                                                                         };
 
         private readonly ILogService logService;
+        private readonly ICaptureWindowService imageService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
-        public ExtractSkillInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ILogService logService)
+        public ExtractSkillInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICaptureWindowService imageService, ILogService logService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;
             this.resourceService = resourceService;
             this.logService = logService;
+            this.imageService = imageService;
         }
 
         public void Extract(Bitmap bitmap)

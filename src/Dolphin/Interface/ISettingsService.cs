@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Windows.Forms;
 using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin
@@ -22,5 +23,7 @@ namespace Dolphin
         void SetHotkeyValue(ActionName key, Hotkey value);
 
         bool SkillIsEnabled(SkillName skill);
+
+        Keys GetKeybinding(Command command);
     }
 }

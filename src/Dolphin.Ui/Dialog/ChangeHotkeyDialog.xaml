@@ -11,6 +11,7 @@
     Height="200"
     md:DialogServiceViews.IsRegistered="True"
     ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
     <Grid

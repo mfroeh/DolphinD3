@@ -7,6 +7,7 @@ namespace Dolphin.Ui
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IViewModelBase Parent { get; set; }
+
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

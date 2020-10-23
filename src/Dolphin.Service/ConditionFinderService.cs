@@ -5,8 +5,8 @@ namespace Dolphin.Service
 {
     public class ConditionFinderService : IConditionFinderService
     {
-        private readonly IModelService modelService;
         private readonly ILogService logService;
+        private readonly IModelService modelService;
 
         public ConditionFinderService(IModelService modelService, ILogService logService)
         {

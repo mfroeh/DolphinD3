@@ -10,9 +10,9 @@ namespace Dolphin
 
         Bitmap CaptureWindow(IntPtr hwnd);
 
-        public Bitmap CropPlayerClass(Bitmap image);
-
         public Bitmap CropHealth(Bitmap image);
+
+        public Bitmap CropPlayerClass(Bitmap image);
 
         public Bitmap CropPrimaryResource(Bitmap image, PlayerClass playerClass);
 

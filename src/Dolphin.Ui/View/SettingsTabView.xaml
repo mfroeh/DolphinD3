@@ -8,8 +8,10 @@
     xmlns:enum="clr-namespace:Dolphin.Enum;assembly=Dolphin"
     xmlns:local="clr-namespace:Dolphin.Ui.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    md:DialogServiceViews.IsRegistered="True"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -17,8 +19,9 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Keybindings">
+        <GroupBox Margin="{adonisUi:Space}" Header="Keybindings">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
@@ -53,7 +56,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding SkillKeybindings[0]}" />
+                    SelectedItem="{Binding Path=SkillKeybindings[0]}" />
                 <Label
                     Grid.Row="0"
                     Grid.Column="2"
@@ -67,7 +70,7 @@
                     Grid.Row="1"
                     Grid.Column="2"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding SkillKeybindings[1]}" />
+                    SelectedItem="{Binding Path=SkillKeybindings[1]}" />
                 <Label
                     Grid.Row="0"
                     Grid.Column="4"
@@ -81,7 +84,7 @@
                     Grid.Row="1"
                     Grid.Column="4"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding SkillKeybindings[2]}" />
+                    SelectedItem="{Binding Path=SkillKeybindings[2]}" />
                 <Label
                     Grid.Row="0"
                     Grid.Column="6"
@@ -95,7 +98,7 @@
                     Grid.Row="1"
                     Grid.Column="6"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding SkillKeybindings[3]}" />
+                    SelectedItem="{Binding Path=SkillKeybindings[3]}" />
 
                 <Label
                     Grid.Row="0"
@@ -110,7 +113,7 @@
                     Grid.Row="1"
                     Grid.Column="8"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding OpenMapKey}" />
+                    SelectedItem="{Binding Path=OtherKeybindings[(enum:Command)OpenMap]}" />
 
                 <Label
                     Grid.Row="0"
@@ -125,7 +128,7 @@
                     Grid.Row="1"
                     Grid.Column="10"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding TeleportToTownKey}" />
+                    SelectedItem="{Binding Path=OtherKeybindings[(enum:Command)TeleportToTown]}" />
 
                 <Label
                     Grid.Row="0"
@@ -140,7 +143,44 @@
                     Grid.Row="1"
                     Grid.Column="12"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding OpenInventoryKey}" />
+                    SelectedItem="{Binding Path=OtherKeybindings[(enum:Command)OpenInventory]}" />
+            </Grid>
+        </GroupBox>
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="{adonisUi:Space}"
+            Header="General">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Bottom=1,
+                                            Top=0,
+                                            Right=0,
+                                            Left=0}"
+                    Content="Update interval"
+                    ToolTip="The time (in ms) between extracting information" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    PreviewTextInput="TextBox_PreviewTextInput"
+                    Text="{Binding UpdateInterval}" />
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Command="{Binding ResetSettingsCommand}"
+                    Content="Reset settings" />
             </Grid>
         </GroupBox>
     </Grid>

@@ -6,18 +6,19 @@ namespace Dolphin
     public interface ITravelInformationService
     {
         Point GetActCoordinate(ActionName actionName);
+
         Point GetActCoordinate(int act);
 
-        Point GetTownCoordinate(ActionName actionName);
+        Point GetKadalaItemCoordinate(ItemType itemType);
 
-        Point GetTownCoordinate(int act);
+        Point GetKadalaTabCoordinate(ItemType itemType);
 
         Point GetNextPoolSpotActCoordinate();
 
         Point GetNextPoolSpotMapCoordinate();
 
-        Point GetKadalaTabCoordinate(ItemType itemType);
+        Point GetTownCoordinate(ActionName actionName);
 
-        Point GetKadalaItemCoordinate(ItemType itemType);
+        Point GetTownCoordinate(int act);
     }
 }

@@ -5,18 +5,22 @@ namespace Dolphin
 {
     public interface ISettingsService
     {
-        Settings Settings { get; }
-
         MacroSettings MacroSettings { get; }
+
+        Settings Settings { get; }
 
         UiSettings UiSettings { get; }
 
+        ActionName GetActionName(Hotkey hotkey);
+
+        void SetPaused(bool newPaused, bool isFromChanging);
+
+        public void ResetSettings<T>();
+
+        public void ResetSettings();
+
         void SetHotkeyValue(ActionName key, Hotkey value);
 
-        void NegateIsPaused();
-
         bool SkillIsEnabled(SkillName skill);
-
-        ActionName GetActionName(Hotkey hotkey);
     }
 }

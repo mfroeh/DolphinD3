@@ -1,11 +1,8 @@
 ﻿using Dolphin.Enum;
 using MvvmDialogs;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using System.Xaml;
 using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Ui.Dialog
@@ -40,6 +37,8 @@ namespace Dolphin.Ui.Dialog
             }
         }
 
+        public ActionName EditingAction { get; set; }
+
         public Hotkey Hotkey
         {
             get => hotkey;
@@ -53,8 +52,6 @@ namespace Dolphin.Ui.Dialog
         public ICommand RevertCommand => new RelayCommand((_) => Hotkey = oldHotkey);
 
         public ICommand SaveCommand => new RelayCommand(SaveCommandAction);
-
-        public ActionName EditingAction { get; set; }
 
         public void SetHotkey(Hotkey currentHotkey)
         {

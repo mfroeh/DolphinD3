@@ -50,6 +50,7 @@
     <Compile Include="CommonCoordinate.cs" />
     <Compile Include="Enum\ActionName.cs" />
     <Compile Include="Enum\ConvertingSpeed.cs" />
+    <Compile Include="Enum\Command.cs" />
     <Compile Include="Enum\RelativeCoordinatePosition.cs" />
     <Compile Include="Enum\ItemType.cs" />
     <Compile Include="Enum\Window.cs" />

@@ -1,10 +1,7 @@
 ﻿using AdonisUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Security.Policy;
 using System.Windows;
-using System.Windows.Input;
 using Unity;
 
 namespace Dolphin.Ui

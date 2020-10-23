@@ -1,11 +1,7 @@
 ﻿using Dolphin.Enum;
-using Dolphin.Service;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -36,6 +32,14 @@ namespace Dolphin.Ui.ViewModel
             BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
         }
 
+        public ICommand AddEntryCommand
+        {
+            get
+            {
+                return new RelayCommand((_) => logService.AddEntry(this, "Test message", LogLevel.Error));
+            }
+        }
+
         public LogLevel DisplayLogLevel
         {
             get => settingsService.Settings.UiSettings.DisplayLogLevel;
@@ -54,14 +58,6 @@ namespace Dolphin.Ui.ViewModel
             get
             {
                 return System.Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
-            }
-        }
-
-        public ICommand AddEntryCommand
-        {
-            get
-            {
-                return new RelayCommand((_) => logService.AddEntry(this, "Test message", LogLevel.Error));
             }
         }
 

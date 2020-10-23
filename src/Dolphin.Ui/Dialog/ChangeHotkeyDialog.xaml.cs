@@ -1,9 +1,6 @@
 ﻿using AdonisUI.Controls;
-using System.Windows;
-using System.Text;
 using System.Windows.Input;
 using WK.Libraries.HotkeyListenerNS;
-using System.Windows.Controls;
 
 namespace Dolphin.Ui.Dialog
 {

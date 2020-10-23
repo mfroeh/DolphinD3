@@ -25,7 +25,7 @@ namespace Dolphin.Service
         private void CastSkill(object o, SkillCanBeCastedEvent @event)
         {
             var handle = handleService.GetHandle();
-            
+
             if (handle == default) return;
             if (!settingsService.SkillIsEnabled(@event.SkillName)) return;
 

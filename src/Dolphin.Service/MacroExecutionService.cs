@@ -1,5 +1,4 @@
 ﻿using Dolphin.Enum;
-using System;
 using System.Threading;
 using System.Windows.Forms;
 using WK.Libraries.HotkeyListenerNS;
@@ -10,9 +9,11 @@ namespace Dolphin.Service
     {
         private readonly Subscription<HotkeyPressedEvent> cancelExecutionSubscriber;
         private readonly Subscription<HotkeyPressedEvent> executeMacro;
+        private readonly IHandleService handleService;
+
         // private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
         private readonly IMacroFinderService macroFinderService;
-        private readonly IHandleService handleService;
+
         private readonly ISettingsService settingsService;
         private bool executing;
         private CancellationTokenSource tokenSource;
@@ -47,7 +48,11 @@ namespace Dolphin.Service
             var handle = handleService.GetHandle();
 
             if (handle == default) return;
-            if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
+
+            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause])
+            {
+                return;
+            }
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
             var macro = macroFinderService.FindAction(actionName, handle, tokenSource);

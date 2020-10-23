@@ -1,5 +1,4 @@
-﻿using AForge.Imaging.Filters;
-using Dolphin.Enum;
+﻿using Dolphin.Enum;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -99,16 +98,20 @@ namespace Dolphin.Service
                 case 1:
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill1TopLeft);
                     break;
+
                 case 2:
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill2TopLeft);
                     break;
+
                 case 3:
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill3TopLeft);
                     break;
+
                 case 4:
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill4TopLeft);
                     size = transformService.TransformSize(CommonSize.SkillbarSkillSizeMouse);
                     break;
+
                 case 5:
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill5TopLeft);
                     size = transformService.TransformSize(CommonSize.SkillbarSkillSizeMouse);

@@ -18,19 +18,15 @@ namespace Dolphin
             SwapItemsAmount = 3
         };
 
-        public static Keys OpenInventoryKeybinding = Keys.C;
-
-        public static Keys OpenMapKeybinding = Keys.M;
-
         public static IList<Keys> SkillKeybindigns = new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
-
-        public static Keys TeleportToTownKeybinding = Keys.T;
 
         public static UiSettings UiSettings = new UiSettings
         {
             DisplayLogLevel = LogLevel.Warning,
             LogPaused = true
         };
+
+        public static uint UpdateInterval = 100;
 
         public static IDictionary<ActionName, Hotkey> Hotkeys
         {
@@ -47,6 +43,19 @@ namespace Dolphin
                 return dict;
             }
         }
+
+        public static IDictionary<Command, Keys> OtherKeybindings
+        {
+            get
+            {
+                return new Dictionary<Command, Keys>
+                {
+                    { Command.TeleportToTown, Keys.T },
+                    { Command.OpenMap, Keys.M },
+                    { Command.OpenInventory, Keys.C }
+                };
+            }
+        }
     }
 
     public class Settings
@@ -59,14 +68,12 @@ namespace Dolphin
 
         public MacroSettings MacroSettings { get; set; } = InitialSettings.MacroSettings;
 
-        public Keys OpenInventoryKeybinding { get; set; } = InitialSettings.OpenInventoryKeybinding;
-
-        public Keys OpenMapKeybinding { get; set; } = InitialSettings.OpenMapKeybinding;
+        public IDictionary<Command, Keys> OtherKeybindings { get; set; } = InitialSettings.OtherKeybindings;
 
         public IList<Keys> SkillKeybindings { get; set; } = InitialSettings.SkillKeybindigns;
 
-        public Keys TeleportToTownKeybinding { get; set; } = InitialSettings.TeleportToTownKeybinding;
-
         public UiSettings UiSettings { get; set; } = InitialSettings.UiSettings;
+
+        public uint UpdateInterval { get; set; } = InitialSettings.UpdateInterval;
     }
 }

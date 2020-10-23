@@ -117,7 +117,7 @@ namespace Dolphin.Service
             catch (Exception ex)
             {
                 Trace.WriteLine($"Exception when trying to see if TokenSource was canceled, {ex}");
-                
+
                 return true;
             }
         }

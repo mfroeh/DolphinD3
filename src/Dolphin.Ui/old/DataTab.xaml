@@ -60,10 +60,10 @@
                     <Image Source="{Binding Skill5ImagePath}" Stretch="UniformToFill"></Image>
                 </Button.Content>
             </Button>
-        </Grid> 
+        </Grid>
 
         <Image Grid.Row="0" Grid.Column="1" Source="{Binding PlayerClass}" Stretch="Fill"></Image>
-            
+
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="10"></RowDefinition>

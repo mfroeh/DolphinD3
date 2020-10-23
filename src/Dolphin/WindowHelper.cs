@@ -34,13 +34,12 @@ namespace Dolphin
         }
 
         [DllImport("user32.dll")]
+        public static extern bool IsWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
         [DllImport("user32.dll")]
         public static extern bool ScreenToClient(IntPtr hwnd, ref Point point);
-
-        [DllImport("user32.dll")]
-        public static extern bool IsWindow(IntPtr hWnd);
-
     }
 }

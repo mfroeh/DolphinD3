@@ -1,13 +1,7 @@
-﻿using AdonisUI.Converters;
-using Dolphin.Service;
+﻿using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
 using MvvmDialogs.FrameworkDialogs;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -42,7 +36,6 @@ namespace Dolphin.Ui
 
             container.RegisterType<IEventSubscriber, MacroExecutionService>();
             container.RegisterType<IEventSubscriber, SkillCastingService>();
-
 
             container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();

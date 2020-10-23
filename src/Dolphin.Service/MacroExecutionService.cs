@@ -12,14 +12,16 @@ namespace Dolphin.Service
         private readonly Subscription<HotkeyPressedEvent> executeMacro;
         // private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
         private readonly IMacroFinderService macroFinderService;
+        private readonly IHandleService handleService;
         private readonly ISettingsService settingsService;
         private bool executing;
         private CancellationTokenSource tokenSource;
 
-        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IMacroFinderService macroFinderService) : base(eventBus)
+        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IMacroFinderService macroFinderService, IHandleService handleService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.macroFinderService = macroFinderService;
+            this.handleService = handleService;
 
             // executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
             executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
@@ -42,16 +44,15 @@ namespace Dolphin.Service
 
         public void ExecuteMacro(object o, HotkeyPressedEvent e)
         {
+            var handle = handleService.GetHandle();
+
+            if (handle == default) return;
             if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
-            var handle = WindowHelper.GetHWND();
+            var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
 
-            if (handle != IntPtr.Zero)
-            {
-                var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
-                Execute.AndForgetAsync(macro);
-            }
+            Execute.AndForgetAsync(macro);
         }
 
         // TODO: This might not need the lock / the lock is actually bad. Potentially all the delegates get staggered up.

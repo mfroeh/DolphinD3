@@ -31,6 +31,9 @@
                     <TabItem DataContext="{Binding Children[2]}" Header="Log">
                         <view:LogTabView />
                     </TabItem>
+                    <TabItem DataContext="{Binding Children[3]}" Header="Settings">
+                        <view:SettingsTabView />
+                    </TabItem>
                 </TabControl>
             </Grid>
         </ScrollViewer>

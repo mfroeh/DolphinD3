@@ -9,16 +9,18 @@ namespace Dolphin.Service
     public class ExtractPlayerInformationService : IExtractInformationService, IEventPublisher<PlayerInformationChangedEvent>
     {
         private readonly IEventBus eventBus;
+        private readonly ICaptureWindowService imageService;
         private readonly ILogService logService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
-        public ExtractPlayerInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ILogService logService)
+        public ExtractPlayerInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICaptureWindowService imageService, ILogService logService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;
             this.resourceService = resourceService;
             this.logService = logService;
+            this.imageService = imageService;
         }
 
         public void Extract(Bitmap picture)
@@ -29,10 +31,10 @@ namespace Dolphin.Service
                 return;
             }
 
-            var classPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 90, Y = 100 }, new Size { Width = 10, Height = 10 }));
-            var healthPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 43, Y = 164 }, new Size { Width = 81, Height = 5 }));
-            var primaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1830, Y = 1230 }, new Size { Height = 194, Width = 2 }));
-            var secondaryPart = ImageHelper.CropImage(picture, new Rectangle(new Point { X = 1850, Y = 1230 }, new Size { Height = 194, Width = 2 }));
+            var classPart = imageService.CropPlayerClass(picture);
+            var healthPart = imageService.CropHealth(picture);
+            var primaryPart = imageService.CropPrimaryResource(picture, modelService.Player.Class);
+            var secondaryPart = imageService.CropSecondaryResource(picture, modelService.Player.Class);
 
             var classChanged = ExtractPlayerClass(classPart);
             var healthChanged = ExtractHealth(healthPart);
@@ -109,6 +111,14 @@ namespace Dolphin.Service
 
         private bool ExtractSecondaryResource(Bitmap picturePart)
         {
+            if (picturePart == null)
+            {
+                var old = modelService.Player.SecondaryRessourcePercentage;
+                modelService.Player.SecondaryRessourcePercentage = 0;
+
+                return old != 0;
+            }
+
             var oldSecondary = modelService.Player.SecondaryRessourcePercentage;
 
             var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleSecondary());

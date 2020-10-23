@@ -1,11 +1,14 @@
-﻿using Dolphin.Service;
+﻿using AdonisUI.Converters;
+using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
+using MvvmDialogs.FrameworkDialogs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Unity;
@@ -31,7 +34,7 @@ namespace Dolphin.Ui
             container.RegisterInstance(new HotkeyListener());
 
             container.RegisterType<IEventBus, EventBus>(new ContainerControlledLifetimeManager());
-            
+
             container.RegisterType<IEventPublisher<PlayerInformationChangedEvent>, ExtractPlayerInformationService>("extractPlayerInformation");
             container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>();
@@ -47,14 +50,16 @@ namespace Dolphin.Ui
             container.RegisterType<IModelService, ModelService>();
             container.RegisterType<IResourceService, ResourceService>();
             container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
-
+            container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
 
             container.RegisterType<IViewModelBase, MainViewModel>("main");
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
             container.RegisterType<IViewModelBase, FeatureTabViewModel>("featureTab");
             container.RegisterType<IViewModelBase, LogTabViewModel>("logTab");
             container.RegisterType<IViewModelBase, ChangeHotkeyDialogViewModel>("changeHotkey");
+            container.RegisterType<IViewModelBase, SettingsTabViewModel>("settingsTab");
 
+            container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
             container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
 
             container.AddExtension(new Diagnostic());
@@ -62,6 +67,17 @@ namespace Dolphin.Ui
             var mainVM = container.Resolve<IViewModelBase>("main");
             MainWindow = new MainWindow { DataContext = mainVM };
             MainWindow.Show();
+
+            var handleService = container.Resolve<IHandleService>();
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    handleService.UpdateHandle();
+                    Thread.Sleep(1000);
+                }
+            });
         }
 
         /*

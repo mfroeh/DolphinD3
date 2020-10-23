@@ -93,7 +93,8 @@ namespace Dolphin.Ui.Dialog
                             this,
                             text,
                             "Existing Hotkey allocation found",
-                            MessageBoxButton.OKCancel);
+                            MessageBoxButton.OKCancel,
+                            MessageBoxImage.Warning);
 
             return result == MessageBoxResult.OK;
         }

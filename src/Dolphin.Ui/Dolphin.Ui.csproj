@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,8 +62,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomFrameworkDialogFactory.cs" />
+    <Compile Include="CustomMessageBox.cs" />
     <Compile Include="old\DataTab.xaml.cs">
       <DependentUpon>DataTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\SettingsTabViewModel.cs" />
+    <Compile Include="View\SettingsTabView.xaml.cs">
+      <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
     <Content Include="old\DataTabViewModel.txt" />
     <Compile Include="EnumBooleanConverter.cs" />
@@ -118,6 +125,10 @@
     <Page Include="View\LogTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SettingsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

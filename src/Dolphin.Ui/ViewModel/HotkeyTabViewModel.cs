@@ -132,12 +132,14 @@ namespace Dolphin.Ui.ViewModel
             {
                 var hotkey = dialogViewModel.Hotkey;
 
-                foreach (var item in Hotkeys)
+                var listCopy = Hotkeys.Select(item => item).ToList();
+                foreach (var item in listCopy)
                 {
                     if (item.Value == hotkey)
                     {
                         settingsService.SetHotkeyValue(item.Key, null);
                         Hotkeys[item.Key] = null;
+                        break; // There can only ever be 
                     }
                 }
 

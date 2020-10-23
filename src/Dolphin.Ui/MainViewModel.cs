@@ -33,6 +33,10 @@ namespace Dolphin.Ui
             tab2.Parent = this;
             Children.Add(tab2);
 
+            var tab3 = container.Resolve<IViewModelBase>("settingsTab");
+            tab3.Parent = this;
+            Children.Add(tab3);
+
             IsDark = settingsService.Settings.UiSettings.IsDark;
             Status = "Ready";
 

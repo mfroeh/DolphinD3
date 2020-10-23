@@ -18,7 +18,9 @@ namespace Dolphin.Ui
             GetType().GetProperty(propertyName).SetValue(this, value);
 
             if (raisePropertyChanged)
+            {
                 RaisePropertyChanged(propertyName);
+            }
         }
     }
 }

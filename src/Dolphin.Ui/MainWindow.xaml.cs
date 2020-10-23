@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestoreWindowPlace;
+using System;
 using System.Windows;
 
 namespace Dolphin.Ui
@@ -11,6 +12,8 @@ namespace Dolphin.Ui
         public MainWindow()
         {
             InitializeComponent();
+
+            ((App)Application.Current).WindowPlace.Register(this);
         }
 
         protected override void OnClosed(EventArgs e)

@@ -1,4 +1,5 @@
-﻿using Dolphin.Enum;
+﻿using AForge;
+using Dolphin.Enum;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -23,7 +24,8 @@ namespace Dolphin
         public static UiSettings UiSettings = new UiSettings
         {
             DisplayLogLevel = LogLevel.Warning,
-            LogPaused = true
+            LogPaused = true,
+            IsDark = false
         };
 
         public static uint UpdateInterval = 100;

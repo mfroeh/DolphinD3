@@ -57,7 +57,8 @@
     <Compile Include="EventSubscriberBase.cs" />
     <Compile Include="Event\PausedEvent.cs" />
     <Compile Include="Event\SkillRecognitionChangedEvent.cs" />
-    <Compile Include="HotkeysChangedEventArgs.cs" />
+    <Compile Include="EventArgs\HandleChangedEventArgs.cs" />
+    <Compile Include="EventArgs\HotkeysChangedEventArgs.cs" />
     <Compile Include="IConditionFinderService.cs" />
     <Compile Include="IHandleService.cs" />
     <Compile Include="IMacroFinderService.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="Interface\ILogService.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Interface\IModelService.cs" />
-    <Compile Include="LogEntryEventArgs.cs" />
+    <Compile Include="EventArgs\LogEntryEventArgs.cs" />
     <Compile Include="Interface\IResourceService.cs" />
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Enum\BuffName.cs" />

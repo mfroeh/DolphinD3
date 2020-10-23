@@ -16,28 +16,27 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
-        <Grid Grid.Row="0" Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="{adonisUi:Space}"
-                Content="Loglevel" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <WrapPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="{adonisUi:Space}"
+            Orientation="Vertical">
+            <Label Margin="{adonisUi:Space Top=0, Left=0}" Content="Loglevel" />
             <ComboBox
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="{adonisUi:Space Top=0}"
-                adonisExtensions:WatermarkExtension.Watermark="Select an option"
                 IsEditable="False"
                 ItemsSource="{Binding PossibleLogLevel}"
                 SelectedItem="{Binding DisplayLogLevel}"
                 ToolTip="Display all Logmessages below this Level or on this level" />
-        </Grid>
-        <Grid Grid.Column="1">
+            <CheckBox
+                Margin="{adonisUi:Space Left=0}"
+                HorizontalAlignment="Center"
+                Content="Log paused"
+                IsChecked="{Binding LogPaused}" />
+        </WrapPanel>
+        <Grid Grid.Row="0" Grid.Column="1">
             <DataGrid
                 Margin="{adonisUi:Space}"
                 AutoGenerateColumns="False"
@@ -69,6 +68,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Button Command="{Binding AddEntryCommand}" Content="Add Entry" />
     </Grid>
 </UserControl>

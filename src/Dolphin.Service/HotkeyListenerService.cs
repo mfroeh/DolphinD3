@@ -10,7 +10,6 @@ namespace Dolphin.Service
         private readonly Subscription<PausedEvent> pausedSubscription;
         private readonly ISettingsService settingsService; // TODO: Remove if not needed
         private readonly ILogService logService;
-        private HotkeyListener pauseOnlyListener;
 
         public HotkeyListenerService(IEventBus eventBus, ISettingsService settingsService, HotkeyListener hotkeyListener, ILogService logService) : base(eventBus)
         {
@@ -51,11 +50,22 @@ namespace Dolphin.Service
 
         public void RefreshHotkeys(IList<Hotkey> newHotkeys)
         {
-            hotkeyListener.RemoveAll();
+            var wasSuspended = hotkeyListener.Suspended;
 
+            if (wasSuspended)
+            {
+                hotkeyListener.Resume();
+            }
+
+            hotkeyListener.RemoveAll();
             foreach (var hotkey in newHotkeys)
             {
                 if (hotkey != null) AddHotkey(hotkey);
+            }
+
+            if (wasSuspended)
+            {
+                hotkeyListener.Suspend();
             }
         }
 

@@ -26,7 +26,7 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public IDictionary<SkillName, bool> EnabledSkills { get; }
+        public ObservableDictionary<SkillName, bool> EnabledSkills { get; }
 
         public ICommand SkillCheckboxClicked
         {

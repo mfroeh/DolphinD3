@@ -21,7 +21,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <GroupBox Margin="{adonisUi:Space}" Header="Keybindings">
+        <GroupBox Margin="{adonisUi:Space Left=0, Top=0}" Header="Keybindings">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
@@ -149,7 +149,8 @@
         <GroupBox
             Grid.Row="0"
             Grid.Column="1"
-            Margin="{adonisUi:Space}"
+            Margin="{adonisUi:Space Right=0,
+                                    Top=0}"
             Header="General">
             <Grid>
                 <Grid.RowDefinitions>

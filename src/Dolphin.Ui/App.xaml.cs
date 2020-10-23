@@ -2,6 +2,8 @@
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
 using MvvmDialogs.FrameworkDialogs;
+using RestoreWindowPlace;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +18,13 @@ namespace Dolphin.Ui
     /// </summary>
     public partial class App : Application
     {
+        public WindowPlace WindowPlace { get; }
+
+        public App()
+        {
+            WindowPlace = new WindowPlace("placement.config");
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -31,7 +40,7 @@ namespace Dolphin.Ui
 
             container.RegisterType<IEventPublisher<PlayerInformationChangedEvent>, ExtractPlayerInformationService>("extractPlayerInformation");
             container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
-            container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>();
+            container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
 
             container.RegisterType<IEventSubscriber, MacroExecutionService>();
@@ -51,6 +60,7 @@ namespace Dolphin.Ui
             container.RegisterType<IViewModelBase, LogTabViewModel>("logTab");
             container.RegisterType<IViewModelBase, ChangeHotkeyDialogViewModel>("changeHotkey");
             container.RegisterType<IViewModelBase, SettingsTabViewModel>("settingsTab");
+            container.RegisterType<IViewModelBase, OverviewTabViewModel>("overviewTab");
 
             container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
             container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
@@ -62,7 +72,8 @@ namespace Dolphin.Ui
             MainWindow.Show();
 
             var handleService = container.Resolve<IHandleService>();
-
+            var logService = container.Resolve<ILogService>();
+            var random = new Random();
             Task.Run(() =>
             {
                 while (true)
@@ -71,6 +82,21 @@ namespace Dolphin.Ui
                     Thread.Sleep(1000);
                 }
             });
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
+                    Thread.Sleep(1000);
+                }
+            });
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            WindowPlace.Save();
         }
 
         /*

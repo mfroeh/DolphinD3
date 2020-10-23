@@ -29,7 +29,8 @@
         <GroupBox
             Grid.Row="0"
             Grid.Column="0"
-            Margin="{adonisUi:Space}"
+            Margin="{adonisUi:Space Top=0,
+                                    Left=0}"
             Header="General">
             <Grid>
                 <Grid.RowDefinitions>
@@ -190,7 +191,7 @@
         <GroupBox
             Grid.Row="1"
             Grid.Column="0"
-            Margin="{adonisUi:Space}"
+            Margin="{adonisUi:Space Left=0}"
             Header="Traveling">
             <Grid>
                 <Grid.RowDefinitions>
@@ -352,7 +353,8 @@
         <GroupBox
             Grid.Row="0"
             Grid.Column="1"
-            Margin="{adonisUi:Space}"
+            Margin="{adonisUi:Space Right=0,
+                                    Top=0}"
             Header="During rift">
             <Grid>
                 <Grid.RowDefinitions>
@@ -489,7 +491,7 @@
         <GroupBox
             Grid.Row="1"
             Grid.Column="1"
-            Margin="{adonisUi:Space}"
+            Margin="{adonisUi:Space Right=0}"
             Header="Post rift">
             <Grid>
                 <Grid.RowDefinitions>
@@ -635,7 +637,7 @@
         <GroupBox
             Grid.Row="2"
             Grid.Column="0"
-            Margin="{adonisUi:Space}"
+            Margin="{adonisUi:Space Left=0}"
             Header="Cube converter">
             <Grid>
                 <Grid.RowDefinitions>

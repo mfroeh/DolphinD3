@@ -22,6 +22,9 @@
         <ScrollViewer>
             <Grid Grid.Row="0">
                 <TabControl Margin="{adonisUi:Space}">
+                    <TabItem DataContext="{Binding Children[4]}" Header="Overview">
+                        <view:OverviewTabView />
+                    </TabItem>
                     <TabItem DataContext="{Binding Children[0]}" Header="Hotkey">
                         <view:HotkeyTabView />
                     </TabItem>

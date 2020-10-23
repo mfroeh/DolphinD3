@@ -41,5 +41,8 @@ namespace Dolphin
 
         [DllImport("user32.dll")]
         public static extern bool ScreenToClient(IntPtr hwnd, ref Point point);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
     }
 }

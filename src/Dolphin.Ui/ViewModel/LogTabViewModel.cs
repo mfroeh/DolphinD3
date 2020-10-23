@@ -25,33 +25,41 @@ namespace Dolphin.Ui.ViewModel
 
         public LogTabViewModel(ISettingsService settingsService, ILogService logService)
         {
+            BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
+
             this.logService = logService;
             this.settingsService = settingsService;
             logService.EntryAdded += OnEntryAdded;
 
-            BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
+            displayLogLevel = settingsService.UiSettings.DisplayLogLevel;
+            logPaused = settingsService.UiSettings.LogPaused;
         }
 
-        public ICommand AddEntryCommand
-        {
-            get
-            {
-                return new RelayCommand((_) => logService.AddEntry(this, "Test message", LogLevel.Error));
-            }
-        }
-
+        private LogLevel displayLogLevel;
         public LogLevel DisplayLogLevel
         {
-            get => settingsService.Settings.UiSettings.DisplayLogLevel;
+            get => displayLogLevel;
             set
             {
+                displayLogLevel = value;
                 settingsService.Settings.UiSettings.DisplayLogLevel = value;
-                LogMessages.Clear(); // TODO: remove later
                 RaisePropertyChanged(nameof(DisplayLogLevel));
             }
         }
 
-        public ICollection<LogEntry> LogMessages { get; } = new ObservableCollection<LogEntry>();
+        public ObservableCollection<LogEntry> LogMessages { get; } = new ObservableCollection<LogEntry>();
+
+        private bool logPaused;
+        public bool LogPaused
+        {
+            get => logPaused;
+            set
+            {
+                logPaused = value;
+                settingsService.UiSettings.LogPaused = value;
+                RaisePropertyChanged(nameof(LogPaused));
+            }
+        }
 
         public IEnumerable<LogLevel> PossibleLogLevel
         {
@@ -63,9 +71,17 @@ namespace Dolphin.Ui.ViewModel
 
         private void OnEntryAdded(object sender, LogEntryEventArgs e)
         {
-            if (e.LogLevel.CompareTo(DisplayLogLevel) <= 0)
+            if (!LogPaused)
             {
-                LogMessages.Add(new LogEntry { Message = e.Message, LogLevel = e.LogLevel, Time = e.Time.ToString("HH:mm:ss") }); // TODO: Prepend
+                if (e.LogLevel.CompareTo(DisplayLogLevel) <= 0 || e.LogLevel == LogLevel.Error)
+                {
+                    if (LogMessages.Count > 500)
+                    {
+                        LogMessages.Clear();
+                    }
+
+                    LogMessages.Add(new LogEntry { Message = e.Message, LogLevel = e.LogLevel, Time = e.Time.ToString("HH:mm:ss") }); // TODO: Prepend
+                }
             }
         }
     }

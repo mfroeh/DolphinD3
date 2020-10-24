@@ -20,24 +20,18 @@ namespace Dolphin
         private const uint WM_RBUTTONDOWN = 0x204;
         private const uint WM_RBUTTONUP = 0x205;
 
-        public static Point GetCursorPos()
-        {
-            var point = new Point();
-            GetCursorPos(ref point);
-
-            return point;
-        }
-
         public static void SendClick(IntPtr handle, MouseButtons button, Point point)
         {
+            WindowHelper.ScreenToClient(handle, ref point);
+
             var lParam = MakeLParam(point);
             switch (button)
             {
                 case MouseButtons.Left:
-                    InputSimulator.SimulateKeyDown(VirtualKeyCode.SHIFT);
+                    // InputSimulator.SimulateKeyDown(VirtualKeyCode.SHIFT);
                     PostMessage(handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
                     PostMessage(handle, WM_LBUTTONUP, 0, lParam);
-                    InputSimulator.SimulateKeyUp(VirtualKeyCode.SHIFT);
+                    // InputSimulator.SimulateKeyUp(VirtualKeyCode.SHIFT);
                     break;
 
                 case MouseButtons.Right:
@@ -59,10 +53,10 @@ namespace Dolphin
 
         public static void SendClickAtCursorPos(IntPtr handle, MouseButtons button)
         {
-            var cursorPos = GetCursorPos();
-            WindowHelper.ScreenToClient(handle, ref cursorPos);
+            var point = new Point();
+            GetCursorPos(ref point);
 
-            SendClick(handle, button, cursorPos);
+            SendClick(handle, button, point);
         }
 
         public static void SendKey(IntPtr handle, Keys key, bool pressAlt = false)

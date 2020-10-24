@@ -12,5 +12,7 @@ namespace Dolphin
         public string Message { get; set; }
 
         public DateTime Time { get; set; }
+
+        public string Type { get; set; }
     }
 }

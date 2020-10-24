@@ -1,10 +1,7 @@
 ﻿using AdonisUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Security.Policy;
 using System.Windows;
-using System.Windows.Input;
 using Unity;
 
 namespace Dolphin.Ui
@@ -32,6 +29,15 @@ namespace Dolphin.Ui
             var tab2 = container.Resolve<IViewModelBase>("logTab");
             tab2.Parent = this;
             Children.Add(tab2);
+
+            var tab3 = container.Resolve<IViewModelBase>("settingsTab");
+            tab3.Parent = this;
+            Children.Add(tab3);
+
+
+            var tab4 = container.Resolve<IViewModelBase>("overviewTab");
+            tab4.Parent = this;
+            Children.Add(tab4);
 
             IsDark = settingsService.Settings.UiSettings.IsDark;
             Status = "Ready";

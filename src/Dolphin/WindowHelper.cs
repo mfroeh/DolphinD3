@@ -6,13 +6,6 @@ using System.Runtime.InteropServices;
 
 namespace Dolphin
 {
-    public enum CoordinatePosition
-    {
-        Left = 0,
-        Right = 1,
-        Middle = 2
-    }
-
     public static class WindowHelper
     {
         [DllImport("user32.dll")]
@@ -21,9 +14,9 @@ namespace Dolphin
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
 
-        public static IntPtr GetHWND(string name = "Diablo III64")
+        public static IntPtr GetHWND(string processName)
         {
-            var processes = Process.GetProcessesByName(name);
+            var processes = Process.GetProcessesByName(processName);
             if (processes.Any())
             {
                 return processes.First().MainWindowHandle;
@@ -41,37 +34,15 @@ namespace Dolphin
         }
 
         [DllImport("user32.dll")]
+        public static extern bool IsWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
         [DllImport("user32.dll")]
         public static extern bool ScreenToClient(IntPtr hwnd, ref Point point);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="sourceCoordinate">Source coordinate in 1920x1080</param>
-        /// <returns></returns>
-        public static Point TransformCoordinate(Point sourceCoordinate, CoordinatePosition coordinatePosition = default)
-        {
-            var clientRect = new Rectangle();
-            GetClientRect(GetHWND(), ref clientRect);
-
-            var scaledY = clientRect.Height / 1080 * sourceCoordinate.Y;
-
-            int scaledX;
-            if (coordinatePosition == CoordinatePosition.Left)
-            {
-                scaledX = clientRect.Height / 1080 * sourceCoordinate.X;
-            }
-            else if (coordinatePosition == CoordinatePosition.Right)
-            {
-                scaledX = clientRect.Width - (1920 - sourceCoordinate.X) * clientRect.Height / 1080;
-            }
-            else
-            {
-                scaledX = sourceCoordinate.X * clientRect.Height / 1080 + (clientRect.Width - 1920 * clientRect.Height / 1080) / 2;
-            }
-
-            return new Point { X = scaledX, Y = scaledY };
-        }
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
     }
 }

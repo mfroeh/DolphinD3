@@ -32,7 +32,6 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-
                 <GroupBox
                     Grid.Row="0"
                     Grid.Column="0"

@@ -12,13 +12,15 @@ namespace Dolphin.Service
         private static readonly IList<ActionName> cancellableMacros = new List<ActionName> { ActionName.CubeConverterDualSlot, ActionName.CubeConverterSingleSlot, ActionName.UpgradeGem };
         private readonly ILogService logService;
         private readonly ISettingsService settingsService;
+        private readonly ITransformService transformService;
         private readonly ITravelInformationService travelService;
 
-        public MacroFinderService(ISettingsService settingsService, ILogService logService, ITravelInformationService travelService)
+        public MacroFinderService(ISettingsService settingsService, ILogService logService, ITravelInformationService travelService, ITransformService transformService)
         {
             this.settingsService = settingsService;
             this.logService = logService;
             this.travelService = travelService;
+            this.transformService = transformService;
         }
 
         public Action FindAction(ActionName actionName, IntPtr handle)
@@ -105,7 +107,6 @@ namespace Dolphin.Service
         {
             try
             {
-
                 if (tokenSource.Token.IsCancellationRequested)
                 {
                     Trace.WriteLine("Cancellation requested!");
@@ -116,6 +117,7 @@ namespace Dolphin.Service
             catch (Exception ex)
             {
                 Trace.WriteLine($"Exception when trying to see if TokenSource was canceled, {ex}");
+
                 return true;
             }
         }
@@ -136,12 +138,12 @@ namespace Dolphin.Service
 
         private void CubeConverterDualSlot(IntPtr handle, CancellationTokenSource tokenSource)
         {
-            var item = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, CoordinatePosition.Right);
-            var step = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryStepSize);
-            var fill = WindowHelper.TransformCoordinate(CommonCoordinate.CubeFill);
-            var transmute = WindowHelper.TransformCoordinate(CommonCoordinate.CubeTransmute);
-            var backwards = WindowHelper.TransformCoordinate(CommonCoordinate.CubeBackwards);
-            var forwards = WindowHelper.TransformCoordinate(CommonCoordinate.CubeForwards);
+            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
+            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
+            var fill = transformService.TransformCoordinate(CommonCoordinate.CubeFill);
+            var transmute = transformService.TransformCoordinate(CommonCoordinate.CubeTransmute);
+            var backwards = transformService.TransformCoordinate(CommonCoordinate.CubeBackwards);
+            var forwards = transformService.TransformCoordinate(CommonCoordinate.CubeForwards);
 
             var itemClickDelay = 130;
             var transmuteDelay = 130;
@@ -165,7 +167,7 @@ namespace Dolphin.Service
                 for (int j = 0; j < 10; j++)
                 {
                     if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Right, item.X + j * step.X, item.Y + i * step.Y * 2);
+                    InputHelper.SendClick(handle, MouseButtons.Right, item.X + j * step.Width, item.Y + i * step.Height * 2);
                     Thread.Sleep(itemClickDelay);
 
                     if (IsCancelled(tokenSource)) return;
@@ -188,12 +190,12 @@ namespace Dolphin.Service
 
         private void CubeConverterSingleSlot(IntPtr handle, CancellationTokenSource tokenSource)
         {
-            var item = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, CoordinatePosition.Right);
-            var step = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryStepSize);
-            var fill = WindowHelper.TransformCoordinate(CommonCoordinate.CubeFill);
-            var transmute = WindowHelper.TransformCoordinate(CommonCoordinate.CubeTransmute);
-            var backwards = WindowHelper.TransformCoordinate(CommonCoordinate.CubeBackwards);
-            var forwards = WindowHelper.TransformCoordinate(CommonCoordinate.CubeForwards);
+            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
+            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
+            var fill = transformService.TransformCoordinate(CommonCoordinate.CubeFill);
+            var transmute = transformService.TransformCoordinate(CommonCoordinate.CubeTransmute);
+            var backwards = transformService.TransformCoordinate(CommonCoordinate.CubeBackwards);
+            var forwards = transformService.TransformCoordinate(CommonCoordinate.CubeForwards);
 
             var itemClickDelay = 130;
             var transmuteDelay = 130;
@@ -217,7 +219,7 @@ namespace Dolphin.Service
                 for (int j = 0; j < 10; j++)
                 {
                     if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Right, item.X + j * step.X, item.Y + i * step.Y);
+                    InputHelper.SendClick(handle, MouseButtons.Right, item.X + j * step.Width, item.Y + i * step.Height);
                     Thread.Sleep(itemClickDelay);
 
                     if (IsCancelled(tokenSource)) return;
@@ -240,21 +242,21 @@ namespace Dolphin.Service
 
         private void DropInventory(IntPtr handle)
         {
-            var item = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryTopRightSpot, CoordinatePosition.Right);
-            var step = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryStepSize);
+            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopRightSpot, RelativeCoordinatePosition.Right);
+            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
 
             var cursorPos = InputHelper.GetCursorPos();
             WindowHelper.ScreenToClient(handle, ref cursorPos); //  x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
 
             var columnIterations = 10 - settingsService.MacroSettings.SpareColumns;
 
-            InputHelper.SendKey(handle, Keys.C);
+            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
 
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < columnIterations; j++)
                 {
-                    InputHelper.SendClick(handle, MouseButtons.Left, item.X - j * step.X, item.Y + i * step.Y);
+                    InputHelper.SendClick(handle, MouseButtons.Left, item.X - j * step.Width, item.Y + i * step.Height);
                     InputHelper.SendClick(handle, MouseButtons.Left, cursorPos);
                 }
             }
@@ -266,8 +268,8 @@ namespace Dolphin.Service
             var _tab = travelService.GetKadalaTabCoordinate(gambleItem);
             var _item = travelService.GetKadalaItemCoordinate(gambleItem);
 
-            var tab = WindowHelper.TransformCoordinate(_tab);
-            var item = WindowHelper.TransformCoordinate(_item);
+            var tab = transformService.TransformCoordinate(_tab);
+            var item = transformService.TransformCoordinate(_item);
 
             InputHelper.SendClick(handle, MouseButtons.Left, tab);
 
@@ -279,7 +281,7 @@ namespace Dolphin.Service
 
         private void LeaveGame(IntPtr handle)
         {
-            var leave = WindowHelper.TransformCoordinate(CommonCoordinate.EscapeLeave);
+            var leave = transformService.TransformCoordinate(CommonCoordinate.EscapeLeave);
 
             InputHelper.SendKey(handle, Keys.Escape);
             InputHelper.SendClick(handle, MouseButtons.Left, leave);
@@ -287,7 +289,7 @@ namespace Dolphin.Service
 
         private void LowerDifficulty(IntPtr handle)
         {
-            var lower = WindowHelper.TransformCoordinate(CommonCoordinate.EscapeLowerDifficulty, CoordinatePosition.Right);
+            var lower = transformService.TransformCoordinate(CommonCoordinate.EscapeLowerDifficulty, RelativeCoordinatePosition.Right);
 
             InputHelper.SendKey(handle, Keys.Escape);
 
@@ -302,8 +304,8 @@ namespace Dolphin.Service
 
         private void OpenGrift(IntPtr handle)
         {
-            var grift = WindowHelper.TransformCoordinate(CommonCoordinate.PortalGriftButton);
-            var accept = WindowHelper.TransformCoordinate(CommonCoordinate.PortalAccept);
+            var grift = transformService.TransformCoordinate(CommonCoordinate.PortalGriftButton);
+            var accept = transformService.TransformCoordinate(CommonCoordinate.PortalAccept);
 
             InputHelper.SendClick(handle, MouseButtons.Left, grift);
             InputHelper.SendClick(handle, MouseButtons.Left, accept);
@@ -311,8 +313,8 @@ namespace Dolphin.Service
 
         private void OpenRift(IntPtr handle)
         {
-            var rift = WindowHelper.TransformCoordinate(CommonCoordinate.PortalRiftButton);
-            var accept = WindowHelper.TransformCoordinate(CommonCoordinate.PortalAccept);
+            var rift = transformService.TransformCoordinate(CommonCoordinate.PortalRiftButton);
+            var accept = transformService.TransformCoordinate(CommonCoordinate.PortalAccept);
 
             InputHelper.SendClick(handle, MouseButtons.Left, rift);
             InputHelper.SendClick(handle, MouseButtons.Left, accept);
@@ -320,11 +322,11 @@ namespace Dolphin.Service
 
         private void Reforge(IntPtr handle)
         {
-            var item = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, CoordinatePosition.Right);
-            var fill = WindowHelper.TransformCoordinate(CommonCoordinate.CubeFill);
-            var transmute = WindowHelper.TransformCoordinate(CommonCoordinate.CubeTransmute);
-            var backwards = WindowHelper.TransformCoordinate(CommonCoordinate.CubeBackwards);
-            var forwards = WindowHelper.TransformCoordinate(CommonCoordinate.CubeForwards);
+            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
+            var fill = transformService.TransformCoordinate(CommonCoordinate.CubeFill);
+            var transmute = transformService.TransformCoordinate(CommonCoordinate.CubeTransmute);
+            var backwards = transformService.TransformCoordinate(CommonCoordinate.CubeBackwards);
+            var forwards = transformService.TransformCoordinate(CommonCoordinate.CubeForwards);
 
             InputHelper.SendClick(handle, MouseButtons.Right, item);
             Thread.Sleep(100);
@@ -340,10 +342,10 @@ namespace Dolphin.Service
 
         private void Salvage(IntPtr handle)
         {
-            var item = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryTopRightSpot, CoordinatePosition.Right);
-            var menu = WindowHelper.TransformCoordinate(CommonCoordinate.BlacksmithMenu);
-            var anvil = WindowHelper.TransformCoordinate(CommonCoordinate.BlacksmithAnvil);
-            var step = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryStepSize);
+            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopRightSpot, RelativeCoordinatePosition.Right);
+            var menu = transformService.TransformCoordinate(CommonCoordinate.BlacksmithMenu);
+            var anvil = transformService.TransformCoordinate(CommonCoordinate.BlacksmithAnvil);
+            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
 
             var columnIterations = 10 - settingsService.MacroSettings.SpareColumns;
 
@@ -354,7 +356,7 @@ namespace Dolphin.Service
             {
                 for (int j = 0; j < columnIterations; j++)
                 {
-                    InputHelper.SendClick(handle, MouseButtons.Left, item.X - j * step.X, item.Y + i * step.Y);
+                    InputHelper.SendClick(handle, MouseButtons.Left, item.X - j * step.Width, item.Y + i * step.Height);
                     InputHelper.SendKey(handle, Keys.Enter);
                     InputHelper.SendKey(handle, Keys.Enter);
                 }
@@ -366,14 +368,14 @@ namespace Dolphin.Service
         private void SwapArmour(IntPtr handle)
         {
             // Allow different spots
-            var step = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryStepSize, CoordinatePosition.Right);
-            var item = WindowHelper.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, CoordinatePosition.Right);
+            var step = transformService.TransformSize(CommonSize.InventoryStepSize, RelativeCoordinatePosition.Right);
+            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
 
-            InputHelper.SendKey(handle, Keys.C);
+            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
 
             for (int i = 0; i < settingsService.MacroSettings.SwapItemsAmount; i++)
             {
-                InputHelper.SendClick(handle, MouseButtons.Right, item.X, item.Y + i * step.Y * 2);
+                InputHelper.SendClick(handle, MouseButtons.Right, item.X, item.Y + i * step.Height * 2);
             }
         }
 
@@ -382,9 +384,9 @@ namespace Dolphin.Service
             var _mapAct = travelService.GetNextPoolSpotActCoordinate();
             var _mapWaypoint = travelService.GetNextPoolSpotMapCoordinate();
 
-            var backwards = WindowHelper.TransformCoordinate(CommonCoordinate.MapBackwards, CoordinatePosition.Middle);
-            var mapAct = WindowHelper.TransformCoordinate(_mapAct, CoordinatePosition.Middle);
-            var mapWaypoint = WindowHelper.TransformCoordinate(_mapWaypoint, CoordinatePosition.Middle);
+            var backwards = transformService.TransformCoordinate(CommonCoordinate.MapBackwards, RelativeCoordinatePosition.Middle);
+            var mapAct = transformService.TransformCoordinate(_mapAct, RelativeCoordinatePosition.Middle);
+            var mapWaypoint = transformService.TransformCoordinate(_mapWaypoint, RelativeCoordinatePosition.Middle);
 
             InputHelper.SendClick(handle, MouseButtons.Left, backwards);
             InputHelper.SendClick(handle, MouseButtons.Left, mapAct);
@@ -396,11 +398,11 @@ namespace Dolphin.Service
             var _mapAct = travelService.GetActCoordinate(actionName);
             var _mapTown = travelService.GetTownCoordinate(actionName);
 
-            var backwards = WindowHelper.TransformCoordinate(CommonCoordinate.MapBackwards, CoordinatePosition.Middle);
-            var mapAct = WindowHelper.TransformCoordinate(_mapAct, CoordinatePosition.Middle);
-            var mapTown = WindowHelper.TransformCoordinate(_mapTown, CoordinatePosition.Middle);
+            var backwards = transformService.TransformCoordinate(CommonCoordinate.MapBackwards, RelativeCoordinatePosition.Middle);
+            var mapAct = transformService.TransformCoordinate(_mapAct, RelativeCoordinatePosition.Middle);
+            var mapTown = transformService.TransformCoordinate(_mapTown, RelativeCoordinatePosition.Middle);
 
-            InputHelper.SendKey(handle, Keys.M);
+            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenMap));
             InputHelper.SendClick(handle, MouseButtons.Left, backwards);
             InputHelper.SendClick(handle, MouseButtons.Left, mapAct);
             InputHelper.SendClick(handle, MouseButtons.Left, mapTown);
@@ -408,8 +410,8 @@ namespace Dolphin.Service
 
         private void UpgradeGem(IntPtr handle, CancellationTokenSource tokenSource)
         {
-            var firstGem = WindowHelper.TransformCoordinate(CommonCoordinate.UrshiFirstGem);
-            var upgrade = WindowHelper.TransformCoordinate(CommonCoordinate.UrshiUpgrade);
+            var firstGem = transformService.TransformCoordinate(CommonCoordinate.UrshiFirstGem);
+            var upgrade = transformService.TransformCoordinate(CommonCoordinate.UrshiUpgrade);
 
             var iterations = settingsService.MacroSettings.Empowered ? 5 : 4;
 
@@ -425,7 +427,7 @@ namespace Dolphin.Service
                 if (iterations - i == 3)
                 {
                     if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendKey(handle, Keys.T);
+                    InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.TeleportToTown));
                 }
 
                 if (IsCancelled(tokenSource)) return;

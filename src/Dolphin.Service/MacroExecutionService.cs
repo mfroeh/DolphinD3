@@ -1,5 +1,5 @@
 ﻿using Dolphin.Enum;
-using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 using WK.Libraries.HotkeyListenerNS;
@@ -10,20 +10,29 @@ namespace Dolphin.Service
     {
         private readonly Subscription<HotkeyPressedEvent> cancelExecutionSubscriber;
         private readonly Subscription<HotkeyPressedEvent> executeMacro;
+        private readonly IHandleService handleService;
+
         // private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
-        private readonly IMacroFinderService macroFinderService;
+        private readonly IActionFinderService macroFinderService;
+
         private readonly ISettingsService settingsService;
         private bool executing;
         private CancellationTokenSource tokenSource;
 
-        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IMacroFinderService macroFinderService) : base(eventBus)
+        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService macroFinderService, IHandleService handleService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.macroFinderService = macroFinderService;
+            this.handleService = handleService;
+
+            Trace.WriteLine(handleService.GetHashCode());
 
             // executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
             executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
             cancelExecutionSubscriber = new Subscription<HotkeyPressedEvent>(CancelExecution);
+
+            SubscribeBus(executeMacro);
+            SubscribeBus(cancelExecutionSubscriber);
         }
 
         /// <summary>
@@ -42,16 +51,19 @@ namespace Dolphin.Service
 
         public void ExecuteMacro(object o, HotkeyPressedEvent e)
         {
-            if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
+            var handle = handleService.GetHandle();
+
+            if (handle == default) return;
+
+            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause])
+            {
+                return;
+            }
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
-            var handle = WindowHelper.GetHWND();
+            var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
 
-            if (handle != IntPtr.Zero)
-            {
-                var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
-                Execute.AndForgetAsync(macro);
-            }
+            Execute.AndForgetAsync(macro);
         }
 
         // TODO: This might not need the lock / the lock is actually bad. Potentially all the delegates get staggered up.

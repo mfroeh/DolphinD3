@@ -5,6 +5,11 @@ namespace Dolphin
 {
     public delegate void CancellableEventHandler<T>(T @event, CancellationToken token);
 
+    public interface ISubscription
+    {
+        public Type EventType { get; }
+    }
+
     public static class SubscriptionExtensionMethods
     {
         public static void CancelReaction<T>(this Subscription<T> sub) where T : IEvent
@@ -30,11 +35,6 @@ namespace Dolphin
             if (sub.Handler != null)
                 Execute.AndForgetAsync(() => sub.Handler.Invoke(null, @event));
         }
-    }
-
-    public interface ISubscription
-    {
-        public Type EventType { get; }
     }
 
     public class Subscription<T> : ISubscription where T : IEvent

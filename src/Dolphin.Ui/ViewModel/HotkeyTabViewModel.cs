@@ -2,7 +2,6 @@
 using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using MvvmDialogs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -14,17 +13,17 @@ namespace Dolphin.Ui.ViewModel
     public class HotkeyTabViewModel : ViewModelBase
     {
         private readonly IDialogService dialogService;
+        private readonly IEventPublisher<HotkeyPressedEvent> hotkeyListener;
         private readonly ISettingsService settingsService;
         private readonly IUnityContainer unityContainer;
-        private readonly IEventPublisher<HotkeyPressedEvent> hotkeyListener;
         private ICommand changeHotkeyCommand;
 
+        private ConvertingSpeed convertingSpeed;
+        private bool empowered;
+        private bool pickGem;
         private ItemType selectedItem;
 
         private uint spareColumns;
-        private bool empowered;
-        private bool pickGem;
-        private ConvertingSpeed convertingSpeed;
 
         public HotkeyTabViewModel(IUnityContainer unityContainer, IDialogService dialogService, ISettingsService settingsService, [Dependency("hotkeyListener")] IEventPublisher<HotkeyPressedEvent> hotkeyListener)
         {
@@ -33,7 +32,7 @@ namespace Dolphin.Ui.ViewModel
             this.settingsService = settingsService;
             this.hotkeyListener = hotkeyListener;
 
-            Hotkeys = new ObservableDictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
+            Hotkeys = new Dictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
             ItemTypes = System.Enum.GetValues(typeof(ItemType)).Cast<ItemType>().ToList();
 
             selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
@@ -41,6 +40,15 @@ namespace Dolphin.Ui.ViewModel
             empowered = settingsService.Settings.MacroSettings.Empowered;
             pickGem = settingsService.Settings.MacroSettings.PickGemYourself;
             convertingSpeed = settingsService.Settings.MacroSettings.ConvertingSpeed;
+        }
+
+        public ICommand ChangeHotkeyCommand
+        {
+            get
+            {
+                changeHotkeyCommand = changeHotkeyCommand ?? new RelayCommand((o) => ShowChangeHotkeyDialog((ActionName)o));
+                return changeHotkeyCommand;
+            }
         }
 
         public ConvertingSpeed ConvertingSpeed
@@ -51,15 +59,6 @@ namespace Dolphin.Ui.ViewModel
                 convertingSpeed = value;
                 settingsService.Settings.MacroSettings.ConvertingSpeed = value;
                 RaisePropertyChanged(nameof(ConvertingSpeed));
-            }
-        }
-
-        public ICommand ChangeHotkeyCommand
-        {
-            get
-            {
-                changeHotkeyCommand = changeHotkeyCommand ?? new RelayCommand((o) => ShowChangeHotkeyDialog((ActionName)o));
-                return changeHotkeyCommand;
             }
         }
 
@@ -74,6 +73,10 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public IDictionary<ActionName, Hotkey> Hotkeys { get; }
+
+        public IList<ItemType> ItemTypes { get; }
+
         public bool PickGemYourself
         {
             get => pickGem;
@@ -84,10 +87,6 @@ namespace Dolphin.Ui.ViewModel
                 RaisePropertyChanged(nameof(Empowered));
             }
         }
-
-        public IDictionary<ActionName, Hotkey> Hotkeys { get; }
-
-        public IList<ItemType> ItemTypes { get; }
 
         public ItemType SelectedGambleItem
         {
@@ -114,6 +113,11 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        private void NotifyHotkeysChanged(IList<Hotkey> newHotkeys)
+        {
+            ((HotkeyListenerService)hotkeyListener).RefreshHotkeys(newHotkeys);
+        }
+
         private void ShowChangeHotkeyDialog(ActionName actionAllocationToChange)
         {
             var oldHotkey = Hotkeys[actionAllocationToChange];
@@ -122,22 +126,21 @@ namespace Dolphin.Ui.ViewModel
             dialogViewModel.SetHotkey(oldHotkey);
             dialogViewModel.EditingAction = actionAllocationToChange;
 
-            if (!settingsService.Settings.IsPaused)
-            {
-                settingsService.NegateIsPaused();
-            }
+            settingsService.SetPaused(true, true);
 
             bool? success = dialogService.ShowDialog(this, dialogViewModel);
             if (success == true && oldHotkey != dialogViewModel.Hotkey)
             {
                 var hotkey = dialogViewModel.Hotkey;
 
-                foreach (var item in Hotkeys)
+                var listCopy = Hotkeys.Select(item => item).ToList();
+                foreach (var item in listCopy)
                 {
                     if (item.Value == hotkey)
                     {
                         settingsService.SetHotkeyValue(item.Key, null);
                         Hotkeys[item.Key] = null;
+                        break; // There can only ever be
                     }
                 }
 
@@ -148,12 +151,7 @@ namespace Dolphin.Ui.ViewModel
                 NotifyHotkeysChanged(settingsService.Settings.Hotkeys.Values.ToList());
             }
 
-            settingsService.NegateIsPaused();
-        }
-
-        private void NotifyHotkeysChanged(IList<Hotkey> newHotkeys)
-        {
-            ((HotkeyListenerService)hotkeyListener).RefreshHotkeys(newHotkeys);
+            settingsService.SetPaused(false, true);
         }
     }
 }

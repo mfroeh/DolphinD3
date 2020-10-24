@@ -1,10 +1,6 @@
 ﻿using Dolphin.Enum;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
@@ -30,7 +26,7 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public IDictionary<SkillName, bool> EnabledSkills { get; }
+        public ObservableDictionary<SkillName, bool> EnabledSkills { get; }
 
         public ICommand SkillCheckboxClicked
         {

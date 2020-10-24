@@ -7,6 +7,7 @@ namespace Dolphin.Ui
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IViewModelBase Parent { get; set; }
+
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -17,7 +18,9 @@ namespace Dolphin.Ui
             GetType().GetProperty(propertyName).SetValue(this, value);
 
             if (raisePropertyChanged)
+            {
                 RaisePropertyChanged(propertyName);
+            }
         }
     }
 }

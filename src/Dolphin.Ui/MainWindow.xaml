@@ -10,7 +10,8 @@
     xmlns:view="clr-namespace:Dolphin.Ui.View"
     Title="MainWindow"
     Width="800"
-    Height="450">
+    Height="450"
+    WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
     </Window.Resources>
@@ -22,6 +23,9 @@
         <ScrollViewer>
             <Grid Grid.Row="0">
                 <TabControl Margin="{adonisUi:Space}">
+                    <TabItem DataContext="{Binding Children[4]}" Header="Overview">
+                        <view:OverviewTabView />
+                    </TabItem>
                     <TabItem DataContext="{Binding Children[0]}" Header="Hotkey">
                         <view:HotkeyTabView />
                     </TabItem>
@@ -30,6 +34,9 @@
                     </TabItem>
                     <TabItem DataContext="{Binding Children[2]}" Header="Log">
                         <view:LogTabView />
+                    </TabItem>
+                    <TabItem DataContext="{Binding Children[3]}" Header="Settings">
+                        <view:SettingsTabView />
                     </TabItem>
                 </TabControl>
             </Grid>

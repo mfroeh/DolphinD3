@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Test", "Dolphin.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dolphin.Ui", "Dolphin.Ui\Dolphin.Ui.csproj", "{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotkeyListener", "HotkeyListener\HotkeyListener.csproj", "{B8B41B35-3D81-4E81-A0D4-24002EF895B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEC916B6-A6EA-4F1F-82A0-8540C34E628C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B41B35-3D81-4E81-A0D4-24002EF895B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B41B35-3D81-4E81-A0D4-24002EF895B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B41B35-3D81-4E81-A0D4-24002EF895B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B41B35-3D81-4E81-A0D4-24002EF895B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

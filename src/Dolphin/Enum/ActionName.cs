@@ -21,6 +21,9 @@
         Salvage = 16,
         DropInventory = 17,
         Gamble = 18,
-        Reforge = 19
+        Reforge = 19,
+        AcceptGriftPopup = 20,
+        StartGame = 21,
+        OpenRift = 22
     }
 }

@@ -17,7 +17,6 @@ namespace Dolphin
         public static Point CubeTransmute = new Point { X = 250, Y = 830 };
         public static Point EscapeLeave = new Point { X = 230, Y = 475 };
         public static Point EscapeLowerDifficulty = new Point { X = 1700, Y = 400 };
-        public static Point InventoryStepSize = new Point { X = 50, Y = 50 }; // Size
         public static Point InventoryTopLeftSpot = new Point { X = 1425, Y = 580 }; // CubeTopLeftInventorySlot
         public static Point InventoryTopRightSpot = new Point { X = 1875, Y = 580 }; // BlacksmithTopRightInventorySlot // Y = 585
         public static Point PortalAccept = new Point { X = 260, Y = 850 };
@@ -77,5 +76,26 @@ namespace Dolphin
         public static Point KadalaTab3 = new Point { X = 515, Y = 480 };
 
         #endregion Kadala
+
+        #region Player
+
+        public static Point HealthBarTopLeft = new Point { X = 43, Y = 164 }; // TODO: Is in 1440p
+        public static Point PlayerClassTopLeft = new Point { X = 90, Y = 100 };
+        public static Point PrimaryResourceDemonHunterTopLeft = new Point { X = 1830, Y = 1230 };
+        public static Point PrimaryResourceTopLeft = new Point { X = 0, Y = 0 };
+        public static Point SecondaryResourceDemonHunterTopLeft = new Point { X = 1850, Y = 1230 };
+
+        #endregion Player
+
+        #region Skill
+
+        public static Point SkillbarSkill0TopLeft = new Point { };
+        public static Point SkillbarSkill1TopLeft = new Point { };
+        public static Point SkillbarSkill2TopLeft = new Point { };
+        public static Point SkillbarSkill3TopLeft = new Point { };
+        public static Point SkillbarSkill4TopLeft = new Point { };
+        public static Point SkillbarSkill5TopLeft = new Point { };
+
+        #endregion Skill
     }
 }

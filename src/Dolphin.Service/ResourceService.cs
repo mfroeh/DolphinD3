@@ -9,11 +9,13 @@ namespace Dolphin.Service
     {
         private readonly ICacheService cacheService;
         private readonly ILogService logService;
+        private readonly IHandleService handleService;
 
-        public ResourceService(ICacheService cacheService, ILogService logService)
+        public ResourceService(ICacheService cacheService, IHandleService handleService, ILogService logService)
         {
             this.cacheService = cacheService;
             this.logService = logService;
+            this.handleService = handleService;
         }
 
         public Bitmap Load<T>(T enumValue)

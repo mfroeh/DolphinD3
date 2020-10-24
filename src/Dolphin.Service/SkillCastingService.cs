@@ -6,15 +6,17 @@ namespace Dolphin.Service
     public class SkillCastingService : EventSubscriberBase
     {
         private readonly IConditionFinderService conditionFinderService;
+        private readonly IHandleService handleService;
         private readonly ILogService logService;
         private readonly ISettingsService settingsService;
         private readonly Subscription<SkillCanBeCastedEvent> skillSubscription;
 
-        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService, ILogService logService) : base(eventBus)
+        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService, IHandleService handleService, ILogService logService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.logService = logService;
             this.conditionFinderService = conditionFinderService;
+            this.handleService = handleService;
 
             skillSubscription = new Subscription<SkillCanBeCastedEvent>(CastSkill);
             SubscribeBus(skillSubscription);
@@ -22,9 +24,10 @@ namespace Dolphin.Service
 
         private void CastSkill(object o, SkillCanBeCastedEvent @event)
         {
-            if (!settingsService.SkillIsEnabled(@event.SkillName)) return;
+            var handle = handleService.GetHandle();
 
-            IntPtr handle = WindowHelper.GetHWND();
+            if (handle == default) return;
+            if (!settingsService.SkillIsEnabled(@event.SkillName)) return;
 
             Action action;
             if (@event.SkillIndex <= 3)

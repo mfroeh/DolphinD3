@@ -1,11 +1,20 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Dolphin.Service
 {
     public class TravelInformationService : ITravelInformationService
     {
+        private IPoolSpotService poolService;
+
+        public TravelInformationService(IPoolSpotService poolService)
+        {
+            this.poolService = poolService;
+        }
+
         public Point GetActCoordinate(ActionName actionName)
         {
             switch (actionName)
@@ -23,7 +32,7 @@ namespace Dolphin.Service
                     return CommonCoordinate.MapAct5;
 
                 default:
-                    return new Point(0, 0);
+                    return default;
             }
         }
 
@@ -47,7 +56,7 @@ namespace Dolphin.Service
                     return CommonCoordinate.MapAct5;
 
                 default:
-                    return new Point(0, 0);
+                    return default;
             }
         }
 
@@ -116,14 +125,9 @@ namespace Dolphin.Service
             }
         }
 
-        public Point GetNextPoolSpotActCoordinate()
+        public Tuple<Point, Point> GetNextPoolSpot()
         {
-            throw new NotImplementedException();
-        }
-
-        public Point GetNextPoolSpotMapCoordinate()
-        {
-            throw new NotImplementedException();
+            return poolService.GetNextPoolSpot();
         }
 
         public Point GetTownCoordinate(ActionName actionName)
@@ -143,7 +147,7 @@ namespace Dolphin.Service
                     return CommonCoordinate.MapAct5Town;
 
                 default:
-                    return new Point(0, 0);
+                    return default;
             }
         }
 
@@ -167,7 +171,7 @@ namespace Dolphin.Service
                     return CommonCoordinate.MapAct5Town;
 
                 default:
-                    return new Point(0, 0);
+                    return default;
             }
         }
     }

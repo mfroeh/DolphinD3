@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System;
 using System.Drawing;
 
 namespace Dolphin
@@ -13,9 +14,7 @@ namespace Dolphin
 
         Point GetKadalaTabCoordinate(ItemType itemType);
 
-        Point GetNextPoolSpotActCoordinate();
-
-        Point GetNextPoolSpotMapCoordinate();
+        Tuple<Point, Point> GetNextPoolSpot();
 
         Point GetTownCoordinate(ActionName actionName);
 

@@ -43,8 +43,9 @@
     <Compile Include="MacroExecutionService.cs" />
     <Compile Include="HotkeyListenerService.cs" />
     <Compile Include="LogService.cs" />
-    <Compile Include="MacroFinderService.cs" />
+    <Compile Include="ActionFinderService.cs" />
     <Compile Include="ModelService.cs" />
+    <Compile Include="PoolSpotService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceService.cs" />
     <Compile Include="SettingsService.cs" />
@@ -57,12 +58,12 @@
       <Project>{8f47c780-b17e-494a-a541-7bb5682e7568}</Project>
       <Name>Dolphin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HotkeyListener\HotkeyListener.csproj">
+      <Project>{b8b41b35-3d81-4e81-a0d4-24002ef895b9}</Project>
+      <Name>HotkeyListener</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="HotkeyListener, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\HotkeyListener.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />

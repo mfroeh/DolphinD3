@@ -1,5 +1,6 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Dolphin.Service
@@ -18,20 +19,19 @@ namespace Dolphin.Service
             var clientRect = new Rectangle();
             WindowHelper.GetClientRect(handleService.GetHandle(), ref clientRect);
 
-            var scaledY = clientRect.Height / 1080 * sourceCoordinate.Y;
-
+            var scaledY = (int)(clientRect.Height / 1080.0 * sourceCoordinate.Y);
             int scaledX;
             if (coordinatePosition == RelativeCoordinatePosition.Left)
             {
-                scaledX = clientRect.Height / 1080 * sourceCoordinate.X;
+                scaledX = (int)(clientRect.Height / 1080.0 * sourceCoordinate.X);
             }
             else if (coordinatePosition == RelativeCoordinatePosition.Right)
             {
-                scaledX = clientRect.Width - (1920 - sourceCoordinate.X) * clientRect.Height / 1080;
+                scaledX = (int)(clientRect.Width - (1920 - sourceCoordinate.X) * clientRect.Height / 1080.0);
             }
             else
             {
-                scaledX = sourceCoordinate.X * clientRect.Height / 1080 + (clientRect.Width - 1920 * clientRect.Height / 1080) / 2;
+                scaledX = (int)(sourceCoordinate.X * clientRect.Height / 1080.0 + (clientRect.Width - 1920 * clientRect.Height / 1080.0) / 2.0);
             }
 
             return new Point { X = scaledX, Y = scaledY };

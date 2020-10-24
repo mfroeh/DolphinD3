@@ -1,9 +1,13 @@
 ﻿using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
+using MvvmDialogs.DialogFactories;
 using MvvmDialogs.FrameworkDialogs;
+using Newtonsoft.Json;
 using RestoreWindowPlace;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +24,8 @@ namespace Dolphin.Ui
     {
         public WindowPlace WindowPlace { get; }
 
+        private IUnityContainer container = new UnityContainer();
+
         public App()
         {
             WindowPlace = new WindowPlace("placement.config");
@@ -29,10 +35,19 @@ namespace Dolphin.Ui
         {
             base.OnStartup(e);
 
-            var container = new UnityContainer();
+            try
+            {
+                var json = File.ReadAllText("settings.json");
+                var settings = JsonConvert.DeserializeObject<Settings>(json);
+                container.RegisterInstance(settings);
+            }
+            catch
+            {
+                container.RegisterInstance(new Settings());
+            }
+
             container.RegisterInstance(new Player());
             container.RegisterInstance(new World());
-            container.RegisterInstance(new Settings());
             container.RegisterInstance(new Log());
             container.RegisterInstance(new HotkeyListener());
 
@@ -43,8 +58,8 @@ namespace Dolphin.Ui
             container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
 
-            container.RegisterType<IEventSubscriber, MacroExecutionService>();
-            container.RegisterType<IEventSubscriber, SkillCastingService>();
+            container.RegisterType<IEventSubscriber, MacroExecutionService>("macro");
+            container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
 
             container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
@@ -53,6 +68,11 @@ namespace Dolphin.Ui
             container.RegisterType<IResourceService, ResourceService>();
             container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IActionFinderService, ActionFinderService>();
+            container.RegisterType<ITransformService, TransformService>();
+            container.RegisterType<IPoolSpotService, PoolSpotService>();
+            container.RegisterType<ITravelInformationService, TravelInformationService>();
+
 
             container.RegisterType<IViewModelBase, MainViewModel>("main");
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
@@ -72,6 +92,7 @@ namespace Dolphin.Ui
             MainWindow.Show();
 
             var handleService = container.Resolve<IHandleService>();
+            Trace.WriteLine(handleService.GetHashCode());
             var logService = container.Resolve<ILogService>();
             var random = new Random();
             Task.Run(() =>
@@ -91,12 +112,21 @@ namespace Dolphin.Ui
                     Thread.Sleep(1000);
                 }
             });
+
+            container.Resolve<IEventSubscriber>("macro");
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
-            WindowPlace.Save();
+
+            if (e.ApplicationExitCode != 2)
+            {
+                var settings = container.Resolve<Settings>();
+                var json = JsonConvert.SerializeObject(settings);
+                File.WriteAllText("settings.json", json);
+                WindowPlace.Save();
+            }
         }
 
         /*

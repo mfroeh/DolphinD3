@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 using WK.Libraries.HotkeyListenerNS;
@@ -12,21 +13,26 @@ namespace Dolphin.Service
         private readonly IHandleService handleService;
 
         // private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
-        private readonly IMacroFinderService macroFinderService;
+        private readonly IActionFinderService macroFinderService;
 
         private readonly ISettingsService settingsService;
         private bool executing;
         private CancellationTokenSource tokenSource;
 
-        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IMacroFinderService macroFinderService, IHandleService handleService) : base(eventBus)
+        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService macroFinderService, IHandleService handleService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.macroFinderService = macroFinderService;
             this.handleService = handleService;
 
+            Trace.WriteLine(handleService.GetHashCode());
+
             // executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
             executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
             cancelExecutionSubscriber = new Subscription<HotkeyPressedEvent>(CancelExecution);
+
+            SubscribeBus(executeMacro);
+            SubscribeBus(cancelExecutionSubscriber);
         }
 
         /// <summary>

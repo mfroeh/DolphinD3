@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Windows.Forms;
 
 namespace Dolphin.Service
 {
@@ -31,6 +32,11 @@ namespace Dolphin.Service
             }
 
             return default;
+        }
+
+        public Keys GetKeybinding(Command command)
+        {
+            return Settings.OtherKeybindings[command];
         }
 
         public void NegateIsPaused(bool isFromChanging)

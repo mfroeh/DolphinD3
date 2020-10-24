@@ -1,8 +1,12 @@
 ﻿using Dolphin.Enum;
 using MvvmDialogs;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -101,8 +105,11 @@ namespace Dolphin.Ui.ViewModel
 
             if (result == MessageBoxResult.Yes)
             {
+                var json = JsonConvert.SerializeObject(settingsService.Settings);
+                File.WriteAllText("settings.json", json);
+
                 System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
-                System.Windows.Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown(2);
             }
         }
     }

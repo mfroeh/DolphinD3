@@ -6,7 +6,7 @@ namespace Dolphin
     {
         event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
 
-        IntPtr GetHandle(string processName = "Dialo III64");
+        IntPtr GetHandle(string processName = "Diablo III64");
 
         void UpdateHandle(string processName = "Diablo III64");
     }

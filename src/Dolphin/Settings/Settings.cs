@@ -1,5 +1,4 @@
-﻿using AForge;
-using Dolphin.Enum;
+﻿using Dolphin.Enum;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,26 +8,11 @@ namespace Dolphin
 {
     public static class InitialSettings
     {
-        public static IList<SkillName> EnabledSkills = new List<SkillName>();
+        private static IList<ActionName> _nonMacroableActions = new List<ActionName> { ActionName.None, ActionName.OpenRift, ActionName.AcceptGriftPopup, ActionName.StartGame };
 
-        public static MacroSettings MacroSettings = new MacroSettings
-        {
-            ConvertingSpeed = ConvertingSpeed.Normal,
-            SelectedGambleItem = ItemType.OneHandedWeapon,
-            SpareColumns = 1,
-            SwapItemsAmount = 3
-        };
+        public static uint UpdateInterval => 100;
 
-        public static IList<Keys> SkillKeybindigns = new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
-
-        public static UiSettings UiSettings = new UiSettings
-        {
-            DisplayLogLevel = LogLevel.Warning,
-            LogPaused = false,
-            IsDark = false
-        };
-
-        public static uint UpdateInterval = 100;
+        public static IList<SkillName> EnabledSkills => new List<SkillName>();
 
         public static IDictionary<ActionName, Hotkey> Hotkeys
         {
@@ -37,7 +21,7 @@ namespace Dolphin
                 var dict = new Dictionary<ActionName, Hotkey>();
                 foreach (var @enum in System.Enum.GetValues(typeof(ActionName)).Cast<ActionName>())
                 {
-                    if (@enum != ActionName.None)
+                    if (!_nonMacroableActions.Contains(@enum))
                     {
                         dict[@enum] = @enum == ActionName.Pause ? new Hotkey(Keys.Control, Keys.C) : null;
                     }
@@ -45,6 +29,19 @@ namespace Dolphin
                 return dict;
             }
         }
+
+        public static MacroSettings MacroSettings => new MacroSettings
+        {
+            ConvertingSpeed = ConvertingSpeed.Normal,
+            SelectedGambleItem = ItemType.OneHandedWeapon,
+            SpareColumns = 1,
+            SwapItemsAmount = 3,
+            Poolspots = new List<Waypoint>
+            {
+                new Waypoint{Act = 1, Name = "CemetryOfTheForsaken" },
+                new Waypoint{Act = 2, Name = "HowlingPlateau"}
+            }
+        };
 
         public static IDictionary<Command, Keys> OtherKeybindings
         {
@@ -58,6 +55,15 @@ namespace Dolphin
                 };
             }
         }
+
+        public static IList<Keys> SkillKeybindigns => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
+
+        public static UiSettings UiSettings => new UiSettings
+        {
+            DisplayLogLevel = LogLevel.Warning,
+            LogPaused = false,
+            IsDark = false
+        };
     }
 
     public class Settings

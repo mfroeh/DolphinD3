@@ -33,10 +33,6 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HotkeyListener, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\HotkeyListener.dll</HintPath>
-    </Reference>
     <Reference Include="InputSimulator, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Desktop\D3Helper-CraftAndParagorn-2.6.1-master\D3Helper.Public-master\D3Helper\InputSimulator.dll</HintPath>
@@ -48,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonCoordinate.cs" />
+    <Compile Include="CommonSize.cs" />
     <Compile Include="Enum\ActionName.cs" />
     <Compile Include="Enum\ConvertingSpeed.cs" />
     <Compile Include="Enum\Command.cs" />
@@ -61,10 +58,10 @@
     <Compile Include="EventArgs\HotkeysChangedEventArgs.cs" />
     <Compile Include="IConditionFinderService.cs" />
     <Compile Include="IHandleService.cs" />
-    <Compile Include="IMacroFinderService.cs" />
+    <Compile Include="IActionFinderService.cs" />
+    <Compile Include="IPoolSpotService.cs" />
     <Compile Include="ITransformService.cs" />
     <Compile Include="ITravelInformationService.cs" />
-    <Compile Include="Settings\MacroSettings.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Event\HotkeyPressedEvent.cs" />
     <Compile Include="Interface\IEvent.cs" />
@@ -74,6 +71,8 @@
     <Compile Include="Interface\IEventPublisher.cs" />
     <Compile Include="Event\PlayerInformationChangedEvent.cs" />
     <Compile Include="Event\SkillCanBeCastedEvent.cs" />
+    <Compile Include="Settings\MacroSettings.cs" />
+    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\UiSettings.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="Condition.cs" />
@@ -94,12 +93,12 @@
     <Compile Include="Enum\BuffName.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Player.cs" />
-    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="Enum\WorldLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Skill.cs" />
     <Compile Include="Enum\SkillName.cs" />
+    <Compile Include="Waypoint.cs" />
     <Compile Include="WindowHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +230,12 @@
     <EmbeddedResource Include="Resource\Skill\SkillName_Vengeance.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HotkeyListener\HotkeyListener.csproj">
+      <Project>{b8b41b35-3d81-4e81-a0d4-24002ef895b9}</Project>
+      <Name>HotkeyListener</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

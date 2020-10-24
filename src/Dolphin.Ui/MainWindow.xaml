@@ -10,7 +10,8 @@
     xmlns:view="clr-namespace:Dolphin.Ui.View"
     Title="MainWindow"
     Width="800"
-    Height="450">
+    Height="450"
+    WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
     </Window.Resources>

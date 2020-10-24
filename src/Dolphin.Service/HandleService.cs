@@ -9,7 +9,7 @@ namespace Dolphin.Service
 
         public event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
 
-        public IntPtr GetHandle(string processName = "Dialo III64")
+        public IntPtr GetHandle(string processName = "Diablo III64")
         {
             handles.TryGetValue(processName, out IntPtr handle);
 

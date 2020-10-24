@@ -10,7 +10,5 @@ namespace Dolphin
         public bool IsDark { get; set; }
 
         public bool LogPaused { get; set; }
-
-        public Rectangle MainWindowPosition { get; set; }
     }
 }

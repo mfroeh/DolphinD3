@@ -23,7 +23,17 @@ namespace Dolphin
                 {
                     if (!_nonMacroableActions.Contains(@enum))
                     {
-                        dict[@enum] = @enum == ActionName.Pause ? new Hotkey(Keys.Control, Keys.C) : null;
+                        Hotkey hotkey = null;
+                        if (@enum == ActionName.CancelAction)
+                        {
+                            hotkey = new Hotkey(Keys.Escape);
+                        }
+                        else if (@enum == ActionName.Pause)
+                        {
+                            hotkey = new Hotkey(Keys.F10);
+                        }
+
+                        dict[@enum] = hotkey;
                     }
                 }
                 return dict;
@@ -68,20 +78,33 @@ namespace Dolphin
 
     public class Settings
     {
-        public IList<SkillName> EnabledSkills { get; set; } = InitialSettings.EnabledSkills;
+        public IList<SkillName> EnabledSkills { get; set; }
 
-        public IDictionary<Enum.ActionName, Hotkey> Hotkeys { get; set; } = InitialSettings.Hotkeys;
+        public IDictionary<Enum.ActionName, Hotkey> Hotkeys { get; set; }
 
         public bool IsPaused { get; set; }
 
-        public MacroSettings MacroSettings { get; set; } = InitialSettings.MacroSettings;
+        public MacroSettings MacroSettings { get; set; }
 
-        public IDictionary<Command, Keys> OtherKeybindings { get; set; } = InitialSettings.OtherKeybindings;
+        public IDictionary<Command, Keys> OtherKeybindings { get; set; }
+        public IList<Keys> SkillKeybindings { get; set; }
 
-        public IList<Keys> SkillKeybindings { get; set; } = InitialSettings.SkillKeybindigns;
+        public UiSettings UiSettings { get; set; }
 
-        public UiSettings UiSettings { get; set; } = InitialSettings.UiSettings;
+        public uint UpdateInterval { get; set; }
 
-        public uint UpdateInterval { get; set; } = InitialSettings.UpdateInterval;
+        public Settings(bool initialize = false)
+        {
+            if (initialize)
+            {
+                EnabledSkills = InitialSettings.EnabledSkills;
+                Hotkeys = InitialSettings.Hotkeys;
+                MacroSettings = InitialSettings.MacroSettings;
+                OtherKeybindings = InitialSettings.OtherKeybindings;
+                SkillKeybindings = InitialSettings.SkillKeybindigns;
+                UiSettings = InitialSettings.UiSettings;
+                UpdateInterval = InitialSettings.UpdateInterval;
+            }
+        }
     }
 }

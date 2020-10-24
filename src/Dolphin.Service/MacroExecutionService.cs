@@ -43,7 +43,7 @@ namespace Dolphin.Service
         /// <param name="e"></param>
         public void CancelExecution(object o, HotkeyPressedEvent e)
         {
-            if (e.PressedHotkey == new Hotkey(Keys.Escape))
+            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
             {
                 tokenSource.Cancel();
             }
@@ -55,7 +55,8 @@ namespace Dolphin.Service
 
             if (handle == default) return;
 
-            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause])
+            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause]
+                || e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
             {
                 return;
             }

@@ -43,7 +43,7 @@ namespace Dolphin.Ui
             }
             catch
             {
-                container.RegisterInstance(new Settings());
+                container.RegisterInstance(new Settings(true));
             }
 
             container.RegisterInstance(new Player());

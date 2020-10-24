@@ -3,6 +3,8 @@ using MvvmDialogs;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -29,6 +31,9 @@ namespace Dolphin.Ui.ViewModel
             SkillKeybindings = new ObservableCollection<Keys>(settingsService.Settings.SkillKeybindings);
             OtherKeybindings = new ObservableDictionary<Command, Keys>(settingsService.Settings.OtherKeybindings);
             updateInterval = settingsService.Settings.UpdateInterval;
+            PoolSpots = new BindingList<Waypoint>(settingsService.MacroSettings.Poolspots);
+
+            PoolSpots.ListChanged += PoolSpotsChangedHandler;
         }
 
         public IDictionary<Command, Keys> OtherKeybindings
@@ -76,12 +81,19 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public BindingList<Waypoint> PoolSpots { get; set; }
+
         public ICommand ResetSettingsCommand
         {
             get
             {
                 return new RelayCommand(ResetSettings);
             }
+        }
+
+        private void PoolSpotsChangedHandler(object o, ListChangedEventArgs e)
+        {
+            settingsService.MacroSettings.Poolspots = PoolSpots.ToList();
         }
 
         private void ResetSettings(object o)

@@ -53,7 +53,7 @@ namespace Dolphin.Service
 
         public void ResetSettings()
         {
-            settings = new Settings();
+            settings = new Settings(true);
         }
 
         // Todo: Implement for specific types?

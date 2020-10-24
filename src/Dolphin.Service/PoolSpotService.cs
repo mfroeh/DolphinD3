@@ -20,7 +20,7 @@ namespace Dolphin.Service
         {
             foreach (var wp in settingsService.MacroSettings.Poolspots)
             {
-                if (!visitedPoolspots.Contains(wp))
+                if (wp.Enabled && !visitedPoolspots.Contains(wp))
                 {
                     visitedPoolspots.Add(wp);
 
@@ -32,7 +32,7 @@ namespace Dolphin.Service
 
             visitedPoolspots.Clear();
 
-            var first = settingsService.MacroSettings.Poolspots.FirstOrDefault();
+            var first = settingsService.MacroSettings.Poolspots.FirstOrDefault(x => x.Enabled);
             if (first != null)
             {
                 visitedPoolspots.Add(first);

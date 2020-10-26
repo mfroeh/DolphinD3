@@ -1,10 +1,11 @@
 ﻿using Dolphin.Enum;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Dolphin.Service
 {
-    public class CacheService : ICacheService
+    public class CacheService : IDiabloCacheService
     {
         private readonly IDictionary<string, object> cache = new Dictionary<string, object>();
 
@@ -30,6 +31,13 @@ namespace Dolphin.Service
             {
                 cache[key] = value;
             }
+        }
+
+        public void AddSkillBitmap(SkillName skillName, bool isMouse, Bitmap bitmap)
+        {
+            var key = isMouse ? $"SkillName_Mouse_{skillName}" : $"SkillName_{skillName}";
+
+            Add(key, bitmap);
         }
 
         public TValue Get<TKey, TValue>(TKey key)
@@ -62,6 +70,13 @@ namespace Dolphin.Service
         public IDictionary<string, object> GetCache()
         {
             return cache;
+        }
+
+        public Bitmap GetSkillBitmap(SkillName skillName, bool isMouse)
+        {
+            var key = isMouse ? $"SkillName_Mouse_{skillName}" : $"SkillName_{skillName}";
+
+            return Get<Bitmap>(key);
         }
 
         private string GetTypeBasedKey<TKey>(TKey key)

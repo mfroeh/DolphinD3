@@ -1215,5 +1215,9 @@
   <ItemGroup>
     <Resource Include="Resource\Skill\Zombiemaster.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Class\NecromancerFemale.png" />
+    <Resource Include="Resource\Class\NecromancerMale.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

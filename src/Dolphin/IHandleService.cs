@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Dolphin
 {
@@ -9,5 +10,7 @@ namespace Dolphin
         IntPtr GetHandle(string processName = "Diablo III64");
 
         void UpdateHandle(string processName = "Diablo III64");
+
+        Task MainLoop();
     }
 }

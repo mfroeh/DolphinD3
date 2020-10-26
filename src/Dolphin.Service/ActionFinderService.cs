@@ -109,6 +109,10 @@ namespace Dolphin.Service
 
         private static bool IsCancelled(CancellationTokenSource tokenSource)
         {
+            if (tokenSource == null) return true;
+
+            return tokenSource.Token.IsCancellationRequested;
+
             try
             {
                 if (tokenSource.Token.IsCancellationRequested)
@@ -153,9 +157,7 @@ namespace Dolphin.Service
             var backwardsDelay = 0; // Care, Thread.Sleep(0)!
             if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Slow)
             {
-                itemClickDelay = 130;
                 fillDelay = 100;
-                transmuteDelay = 130;
                 backwardsDelay = 100;
             }
             else if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Fast)
@@ -205,9 +207,7 @@ namespace Dolphin.Service
             var backwardsDelay = 0; // Care, Thread.Sleep(0)!
             if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Slow)
             {
-                itemClickDelay = 130;
                 fillDelay = 100;
-                transmuteDelay = 130;
                 backwardsDelay = 100;
             }
             else if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Fast)
@@ -435,7 +435,12 @@ namespace Dolphin.Service
 
                 if (IsCancelled(tokenSource)) return;
                 InputHelper.SendClick(handle, MouseButtons.Left, upgrade);
-                Thread.Sleep(1800);
+
+                for (int _ = 0; _ < 18; _++)
+                {
+                    if (IsCancelled(tokenSource)) return;
+                    Thread.Sleep(100);
+                }
             }
         }
     }

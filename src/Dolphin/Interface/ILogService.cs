@@ -9,6 +9,6 @@ namespace Dolphin
 
         void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null);
 
-        void SaveLog(string path);
+        void SaveLog();
     }
 }

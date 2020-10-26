@@ -35,7 +35,7 @@ namespace Dolphin.Service
             }
 
             var rect = new Rectangle();
-            WindowHelper.GetWindowRect(hwnd, ref rect);
+            WindowHelper.GetClientRect(hwnd, ref rect);
 
             var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y, PixelFormat.Format24bppRgb);
             using (var graphics = Graphics.FromImage(bitmap))

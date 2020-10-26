@@ -34,7 +34,7 @@
                 Height="128"
                 Margin="{adonisUi:Space Bottom=2,
                                         Top=2}"
-                Source="{Binding CurrentPlayerClass}" />
+                Source="{Binding CurrentPlayerClass, Mode=OneWay}" />
             <WrapPanel
                 Grid.Row="0"
                 Grid.Column="1"
@@ -47,7 +47,7 @@
                                             Left=1,
                                             Right=0}"
                     IsReadOnly="True"
-                    Text="{Binding CurrentHealth}" />
+                    Text="{Binding CurrentHealth, Mode=OneWay}" />
                 <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="PrimaryResource" />
                 <TextBox
                     Margin="{adonisUi:Space Top=0,
@@ -55,7 +55,7 @@
                                             Left=1,
                                             Right=0}"
                     IsReadOnly="True"
-                    Text="{Binding CurrentPrimaryResource}" />
+                    Text="{Binding CurrentPrimaryResource, Mode=OneWay}" />
                 <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="Secondary Resource" />
                 <TextBox
                     Margin="{adonisUi:Space Top=0,
@@ -63,7 +63,7 @@
                                             Left=1,
                                             Right=0}"
                     IsReadOnly="True"
-                    Text="{Binding CurrentSecondaryResource}" />
+                    Text="{Binding CurrentSecondaryResource, Mode=OneWay}" />
             </WrapPanel>
             <WrapPanel
                 Grid.Row="0"
@@ -76,7 +76,7 @@
                                             Left=0,
                                             Right=1}"
                     IsReadOnly="True"
-                    Text="{Binding DiabloProcessId}" />
+                    Text="{Binding DiabloProcessId, Mode=OneWay}" />
             </WrapPanel>
         </Grid>
         <Grid
@@ -104,32 +104,32 @@
             <Image
                 Grid.Row="1"
                 Grid.Column="0"
-                Source="{Binding Path=CurrentSkills[0]}" />
+                Source="{Binding Path=CurrentSkills[0], Mode=OneWay}" />
 
             <Image
                 Grid.Row="1"
                 Grid.Column="2"
-                Source="{Binding Path=CurrentSkills[1]}" />
+                Source="{Binding Path=CurrentSkills[1], Mode=OneWay}" />
 
             <Image
                 Grid.Row="1"
                 Grid.Column="4"
-                Source="{Binding Path=CurrentSkills[2]}" />
+                Source="{Binding Path=CurrentSkills[2], Mode=OneWay}" />
 
             <Image
                 Grid.Row="1"
                 Grid.Column="6"
-                Source="{Binding Path=CurrentSkills[3]}" />
+                Source="{Binding Path=CurrentSkills[3], Mode=OneWay}" />
 
             <Image
                 Grid.Row="1"
                 Grid.Column="8"
-                Source="{Binding Path=CurrentSkills[4]}" />
+                Source="{Binding Path=CurrentSkills[4], Mode=OneWay}" />
 
             <Image
                 Grid.Row="1"
                 Grid.Column="10"
-                Source="{Binding Path=CurrentSkills[5]}" />
+                Source="{Binding Path=CurrentSkills[5], Mode=OneWay}" />
         </Grid>
         <Button
             Grid.Row="3"

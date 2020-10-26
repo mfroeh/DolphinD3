@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Dolphin.Service
 {
@@ -28,6 +30,18 @@ namespace Dolphin.Service
 
                 HandleStatusChanged?.Invoke(this, new HandleChangedEventArgs { ProcessName = processName, NewHandle = handle, NewProcessId = processId });
             }
+        }
+
+        public Task MainLoop()
+        {
+            return Task.Run(() =>
+            {
+                while (true)
+                {
+                    UpdateHandle();
+                    Thread.Sleep(1000);
+                }
+            });
         }
     }
 }

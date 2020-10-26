@@ -14,6 +14,19 @@ namespace Dolphin.Service
                 Enum.PlayerResource.PrimaryHatred_0, Enum.PlayerResource.PrimaryHatred_20, Enum.PlayerResource.PrimaryHatred_40, Enum.PlayerResource.PrimaryHatred_60, Enum.PlayerResource.PrimaryHatred_80, Enum.PlayerResource.PrimaryHatred_100,
                 Enum.PlayerResource.SecondaryDiscipline_0, Enum.PlayerResource.SecondaryDiscipline_20, Enum.PlayerResource.SecondaryDiscipline_40, Enum.PlayerResource.SecondaryDiscipline_60, Enum.PlayerResource.SecondaryDiscipline_80, Enum.PlayerResource.SecondaryDiscipline_100
             } },
+            { PlayerClass.DemonHunterMale, new List<Enum.PlayerResource>
+            {
+                Enum.PlayerResource.PrimaryHatred_0, Enum.PlayerResource.PrimaryHatred_20, Enum.PlayerResource.PrimaryHatred_40, Enum.PlayerResource.PrimaryHatred_60, Enum.PlayerResource.PrimaryHatred_80, Enum.PlayerResource.PrimaryHatred_100,
+                Enum.PlayerResource.SecondaryDiscipline_0, Enum.PlayerResource.SecondaryDiscipline_20, Enum.PlayerResource.SecondaryDiscipline_40, Enum.PlayerResource.SecondaryDiscipline_60, Enum.PlayerResource.SecondaryDiscipline_80, Enum.PlayerResource.SecondaryDiscipline_100
+            } },
+            { PlayerClass.NecromancerFemale, new List<PlayerResource>
+            {
+                PlayerResource.PrimaryEssence_100, PlayerResource.PrimaryEssence_80, PlayerResource.PrimaryEssence_60,PlayerResource.PrimaryEssence_40,PlayerResource.PrimaryEssence_20,PlayerResource.PrimaryEssence_0,
+            } },
+             { PlayerClass.NecromancerMale, new List<PlayerResource>
+            {
+                PlayerResource.PrimaryEssence_100, PlayerResource.PrimaryEssence_80, PlayerResource.PrimaryEssence_60,PlayerResource.PrimaryEssence_40,PlayerResource.PrimaryEssence_20,PlayerResource.PrimaryEssence_0,
+            } }
         };
 
         private static readonly IDictionary<PlayerClass, IList<SkillName>> SkillDictionary = new Dictionary<PlayerClass, IList<SkillName>>
@@ -45,6 +58,8 @@ namespace Dolphin.Service
 
         public IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum()
         {
+            if (Player.Class == default) yield break;
+
             foreach (var @enum in ResourceDictionary[Player.Class])
             {
                 if (!nameof(@enum).StartsWith("Secondary"))
@@ -56,6 +71,8 @@ namespace Dolphin.Service
 
         public IEnumerable<Enum.PlayerResource> GetPossibleSecondary()
         {
+            if (Player.Class == default) yield break;
+
             foreach (var @enum in ResourceDictionary[Player.Class])
             {
                 if (!nameof(@enum).StartsWith("Primary"))
@@ -65,11 +82,29 @@ namespace Dolphin.Service
             }
         }
 
-        public IEnumerable<SkillName> GetPossibleSkills()
+        public IEnumerable<SkillName> GetPossibleSkills(bool isMouse)
         {
-            foreach (var @enum in SkillDictionary[Player.Class])
+            if (Player.Class == default) yield break;
+
+            switch (Player.Class)
             {
-                yield return @enum;
+                case PlayerClass.NecromancerMale:
+                case PlayerClass.NecromancerFemale:
+                    if (isMouse)
+                    {
+                        yield return SkillName.BoneArmor;
+                        yield return SkillName.BoneSpikes;
+                    }
+                    else
+                    {
+                        yield return SkillName.BloodRush;
+                        yield return SkillName.SkeletalMage;
+                        yield return SkillName.CommandSkeletons;
+                        yield return SkillName.Devour;
+                    }
+                    break;
+                default:
+                    yield break;
             }
         }
 

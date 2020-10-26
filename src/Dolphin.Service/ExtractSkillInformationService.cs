@@ -7,18 +7,6 @@ namespace Dolphin.Service
     public class ExtractSkillInformationService : IExtractInformationService, IEventPublisher<SkillCanBeCastedEvent>, IEventPublisher<SkillRecognitionChangedEvent>
     {
         private readonly IEventBus eventBus;
-
-        // TODO: [CaptureWindowService] Get this from somewhere else
-        private readonly IDictionary<int, Point> leftUpperCorners = new Dictionary<int, Point>
-                                                                        {
-                                                                            { 0, new Point { X = 846, Y = 1335 } },
-                                                                            { 1, new Point { X = 935, Y = 1335 } },
-                                                                            { 2, new Point { X = 1024, Y = 1335 } },
-                                                                            { 3, new Point { X = 1113, Y = 1335 } },
-                                                                            { 4, new Point { X = 1207, Y = 1335 } },
-                                                                            { 5, new Point { X = 1293, Y = 1335 } },
-                                                                        };
-
         private readonly ILogService logService;
         private readonly ICaptureWindowService imageService;
         private readonly IModelService modelService;
@@ -45,7 +33,7 @@ namespace Dolphin.Service
             {
                 var oldSkill = modelService.GetSkill(i);
 
-                var visibleSkillBitmap = GetSkillBitmap(i, bitmap);
+                var visibleSkillBitmap = imageService.CropSkillbar(bitmap, i);
                 var newSkill = ExtractSkill(visibleSkillBitmap, i);
 
                 modelService.SetSkill(i, newSkill);
@@ -80,9 +68,9 @@ namespace Dolphin.Service
 
         private Skill ExtractSkill(Bitmap picturePart, int index)
         {
-            foreach (var skillName in modelService.GetPossibleSkills())
+            foreach (var skillName in modelService.GetPossibleSkills(index >= 4))
             {
-                var template = resourceService.Load(skillName);
+                var template = resourceService.LoadSkillBitmap(skillName, index >= 4);
                 var similiaryPercentage = ImageHelper.Compare(picturePart, template);
 
                 // If similarityPercentage is > some value but not 1, then it must either be on not castable (due to resources / cooldown) or it is active
@@ -107,14 +95,6 @@ namespace Dolphin.Service
             logService.AddEntry(this, $"Couldn't identify Skill{index}.");
 
             return null;
-        }
-
-        private Bitmap GetSkillBitmap(int index, Bitmap fullBitmap)
-        {
-            var size = new Size { Height = 20, Width = 40 };
-            var rect = new Rectangle(leftUpperCorners[index], size);
-
-            return ImageHelper.CropImage(fullBitmap, rect);
         }
 
         private bool IsActive(Bitmap bitmap)

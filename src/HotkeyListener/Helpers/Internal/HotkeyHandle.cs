@@ -169,7 +169,8 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         {
             if (m.Msg == WM_HOTKEY)
             {
-                HotkeyPressed?.Invoke(null, new HotkeyEventArgs { Hotkey = HotkeyListener.Convert(this.Hotkeys[m.WParam.ToInt32()]) });
+                var hotkey = HotkeyListener.Convert(this.Hotkeys[m.WParam.ToInt32()]);
+                HotkeyPressed?.Invoke(null, new HotkeyEventArgs { Hotkey = hotkey });
             }
             else
                 base.WndProc(ref m);

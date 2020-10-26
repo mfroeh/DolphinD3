@@ -16,9 +16,10 @@ namespace Dolphin.Service
 
         public Point TransformCoordinate(Point sourceCoordinate, RelativeCoordinatePosition coordinatePosition = RelativeCoordinatePosition.Left)
         {
-            var clientRect = new Rectangle();
-            WindowHelper.GetClientRect(handleService.GetHandle(), ref clientRect);
+            var handle = handleService.GetHandle();
 
+            var clientRect = new Rectangle();
+            WindowHelper.GetClientRect(handle, ref clientRect);
             var scaledY = (int)(clientRect.Height / 1080.0 * sourceCoordinate.Y);
             int scaledX;
             if (coordinatePosition == RelativeCoordinatePosition.Left)

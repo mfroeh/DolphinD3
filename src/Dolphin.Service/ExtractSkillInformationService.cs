@@ -1,5 +1,6 @@
 ﻿using Dolphin.Enum;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Dolphin.Service
@@ -7,18 +8,6 @@ namespace Dolphin.Service
     public class ExtractSkillInformationService : IExtractInformationService, IEventPublisher<SkillCanBeCastedEvent>, IEventPublisher<SkillRecognitionChangedEvent>
     {
         private readonly IEventBus eventBus;
-
-        // TODO: [CaptureWindowService] Get this from somewhere else
-        private readonly IDictionary<int, Point> leftUpperCorners = new Dictionary<int, Point>
-                                                                        {
-                                                                            { 0, new Point { X = 846, Y = 1335 } },
-                                                                            { 1, new Point { X = 935, Y = 1335 } },
-                                                                            { 2, new Point { X = 1024, Y = 1335 } },
-                                                                            { 3, new Point { X = 1113, Y = 1335 } },
-                                                                            { 4, new Point { X = 1207, Y = 1335 } },
-                                                                            { 5, new Point { X = 1293, Y = 1335 } },
-                                                                        };
-
         private readonly ILogService logService;
         private readonly ICaptureWindowService imageService;
         private readonly IModelService modelService;
@@ -45,12 +34,12 @@ namespace Dolphin.Service
             {
                 var oldSkill = modelService.GetSkill(i);
 
-                var visibleSkillBitmap = GetSkillBitmap(i, bitmap);
-                var newSkill = ExtractSkill(visibleSkillBitmap, i);
+                var visibleSkillBitmap = imageService.CropSkillbar(bitmap, i);
+                var newSkill = ExtractSkill(visibleSkillBitmap, i, bitmap);
 
                 modelService.SetSkill(i, newSkill);
 
-                if (newSkill?.IsNotActiveAndCanBeCasted == true)
+                if (newSkill?.CanBeCasted == true)
                 {
                     Publish(new SkillCanBeCastedEvent { SkillIndex = i, SkillName = newSkill.Name });
                 }
@@ -78,9 +67,9 @@ namespace Dolphin.Service
             return default;
         }
 
-        private Skill ExtractSkill(Bitmap picturePart, int index)
+        private Skill ExtractSkill(Bitmap picturePart, int index, Bitmap fullBitmap)
         {
-            foreach (var skillName in modelService.GetPossibleSkills())
+            foreach (var skillName in modelService.GetPossibleSkills(index >= 4))
             {
                 var template = resourceService.Load(skillName);
                 var similiaryPercentage = ImageHelper.Compare(picturePart, template);
@@ -90,9 +79,11 @@ namespace Dolphin.Service
                 {
                     var skill = new Skill { Name = skillName, Index = index };
 
+                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index));
+
                     if (similiaryPercentage >= 0.9975f)
                     {
-                        skill.IsNotActiveAndCanBeCasted = true;
+                        skill.CanBeCasted = true;
                         logService.AddEntry(this, $"Skill{index} is {skillName}.");
                     }
                     else
@@ -109,18 +100,11 @@ namespace Dolphin.Service
             return null;
         }
 
-        private Bitmap GetSkillBitmap(int index, Bitmap fullBitmap)
-        {
-            var size = new Size { Height = 20, Width = 40 };
-            var rect = new Rectangle(leftUpperCorners[index], size);
-
-            return ImageHelper.CropImage(fullBitmap, rect);
-        }
-
         private bool IsActive(Bitmap bitmap)
         {
-            // TODO:
-            return default;
+            var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png"));
+
+            return result > 0.9f;
         }
     }
 }

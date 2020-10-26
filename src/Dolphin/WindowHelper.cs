@@ -25,9 +25,6 @@ namespace Dolphin
             return IntPtr.Zero;
         }
 
-        [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rect);
-
         public static bool IsForeground(IntPtr hwnd)
         {
             return GetForegroundWindow() == hwnd;

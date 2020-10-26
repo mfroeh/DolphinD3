@@ -7,11 +7,11 @@ namespace Dolphin.Service
 {
     public class ResourceService : IResourceService
     {
-        private readonly ICacheService cacheService;
+        private readonly IDiabloCacheService cacheService;
+        private readonly IHandleService handleService; // Todo: By resolution
         private readonly ILogService logService;
-        private readonly IHandleService handleService;
 
-        public ResourceService(ICacheService cacheService, IHandleService handleService, ILogService logService)
+        public ResourceService(IDiabloCacheService cacheService, IHandleService handleService, ILogService logService)
         {
             this.cacheService = cacheService;
             this.logService = logService;
@@ -23,7 +23,7 @@ namespace Dolphin.Service
             var cachedBitmap = cacheService.Get<T, Bitmap>(enumValue);
             if (cachedBitmap != null)
             {
-                logService.AddEntry(this, $"Found Image for {enumValue} in Cache.");
+                logService.AddEntry(this, $"Found Image for {enumValue} in Cache.", LogLevel.Debug);
 
                 return cachedBitmap;
             }
@@ -37,7 +37,31 @@ namespace Dolphin.Service
             }
 
             cacheService.Add(enumValue, bitmap);
-            logService.AddEntry(this, $"Loaded Image from [{path}] for {enumValue} and added to Cache.");
+            logService.AddEntry(this, $"Loaded Image from [{path}] for {enumValue} and added to Cache.", LogLevel.Debug);
+
+            return bitmap;
+        }
+
+        public Bitmap LoadSkillBitmap(SkillName skillName, bool isMouse)
+        {
+            var cachedBitmap = cacheService.GetSkillBitmap(skillName, isMouse);
+            if (cachedBitmap != null)
+            {
+                logService.AddEntry(this, $"Found Image for {skillName} in Cache.", LogLevel.Debug);
+
+                return cachedBitmap;
+            }
+
+            var path = isMouse ? $"Resource/Skill/Mouse/{skillName}.png" : $"Resource/Skill/{skillName}.png";
+
+            var bitmap = new Bitmap(path);
+            if (bitmap.PixelFormat != PixelFormat.Format24bppRgb)
+            {
+                bitmap = ImageHelper.To24bppRgbFormat(bitmap);
+            }
+
+            cacheService.AddSkillBitmap(skillName, isMouse, bitmap);
+            logService.AddEntry(this, $"Loaded Image from [{path}] for {skillName} and added to Cache.", LogLevel.Debug);
 
             return bitmap;
         }
@@ -47,22 +71,19 @@ namespace Dolphin.Service
             switch (enumValue)
             {
                 case BuffName buffName:
-                    return $"Resource/Buff/BuffName_{buffName}.png";
-
-                case SkillName skillName:
-                    return $"Resource/Skill/SkillName_{skillName}.png";
+                    return $"Resource/Buff/{buffName}.png";
 
                 case WorldLocation location:
-                    return $"Resource/Location/WorldLocation_{location}.png";
+                    return $"Resource/Location/{location}.png";
 
                 case PlayerClass playerClass:
-                    return $"Resource/Player/PlayerClass/PlayerClass_{playerClass}.png";
+                    return $"Resource/Player/PlayerClass/{playerClass}.png";
 
                 case PlayerHealth health:
-                    return $"Resource/Player/PlayerHealth/PlayerHealth_{health}.png";
+                    return $"Resource/Player/PlayerHealth/{health}.png";
 
                 case Enum.PlayerResource resource:
-                    return $"Resource/Player/PlayerResource/PlayerResource_{resource}.png";
+                    return $"Resource/Player/PlayerResource/{resource}.png";
 
                 default:
                     throw new NotImplementedException($"Didnt implement GetTypeBasedKey for type {enumValue.GetType().Name} in CacheService yet.");

@@ -35,7 +35,7 @@ namespace Dolphin.Service
             }
 
             var rect = new Rectangle();
-            WindowHelper.GetWindowRect(hwnd, ref rect);
+            WindowHelper.GetClientRect(hwnd, ref rect);
 
             var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y, PixelFormat.Format24bppRgb);
             using (var graphics = Graphics.FromImage(bitmap))
@@ -88,13 +88,58 @@ namespace Dolphin.Service
             return ImageHelper.CropImage(image, new Rectangle(resource, size));
         }
 
-        public Bitmap CropSkillbar(Bitmap image, int index)
+        public Bitmap CropSkillActive(Bitmap image, int index)
         {
-            var skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill0TopLeft);
-            var size = transformService.TransformSize(CommonSize.SkillbarSkillSize);
+            Point skillActive = default;
+            var size = new Size { Height = 1, Width = 5 };
 
             switch (index)
             {
+                case 0:
+                    var skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill0TopLeft);
+                    skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X + 2, Y = skillbar.Y - 14 });
+                    break;
+
+                case 1:
+                    skillbar = CommonCoordinate.SkillbarSkill1TopLeft;
+                    skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X + 2, Y = skillbar.Y - 14 });
+                    break;
+
+                case 2:
+                    skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill2TopLeft);
+                    skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X + 2, Y = skillbar.Y - 14 });
+                    break;
+
+                case 3:
+                    skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill3TopLeft);
+                    skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X + 2, Y = skillbar.Y - 14 });
+                    break;
+
+                case 4:
+                    skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill4TopLeft);
+                    skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X - 1, Y = skillbar.Y - 15 });
+                    break;
+
+                case 5:
+                    skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill5TopLeft);
+                    skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X - 1, Y = skillbar.Y - 15 });
+                    break;
+            }
+
+            return ImageHelper.CropImage(image, new Rectangle(skillActive, size));
+        }
+
+        public Bitmap CropSkillbar(Bitmap image, int index)
+        {
+            Point skillbar = default;
+            Size size = transformService.TransformSize(CommonSize.SkillbarSkillSize);
+
+            switch (index)
+            {
+                case 0:
+                    skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill0TopLeft);
+                    break;
+
                 case 1:
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill1TopLeft);
                     break;
@@ -123,20 +168,52 @@ namespace Dolphin.Service
 
         public Bitmap CropWindow(Bitmap image, Window window)
         {
+            Size size = default;
+            Point point = default;
+
             switch (window)
             {
+                case Window.StartGame:
+                    size = transformService.TransformSize(CommonSize.WindowStartGame);
+                    point = transformService.TransformCoordinate(CommonCoordinate.WindowStartGame);
+                    break;
+
+                case Window.Urshi:
+                    size = transformService.TransformSize(CommonSize.WindowUrshi);
+                    point = transformService.TransformCoordinate(CommonCoordinate.WindowUrshi);
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
+
+            return ImageHelper.CropImage(image, new Rectangle(point, size));
         }
 
         public Bitmap CropWorldLocation(Bitmap image, WorldLocation location)
         {
+            Point point = default;
+            Size size = default;
+
             switch (location)
             {
+                case WorldLocation.Grift:
+                    size = transformService.TransformSize(CommonSize.LocationGriftText);
+                    point = transformService.TransformCoordinate(CommonCoordinate.LocationGrift);
+                    break;
+                case WorldLocation.Rift:
+                    size = transformService.TransformSize(CommonSize.LocationRiftLevel);
+                    point = transformService.TransformCoordinate(CommonCoordinate.LocationRiftLevel);
+                    break;
+                case WorldLocation.Menu:
+                    size = transformService.TransformSize(CommonSize.LocationMenu);
+                    point = transformService.TransformCoordinate(CommonCoordinate.LocationMenuSymbol);
+                    break;
                 default:
                     throw new NotImplementedException();
             }
+
+            return ImageHelper.CropImage(image, new Rectangle(point, size));
         }
     }
 }

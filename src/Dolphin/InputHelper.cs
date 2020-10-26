@@ -22,8 +22,6 @@ namespace Dolphin
 
         public static void SendClick(IntPtr handle, MouseButtons button, Point point)
         {
-            WindowHelper.ScreenToClient(handle, ref point);
-
             var lParam = MakeLParam(point);
             switch (button)
             {
@@ -55,6 +53,8 @@ namespace Dolphin
         {
             var point = new Point();
             GetCursorPos(ref point);
+            
+            WindowHelper.ScreenToClient(handle, ref point);
 
             SendClick(handle, button, point);
         }

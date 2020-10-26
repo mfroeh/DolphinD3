@@ -8,6 +8,7 @@ using RestoreWindowPlace;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -43,7 +44,7 @@ namespace Dolphin.Ui
             }
             catch
             {
-                container.RegisterInstance(new Settings());
+                container.RegisterInstance(new Settings(true));
             }
 
             container.RegisterInstance(new Player());
@@ -61,18 +62,22 @@ namespace Dolphin.Ui
             container.RegisterType<IEventSubscriber, MacroExecutionService>("macro");
             container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
 
-            container.RegisterType<ICacheService, CacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("extractPlayerInformation");
+            container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("extractSkillInformation");
+
+            container.RegisterType<IDiabloCacheService, CacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
             container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IModelService, ModelService>();
             container.RegisterType<IResourceService, ResourceService>();
+            container.RegisterType<IDiabloCacheService, CacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IActionFinderService, ActionFinderService>();
             container.RegisterType<ITransformService, TransformService>();
             container.RegisterType<IPoolSpotService, PoolSpotService>();
             container.RegisterType<ITravelInformationService, TravelInformationService>();
-
+            container.RegisterType<IConditionFinderService, ConditionFinderService>();
 
             container.RegisterType<IViewModelBase, MainViewModel>("main");
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
@@ -95,6 +100,7 @@ namespace Dolphin.Ui
             Trace.WriteLine(handleService.GetHashCode());
             var logService = container.Resolve<ILogService>();
             var random = new Random();
+
             Task.Run(() =>
             {
                 while (true)
@@ -104,16 +110,53 @@ namespace Dolphin.Ui
                 }
             });
 
-            Task.Run(() =>
+            //Task.Run(() =>
+            //{
+            //    while (true)
+            //    {
+            //        logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
+            //        Thread.Sleep(1000);
+            //    }
+            //});
+
+            var captureService = container.Resolve<ICaptureWindowService>();
+            var extractSkillService = container.Resolve<IExtractInformationService>("extractSkillInformation");
+            var extractPlayerService = container.Resolve<IExtractInformationService>("extractPlayerInformation");
+            var _settings = container.Resolve<Settings>();
+
+            var task = Task.Factory.StartNew(async () =>
             {
                 while (true)
                 {
-                    logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
-                    Thread.Sleep(1000);
+                    try
+                    {
+                        var handle = handleService.GetHandle();
+                        if (handle != IntPtr.Zero && !_settings.IsPaused)//!settingsService.Settings.IsPaused)
+                        {
+                            using (var image = captureService.CaptureWindow("Diablo III64"))
+                            {
+                                //var task1 = Task.Run(() => extractSkillService.Extract(image));
+                                //var task2 = Task.Run(() => extractPlayerService.Extract(image));
+                                //var delayTask = Task.Run(() => Thread.Sleep((int)delay));
+
+                                //await task2;
+                                //await task1;
+                                //await delayTask;
+                                extractSkillService.Extract(image);
+                                extractPlayerService.Extract(image);
+                            }
+                        }
+                        Thread.Sleep((int)_settings.UpdateInterval);
+                    }
+                    catch (Exception ex)
+                    {
+                        logService.AddEntry(this, "Caught exception in information extraction mmainloop", Enum.LogLevel.Error, ex);
+                    }
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
 
             container.Resolve<IEventSubscriber>("macro");
+            container.Resolve<IEventSubscriber>("skill");
         }
 
         protected override void OnExit(ExitEventArgs e)

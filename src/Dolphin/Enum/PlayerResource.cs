@@ -14,6 +14,12 @@
         SecondaryDiscipline_60 = 9,
         SecondaryDiscipline_40 = 10,
         SecondaryDiscipline_20 = 11,
-        SecondaryDiscipline_0 = 12
+        SecondaryDiscipline_0 = 12,
+        PrimaryEssence_100 = 13,
+        PrimaryEssence_80 = 14,
+        PrimaryEssence_60 = 15,
+        PrimaryEssence_40 = 16,
+        PrimaryEssence_20 = 17,
+        PrimaryEssence_0 = 18
     }
 }

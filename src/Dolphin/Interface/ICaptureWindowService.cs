@@ -23,5 +23,7 @@ namespace Dolphin
         public Bitmap CropWindow(Bitmap image, Window window);
 
         public Bitmap CropWorldLocation(Bitmap image, WorldLocation location);
+
+        public Bitmap CropSkillActive(Bitmap image, int index);
     }
 }

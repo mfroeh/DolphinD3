@@ -39,6 +39,7 @@
     <Compile Include="EventBus.cs" />
     <Compile Include="ExtractPlayerInformationService.cs" />
     <Compile Include="ExtractSkillInformationService.cs" />
+    <Compile Include="ExtractWorldInformationService.cs" />
     <Compile Include="HandleService.cs" />
     <Compile Include="MacroExecutionService.cs" />
     <Compile Include="HotkeyListenerService.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="SkillCastingService.cs" />
     <Compile Include="TransformService.cs" />
     <Compile Include="TravelInformationService.cs" />
+    <Compile Include="WorldInformationChangedEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dolphin\Dolphin.csproj">

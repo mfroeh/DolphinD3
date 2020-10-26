@@ -46,12 +46,15 @@
         <Grid Grid.Row="0" Grid.Column="1">
             <DataGrid
                 MaxHeight="300"
-                Margin="{adonisUi:Space}"
+                Margin="{adonisUi:Space Top=0}"
                 AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserReorderColumns="True"
+                CanUserSortColumns="True"
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
                 FrozenColumnCount="1"
-                HorizontalScrollBarVisibility="Visible"
+                HorizontalScrollBarVisibility="Hidden"
                 ItemsSource="{Binding LogMessages}"
                 SelectedItem="{Binding SelectedLogItem}"
                 SelectionMode="Single"
@@ -62,7 +65,8 @@
                         MinWidth="100"
                         Binding="{Binding Time}"
                         Header="Time"
-                        IsReadOnly="True" />
+                        IsReadOnly="True"
+                        SortDirection="Descending" />
 
                     <DataGridTextColumn
                         MinWidth="100"

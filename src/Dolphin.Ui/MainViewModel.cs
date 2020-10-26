@@ -34,7 +34,6 @@ namespace Dolphin.Ui
             tab3.Parent = this;
             Children.Add(tab3);
 
-
             var tab4 = container.Resolve<IViewModelBase>("overviewTab");
             tab4.Parent = this;
             Children.Add(tab4);

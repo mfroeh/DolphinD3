@@ -16,6 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -183,6 +184,36 @@
                     Command="{Binding ResetSettingsCommand}"
                     Content="Reset settings" />
             </Grid>
+        </GroupBox>
+        <GroupBox
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{adonisUi:Space Left=0}"
+            Header="Poolspots">
+            <DataGrid
+                MaxHeight="250"
+                Margin="{adonisUi:Space Top=0}"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserReorderColumns="True"
+                CanUserSortColumns="True"
+                EnableColumnVirtualization="True"
+                EnableRowVirtualization="True"
+                ItemsSource="{Binding PoolSpots}"
+                SelectionMode="Single"
+                VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Act}"
+                        Header="Act"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Binding="{Binding Name}"
+                        Header="Waypoint"
+                        IsReadOnly="True" />
+                    <DataGridCheckBoxColumn Binding="{Binding Enabled}" Header="Enabled" />
+                </DataGrid.Columns>
+            </DataGrid>
         </GroupBox>
     </Grid>
 </UserControl>

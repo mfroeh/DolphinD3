@@ -24,6 +24,7 @@
         Reforge = 19,
         AcceptGriftPopup = 20,
         StartGame = 21,
-        OpenRift = 22
+        OpenRift = 22,
+        CancelAction = 23
     }
 }

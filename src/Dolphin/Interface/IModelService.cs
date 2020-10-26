@@ -15,7 +15,7 @@ namespace Dolphin
 
         IEnumerable<Enum.PlayerResource> GetPossibleSecondary();
 
-        IEnumerable<SkillName> GetPossibleSkills();
+        IEnumerable<SkillName> GetPossibleSkills(bool isMouse);
 
         Skill GetSkill(SkillName name);
 

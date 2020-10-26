@@ -77,7 +77,7 @@ namespace Dolphin.Ui
             container.RegisterType<ITransformService, TransformService>();
             container.RegisterType<IPoolSpotService, PoolSpotService>();
             container.RegisterType<ITravelInformationService, TravelInformationService>();
-
+            container.RegisterType<IConditionFinderService, ConditionFinderService>();
 
             container.RegisterType<IViewModelBase, MainViewModel>("main");
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
@@ -122,7 +122,7 @@ namespace Dolphin.Ui
             var captureService = container.Resolve<ICaptureWindowService>();
             var extractSkillService = container.Resolve<IExtractInformationService>("extractSkillInformation");
             var extractPlayerService = container.Resolve<IExtractInformationService>("extractPlayerInformation");
-            var delay = container.Resolve<Settings>().UpdateInterval;
+            var _settings = container.Resolve<Settings>();
 
             var task = Task.Factory.StartNew(async () =>
             {
@@ -131,7 +131,7 @@ namespace Dolphin.Ui
                     try
                     {
                         var handle = handleService.GetHandle();
-                        if (handle != IntPtr.Zero)
+                        if (handle != IntPtr.Zero && !_settings.IsPaused)//!settingsService.Settings.IsPaused)
                         {
                             using (var image = captureService.CaptureWindow("Diablo III64"))
                             {
@@ -145,8 +145,8 @@ namespace Dolphin.Ui
                                 extractSkillService.Extract(image);
                                 extractPlayerService.Extract(image);
                             }
-                            Thread.Sleep(50);
                         }
+                        Thread.Sleep((int)_settings.UpdateInterval);
                     }
                     catch (Exception ex)
                     {
@@ -156,6 +156,7 @@ namespace Dolphin.Ui
             }, TaskCreationOptions.LongRunning);
 
             container.Resolve<IEventSubscriber>("macro");
+            container.Resolve<IEventSubscriber>("skill");
         }
 
         protected override void OnExit(ExitEventArgs e)

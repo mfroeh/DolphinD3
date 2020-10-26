@@ -3,8 +3,8 @@
     public enum Window
     {
         None = 0,
-        Chat = 1,
-        ChangeSkill = 2,
-        AcceptGrift = 3
+        AcceptGrift = 1,
+        StartGame = 2,
+        Urshi = 3
     }
 }

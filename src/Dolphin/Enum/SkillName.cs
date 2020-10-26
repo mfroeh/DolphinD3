@@ -13,6 +13,8 @@
         BloodRush = 8,
         CommandSkeletons = 9,
         Devour = 10,
-        SkeletalMage = 11
+        SkeletalMage = 11,
+        Simulacrum = 12,
+        LandOfTheDead = 13
     }
 }

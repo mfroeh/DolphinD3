@@ -1,45 +1,89 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Linq;
 
 namespace Dolphin
 {
     public static class Condition
     {
-        public static Func<Player, World, bool> Companion = CompanionFunction;
-        public static Func<Player, World, bool> Punishment = PunishmentFunction;
-        public static Func<Player, World, bool> ShadowPower = ShadowPowerFunction;
-        public static Func<Player, World, bool> Vengance = VenganceFunction;
+        public static Func<Player, World, Skill, bool> BoneArmor = BoneArmorFunction;
+        public static Func<Player, World, Skill, bool> Companion = CompanionFunction;
+        public static Func<Player, World, Skill, bool> Devour = DevourFunction;
+        public static Func<Player, World, Skill, bool> LandOfTheDead = LandOfTheDeadFunction;
+        public static Func<Player, World, Skill, bool> Punishment = PunishmentFunction;
+        public static Func<Player, World, Skill, bool> ShadowPower = ShadowPowerFunction;
+        public static Func<Player, World, Skill, bool> Simulacrum = SimulacrumFunction;
+        public static Func<Player, World, Skill, bool> SkeletalMage = SkeletalMageFunction;
+        public static Func<Player, World, Skill, bool> Vengeance = VenganceFunction;
 
-        public static bool CompanionFunction(Player p, World w)
+        #region DemonHunter
+
+        public static bool CompanionFunction(Player p, World w, Skill skill)
         {
             return w.IsRiftOrGrift() &&
                     p.NotDead() &&
-                    p.SkillNotActiveAndCanBeCasted(SkillName.Companion);
+                    !skill.IsActive;
         }
 
-        public static bool PunishmentFunction(Player p, World w)
+        public static bool PunishmentFunction(Player p, World w, Skill skill)
         {
             return w.IsRiftOrGrift() &&
                     p.NotDead() &&
-                    p.PrimaryResourcePercentage < 80 &&
-                    p.SkillNotActiveAndCanBeCasted(SkillName.Preperation);
+                    p.PrimaryResourcePercentage < 80;
         }
 
-        public static bool ShadowPowerFunction(Player p, World w)
+        public static bool ShadowPowerFunction(Player p, World w, Skill skill)
         {
             return w.IsRiftOrGrift() &&
+                    !skill.IsActive &&
                     p.NotDead() &&
-                    p.SecondaryRessourcePercentage >= 60 &&
-                    p.SkillNotActiveAndCanBeCasted(SkillName.ShadowPower);
+                    p.SecondaryRessourcePercentage >= 60;
         }
 
-        public static bool VenganceFunction(Player p, World w)
+        public static bool VenganceFunction(Player p, World w, Skill skill)
+        {
+            return !skill.IsActive &&
+                    w.IsRiftOrGrift() &&
+                    p.NotDead();
+        }
+
+        #endregion DemonHunter
+
+        #region Necromancer
+
+        public static bool BoneArmorFunction(Player p, World w, Skill skill)
         {
             return w.IsRiftOrGrift() &&
-                    p.NotDead() &&
-                    p.SkillNotActiveAndCanBeCasted(SkillName.Vengeance);
+                   p.NotDead();
         }
+
+        public static bool DevourFunction(Player p, World w, Skill skill)
+        {
+            return w.IsRiftOrGrift() &&
+                   p.NotDead();
+        }
+
+        public static bool LandOfTheDeadFunction(Player p, World w, Skill skill)
+        {
+            return w.IsRiftOrGrift() &&
+                   p.NotDead() &&
+                   !skill.IsActive;
+        }
+
+        public static bool SimulacrumFunction(Player p, World w, Skill skill)
+        {
+            return w.IsRiftOrGrift() &&
+                   p.NotDead() &&
+                   !skill.IsActive;
+        }
+
+        public static bool SkeletalMageFunction(Player p, World w, Skill skill)
+        {
+            return w.IsRiftOrGrift() &&
+                   p.NotDead() &&
+                   p.PrimaryResourcePercentage == 100;
+        }
+
+        #endregion Necromancer
     }
 
     public static class ConditionExtensionMethod
@@ -50,17 +94,5 @@ namespace Dolphin
         }
 
         public static bool NotDead(this Player p) => p.HealthPercentage > 0;
-
-        public static bool SkillNotActiveAndCanBeCasted(this Player p, SkillName name)
-        {
-            var skill = p.Skills.Where(x => x.Name == name).FirstOrDefault();
-
-            if (skill != null && skill.IsNotActiveAndCanBeCasted)
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }

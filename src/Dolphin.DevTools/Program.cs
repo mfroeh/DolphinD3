@@ -1,6 +1,9 @@
-﻿using Dolphin.Service;
+﻿using Dolphin.Enum;
+using Dolphin.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,17 +25,46 @@ namespace Dolphin.DevTools
 
             var imageService = container.Resolve<ISaveImageService>();
 
+            //while (true)
+            //{
+            //    var image = imageService.TakePicture("Diablo III64");
+
+            //    imageService.SaveHealthbar(image);
+            //    imageService.SavePlayerClass(image);
+            //    imageService.SavePlayerResourcePrimary(image);
+            //    imageService.SavePlayerSkills(image);
+            //    imageService.SavePlayerSkillsMouse(image);
+            //    imageService.SavePlayerSkillsActive(image);
+
+
+            //    Thread.Sleep(1000);
+            //}
+
+
+            //imageService.SaveWindow(image, Enum.Window.StartGame);
+            //imageService.SaveWorldLocation(image, Enum.WorldLocation.Grift);
+            var captureSErvice = container.Resolve<ICaptureWindowService>();
+
+            var image = imageService.TakePicture("Diablo III64");
+
+            imageService.SaveWindow(image, Window.Urshi);
+
             while (true)
             {
-                var image = imageService.TakePicture("Diablo III64");
+                image = imageService.TakePicture("Diablo III64");
+                var now = captureSErvice.CropWorldLocation(image, WorldLocation.Grift); // 90% + 
+                var bitmap = new Bitmap("Resource/WorldLocation/Grift.png");
+                Console.WriteLine($"Grift chance: {ImageHelper.Compare(now, bitmap)}");
 
-                imageService.SaveHealthbar(image);
-                imageService.SavePlayerClass(image);
-                imageService.SavePlayerResourcePrimary(image);
-                imageService.SavePlayerSkills(image);
-                imageService.SavePlayerSkillsMouse(image);
+                now = captureSErvice.CropWorldLocation(image, WorldLocation.Menu); // 95% +
+                bitmap = new Bitmap("Resource/WorldLocation/Menu.png");
+                Console.WriteLine($"Menu chance: {ImageHelper.Compare(now, bitmap)}");
 
-                Thread.Sleep(1000);
+                now = captureSErvice.CropWindow(image, Window.StartGame);
+                bitmap = new Bitmap("Resource/Window/StartGame.png");
+                Console.WriteLine($"Start game chance: {ImageHelper.Compare(now, bitmap)}"); // 90+
+
+                Thread.Sleep(500);
             }
         }
 

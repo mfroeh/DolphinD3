@@ -1,5 +1,6 @@
 ﻿using Dolphin.Enum;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Dolphin.Service
@@ -34,11 +35,11 @@ namespace Dolphin.Service
                 var oldSkill = modelService.GetSkill(i);
 
                 var visibleSkillBitmap = imageService.CropSkillbar(bitmap, i);
-                var newSkill = ExtractSkill(visibleSkillBitmap, i);
+                var newSkill = ExtractSkill(visibleSkillBitmap, i, bitmap);
 
                 modelService.SetSkill(i, newSkill);
 
-                if (newSkill?.IsNotActiveAndCanBeCasted == true)
+                if (newSkill?.CanBeCasted == true)
                 {
                     Publish(new SkillCanBeCastedEvent { SkillIndex = i, SkillName = newSkill.Name });
                 }
@@ -66,11 +67,11 @@ namespace Dolphin.Service
             return default;
         }
 
-        private Skill ExtractSkill(Bitmap picturePart, int index)
+        private Skill ExtractSkill(Bitmap picturePart, int index, Bitmap fullBitmap)
         {
             foreach (var skillName in modelService.GetPossibleSkills(index >= 4))
             {
-                var template = resourceService.LoadSkillBitmap(skillName, index >= 4);
+                var template = resourceService.Load(skillName);
                 var similiaryPercentage = ImageHelper.Compare(picturePart, template);
 
                 // If similarityPercentage is > some value but not 1, then it must either be on not castable (due to resources / cooldown) or it is active
@@ -78,9 +79,11 @@ namespace Dolphin.Service
                 {
                     var skill = new Skill { Name = skillName, Index = index };
 
+                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index));
+
                     if (similiaryPercentage >= 0.9975f)
                     {
-                        skill.IsNotActiveAndCanBeCasted = true;
+                        skill.CanBeCasted = true;
                         logService.AddEntry(this, $"Skill{index} is {skillName}.");
                     }
                     else
@@ -99,8 +102,9 @@ namespace Dolphin.Service
 
         private bool IsActive(Bitmap bitmap)
         {
-            // TODO:
-            return default;
+            var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png"));
+
+            return result > 0.9f;
         }
     }
 }

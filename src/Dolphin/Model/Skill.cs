@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Windows.Forms;
 
 namespace Dolphin
 {
@@ -6,7 +7,9 @@ namespace Dolphin
     {
         public int Index { get; set; }
 
-        public bool IsNotActiveAndCanBeCasted { get; set; }
+        public bool CanBeCasted { get; set; }
+
+        public bool IsActive { get; set; }
 
         public SkillName Name { get; set; }
     }

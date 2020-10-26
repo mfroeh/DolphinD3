@@ -97,5 +97,21 @@ namespace Dolphin
         public static Point SkillbarSkill5TopLeft = new Point { X = 971, Y = 1006 };
 
         #endregion Skill
+
+        #region WorldLocation
+
+        public static Point LocationGrift = new Point { X = 1738, Y = 31 };
+        public static Point LocationMenuSymbol = new Point { X = 1481, Y = 985 };
+        public static Point LocationRiftLevel = new Point { X = 1884, Y = 7 };
+        public static Point LocationRiftSpeakToOrek = new Point { X = 1680, Y = 428 };
+
+        #endregion WorldLocation
+
+        #region Window
+
+        public static Point WindowStartGame = new Point { X = 169, Y = 508 };
+        public static Point WindowUrshi = new Point { X = 185, Y = 127 };
+
+        #endregion Window
     }
 }

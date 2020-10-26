@@ -8,7 +8,7 @@ namespace Dolphin.Service
     public class ResourceService : IResourceService
     {
         private readonly IDiabloCacheService cacheService;
-        private readonly IHandleService handleService;
+        private readonly IHandleService handleService; // Todo: By resolution
         private readonly ILogService logService;
 
         public ResourceService(IDiabloCacheService cacheService, IHandleService handleService, ILogService logService)

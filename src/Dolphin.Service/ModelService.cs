@@ -93,13 +93,21 @@ namespace Dolphin.Service
                     if (isMouse)
                     {
                         yield return SkillName.BoneArmor;
-                        yield return SkillName.BoneSpikes;
+                        yield return SkillName.BloodRush;
+                        yield return SkillName.CommandSkeletons;
+                        yield return SkillName.SkeletalMage;
+                        yield return SkillName.LandOfTheDead;
+                        yield return SkillName.Simulacrum;
+                        yield return SkillName.Devour;
                     }
                     else
                     {
+                        yield return SkillName.BoneArmor;
                         yield return SkillName.BloodRush;
-                        yield return SkillName.SkeletalMage;
                         yield return SkillName.CommandSkeletons;
+                        yield return SkillName.SkeletalMage;
+                        yield return SkillName.LandOfTheDead;
+                        yield return SkillName.Simulacrum;
                         yield return SkillName.Devour;
                     }
                     break;
@@ -110,7 +118,7 @@ namespace Dolphin.Service
 
         public Skill GetSkill(SkillName name)
         {
-            return Player.Skills.FirstOrDefault(x => x.Name == name);
+            return Player.Skills.FirstOrDefault(x => x?.Name == name);
         }
 
         public Skill GetSkill(int index)

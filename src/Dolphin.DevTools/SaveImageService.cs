@@ -1,19 +1,12 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dolphin.DevTools
 {
     public class SaveImageService : ISaveImageService
     {
-
         private readonly ICaptureWindowService captureWindowService;
         private readonly string outputDirectoryBasePath;
         private string extractedFilesDirectory;
@@ -83,6 +76,16 @@ namespace Dolphin.DevTools
             }
         }
 
+        public void SavePlayerSkillsActive(Bitmap bitmap)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                var skill = captureWindowService.CropSkillActive(bitmap, i);
+
+                skill.Save($"{extractedFilesDirectory}Skill{i}_Active.png");
+            }
+        }
+
         public void SavePlayerSkillsMouse(Bitmap bitmap)
         {
             Directory.CreateDirectory($"{extractedFilesDirectory}/Skill/Mouse");
@@ -93,6 +96,24 @@ namespace Dolphin.DevTools
 
                 skill.Save($"{extractedFilesDirectory}/Skill/Mouse/Skill{i}.png");
             }
+        }
+
+        public void SaveWindow(Bitmap bitmap, Window window)
+        {
+            Directory.CreateDirectory($"{extractedFilesDirectory}/Window");
+
+            var image = captureWindowService.CropWindow(bitmap, window);
+
+            image.Save($"{extractedFilesDirectory}/Window/{window}.png");
+        }
+
+        public void SaveWorldLocation(Bitmap bitmap, WorldLocation location)
+        {
+            Directory.CreateDirectory($"{extractedFilesDirectory}/WorldLocation");
+
+            var image = captureWindowService.CropWorldLocation(bitmap, location);
+
+            image.Save($"{extractedFilesDirectory}/WorldLocation/{location}.png");
         }
 
         public Bitmap TakePicture(string processName)

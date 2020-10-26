@@ -1,4 +1,6 @@
 ﻿using Dolphin.Enum;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,7 +14,8 @@ namespace Dolphin
 
         public static uint UpdateInterval => 100;
 
-        public static IList<SkillName> EnabledSkills => new List<SkillName>();
+        public static IList<SkillName> EnabledSkills => new List<SkillName>() { SkillName.Devour, SkillName.LandOfTheDead,
+                                        SkillName.SkeletalMage, SkillName.BoneArmor, SkillName.Simulacrum, SkillName.BloodRush };
 
         public static IDictionary<ActionName, Hotkey> Hotkeys
         {
@@ -82,6 +85,7 @@ namespace Dolphin
 
         public IDictionary<Enum.ActionName, Hotkey> Hotkeys { get; set; }
 
+        [JsonIgnore]
         public bool IsPaused { get; set; }
 
         public MacroSettings MacroSettings { get; set; }

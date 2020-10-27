@@ -1,7 +1,7 @@
 ﻿using Dolphin.Enum;
 using System.Drawing;
 
-namespace Dolphin.DevTools
+namespace Dolphin.DevUi
 {
     public interface ISaveImageService
     {
@@ -26,7 +26,5 @@ namespace Dolphin.DevTools
         void SaveWorldLocation(Bitmap bitmap, WorldLocation location);
 
         void SaveUrshiGemUp(Bitmap bitmap, int gemUps);
-
-        Bitmap TakePicture(string processName);
     }
 }

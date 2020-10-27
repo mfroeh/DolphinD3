@@ -9,12 +9,12 @@ namespace Dolphin.Service
     public class ExtractPlayerInformationService : IExtractInformationService, IEventPublisher<PlayerInformationChangedEvent>
     {
         private readonly IEventBus eventBus;
-        private readonly ICaptureWindowService imageService;
+        private readonly ICropImageService imageService;
         private readonly ILogService logService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
-        public ExtractPlayerInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICaptureWindowService imageService, ILogService logService)
+        public ExtractPlayerInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICropImageService imageService, ILogService logService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;

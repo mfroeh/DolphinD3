@@ -25,10 +25,11 @@
             Header="Skills">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="135" />
-                    <RowDefinition Height="135" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
@@ -36,7 +37,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Margin="{adonisUi:Space Bottom=0,
-                                            Right=0,
+                                            Right=1,
                                             Left=0,
                                             Top=1}"
                     Header="Demonhunter">
@@ -47,9 +48,13 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
                             <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
                             <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
                             <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
                             <ColumnDefinition Width="64" />
                         </Grid.ColumnDefinitions>
 
@@ -69,12 +74,12 @@
 
                         <Image
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Source="pack://application:,,,/Resource/Skill/FanOfKnives.png" />
 
                         <CheckBox
                             Grid.Row="1"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="20,5,10,-5"
                             Command="{Binding SkillCheckboxClicked}"
                             CommandParameter="{x:Static enum:SkillName.FanOfKnives}"
@@ -82,12 +87,12 @@
                             Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                         <Image
                             Grid.Row="0"
-                            Grid.Column="2"
+                            Grid.Column="4"
                             Source="pack://application:,,,/Resource/Skill/Preperation.png" />
 
                         <CheckBox
                             Grid.Row="1"
-                            Grid.Column="2"
+                            Grid.Column="4"
                             Margin="20,5,10,-5"
                             Command="{Binding SkillCheckboxClicked}"
                             CommandParameter="{x:Static enum:SkillName.Preperation}"
@@ -96,12 +101,12 @@
 
                         <Image
                             Grid.Row="0"
-                            Grid.Column="3"
+                            Grid.Column="6"
                             Source="pack://application:,,,/Resource/Skill/ShadowPower.png" />
 
                         <CheckBox
                             Grid.Row="1"
-                            Grid.Column="3"
+                            Grid.Column="6"
                             Margin="20,5,10,-5"
                             Command="{Binding SkillCheckboxClicked}"
                             CommandParameter="{x:Static enum:SkillName.ShadowPower}"
@@ -110,16 +115,129 @@
 
                         <Image
                             Grid.Row="0"
-                            Grid.Column="4"
+                            Grid.Column="8"
                             Source="pack://application:,,,/Resource/Skill/Vengeance.png" />
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="8"
+                            Margin="20,5,10,-5"
+                            Command="{Binding SkillCheckboxClicked}"
+                            CommandParameter="{x:Static enum:SkillName.Vengeance}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Vengeance]}"
+                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="{adonisUi:Space Bottom=0,
+                                            Right=0,
+                                            Left=1,
+                                            Top=1}"
+                    Header="Demonhunter">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="64" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="64" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="64" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Source="pack://application:,,,/Resource/Skill/LandOfTheDead.png" />
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="20,5,10,-5"
+                            Command="{Binding SkillCheckboxClicked}"
+                            CommandParameter="{x:Static enum:SkillName.LandOfTheDead}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)LandOfTheDead]}"
+                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+
+                        <Image
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Source="pack://application:,,,/Resource/Skill/Simulacrum.png" />
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="20,5,10,-5"
+                            Command="{Binding SkillCheckboxClicked}"
+                            CommandParameter="{x:Static enum:SkillName.Simulacrum}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Simulacrum]}"
+                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                        <Image
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            Source="pack://application:,,,/Resource/Skill/SkeletalMage.png" />
 
                         <CheckBox
                             Grid.Row="1"
                             Grid.Column="4"
                             Margin="20,5,10,-5"
                             Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.Vengeance}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Vengeance]}"
+                            CommandParameter="{x:Static enum:SkillName.SkeletalMage}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)SkeletalMage]}"
+                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+
+                        <Image
+                            Grid.Row="0"
+                            Grid.Column="6"
+                            Source="pack://application:,,,/Resource/Skill/Devour.png" />
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="6"
+                            Margin="20,5,10,-5"
+                            Command="{Binding SkillCheckboxClicked}"
+                            CommandParameter="{x:Static enum:SkillName.Devour}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Devour]}"
+                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+
+                        <Image
+                            Grid.Row="0"
+                            Grid.Column="8"
+                            Source="pack://application:,,,/Resource/Skill/BoneArmor.png" />
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="8"
+                            Margin="20,5,10,-5"
+                            Command="{Binding SkillCheckboxClicked}"
+                            CommandParameter="{x:Static enum:SkillName.BoneArmor}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)BoneArmor]}"
+                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+
+                        <Image
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Source="pack://application:,,,/Resource/Skill/CommandSkeletons.png" />
+
+                        <CheckBox
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Margin="20,5,10,-5"
+                            Command="{Binding SkillCheckboxClicked}"
+                            CommandParameter="{x:Static enum:SkillName.CommandSkeletons}"
+                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)CommandSkeletons]}"
                             Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                     </Grid>
                 </GroupBox>

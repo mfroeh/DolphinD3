@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionService.cs" />
+    <Compile Include="CropImageService.cs" />
     <Compile Include="ImageCacheService.cs" />
     <Compile Include="CaptureWindowService.cs" />
     <Compile Include="ConditionFinderService.cs" />

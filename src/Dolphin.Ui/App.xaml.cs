@@ -68,6 +68,7 @@ namespace Dolphin.Ui
 
             container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
+            container.RegisterType<ICropImageService, CropImageService>();
             container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IModelService, ModelService>();
             container.RegisterType<IResourceService, ResourceService>();

@@ -6,12 +6,12 @@ namespace Dolphin.Service
     public class ExtractWorldInformationService : IExtractInformationService, IEventPublisher<WorldInformationChangedEvent>
     {
         private readonly IEventBus eventBus;
-        private readonly ICaptureWindowService imageService;
+        private readonly ICropImageService imageService;
         private readonly ILogService logService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
-        public ExtractWorldInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICaptureWindowService imageService, ILogService logService)
+        public ExtractWorldInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICropImageService imageService, ILogService logService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;

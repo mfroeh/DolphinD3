@@ -61,6 +61,7 @@
     <Compile Include="EventArgs\HandleChangedEventArgs.cs" />
     <Compile Include="EventArgs\HotkeysChangedEventArgs.cs" />
     <Compile Include="IConditionFinderService.cs" />
+    <Compile Include="ICropImageService.cs" />
     <Compile Include="IImageCacheService.cs" />
     <Compile Include="IHandleService.cs" />
     <Compile Include="IActionFinderService.cs" />

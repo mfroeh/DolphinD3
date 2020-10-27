@@ -9,11 +9,11 @@ namespace Dolphin.Service
     {
         private readonly IEventBus eventBus;
         private readonly ILogService logService;
-        private readonly ICaptureWindowService imageService;
+        private readonly ICropImageService imageService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
-        public ExtractSkillInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICaptureWindowService imageService, ILogService logService)
+        public ExtractSkillInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICropImageService imageService, ILogService logService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;

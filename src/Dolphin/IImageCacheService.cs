@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Dolphin
 {
-    public interface IDiabloCacheService : ICacheService
+    public interface IImageCacheService : ICacheService
     {
         void AddSkillBitmap(SkillName skillName, bool isMouse, Bitmap bitmap);
 

@@ -53,7 +53,7 @@ namespace Dolphin
         {
             var point = new Point();
             GetCursorPos(ref point);
-            
+
             WindowHelper.ScreenToClient(handle, ref point);
 
             SendClick(handle, button, point);

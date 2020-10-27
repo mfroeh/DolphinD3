@@ -97,7 +97,6 @@ namespace Dolphin.Ui.ViewModel
         {
             if (!LogPaused)
             {
-                return;
                 if (e.LogLevel.CompareTo(DisplayLogLevel) <= 0)
                 {
                     if (LogMessages.Count > 500)

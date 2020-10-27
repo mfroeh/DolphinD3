@@ -71,7 +71,7 @@ namespace Dolphin.Service
         {
             foreach (var skillName in modelService.GetPossibleSkills(index >= 4))
             {
-                var template = resourceService.Load(skillName);
+                var template = resourceService.LoadSkillBitmap(skillName, index >= 4);
                 var similiaryPercentage = ImageHelper.Compare(picturePart, template);
 
                 // If similarityPercentage is > some value but not 1, then it must either be on not castable (due to resources / cooldown) or it is active

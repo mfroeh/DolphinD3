@@ -47,7 +47,7 @@ namespace Dolphin.DevTools
 
             var image = imageService.TakePicture("Diablo III64");
 
-            imageService.SaveWindow(image, Window.Urshi);
+            imageService.SaveUrshiGemUp(image, 3);
 
             while (true)
             {

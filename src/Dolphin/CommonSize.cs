@@ -27,6 +27,10 @@ namespace Dolphin
         #region Window
         public static Size WindowStartGame = new Size { Width = 67, Height = 8 };
         public static Size WindowUrshi = new Size { Width = 46, Height = 15 };
+        public static Size WindowUrhsiGemUp = new Size { Width = 29, Height = 12 };
+        public static Size WindowKadala = new Size { Width = 46, Height = 20 };
+
+        public static Size WindowObelisk = new Size { Width = 55, Height = 9 };
         #endregion
     }
 }

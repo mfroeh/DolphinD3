@@ -113,16 +113,12 @@ namespace Dolphin.Ui.ViewModel
 
         protected void ShowRestartDialog()
         {
-            var result = dialogService.ShowMessageBox(this, "A restart is required in order for these changes to take effect. Restart now?", "Restart required", MessageBoxButton.YesNo);
+            dialogService.ShowMessageBox(this, "A restart is required in order for these changes to take effect. Restarting now.", "Restart required", MessageBoxButton.OK);
+            var json = JsonConvert.SerializeObject(settingsService.Settings);
+            File.WriteAllText("settings.json", json);
 
-            if (result == MessageBoxResult.Yes)
-            {
-                var json = JsonConvert.SerializeObject(settingsService.Settings);
-                File.WriteAllText("settings.json", json);
-
-                System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
-                System.Windows.Application.Current.Shutdown(2);
-            }
+            System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
+            System.Windows.Application.Current.Shutdown(2);
         }
     }
 }

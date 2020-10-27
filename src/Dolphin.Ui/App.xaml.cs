@@ -58,19 +58,20 @@ namespace Dolphin.Ui
             container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
-
-            container.RegisterType<IEventSubscriber, MacroExecutionService>("macro");
+            container.RegisterType<IEventPublisher<WorldInformationChangedEvent>, ExtractWorldInformationService>("extractWorldInformation");
+            container.RegisterType<IEventSubscriber, ExecuteActionService>("macro");
             container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
 
             container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("extractPlayerInformation");
             container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("extractSkillInformation");
+            container.RegisterType<IExtractInformationService, ExtractWorldInformationService>("extractWorldInformation");
 
-            container.RegisterType<IDiabloCacheService, CacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
             container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IModelService, ModelService>();
             container.RegisterType<IResourceService, ResourceService>();
-            container.RegisterType<IDiabloCacheService, CacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IActionFinderService, ActionFinderService>();
@@ -89,6 +90,8 @@ namespace Dolphin.Ui
 
             container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
             container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
+
+            container.RegisterType<ActionService, ActionService>(); // Does this work?
 
             container.AddExtension(new Diagnostic());
 
@@ -110,18 +113,19 @@ namespace Dolphin.Ui
                 }
             });
 
-            //Task.Run(() =>
-            //{
-            //    while (true)
-            //    {
-            //        logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
-            //        Thread.Sleep(1000);
-            //    }
-            //});
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
+                    Thread.Sleep(1000);
+                }
+            });
 
             var captureService = container.Resolve<ICaptureWindowService>();
             var extractSkillService = container.Resolve<IExtractInformationService>("extractSkillInformation");
             var extractPlayerService = container.Resolve<IExtractInformationService>("extractPlayerInformation");
+            var extractWorldService = container.Resolve<IExtractInformationService>("extractWorldInformation");
             var _settings = container.Resolve<Settings>();
 
             var task = Task.Factory.StartNew(async () =>
@@ -144,6 +148,7 @@ namespace Dolphin.Ui
                                 //await delayTask;
                                 extractSkillService.Extract(image);
                                 extractPlayerService.Extract(image);
+                                extractWorldService.Extract(image);
                             }
                         }
                         Thread.Sleep((int)_settings.UpdateInterval);

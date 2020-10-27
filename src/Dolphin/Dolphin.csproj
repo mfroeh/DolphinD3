@@ -37,17 +37,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Desktop\D3Helper-CraftAndParagorn-2.6.1-master\D3Helper.Public-master\D3Helper\InputSimulator.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheServiceBase.cs" />
     <Compile Include="CommonCoordinate.cs" />
     <Compile Include="CommonSize.cs" />
     <Compile Include="Enum\ActionName.cs" />
     <Compile Include="Enum\ConvertingSpeed.cs" />
     <Compile Include="Enum\Command.cs" />
+    <Compile Include="Enum\ExtraInformation.cs" />
     <Compile Include="Enum\RelativeCoordinatePosition.cs" />
     <Compile Include="Enum\ItemType.cs" />
     <Compile Include="Enum\Window.cs" />
@@ -57,7 +61,7 @@
     <Compile Include="EventArgs\HandleChangedEventArgs.cs" />
     <Compile Include="EventArgs\HotkeysChangedEventArgs.cs" />
     <Compile Include="IConditionFinderService.cs" />
-    <Compile Include="IDiabloCacheService.cs" />
+    <Compile Include="IImageCacheService.cs" />
     <Compile Include="IHandleService.cs" />
     <Compile Include="IActionFinderService.cs" />
     <Compile Include="IPoolSpotService.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="Event\SkillCanBeCastedEvent.cs" />
     <Compile Include="Settings\MacroSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\SmartActionSettings.cs" />
     <Compile Include="Settings\UiSettings.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="Condition.cs" />
@@ -169,6 +174,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resource\ExtraInformation\Urshi_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\ExtraInformation\Urshi_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\ExtraInformation\Urshi_3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\ExtraInformation\Urshi_4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\ExtraInformation\Urshi_5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Resource\Skill\04_24_47Skill4_Active.png" />
     <EmbeddedResource Include="Resource\Window\Urshi.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

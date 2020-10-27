@@ -98,6 +98,15 @@ namespace Dolphin.DevTools
             }
         }
 
+        public void SaveUrshiGemUp(Bitmap bitmap, int gemUp)
+        {
+            Directory.CreateDirectory($"{extractedFilesDirectory}/ExtraInformation");
+
+            var image = captureWindowService.CropUrshiGemUp(bitmap);
+
+            image.Save($"{extractedFilesDirectory}/ExtraInformation/Urshi_{gemUp}.png");
+        }
+
         public void SaveWindow(Bitmap bitmap, Window window)
         {
             Directory.CreateDirectory($"{extractedFilesDirectory}/Window");
@@ -115,6 +124,8 @@ namespace Dolphin.DevTools
 
             image.Save($"{extractedFilesDirectory}/WorldLocation/{location}.png");
         }
+
+
 
         public Bitmap TakePicture(string processName)
         {

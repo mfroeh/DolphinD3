@@ -25,6 +25,8 @@ namespace Dolphin.DevTools
 
         void SaveWorldLocation(Bitmap bitmap, WorldLocation location);
 
+        void SaveUrshiGemUp(Bitmap bitmap, int gemUps);
+
         Bitmap TakePicture(string processName);
     }
 }

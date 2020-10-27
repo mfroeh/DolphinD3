@@ -12,6 +12,8 @@ namespace Dolphin
 
         UiSettings UiSettings { get; }
 
+        SmartActionSettings SmartActionSettings { get; }
+
         ActionName GetActionName(Hotkey hotkey);
 
         void SetPaused(bool newPaused, bool isFromChanging);

@@ -111,7 +111,10 @@ namespace Dolphin
 
         public static Point WindowStartGame = new Point { X = 169, Y = 508 };
         public static Point WindowUrshi = new Point { X = 185, Y = 127 };
+        public static Point WindowUrshiGemUp = new Point { X = 295, Y = 542 };
+        public static Point WindowKadala = new Point { X = 243, Y = 47 };
 
+        public static Point WindowObelisk = new Point { X = 298, Y = 128 };
         #endregion Window
     }
 }

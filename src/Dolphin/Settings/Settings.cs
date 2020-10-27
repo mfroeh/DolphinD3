@@ -10,7 +10,7 @@ namespace Dolphin
 {
     public static class InitialSettings
     {
-        private static IList<ActionName> _nonMacroableActions = new List<ActionName> { ActionName.None, ActionName.OpenRift, ActionName.AcceptGriftPopup, ActionName.StartGame };
+        private static IList<ActionName> _nonMacroableActions = new List<ActionName> { ActionName.None, ActionName.Smart_OpenRift, ActionName.Smart_AcceptGriftPopup, ActionName.Smart_StartGame };
 
         public static uint UpdateInterval => 100;
 
@@ -77,6 +77,14 @@ namespace Dolphin
             LogPaused = false,
             IsDark = false
         };
+
+        public static SmartActionSettings SmartActionSettings
+        {
+            get
+            {
+                return new SmartActionSettings();
+            }
+        }
     }
 
     public class Settings
@@ -95,6 +103,8 @@ namespace Dolphin
 
         public UiSettings UiSettings { get; set; }
 
+        public SmartActionSettings SmartActionSettings { get; set; }
+
         public uint UpdateInterval { get; set; }
 
         public Settings(bool initialize = false)
@@ -108,6 +118,7 @@ namespace Dolphin
                 SkillKeybindings = InitialSettings.SkillKeybindigns;
                 UiSettings = InitialSettings.UiSettings;
                 UpdateInterval = InitialSettings.UpdateInterval;
+                SmartActionSettings = InitialSettings.SmartActionSettings;
             }
         }
     }

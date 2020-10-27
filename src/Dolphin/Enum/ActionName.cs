@@ -22,9 +22,12 @@
         DropInventory = 17,
         Gamble = 18,
         Reforge = 19,
-        AcceptGriftPopup = 20,
-        StartGame = 21,
-        OpenRift = 22,
-        CancelAction = 23
+        Smart_AcceptGriftPopup = 20,
+        Smart_StartGame = 21,
+        Smart_OpenRift = 22,
+        Smart_Gamble = 23,
+        Smart_UpgradeGem = 24,
+        CancelAction = 25,
+        Smart_OpenGrift = 26
     }
 }

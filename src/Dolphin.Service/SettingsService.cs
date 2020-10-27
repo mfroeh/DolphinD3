@@ -22,6 +22,8 @@ namespace Dolphin.Service
 
         public Settings Settings => settings;
 
+        public SmartActionSettings SmartActionSettings => Settings.SmartActionSettings;
+
         public UiSettings UiSettings => Settings.UiSettings;
 
         public ActionName GetActionName(WK.Libraries.HotkeyListenerNS.Hotkey hotkey)

@@ -90,8 +90,8 @@ namespace Dolphin.Service
 
         public Bitmap CropSkillActive(Bitmap image, int index)
         {
-            Point skillActive = default;
-            var size = new Size { Height = 1, Width = 5 };
+            var size = new Size { Height = 1, Width = 5 }; // TODO: ?
+            Point skillActive;
 
             switch (index)
             {
@@ -124,6 +124,9 @@ namespace Dolphin.Service
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill5TopLeft);
                     skillActive = transformService.TransformCoordinate(new Point { X = skillbar.X - 1, Y = skillbar.Y - 15 });
                     break;
+
+                default:
+                    throw new NotImplementedException();
             }
 
             return ImageHelper.CropImage(image, new Rectangle(skillActive, size));
@@ -131,8 +134,8 @@ namespace Dolphin.Service
 
         public Bitmap CropSkillbar(Bitmap image, int index)
         {
-            Point skillbar = default;
             Size size = transformService.TransformSize(CommonSize.SkillbarSkillSize);
+            Point skillbar;
 
             switch (index)
             {
@@ -161,15 +164,26 @@ namespace Dolphin.Service
                     skillbar = transformService.TransformCoordinate(CommonCoordinate.SkillbarSkill5TopLeft);
                     size = transformService.TransformSize(CommonSize.SkillbarSkillSizeMouse);
                     break;
+
+                default:
+                    throw new NotImplementedException();
             }
 
             return ImageHelper.CropImage(image, new Rectangle(skillbar, size));
         }
 
+        public Bitmap CropUrshiGemUp(Bitmap image)
+        {
+            var point = transformService.TransformCoordinate(CommonCoordinate.WindowUrshiGemUp);
+            var size = transformService.TransformSize(CommonSize.WindowUrhsiGemUp);
+
+            return ImageHelper.CropImage(image, new Rectangle(point, size));
+        }
+
         public Bitmap CropWindow(Bitmap image, Window window)
         {
-            Size size = default;
-            Point point = default;
+            Point point;
+            Size size;
 
             switch (window)
             {
@@ -183,6 +197,16 @@ namespace Dolphin.Service
                     point = transformService.TransformCoordinate(CommonCoordinate.WindowUrshi);
                     break;
 
+                case Window.Kadala:
+                    size = transformService.TranformSize(CommonSize.WindowKadala);
+                    point = transformService.TransformCoordinate(CommonCoordinate.WindowKadala);
+                    break;
+
+                case Window.Obelisk:
+                    size = transformService.TransformSize(CommonSize.WindowObelisk);
+                    point = transformService.TransformCoordinate(CommonCoordinate.WindowObelisk);
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
@@ -192,8 +216,8 @@ namespace Dolphin.Service
 
         public Bitmap CropWorldLocation(Bitmap image, WorldLocation location)
         {
-            Point point = default;
-            Size size = default;
+            Point point;
+            Size size;
 
             switch (location)
             {
@@ -201,14 +225,17 @@ namespace Dolphin.Service
                     size = transformService.TransformSize(CommonSize.LocationGriftText);
                     point = transformService.TransformCoordinate(CommonCoordinate.LocationGrift);
                     break;
+
                 case WorldLocation.Rift:
                     size = transformService.TransformSize(CommonSize.LocationRiftLevel);
                     point = transformService.TransformCoordinate(CommonCoordinate.LocationRiftLevel);
                     break;
+
                 case WorldLocation.Menu:
                     size = transformService.TransformSize(CommonSize.LocationMenu);
                     point = transformService.TransformCoordinate(CommonCoordinate.LocationMenuSymbol);
                     break;
+
                 default:
                     throw new NotImplementedException();
             }

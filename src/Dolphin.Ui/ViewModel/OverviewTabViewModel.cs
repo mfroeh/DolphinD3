@@ -1,6 +1,6 @@
 ﻿using Dolphin.Enum;
+using Dolphin.Service;
 using System.Collections.ObjectModel;
-using System.Reflection;
 using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
@@ -8,10 +8,12 @@ namespace Dolphin.Ui.ViewModel
     public class OverviewTabViewModel : ViewModelBase, IEventSubscriber
     {
         private readonly IEventBus eventBus;
+        private readonly IHandleService handleService;
         private readonly IModelService modelService;
         private readonly Subscription<PlayerInformationChangedEvent> playerInformationChanged;
         private readonly Subscription<SkillRecognitionChangedEvent> skillRecognitionChanged;
-        private readonly IHandleService handleService;
+        private readonly Subscription<WorldInformationChangedEvent> worldInformationChanged;
+
         public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService)
         {
             this.eventBus = eventBus;
@@ -20,9 +22,11 @@ namespace Dolphin.Ui.ViewModel
 
             playerInformationChanged = new Subscription<PlayerInformationChangedEvent>(OnPlayerInformationChanged);
             skillRecognitionChanged = new Subscription<SkillRecognitionChangedEvent>(OnSkillRecognitionChanged);
+            worldInformationChanged = new Subscription<WorldInformationChangedEvent>(OnWorldInformationChanged);
 
             SubscribeBus(playerInformationChanged);
             SubscribeBus(skillRecognitionChanged);
+            SubscribeBus(worldInformationChanged);
 
             handleService.HandleStatusChanged += OnHandleChanged;
 
@@ -42,16 +46,6 @@ namespace Dolphin.Ui.ViewModel
             CurrentPrimaryResource = 0;
         }
 
-        private void OnHandleChanged(object o, HandleChangedEventArgs e)
-        {
-            if (e.ProcessName == "Diablo III64")
-            {
-                PropertySetter(e.NewProcessId, nameof(DiabloProcessId));
-            }
-        }
-
-        public uint DiabloProcessId { get; set; }
-
         public int CurrentHealth { get; set; }
 
         public string CurrentPlayerClass { get; set; }
@@ -61,6 +55,12 @@ namespace Dolphin.Ui.ViewModel
         public int CurrentSecondaryResource { get; set; }
 
         public ObservableCollection<string> CurrentSkills { get; set; }
+
+        public uint DiabloProcessId { get; set; }
+
+        public WorldLocation CurrentLocation { get; set; }
+
+        public Window OpenWindow { get; set; }
 
         private string GetResourcePath(SkillName skillName)
         {
@@ -86,6 +86,14 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        private void OnHandleChanged(object o, HandleChangedEventArgs e)
+        {
+            if (e.ProcessName == "Diablo III64")
+            {
+                PropertySetter(e.NewProcessId, nameof(DiabloProcessId));
+            }
+        }
+
         private void OnPlayerInformationChanged(object o, PlayerInformationChangedEvent @event)
         {
             if (@event.ChangedProperties.Contains(nameof(Player.Class)))
@@ -98,7 +106,7 @@ namespace Dolphin.Ui.ViewModel
                 }
             }
 
-            // TOdo: maybe its worth to filter these performance wise
+            // TODO: maybe its worth to filter these performance wise
 
             CurrentHealth = modelService.Player.HealthPercentage;
             CurrentPrimaryResource = modelService.Player.PrimaryResourcePercentage;
@@ -120,12 +128,16 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public ICommand Cmd
+        private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {
-            get
+            if (@event.IsLocationChanged)
             {
-                return new RelayCommand((_) => PropertySetter(12, nameof(CurrentHealth)));
+                PropertySetter(@event.NewLocation, nameof(CurrentLocation));
+            }
 
+            if (@event.IsWindowChanged)
+            {
+                PropertySetter(@event.NewOpenWindow, nameof(OpenWindow));
             }
         }
 

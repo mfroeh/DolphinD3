@@ -33,7 +33,8 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CacheService.cs" />
+    <Compile Include="ActionService.cs" />
+    <Compile Include="ImageCacheService.cs" />
     <Compile Include="CaptureWindowService.cs" />
     <Compile Include="ConditionFinderService.cs" />
     <Compile Include="EventBus.cs" />
@@ -41,7 +42,7 @@
     <Compile Include="ExtractSkillInformationService.cs" />
     <Compile Include="ExtractWorldInformationService.cs" />
     <Compile Include="HandleService.cs" />
-    <Compile Include="MacroExecutionService.cs" />
+    <Compile Include="ExecuteActionService.cs" />
     <Compile Include="HotkeyListenerService.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="ActionFinderService.cs" />

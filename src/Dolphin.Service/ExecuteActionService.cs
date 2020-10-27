@@ -2,29 +2,29 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace Dolphin.Service
 {
-    public class MacroExecutionService : EventSubscriberBase
+    public class ExecuteActionService : EventSubscriberBase
     {
         private static readonly IList<ActionName> cancellableMacros = new List<ActionName> { ActionName.CubeConverterDualSlot, ActionName.CubeConverterSingleSlot, ActionName.UpgradeGem };
 
+        private readonly IActionFinderService actionFinderService;
         private readonly Subscription<HotkeyPressedEvent> cancelExecutionSubscriber;
         private readonly Subscription<HotkeyPressedEvent> executeMacro;
         private readonly Subscription<HotkeyPressedEvent> executeMacroCancelable;
-        private readonly IHandleService handleService;
-        private readonly IActionFinderService macroFinderService;
+        private readonly Subscription<WorldInformationChangedEvent> executeSmartAction;
 
+        private readonly IHandleService handleService;
         private readonly ISettingsService settingsService;
         private CancellationTokenSource tokenSource;
 
-        public MacroExecutionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService macroFinderService, IHandleService handleService) : base(eventBus)
+        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService macroFinderService, IHandleService handleService) : base(eventBus)
         {
             this.settingsService = settingsService;
-            this.macroFinderService = macroFinderService;
+            this.actionFinderService = macroFinderService;
             this.handleService = handleService;
 
             Trace.WriteLine(handleService.GetHashCode());
@@ -32,18 +32,14 @@ namespace Dolphin.Service
             executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
             executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
             cancelExecutionSubscriber = new Subscription<HotkeyPressedEvent>(CancelExecution);
+            executeSmartAction = new Subscription<WorldInformationChangedEvent>(OnWorldInformationChanged);
 
             SubscribeBus(executeMacro);
             SubscribeBus(cancelExecutionSubscriber);
             SubscribeBus(executeMacroCancelable);
+            SubscribeBus(executeSmartAction);
         }
 
-        /// <summary>
-        /// Cancels the current cancellable Action
-        /// TODO: Test this
-        /// </summary>
-        /// <param name="o"></param>
-        /// <param name="e"></param>
         public void CancelExecution(object o, HotkeyPressedEvent e)
         {
             if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
@@ -72,12 +68,11 @@ namespace Dolphin.Service
                 return;
             }
 
-            var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
+            var macro = actionFinderService.FindAction(actionName, handle, tokenSource);
 
             Execute.AndForgetAsync(macro);
         }
 
-        // TODO: This might not need the lock / the lock is actually bad. Potentially all the delegates get staggered up.
         public void ExecuteMacroCancelable(object o, HotkeyPressedEvent e)
         {
             var actionName = settingsService.GetActionName(e.PressedHotkey);
@@ -97,7 +92,7 @@ namespace Dolphin.Service
             {
                 tokenSource = new CancellationTokenSource();
 
-                var macro = macroFinderService.FindAction(actionName, handle, tokenSource);
+                var macro = actionFinderService.FindAction(actionName, handle, tokenSource);
 
                 Execute.AndForgetAsync(() =>
                 {
@@ -107,45 +102,59 @@ namespace Dolphin.Service
                 });
             }
         }
-        //if (e.PressedHotkey != settingsService.Settings.Hotkeys[ActionName.Pause]) return;
 
-        //var isExecuting = tokenSource != null;
-        //if (!executing)
-        //{
-        //    var actionName = settingsService.GetActionName(e.PressedHotkey);
-        //    var macro = MacroDonor.GiveCancellableMacro(actionName, settingsService.Settings);
-
-        //    if (macro != null)
-        //    {
-        //        var handle = WindowHelper.GetHWND();
-        //        tokenSource = new CancellationTokenSource();
-
-        //        Action action = () =>
-        //        {
-        //            executing = true;
-        //            macro.Invoke(handle, tokenSource);
-        //            tokenSource = null;
-        //            tokenSource.Dispose();
-        //            executing = false;
-        //        };
-
-        //        Execute.AndForgetAsync(action);
-        //    }
-    }
-
-    public static class CancellationTokenSourceExtensionMethods
-    {
-        public static bool IsDiposedOrNull(this CancellationTokenSource source)
+        private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {
-            try
+            var handle = handleService.GetHandle();
+
+            if (@event.NewOpenWindow == Window.Urshi && tokenSource == null)
             {
-                bool y = source.IsCancellationRequested;
+                tokenSource = new CancellationTokenSource();
+
+                var macro = actionFinderService.FindAction(ActionName.Smart_UpgradeGem, handle, (int)@event.WindowExtraInformation[0]);
+
+                Execute.AndForgetAsync(() =>
+                {
+                    macro.Invoke();
+                    Trace.WriteLine("Nulling Smart now!");
+                    tokenSource = null;
+                });
             }
-            catch (Exception)
+            else if (@event.NewOpenWindow != default)
             {
-                return true;
+                Action action;
+
+                switch (@event.NewOpenWindow)
+                {
+                    case Window.Kadala when settingsService.SmartActionSettings.GambleEnabled:
+                        action = actionFinderService.FindAction(ActionName.Smart_Gamble, handle);
+                        break;
+
+                    case Window.Obelisk when settingsService.SmartActionSettings.StartRiftEnabled:
+                        if (settingsService.SmartActionSettings.UseRift)
+                        {
+                            action = actionFinderService.FindAction(ActionName.Smart_OpenRift, handle);
+                        }
+                        else
+                        {
+                            action = actionFinderService.FindAction(ActionName.Smart_OpenGrift, handle);
+                        }
+                        break;
+
+                    case Window.StartGame when settingsService.SmartActionSettings.StartGameEnabled:
+                        action = actionFinderService.FindAction(ActionName.Smart_StartGame, handle);
+                        break;
+
+                    case Window.AcceptGrift when settingsService.SmartActionSettings.AcceptGriftEnabled:
+                        action = actionFinderService.FindAction(ActionName.Smart_AcceptGriftPopup, handle);
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                Execute.AndForgetAsync(action);
             }
-            return false;
         }
     }
 }

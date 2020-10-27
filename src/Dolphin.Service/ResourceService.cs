@@ -7,11 +7,11 @@ namespace Dolphin.Service
 {
     public class ResourceService : IResourceService
     {
-        private readonly IDiabloCacheService cacheService;
+        private readonly IImageCacheService cacheService;
         private readonly IHandleService handleService; // Todo: By resolution
         private readonly ILogService logService;
 
-        public ResourceService(IDiabloCacheService cacheService, IHandleService handleService, ILogService logService)
+        public ResourceService(IImageCacheService cacheService, IHandleService handleService, ILogService logService)
         {
             this.cacheService = cacheService;
             this.logService = logService;
@@ -74,7 +74,11 @@ namespace Dolphin.Service
                     return $"Resource/Buff/{buffName}.png";
 
                 case WorldLocation location:
-                    return $"Resource/Location/{location}.png";
+                    return $"Resource/WorldLocation/{location}.png";
+
+                case Window window:
+                    return $"Resource/Window/{window}.png";
+
 
                 case PlayerClass playerClass:
                     return $"Resource/Player/PlayerClass/{playerClass}.png";
@@ -85,8 +89,11 @@ namespace Dolphin.Service
                 case Enum.PlayerResource resource:
                     return $"Resource/Player/PlayerResource/{resource}.png";
 
+                case ExtraInformation information:
+                    return $"Resource/ExtraInformation/{information}.png";
+
                 default:
-                    throw new NotImplementedException($"Didnt implement GetTypeBasedKey for type {enumValue.GetType().Name} in CacheService yet.");
+                    throw new NotImplementedException($"Didnt implement GetTypeBasedKey for type {enumValue.GetType().Name} in ResourceService yet.");
             }
         }
     }

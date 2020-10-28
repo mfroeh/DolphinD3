@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.Remoting.Messaging;
 
 namespace Dolphin.Service
 {
@@ -79,9 +80,11 @@ namespace Dolphin.Service
                 {
                     var skill = new Skill { Name = skillName, Index = index };
 
-                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index));
+                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index), index >= 4);
 
-                    if (similiaryPercentage >= 0.9975f)
+                    Trace.WriteLine($"{skillName} is active: {skill.IsActive}");
+
+                    if (similiaryPercentage >= 0.99f)
                     {
                         skill.CanBeCasted = true;
                         logService.AddEntry(this, $"Skill{index} is {skillName}.");
@@ -100,11 +103,18 @@ namespace Dolphin.Service
             return null;
         }
 
-        private bool IsActive(Bitmap bitmap)
+        private bool IsActive(Bitmap bitmap, bool isMouse)
         {
-            var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png"));
+            if (isMouse)
+            {
+                var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/Mouse/SkillActive.png"));
 
-            return result > 0.9f;
+                return result > 0.95f;
+            }
+            else
+            {
+                return ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png")) > 0.9f;
+            }
         }
     }
 }

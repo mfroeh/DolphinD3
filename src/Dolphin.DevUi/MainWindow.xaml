@@ -53,6 +53,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <Label
@@ -98,6 +99,12 @@
                 Grid.Column="1"
                 Command="{Binding ChangeOutputDirectory}"
                 Content="Change directory" />
+
+            <Button
+                Grid.Row="7"
+                Grid.Column="1"
+                Command="{Binding OpenInExplorer}"
+                Content="Open in explorer" />
         </Grid>
     </Grid>
 </Window>

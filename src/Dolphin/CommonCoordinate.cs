@@ -81,9 +81,9 @@ namespace Dolphin
 
         public static Point HealthBarTopLeft = new Point { X = 32, Y = 122 };
         public static Point PlayerClassTopLeft = new Point { X = 59, Y = 80 };
-        public static Point PrimaryResourceDemonHunterTopLeft = new Point { X = 1830, Y = 1230 }; // 1440p
+        public static Point PrimaryResourceDemonHunterTopLeft = new Point { X = 1368, Y = 919 };
         public static Point PrimaryResourceTopLeft = new Point { X = 1380, Y = 917 };
-        public static Point SecondaryResourceDemonHunterTopLeft = new Point { X = 1850, Y = 1230 };  // 1440p
+        public static Point SecondaryResourceDemonHunterTopLeft = new Point { X = 1388, Y = 919 };
 
         #endregion Player
 

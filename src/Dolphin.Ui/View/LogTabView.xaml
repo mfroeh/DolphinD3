@@ -54,7 +54,7 @@
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
                 FrozenColumnCount="1"
-                HorizontalScrollBarVisibility="Hidden"
+                HorizontalScrollBarVisibility="Auto"
                 ItemsSource="{Binding LogMessages}"
                 SelectedItem="{Binding SelectedLogItem}"
                 SelectionMode="Single"

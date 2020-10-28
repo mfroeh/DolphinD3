@@ -1,6 +1,8 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 
@@ -104,7 +106,14 @@ namespace Dolphin.Service
             var compareResult = GetHighestMatch(picturePart, modelService.GetPossiblePrimaryResourceEnum());
             logService.AddEntry(this, $"Player primary resource is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.");
 
-            modelService.SetPlayerPrimaryResource(compareResult.Item1);
+            if (compareResult.Item2 != 0f)
+            {
+                modelService.SetPlayerPrimaryResource(compareResult.Item1);
+            }
+            else
+            {
+                modelService.SetPlayerPrimaryResource(PlayerResource.None);
+            }
 
             return oldPrimary != modelService.Player.PrimaryResourcePercentage;
         }
@@ -121,10 +130,17 @@ namespace Dolphin.Service
 
             var oldSecondary = modelService.Player.SecondaryRessourcePercentage;
 
-            var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleSecondary());
+            var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleSecondaryResourceEnum());
             logService.AddEntry(this, $"Player secondary resource is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.");
 
-            modelService.SetPlayerSecondaryResource(compareResult.Item1);
+            if (compareResult.Item2 != 0f)
+            {
+                modelService.SetPlayerSecondaryResource(compareResult.Item1);
+            }
+            else
+            {
+                modelService.SetPlayerSecondaryResource(PlayerResource.None);
+            }
 
             return oldSecondary != modelService.Player.SecondaryRessourcePercentage;
         }

@@ -73,9 +73,21 @@
                 Margin="{adonisUi:Space Top=0}"
                 Orientation="Vertical">
                 <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="Location" />
-                <TextBox Margin="{adonisUi:Space Top=0, Bottom=0, Left=1, Right=0}" Text="{Binding CurrentLocation, Mode=OneWay}" />
+                <TextBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Bottom=0,
+                                            Left=1,
+                                            Right=0}"
+                    IsReadOnly="True"
+                    Text="{Binding CurrentLocation, Mode=OneWay}" />
                 <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="Open Window" />
-                <TextBox Margin="{adonisUi:Space Top=0, Bottom=0, Left=1, Right=0}" Text="{Binding OpenWindow, Mode=OneWay}" />
+                <TextBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Bottom=0,
+                                            Left=1,
+                                            Right=0}"
+                    IsReadOnly="True"
+                    Text="{Binding OpenWindow, Mode=OneWay}" />
             </WrapPanel>
 
             <WrapPanel
@@ -99,6 +111,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="64" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="64" />
@@ -118,31 +131,50 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Source="{Binding Path=CurrentSkills[0], Mode=OneWay}" />
-
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Content="{Binding CurrentSkillState[0]}" />
             <Image
                 Grid.Row="1"
                 Grid.Column="2"
                 Source="{Binding Path=CurrentSkills[1], Mode=OneWay}" />
-
+            <Label
+                Grid.Row="2"
+                Grid.Column="2"
+                Content="{Binding CurrentSkillState[1]}" />
             <Image
                 Grid.Row="1"
                 Grid.Column="4"
                 Source="{Binding Path=CurrentSkills[2], Mode=OneWay}" />
-
+            <Label
+                Grid.Row="2"
+                Grid.Column="4"
+                Content="{Binding CurrentSkillState[2]}" />
             <Image
                 Grid.Row="1"
                 Grid.Column="6"
                 Source="{Binding Path=CurrentSkills[3], Mode=OneWay}" />
-
+            <Label
+                Grid.Row="2"
+                Grid.Column="6"
+                Content="{Binding CurrentSkillState[3]}" />
             <Image
                 Grid.Row="1"
                 Grid.Column="8"
                 Source="{Binding Path=CurrentSkills[4], Mode=OneWay}" />
-
+            <Label
+                Grid.Row="2"
+                Grid.Column="8"
+                Content="{Binding CurrentSkillState[4]}" />
             <Image
                 Grid.Row="1"
                 Grid.Column="10"
                 Source="{Binding Path=CurrentSkills[5], Mode=OneWay}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="10"
+                Content="{Binding CurrentSkillState[5]}" />
         </Grid>
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using Dolphin.Enum;
 using Dolphin.Service;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
@@ -13,6 +14,7 @@ namespace Dolphin.Ui.ViewModel
         private readonly Subscription<PlayerInformationChangedEvent> playerInformationChanged;
         private readonly Subscription<SkillRecognitionChangedEvent> skillRecognitionChanged;
         private readonly Subscription<WorldInformationChangedEvent> worldInformationChanged;
+        private readonly Subscription<SkillCanBeCastedEvent> skillCanBeCasted;
 
         public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService)
         {
@@ -23,10 +25,12 @@ namespace Dolphin.Ui.ViewModel
             playerInformationChanged = new Subscription<PlayerInformationChangedEvent>(OnPlayerInformationChanged);
             skillRecognitionChanged = new Subscription<SkillRecognitionChangedEvent>(OnSkillRecognitionChanged);
             worldInformationChanged = new Subscription<WorldInformationChangedEvent>(OnWorldInformationChanged);
+            skillCanBeCasted = new Subscription<SkillCanBeCastedEvent>(OnSkillCanBeCasted);
 
             SubscribeBus(playerInformationChanged);
             SubscribeBus(skillRecognitionChanged);
             SubscribeBus(worldInformationChanged);
+            SubscribeBus(skillCanBeCasted);
 
             handleService.HandleStatusChanged += OnHandleChanged;
 
@@ -39,6 +43,8 @@ namespace Dolphin.Ui.ViewModel
                 "pack://application:,,,/Resource/Skill/EmptyFrame.png",
                 "pack://application:,,,/Resource/Skill/EmptyFrame.png",
             };
+
+            CurrentSkillState = new ObservableCollection<string> { "Cant cast", "Cant cast", "Cant cast", "Cant cast", "Cant cast", "Cant cast" };
 
             CurrentPlayerClass = "pack://application:,,,/Resource/Skill/EmptyFrame.png";
             CurrentHealth = 0;
@@ -125,8 +131,17 @@ namespace Dolphin.Ui.ViewModel
             if (CurrentSkills[@event.Index] != newResourcePath)
             {
                 CurrentSkills[@event.Index] = newResourcePath;
+                CurrentSkillState[@event.Index] = @event.NewSkillName == SkillName.None ? "" : "Cant be casted";
             }
         }
+
+        private void OnSkillCanBeCasted(object o, SkillCanBeCastedEvent @event)
+        {
+            var skill = modelService.GetSkill(@event.SkillIndex);
+            CurrentSkillState[@event.SkillIndex] = skill.IsActive ? "Can cast [Active]" : "Can cast";
+        }
+
+        public ObservableCollection<string> CurrentSkillState { get; set; }
 
         private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {

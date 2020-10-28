@@ -1,10 +1,4 @@
 ﻿using Dolphin.Service;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Dolphin.DevUi
@@ -20,9 +14,9 @@ namespace Dolphin.DevUi
 
             var handleService = new HandleService();
             var transformService = new TransformService(handleService);
-            var captureScreenService = new CaptureWindowService(handleService, transformService, null);
-            var cropImageService = new CropImageService(transformService, null);
-
+            var logService = new LogService(new Log());
+            var captureScreenService = new CaptureWindowService(handleService, transformService, logService);
+            var cropImageService = new CropImageService(transformService, logService);
             var saveImageService = new SaveImageService(cropImageService);
 
             var window = new MainWindow();

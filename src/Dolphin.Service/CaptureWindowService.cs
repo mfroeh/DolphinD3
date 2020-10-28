@@ -198,7 +198,7 @@ namespace Dolphin.Service
                     break;
 
                 case Window.Kadala:
-                    size = transformService.TranformSize(CommonSize.WindowKadala);
+                    size = transformService.TransformSize(CommonSize.WindowKadala);
                     point = transformService.TransformCoordinate(CommonCoordinate.WindowKadala);
                     break;
 

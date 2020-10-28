@@ -27,6 +27,6 @@ namespace Dolphin.DevUi.Properties
             }
         }
 
-        public string OutputDirectory { get; set; }
+        public string OutputDirectory { get; set; } = "Extracted";
     }
 }

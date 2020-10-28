@@ -77,7 +77,6 @@ namespace Dolphin.Ui.ViewModel
                 updateInterval = intValue;
                 settingsService.Settings.UpdateInterval = intValue;
                 RaisePropertyChanged(nameof(UpdateInterval));
-                ShowRestartDialog();
             }
         }
 

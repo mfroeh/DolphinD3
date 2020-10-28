@@ -13,7 +13,7 @@ namespace Dolphin
 
         IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum();
 
-        IEnumerable<Enum.PlayerResource> GetPossibleSecondary();
+        IEnumerable<Enum.PlayerResource> GetPossibleSecondaryResourceEnum();
 
         IEnumerable<SkillName> GetPossibleSkills(bool isMouse);
 

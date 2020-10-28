@@ -15,7 +15,7 @@ namespace Dolphin
         public static uint UpdateInterval => 100;
 
         public static IList<SkillName> EnabledSkills => new List<SkillName>() { SkillName.Devour, SkillName.LandOfTheDead,
-                                        SkillName.SkeletalMage, SkillName.BoneArmor, SkillName.Simulacrum, SkillName.BloodRush };
+                                        SkillName.SkeletalMage, SkillName.BoneArmor, SkillName.Simulacrum };
 
         public static IDictionary<ActionName, Hotkey> Hotkeys
         {

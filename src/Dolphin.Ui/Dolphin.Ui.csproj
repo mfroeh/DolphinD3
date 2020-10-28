@@ -1219,5 +1219,9 @@
     <Resource Include="Resource\Class\NecromancerFemale.png" />
     <Resource Include="Resource\Class\NecromancerMale.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Class\CrusaderFemale.png" />
+    <Resource Include="Resource\Class\CrusaderMale.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

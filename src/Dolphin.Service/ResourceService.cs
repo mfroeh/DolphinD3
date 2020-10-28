@@ -29,17 +29,25 @@ namespace Dolphin.Service
             }
 
             var path = GetTypeBastedPath(enumValue);
-            var bitmap = new Bitmap(path);
-
-            if (bitmap.PixelFormat != PixelFormat.Format24bppRgb)
+            try
             {
-                bitmap = ImageHelper.To24bppRgbFormat(bitmap);
+                var bitmap = new Bitmap(path);
+
+                if (bitmap.PixelFormat != PixelFormat.Format24bppRgb)
+                {
+                    bitmap = ImageHelper.To24bppRgbFormat(bitmap);
+                }
+
+                cacheService.Add(enumValue, bitmap);
+                logService.AddEntry(this, $"Loaded Image from [{path}] for {enumValue} and added to Cache.", LogLevel.Debug);
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                logService.AddEntry(this, $"Couldent load image for {enumValue}", LogLevel.Warning, ex);
             }
 
-            cacheService.Add(enumValue, bitmap);
-            logService.AddEntry(this, $"Loaded Image from [{path}] for {enumValue} and added to Cache.", LogLevel.Debug);
-
-            return bitmap;
+            return default;
         }
 
         public Bitmap LoadSkillBitmap(SkillName skillName, bool isMouse)
@@ -53,17 +61,25 @@ namespace Dolphin.Service
             }
 
             var path = isMouse ? $"Resource/Skill/Mouse/{skillName}.png" : $"Resource/Skill/{skillName}.png";
-
-            var bitmap = new Bitmap(path);
-            if (bitmap.PixelFormat != PixelFormat.Format24bppRgb)
+            try
             {
-                bitmap = ImageHelper.To24bppRgbFormat(bitmap);
+                var bitmap = new Bitmap(path);
+                if (bitmap.PixelFormat != PixelFormat.Format24bppRgb)
+                {
+                    bitmap = ImageHelper.To24bppRgbFormat(bitmap);
+                }
+
+                cacheService.AddSkillBitmap(skillName, isMouse, bitmap);
+                logService.AddEntry(this, $"Loaded Image from [{path}] for {skillName} and added to Cache.", LogLevel.Debug);
+
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                logService.AddEntry(this, $"Couldent load image for {skillName}", LogLevel.Warning, ex);
             }
 
-            cacheService.AddSkillBitmap(skillName, isMouse, bitmap);
-            logService.AddEntry(this, $"Loaded Image from [{path}] for {skillName} and added to Cache.", LogLevel.Debug);
-
-            return bitmap;
+            return default;
         }
 
         private string GetTypeBastedPath<T>(T enumValue)
@@ -78,7 +94,6 @@ namespace Dolphin.Service
 
                 case Window window:
                     return $"Resource/Window/{window}.png";
-
 
                 case PlayerClass playerClass:
                     return $"Resource/Player/PlayerClass/{playerClass}.png";

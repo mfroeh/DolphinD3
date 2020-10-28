@@ -8,6 +8,8 @@ namespace Dolphin
     {
         public static float Compare(Bitmap image, Bitmap template)
         {
+            if (image == null || template == null) return 0;
+
             var result = new ExhaustiveTemplateMatching(0)
                             .ProcessImage(image, template)[0]
                             .Similarity;

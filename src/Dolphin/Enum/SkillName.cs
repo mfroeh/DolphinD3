@@ -9,8 +9,6 @@
         ShadowPower = 4,
         Vengeance = 5,
         BoneArmor = 6,
-        BoneSpikes = 7,
-        BloodRush = 8,
         CommandSkeletons = 9,
         Devour = 10,
         SkeletalMage = 11,

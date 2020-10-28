@@ -7,119 +7,126 @@ namespace Dolphin.DevUi
 {
     public class SaveImageService : ISaveImageService
     {
-        private readonly ICropImageService captureWindowService;
+        private readonly ICropImageService cropWindowService;
 
         public SaveImageService(ICropImageService cropImageService)
         {
-            this.captureWindowService = cropImageService;
-
+            this.cropWindowService = cropImageService;
             Directory.CreateDirectory(Properties.Settings.Default.OutputDirectory);
         }
 
+        private string CurrentTime => DateTime.Now.ToString("HH_mm_ss");
+
+        private string OutputDirectory => Properties.Settings.Default.OutputDirectory;
+
+        private string OutputDirectoryDated => $"{OutputDirectory}/{CurrentTime}";
+
         public void SaveHealthbar(Bitmap bitmap)
         {
-            var image = captureWindowService.CropHealth(bitmap);
+            var image = cropWindowService.CropHealth(bitmap);
 
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerHealth");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Player/PlayerHealth");
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerHealth/H_FILLIN.png");
+            image.Save($"{OutputDirectoryDated}/Player/PlayerHealth/H_FILLIN.png");
         }
 
         public void SavePlayerClass(Bitmap bitmap)
         {
-            var image = captureWindowService.CropPlayerClass(bitmap);
+            var image = cropWindowService.CropPlayerClass(bitmap);
 
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerClass");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Player/PlayerClass");
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerClass/PlayerClass.png");
+            image.Save($"{OutputDirectoryDated}/Player/PlayerClass/PlayerClass.png");
         }
 
         public void SavePlayerResourcePrimary(Bitmap bitmap)
         {
-            var image = captureWindowService.CropPrimaryResource(bitmap, PlayerClass.NecromancerFemale);
+            var image = cropWindowService.CropPrimaryResource(bitmap, PlayerClass.NecromancerFemale);
 
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerResource");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Player/PlayerResource");
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerResource/PrimaryResource_FILLIN.png");
+            image.Save($"{OutputDirectoryDated}/Player/PlayerResource/PrimaryFILLIN_FILLIN.png");
         }
 
         public void SavePlayerResourcePrimaryDemonHunter(Bitmap bitmap)
         {
-            var image = captureWindowService.CropPrimaryResource(bitmap, PlayerClass.DemonHunterFemale);
+            var image = cropWindowService.CropPrimaryResource(bitmap, PlayerClass.DemonHunterFemale);
 
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerResource");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Player/PlayerResource");
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerResource/PrimaryResourceDemonHunter_FILLIN.png");
+            image.Save($"{OutputDirectoryDated}/Player/PlayerResource/PrimaryHatred_FILLIN.png");
         }
 
         public void SavePlayerResourceSecondaryDemonHunter(Bitmap bitmap)
         {
-            var image = captureWindowService.CropSecondaryResource(bitmap, PlayerClass.DemonHunterFemale);
+            var image = cropWindowService.CropSecondaryResource(bitmap, PlayerClass.DemonHunterFemale);
 
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerResource");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Player/PlayerResource");
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/Player/PlayerResource/SecondaryResourceDemonHunter_FILLIN.png");
+            image.Save($"{OutputDirectoryDated}/Player/PlayerResource/SecondaryDiscipline_FILLIN.png");
         }
 
         public void SavePlayerSkills(Bitmap bitmap)
         {
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Skill");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Skill");
 
             for (int i = 0; i < 4; i++)
             {
-                var skill = captureWindowService.CropSkillbar(bitmap, i);
+                var skill = cropWindowService.CropSkillbar(bitmap, i);
 
-                skill.Save($"{Properties.Settings.Default.OutputDirectory}/Skill/Skill{i}.png");
+                skill.Save($"{OutputDirectoryDated}/Skill/Skill{i}.png");
             }
         }
 
         public void SavePlayerSkillsActive(Bitmap bitmap)
         {
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Skill");
+
             for (int i = 0; i < 6; i++)
             {
-                var skill = captureWindowService.CropSkillActive(bitmap, i);
+                var skill = cropWindowService.CropSkillActive(bitmap, i);
 
-                skill.Save($"{Properties.Settings.Default.OutputDirectory}Skill{i}_Active.png");
+                skill.Save($"{OutputDirectoryDated}/Skill{i}_Active.png");
             }
         }
 
         public void SavePlayerSkillsMouse(Bitmap bitmap)
         {
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Skill/Mouse");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Skill/Mouse");
 
             for (int i = 4; i < 6; i++)
             {
-                var skill = captureWindowService.CropSkillbar(bitmap, i);
+                var skill = cropWindowService.CropSkillbar(bitmap, i);
 
-                skill.Save($"{Properties.Settings.Default.OutputDirectory}/Skill/Mouse/Skill{i}.png");
+                skill.Save($"{OutputDirectoryDated}/Skill/Mouse/Skill{i}.png");
             }
         }
 
         public void SaveUrshiGemUp(Bitmap bitmap, int gemUp)
         {
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/ExtraInformation");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/ExtraInformation");
 
-            var image = captureWindowService.CropUrshiGemUp(bitmap);
+            var image = cropWindowService.CropUrshiGemUp(bitmap);
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/ExtraInformation/Urshi_{gemUp}.png");
+            image.Save($"{OutputDirectoryDated}/ExtraInformation/Urshi_{gemUp}.png");
         }
 
         public void SaveWindow(Bitmap bitmap, Window window)
         {
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/Window");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/Window");
 
-            var image = captureWindowService.CropWindow(bitmap, window);
+            var image = cropWindowService.CropWindow(bitmap, window);
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/Window/{window}.png");
+            image.Save($"{OutputDirectoryDated}/Window/{window}.png");
         }
 
         public void SaveWorldLocation(Bitmap bitmap, WorldLocation location)
         {
-            Directory.CreateDirectory($"{Properties.Settings.Default.OutputDirectory}/WorldLocation");
+            Directory.CreateDirectory($"{OutputDirectoryDated}/WorldLocation");
 
-            var image = captureWindowService.CropWorldLocation(bitmap, location);
+            var image = cropWindowService.CropWorldLocation(bitmap, location);
 
-            image.Save($"{Properties.Settings.Default.OutputDirectory}/WorldLocation/{location}.png");
+            image.Save($"{OutputDirectoryDated}/WorldLocation/{location}.png");
         }
     }
 }

@@ -7,11 +7,10 @@ namespace Dolphin.Service
     {
         private readonly Subscription<HotkeyPressedEvent> hotkeySubscription;
         private readonly ILogService logService;
-        private Settings settings;
 
         public SettingsService(IEventBus eventBus, Settings settings, ILogService logService) : base(eventBus)
         {
-            this.settings = settings;
+            Settings = settings;
             this.logService = logService;
 
             hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
@@ -20,7 +19,7 @@ namespace Dolphin.Service
 
         public MacroSettings MacroSettings => Settings.MacroSettings;
 
-        public Settings Settings => settings;
+        public Settings Settings { get; private set; }
 
         public SmartActionSettings SmartActionSettings => Settings.SmartActionSettings;
 
@@ -41,6 +40,11 @@ namespace Dolphin.Service
             return Settings.OtherKeybindings[command];
         }
 
+        public bool IsSmartActionEnabled(ActionName smartAction)
+        {
+            return Settings.EnabledSmartActions.Contains(smartAction);
+        }
+
         public void NegateIsPaused(bool isFromChanging)
         {
             Settings.IsPaused = !Settings.IsPaused;
@@ -55,7 +59,7 @@ namespace Dolphin.Service
 
         public void ResetSettings()
         {
-            settings = new Settings(true);
+            Settings = new Settings(true);
         }
 
         // Todo: Implement for specific types?

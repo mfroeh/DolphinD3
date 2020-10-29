@@ -5,7 +5,7 @@ namespace Dolphin
 {
     public interface ICropImageService
     {
-        public Bitmap CropHealth(Bitmap image);
+        public Bitmap CropHealthbar(Bitmap image);
 
         public Bitmap CropPlayerClass(Bitmap image);
 

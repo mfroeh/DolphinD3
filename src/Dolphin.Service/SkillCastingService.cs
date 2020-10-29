@@ -24,10 +24,9 @@ namespace Dolphin.Service
 
         private void CastSkill(object o, SkillCanBeCastedEvent @event)
         {
-            var handle = handleService.GetHandle();
+            var handle = handleService.GetHandle("Diablo III64");
 
-            if (handle == default) return;
-            if (!settingsService.SkillIsEnabled(@event.SkillName)) return;
+            if (handle == default || !settingsService.SkillIsEnabled(@event.SkillName)) return;
 
             Action action;
             if (@event.SkillIndex <= 3)

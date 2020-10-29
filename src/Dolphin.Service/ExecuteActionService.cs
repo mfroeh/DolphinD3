@@ -9,7 +9,12 @@ namespace Dolphin.Service
 {
     public class ExecuteActionService : EventSubscriberBase
     {
-        private static readonly IList<ActionName> cancellableMacros = new List<ActionName> { ActionName.CubeConverterDualSlot, ActionName.CubeConverterSingleSlot, ActionName.UpgradeGem };
+        private static readonly IList<ActionName> cancellableMacros = new List<ActionName>
+        {
+            ActionName.CubeConverterDualSlot,
+            ActionName.CubeConverterSingleSlot,
+            ActionName.UpgradeGem
+        };
 
         private readonly IActionFinderService actionFinderService;
         private readonly Subscription<HotkeyPressedEvent> cancelExecutionSubscriber;
@@ -21,13 +26,11 @@ namespace Dolphin.Service
         private readonly ISettingsService settingsService;
         private CancellationTokenSource tokenSource;
 
-        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService macroFinderService, IHandleService handleService) : base(eventBus)
+        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService actionFinderService, IHandleService handleService) : base(eventBus)
         {
             this.settingsService = settingsService;
-            this.actionFinderService = macroFinderService;
+            this.actionFinderService = actionFinderService;
             this.handleService = handleService;
-
-            Trace.WriteLine(handleService.GetHashCode());
 
             executeMacroCancelable = new Subscription<HotkeyPressedEvent>(ExecuteMacroCancelable);
             executeMacro = new Subscription<HotkeyPressedEvent>(ExecuteMacro);
@@ -44,7 +47,7 @@ namespace Dolphin.Service
         {
             if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
             {
-                InputHelper.SendKey(handleService.GetHandle(), Keys.Escape);
+                InputHelper.SendKey(handleService.GetHandle("Diablo III64"), Keys.Escape);
 
                 if (tokenSource != null)
                 {
@@ -56,17 +59,12 @@ namespace Dolphin.Service
         public void ExecuteMacro(object o, HotkeyPressedEvent e)
         {
             var actionName = settingsService.GetActionName(e.PressedHotkey);
-
             if (cancellableMacros.Contains(actionName)) return;
 
-            var handle = handleService.GetHandle();
-
-            if (handle == default) return;
-            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause]
-                || e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
-            {
-                return;
-            }
+            var handle = handleService.GetHandle("Diablo III64");
+            if (handle == default ||
+                e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause] ||
+                e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction]) return;
 
             var macro = actionFinderService.FindAction(actionName, handle, tokenSource);
 
@@ -76,17 +74,12 @@ namespace Dolphin.Service
         public void ExecuteMacroCancelable(object o, HotkeyPressedEvent e)
         {
             var actionName = settingsService.GetActionName(e.PressedHotkey);
-
             if (!cancellableMacros.Contains(actionName)) return;
 
-            var handle = handleService.GetHandle();
-
-            if (handle == default) return;
-            if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause]
-                || e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
-            {
-                return;
-            }
+            var handle = handleService.GetHandle("Diablo III64");
+            if (handle == default ||
+                e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.Pause] ||
+                e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction]) return;
 
             if (tokenSource == null)
             {
@@ -94,66 +87,73 @@ namespace Dolphin.Service
 
                 var macro = actionFinderService.FindAction(actionName, handle, tokenSource);
 
-                Execute.AndForgetAsync(() =>
-                {
-                    macro.Invoke();
-                    Trace.WriteLine("Nulling now!");
-                    tokenSource = null;
-                });
+                ExecuteAndResetTokenSource(macro);
             }
+        }
+
+        private void ExecuteAndResetTokenSource(Action action)
+        {
+            Execute.AndForgetAsync(() =>
+            {
+                action.Invoke();
+                Trace.WriteLine("Nulling now!");
+                tokenSource = null;
+            });
         }
 
         private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {
-            var handle = handleService.GetHandle();
+            var handle = handleService.GetHandle("Diablo III64");
 
-            if (@event.NewOpenWindow == Window.Urshi && tokenSource == null)
+            if (@event.NewOpenWindow == default || handle == default) return;
+
+            if (@event.NewOpenWindow == Window.Urshi && settingsService.IsSmartActionEnabled(ActionName.Smart_UpgradeGem) && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
 
                 var macro = actionFinderService.FindAction(ActionName.Smart_UpgradeGem, handle, (int)@event.WindowExtraInformation[0]);
 
-                Execute.AndForgetAsync(() =>
+                ExecuteAndResetTokenSource(macro);
+            }
+            else if (@event.NewOpenWindow == Window.Kadala && settingsService.IsSmartActionEnabled(ActionName.Smart_Gamble) && tokenSource == null)
+            {
+                tokenSource = new CancellationTokenSource();
+
+                var action = actionFinderService.FindAction(ActionName.Smart_Gamble, handle);
+
+                ExecuteAndResetTokenSource(() =>
                 {
-                    macro.Invoke();
-                    Trace.WriteLine("Nulling Smart now!");
-                    tokenSource = null;
+                    action.Invoke();
+                    Thread.Sleep(200);
                 });
             }
-            else if (@event.NewOpenWindow != default)
+
+            switch (@event.NewOpenWindow)
             {
-                Action action;
+                case Window.Obelisk:
+                    if (settingsService.IsSmartActionEnabled(ActionName.Smart_OpenGrift))
+                    {
+                        Execute.AndForgetAsync(actionFinderService.FindAction(ActionName.Smart_OpenGrift, handle));
+                    }
+                    else if (settingsService.IsSmartActionEnabled(ActionName.Smart_OpenRift))
+                    {
+                        Execute.AndForgetAsync(actionFinderService.FindAction(ActionName.Smart_OpenRift, handle));
+                    }
+                    break;
 
-                switch (@event.NewOpenWindow)
-                {
-                    case Window.Kadala when settingsService.SmartActionSettings.GambleEnabled:
-                        action = actionFinderService.FindAction(ActionName.Smart_Gamble, handle);
-                        break;
+                case Window.StartGame:
+                    if (settingsService.IsSmartActionEnabled(ActionName.Smart_StartGame))
+                    {
+                        Execute.AndForgetAsync(actionFinderService.FindAction(ActionName.Smart_StartGame, handle));
+                    }
+                    break;
 
-                    case Window.Obelisk when settingsService.SmartActionSettings.StartRiftEnabled:
-                        if (settingsService.SmartActionSettings.UseRift)
-                        {
-                            action = actionFinderService.FindAction(ActionName.Smart_OpenRift, handle);
-                        }
-                        else
-                        {
-                            action = actionFinderService.FindAction(ActionName.Smart_OpenGrift, handle);
-                        }
-                        break;
-
-                    case Window.StartGame when settingsService.SmartActionSettings.StartGameEnabled:
-                        action = actionFinderService.FindAction(ActionName.Smart_StartGame, handle);
-                        break;
-
-                    case Window.AcceptGrift when settingsService.SmartActionSettings.AcceptGriftEnabled:
-                        action = actionFinderService.FindAction(ActionName.Smart_AcceptGriftPopup, handle);
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-
-                Execute.AndForgetAsync(action);
+                case Window.AcceptGrift:
+                    if (settingsService.IsSmartActionEnabled(ActionName.Smart_AcceptGriftPopup))
+                    {
+                        Execute.AndForgetAsync(actionFinderService.FindAction(ActionName.Smart_AcceptGriftPopup, handle));
+                    }
+                    break;
             }
         }
     }

@@ -63,6 +63,7 @@
     </ApplicationDefinition>
     <Compile Include="CustomFrameworkDialogFactory.cs" />
     <Compile Include="CustomMessageBox.cs" />
+    <Compile Include="ShouldSerializeContractResolver.cs" />
     <Compile Include="ViewModel\OverviewTabViewModel.cs" />
     <Compile Include="ViewModel\SettingsTabViewModel.cs" />
     <Compile Include="View\OverviewTabView.xaml.cs">
@@ -185,6 +186,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dolphin.Image\Dolphin.Image.csproj">
+      <Project>{a643ff5d-d723-4223-9bda-917dcb6fefcd}</Project>
+      <Name>Dolphin.Image</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
       <Project>{1966956e-6203-42f0-b3d4-376d17d83677}</Project>
       <Name>Dolphin.Service</Name>

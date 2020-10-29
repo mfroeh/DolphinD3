@@ -1,6 +1,5 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.IO;
 
 namespace Dolphin.Service
 {
@@ -19,14 +18,12 @@ namespace Dolphin.Service
 
         public void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
-            var currentTime = DateTime.Now;
-            var fullMessage = $"[{currentTime}]---LogLevel: {logLevel}, Type: {origin.GetType().FullName}, Message: {message}";
-
             if (ex != null)
             {
-                fullMessage += $", Exception: {ex}";
                 message += $", Exception: {ex}";
             }
+
+            var fullMessage = $"[{DateTime.Now}]---LogLevel: {logLevel}, Type: {origin.GetType().FullName}, Message: {message}";
 
             internalLog.Entries.Add(fullMessage);
             if (internalLog.Entries.Count >= 2500)
@@ -35,12 +32,12 @@ namespace Dolphin.Service
                 internalLog.Entries.Clear();
             }
 
-            Execute.OnUIThreadAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = currentTime, Type = origin.GetType().FullName }));
+            Execute.OnUIThreadAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = DateTime.Now, Type = origin.GetType().Name }));
         }
 
         public void SaveLog()
         {
-           //TODO: File.AppendAllLines(savePath, internalLog.Entries);
+            //TODO: File.AppendAllLines(savePath, internalLog.Entries);
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Dolphin.Service
@@ -15,7 +13,22 @@ namespace Dolphin.Service
             this.poolService = poolService;
         }
 
-        public Point GetActCoordinate(ActionName actionName)
+        public Tuple<Point, Point> GetKadalaCoordinates(ItemType itemType)
+        {
+            return Tuple.Create(GetKadalaTabCoordinate(itemType), GetKadalaItemCoordinate(itemType));
+        }
+
+        public Tuple<Point, Point> GetNextPoolSpot()
+        {
+            return poolService.GetNextPoolSpot();
+        }
+
+        public Tuple<Point, Point> GetTownCoordinates(ActionName actionName)
+        {
+            return Tuple.Create(GetActCoordinate(actionName), GetTownCoordinate(actionName));
+        }
+
+        private Point GetActCoordinate(ActionName actionName)
         {
             switch (actionName)
             {
@@ -36,7 +49,7 @@ namespace Dolphin.Service
             }
         }
 
-        public Point GetActCoordinate(int act)
+        private Point GetActCoordinate(int act)
         {
             switch (act)
             {
@@ -60,7 +73,7 @@ namespace Dolphin.Service
             }
         }
 
-        public Point GetKadalaItemCoordinate(ItemType itemType)
+        private Point GetKadalaItemCoordinate(ItemType itemType)
         {
             switch (itemType)
             {
@@ -100,11 +113,11 @@ namespace Dolphin.Service
                     return CommonCoordinate.KadalaItemRight4;
 
                 default:
-                    return new Point(0, 0);
+                    return default;
             }
         }
 
-        public Point GetKadalaTabCoordinate(ItemType itemType)
+        private Point GetKadalaTabCoordinate(ItemType itemType)
         {
             switch (itemType)
             {
@@ -125,12 +138,7 @@ namespace Dolphin.Service
             }
         }
 
-        public Tuple<Point, Point> GetNextPoolSpot()
-        {
-            return poolService.GetNextPoolSpot();
-        }
-
-        public Point GetTownCoordinate(ActionName actionName)
+        private Point GetTownCoordinate(ActionName actionName)
         {
             switch (actionName)
             {
@@ -151,7 +159,7 @@ namespace Dolphin.Service
             }
         }
 
-        public Point GetTownCoordinate(int act)
+        private Point GetTownCoordinate(int act)
         {
             switch (act)
             {

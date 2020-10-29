@@ -4,9 +4,11 @@ namespace Dolphin
 {
     public class Waypoint : INotifyPropertyChanged
     {
-        public int Act { get; set; }
+        private bool enabled = true;
 
-        private bool enabled;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int Act { get; set; }
 
         public bool Enabled
         {
@@ -19,8 +21,6 @@ namespace Dolphin
         }
 
         public string Name { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName)
         {

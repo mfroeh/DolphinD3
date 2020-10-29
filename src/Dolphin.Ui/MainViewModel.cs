@@ -18,25 +18,25 @@ namespace Dolphin.Ui
             this.eventBus = eventBus;
             this.settingsService = settingsService;
 
-            var tab0 = container.Resolve<IViewModelBase>("hotkeyTab");
-            tab0.Parent = this;
-            Children.Add(tab0);
+            var hotkeyTab = container.Resolve<IViewModelBase>("hotkeyTab");
+            hotkeyTab.Parent = this;
+            Children.Add(hotkeyTab);
 
-            var tab1 = container.Resolve<IViewModelBase>("featureTab");
-            tab1.Parent = this;
-            Children.Add(tab1);
+            var featureTab = container.Resolve<IViewModelBase>("featureTab");
+            featureTab.Parent = this;
+            Children.Add(featureTab);
 
-            var tab2 = container.Resolve<IViewModelBase>("logTab");
-            tab2.Parent = this;
-            Children.Add(tab2);
+            var logTab = container.Resolve<IViewModelBase>("logTab");
+            logTab.Parent = this;
+            Children.Add(logTab);
 
-            var tab3 = container.Resolve<IViewModelBase>("settingsTab");
-            tab3.Parent = this;
-            Children.Add(tab3);
+            var settingsTab = container.Resolve<IViewModelBase>("settingsTab");
+            settingsTab.Parent = this;
+            Children.Add(settingsTab);
 
-            var tab4 = container.Resolve<IViewModelBase>("overviewTab");
-            tab4.Parent = this;
-            Children.Add(tab4);
+            var overviewTab = container.Resolve<IViewModelBase>("overviewTab");
+            overviewTab.Parent = this;
+            Children.Add(overviewTab);
 
             IsDark = settingsService.Settings.UiSettings.IsDark;
             Status = "Ready";

@@ -1,4 +1,5 @@
-﻿using Dolphin.Service;
+﻿using Dolphin.Image;
+using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
 using MvvmDialogs.DialogFactories;
@@ -23,29 +24,40 @@ namespace Dolphin.Ui
     /// </summary>
     public partial class App : Application
     {
-        public WindowPlace WindowPlace { get; }
+        public WindowPlace WindowPlace { get; private set; }
 
         private IUnityContainer container = new UnityContainer();
 
-        public App()
+        private Settings LoadSettings()
         {
-            WindowPlace = new WindowPlace("placement.config");
+            var contractResolver = new ShouldSerializeContractResolver();
+            var serializerSettings = new JsonSerializerSettings { ContractResolver = contractResolver };
+
+            Settings settings;
+            try
+            {
+                var json = File.ReadAllText("settings.json");
+
+                settings = JsonConvert.DeserializeObject<Settings>(json, serializerSettings);
+            }
+            catch
+            {
+                settings = new Settings(true);
+            }
+
+            return settings;
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            try
-            {
-                var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<Settings>(json);
-                container.RegisterInstance(settings);
-            }
-            catch
-            {
-                container.RegisterInstance(new Settings(true));
-            }
+            WindowPlace = new WindowPlace("placement.config");
+
+            var settings = LoadSettings();
+
+            #region Register
+            container.RegisterInstance(settings);
 
             container.RegisterInstance(new Player());
             container.RegisterInstance(new World());
@@ -94,6 +106,8 @@ namespace Dolphin.Ui
 
             container.RegisterType<ActionService, ActionService>(); // Does this work?
 
+            #endregion
+
             container.AddExtension(new Diagnostic());
 
             var mainVM = container.Resolve<IViewModelBase>("main");
@@ -105,23 +119,7 @@ namespace Dolphin.Ui
             var logService = container.Resolve<ILogService>();
             var random = new Random();
 
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    handleService.UpdateHandle();
-                    Thread.Sleep(1000);
-                }
-            });
-
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
-                    Thread.Sleep(1000);
-                }
-            });
+            handleService.MainLoop("Diablo III64");
 
             var captureService = container.Resolve<ICaptureWindowService>();
             var extractSkillService = container.Resolve<IExtractInformationService>("extractSkillInformation");
@@ -135,7 +133,7 @@ namespace Dolphin.Ui
                 {
                     try
                     {
-                        var handle = handleService.GetHandle();
+                        var handle = handleService.GetHandle("Diablo III64");
                         if (handle != IntPtr.Zero && !_settings.IsPaused)//!settingsService.Settings.IsPaused)
                         {
                             using (var image = captureService.CaptureWindow("Diablo III64"))

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1966956E-6203-42F0-B3D4-376D17D83677}</ProjectGuid>
+    <ProjectGuid>{A643FF5D-D723-4223-9BDA-917DCB6FEFCD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dolphin.Service</RootNamespace>
-    <AssemblyName>Dolphin.Service</AssemblyName>
+    <RootNamespace>Dolphin.Image</RootNamespace>
+    <AssemblyName>Dolphin.Image</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,38 +29,41 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ActionService.cs" />
-    <Compile Include="ConditionFinderService.cs" />
-    <Compile Include="HandleService.cs" />
-    <Compile Include="ExecuteActionService.cs" />
-    <Compile Include="HotkeyListenerService.cs" />
-    <Compile Include="LogService.cs" />
-    <Compile Include="ActionFinderService.cs" />
-    <Compile Include="ModelService.cs" />
-    <Compile Include="PoolSpotService.cs" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CaptureWindowService.cs" />
+    <Compile Include="CommonImageCoordinate.cs" />
+    <Compile Include="CommonImageSize.cs" />
+    <Compile Include="CropImageService.cs" />
+    <Compile Include="ExtractPlayerInformationService.cs" />
+    <Compile Include="ExtractSkillInformationService.cs" />
+    <Compile Include="ExtractWorldInformationService.cs" />
+    <Compile Include="ImageCacheService.cs" />
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsService.cs" />
-    <Compile Include="SkillCastingService.cs" />
-    <Compile Include="TransformService.cs" />
-    <Compile Include="TravelInformationService.cs" />
+    <Compile Include="ResourceService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dolphin\Dolphin.csproj">
       <Project>{8f47c780-b17e-494a-a541-7bb5682e7568}</Project>
       <Name>Dolphin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HotkeyListener\HotkeyListener.csproj">
-      <Project>{b8b41b35-3d81-4e81-a0d4-24002ef895b9}</Project>
-      <Name>HotkeyListener</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="AForge.Imaging">
+      <Version>2.2.5</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

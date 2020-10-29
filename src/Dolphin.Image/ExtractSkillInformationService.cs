@@ -1,16 +1,15 @@
 ﻿using Dolphin.Enum;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.Remoting.Messaging;
 
-namespace Dolphin.Service
+namespace Dolphin.Image
 {
+    // TODO: OVERDO
     public class ExtractSkillInformationService : IExtractInformationService, IEventPublisher<SkillCanBeCastedEvent>, IEventPublisher<SkillRecognitionChangedEvent>
     {
         private readonly IEventBus eventBus;
-        private readonly ILogService logService;
         private readonly ICropImageService imageService;
+        private readonly ILogService logService;
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
@@ -25,11 +24,7 @@ namespace Dolphin.Service
 
         public void Extract(Bitmap bitmap)
         {
-            if (bitmap == null)
-            {
-                logService.AddEntry(this, "Bitmap was null");
-                return;
-            }
+            if (bitmap == null) return;
 
             for (int i = 0; i < 6; i++)
             {
@@ -62,12 +57,6 @@ namespace Dolphin.Service
             eventBus.Publish(@event);
         }
 
-        private bool CanCast(Bitmap bitmap)
-        {
-            // TODO:
-            return default;
-        }
-
         private Skill ExtractSkill(Bitmap picturePart, int index, Bitmap fullBitmap)
         {
             foreach (var skillName in modelService.GetPossibleSkills(index >= 4))
@@ -87,18 +76,18 @@ namespace Dolphin.Service
                     if (similiaryPercentage >= 0.99f)
                     {
                         skill.CanBeCasted = true;
-                        logService.AddEntry(this, $"Skill{index} is {skillName}.");
+                        logService.AddEntry(this, $"Skill{index} is {skillName}.", LogLevel.Debug);
                     }
                     else
                     {
-                        logService.AddEntry(this, $"Skill{index} is {skillName}, but is either active or not castable.");
+                        logService.AddEntry(this, $"Skill{index} is {skillName}, but is either active or not castable.", LogLevel.Debug);
                     }
 
                     return skill;
                 }
             }
 
-            logService.AddEntry(this, $"Couldn't identify Skill{index}.");
+            logService.AddEntry(this, $"Couldn't identify Skill{index}.", LogLevel.Debug);
 
             return null;
         }
@@ -109,11 +98,16 @@ namespace Dolphin.Service
             {
                 var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/Mouse/SkillActive.png"));
 
+                Trace.WriteLine(result);
+
                 return result > 0.95f;
             }
             else
             {
-                return ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png")) > 0.9f;
+                var x = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png"));
+                Trace.WriteLine(x);
+
+                return x > 0.9f;
             }
         }
     }

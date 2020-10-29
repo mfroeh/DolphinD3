@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Dolphin.Service
+namespace Dolphin
 {
     public class EventBus : IEventBus
     {

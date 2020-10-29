@@ -11,14 +11,14 @@ namespace Dolphin.Service
 
         public event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
 
-        public IntPtr GetHandle(string processName = "Diablo III64")
+        public IntPtr GetHandle(string processName)
         {
             handles.TryGetValue(processName, out IntPtr handle);
 
             return handle;
         }
 
-        public void UpdateHandle(string processName = "Diablo III64")
+        public void UpdateHandle(string processName)
         {
             var handle = WindowHelper.GetHWND(processName);
 
@@ -26,19 +26,23 @@ namespace Dolphin.Service
             {
                 handles[processName] = handle;
 
-                WindowHelper.GetWindowThreadProcessId(handle, out var processId);
+                var processId = WindowHelper.GetWindowThreadProcessId(handle);
 
                 HandleStatusChanged?.Invoke(this, new HandleChangedEventArgs { ProcessName = processName, NewHandle = handle, NewProcessId = processId });
             }
         }
 
-        public Task MainLoop()
+        public Task MainLoop(params string[] processNames)
         {
             return Task.Run(() =>
             {
                 while (true)
                 {
-                    UpdateHandle();
+                    foreach (var processName in processNames)
+                    {
+                        UpdateHandle(processName);
+                    }
+
                     Thread.Sleep(1000);
                 }
             });

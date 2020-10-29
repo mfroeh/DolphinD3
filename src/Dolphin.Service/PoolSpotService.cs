@@ -57,8 +57,10 @@ namespace Dolphin.Service
                     return CommonCoordinate.MapAct3;
                 case 4:
                     return CommonCoordinate.MapAct4;
-                default:
+                case 5:
                     return CommonCoordinate.MapAct5;
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

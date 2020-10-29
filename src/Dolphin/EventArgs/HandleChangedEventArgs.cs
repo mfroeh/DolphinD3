@@ -2,10 +2,12 @@
 
 namespace Dolphin
 {
-    public class HandleChangedEventArgs
+    public class HandleChangedEventArgs : EventArgs
     {
-        public string ProcessName { get; set; }
-        public uint NewProcessId { get; set; }
         public IntPtr NewHandle { get; set; }
+
+        public uint NewProcessId { get; set; }
+
+        public string ProcessName { get; set; }
     }
 }

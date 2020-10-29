@@ -1,5 +1,4 @@
-﻿using Dolphin.Enum;
-using System;
+﻿using System;
 using System.Drawing;
 
 namespace Dolphin

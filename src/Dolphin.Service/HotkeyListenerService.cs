@@ -17,10 +17,10 @@ namespace Dolphin.Service
             this.settingsService = settingsService;
             this.logService = logService;
 
-            hotkeyListener.HotkeyPressed += OnHotkeyPressed;
-
             pausedSubscription = new Subscription<PausedEvent>(PausedHandler);
             SubscribeBus(pausedSubscription);
+
+            hotkeyListener.HotkeyPressed += OnHotkeyPressed;
 
             foreach (var hotkey in settingsService.Settings.Hotkeys.Values.ToList().Where(x => x != null))
             {

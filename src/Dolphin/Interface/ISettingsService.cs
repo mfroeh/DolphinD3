@@ -12,11 +12,9 @@ namespace Dolphin
 
         UiSettings UiSettings { get; }
 
-        SmartActionSettings SmartActionSettings { get; }
-
         ActionName GetActionName(Hotkey hotkey);
 
-        void SetPaused(bool newPaused, bool isFromChanging);
+        Keys GetKeybinding(Command command);
 
         public void ResetSettings<T>();
 
@@ -24,8 +22,10 @@ namespace Dolphin
 
         void SetHotkeyValue(ActionName key, Hotkey value);
 
+        void SetPaused(bool newPaused, bool isFromChanging);
+
         bool SkillIsEnabled(SkillName skill);
 
-        Keys GetKeybinding(Command command);
+        bool IsSmartActionEnabled(ActionName smartAction);
     }
 }

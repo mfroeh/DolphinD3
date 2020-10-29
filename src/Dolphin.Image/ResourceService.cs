@@ -3,12 +3,12 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Dolphin.Service
+namespace Dolphin.Image
 {
     public class ResourceService : IResourceService
     {
         private readonly IImageCacheService cacheService;
-        private readonly IHandleService handleService; // Todo: By resolution
+        private readonly IHandleService handleService;
         private readonly ILogService logService;
 
         public ResourceService(IImageCacheService cacheService, IHandleService handleService, ILogService logService)
@@ -21,12 +21,8 @@ namespace Dolphin.Service
         public Bitmap Load<T>(T enumValue)
         {
             var cachedBitmap = cacheService.Get<T, Bitmap>(enumValue);
-            if (cachedBitmap != null)
-            {
-                logService.AddEntry(this, $"Found Image for {enumValue} in Cache.", LogLevel.Debug);
 
-                return cachedBitmap;
-            }
+            if (cachedBitmap != null) return cachedBitmap;
 
             var path = GetTypeBastedPath(enumValue);
             try
@@ -40,6 +36,7 @@ namespace Dolphin.Service
 
                 cacheService.Add(enumValue, bitmap);
                 logService.AddEntry(this, $"Loaded Image from [{path}] for {enumValue} and added to Cache.", LogLevel.Debug);
+
                 return bitmap;
             }
             catch (Exception ex)
@@ -53,12 +50,7 @@ namespace Dolphin.Service
         public Bitmap LoadSkillBitmap(SkillName skillName, bool isMouse)
         {
             var cachedBitmap = cacheService.GetSkillBitmap(skillName, isMouse);
-            if (cachedBitmap != null)
-            {
-                logService.AddEntry(this, $"Found Image for {skillName} in Cache.", LogLevel.Debug);
-
-                return cachedBitmap;
-            }
+            if (cachedBitmap != null) return cachedBitmap;
 
             var path = isMouse ? $"Resource/Skill/Mouse/{skillName}.png" : $"Resource/Skill/{skillName}.png";
             try

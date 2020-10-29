@@ -23,7 +23,7 @@ namespace Dolphin.DevUi
 
         public void SaveHealthbar(Bitmap bitmap)
         {
-            var image = cropWindowService.CropHealth(bitmap);
+            var image = cropWindowService.CropHealthbar(bitmap);
 
             Directory.CreateDirectory($"{OutputDirectoryDated}/Player/PlayerHealth");
 

@@ -202,11 +202,11 @@ namespace Dolphin.Service
             }
         }
 
-        public void SetPlayerPrimaryResource(Enum.PlayerResource primary)
+        public void SetPlayerPrimaryResource(PlayerResource primary)
         {
             if (primary.ToString().StartsWith("Secondary")) throw new Exception("Recived secondary resource in SetPlayerPrimaryResource()");
 
-            if (primary == Enum.PlayerResource.None)
+            if (primary == PlayerResource.None)
             {
                 Player.PrimaryResourcePercentage = 0;
             }
@@ -216,11 +216,11 @@ namespace Dolphin.Service
             }
         }
 
-        public void SetPlayerSecondaryResource(Enum.PlayerResource secondary)
+        public void SetPlayerSecondaryResource(PlayerResource secondary)
         {
             if (secondary.ToString().StartsWith("Primary")) throw new Exception("Recived primary resource in SetPlayerSecondaryResource()");
 
-            if (secondary == Enum.PlayerResource.None)
+            if (secondary == PlayerResource.None)
             {
                 Player.SecondaryRessourcePercentage = 0;
             }

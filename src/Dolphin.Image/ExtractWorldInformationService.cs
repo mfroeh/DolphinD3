@@ -1,7 +1,7 @@
 ﻿using Dolphin.Enum;
 using System.Drawing;
 
-namespace Dolphin.Service
+namespace Dolphin.Image
 {
     public class ExtractWorldInformationService : IExtractInformationService, IEventPublisher<WorldInformationChangedEvent>
     {
@@ -11,13 +11,13 @@ namespace Dolphin.Service
         private readonly IModelService modelService;
         private readonly IResourceService resourceService;
 
-        public ExtractWorldInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICropImageService imageService, ILogService logService)
+        public ExtractWorldInformationService(IEventBus eventBus, IModelService modelService, IResourceService resourceService, ICropImageService cropService, ILogService logService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;
             this.resourceService = resourceService;
             this.logService = logService;
-            this.imageService = imageService;
+            this.imageService = cropService;
         }
 
         public void Extract(Bitmap picture)
@@ -60,10 +60,9 @@ namespace Dolphin.Service
             {
                 var original = resourceService.Load(System.Enum.Parse(typeof(ExtraInformation), $"Urshi_{i}"));
 
-                if (ImageHelper.Compare(imagePart, original) >= 0.95f) { System.Diagnostics.Trace.WriteLine($"Is {i}"); return i; }
+                if (ImageHelper.Compare(imagePart, original) >= 0.95f) return i;
             }
 
-            System.Diagnostics.Trace.WriteLine($"Is none");
             return default;
         }
 

@@ -80,8 +80,7 @@ namespace Dolphin.Service
                     break;
 
                 default:
-                    throw new NotImplementedException($"Non cancellable Macro not implemented for {actionName}");
-                    break;
+                    throw new NotImplementedException();
             }
         }
 

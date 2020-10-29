@@ -172,11 +172,10 @@ namespace Dolphin.Service
 
         public void Gamble(IntPtr handle, ItemType gambleItem)
         {
-            var _tab = travelService.GetKadalaTabCoordinate(gambleItem);
-            var _item = travelService.GetKadalaItemCoordinate(gambleItem);
+            var coordinates = travelService.GetKadalaCoordinates(gambleItem);
 
-            var tab = transformService.TransformCoordinate(_tab);
-            var item = transformService.TransformCoordinate(_item);
+            var tab = transformService.TransformCoordinate(coordinates.Item1);
+            var item = transformService.TransformCoordinate(coordinates.Item2);
 
             InputHelper.SendClick(handle, MouseButtons.Left, tab);
 
@@ -329,12 +328,11 @@ namespace Dolphin.Service
 
         public void TravelTown(IntPtr handle, ActionName actionName, Keys openMapKey)
         {
-            var _mapAct = travelService.GetActCoordinate(actionName);
-            var _mapTown = travelService.GetTownCoordinate(actionName);
+            var coordinates = travelService.GetTownCoordinates(actionName);
 
             var backwards = transformService.TransformCoordinate(CommonCoordinate.MapBackwards, RelativeCoordinatePosition.Middle);
-            var mapAct = transformService.TransformCoordinate(_mapAct, RelativeCoordinatePosition.Middle);
-            var mapTown = transformService.TransformCoordinate(_mapTown, RelativeCoordinatePosition.Middle);
+            var mapAct = transformService.TransformCoordinate(coordinates.Item1, RelativeCoordinatePosition.Middle);
+            var mapTown = transformService.TransformCoordinate(coordinates.Item2, RelativeCoordinatePosition.Middle);
 
             InputHelper.SendKey(handle, openMapKey);
             InputHelper.SendClick(handle, MouseButtons.Left, backwards);

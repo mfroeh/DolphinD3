@@ -23,6 +23,7 @@ namespace Dolphin.Service
             if (property == null)
             {
                 logService.AddEntry(this, $"{skillName} has no condition defined, defaulting to just return true.");
+
                 return () => true;
             }
 

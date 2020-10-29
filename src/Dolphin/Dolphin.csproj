@@ -46,8 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheServiceBase.cs" />
-    <Compile Include="CommonCoordinate.cs" />
-    <Compile Include="CommonSize.cs" />
+    <Compile Include="Static\CommonCoordinate.cs" />
+    <Compile Include="Static\CommonSize.cs" />
     <Compile Include="Enum\ActionName.cs" />
     <Compile Include="Enum\ConvertingSpeed.cs" />
     <Compile Include="Enum\Command.cs" />
@@ -55,24 +55,26 @@
     <Compile Include="Enum\RelativeCoordinatePosition.cs" />
     <Compile Include="Enum\ItemType.cs" />
     <Compile Include="Enum\Window.cs" />
+    <Compile Include="EventBus.cs" />
     <Compile Include="EventSubscriberBase.cs" />
     <Compile Include="Event\PausedEvent.cs" />
     <Compile Include="Event\SkillRecognitionChangedEvent.cs" />
     <Compile Include="EventArgs\HandleChangedEventArgs.cs" />
     <Compile Include="EventArgs\HotkeysChangedEventArgs.cs" />
-    <Compile Include="IConditionFinderService.cs" />
-    <Compile Include="ICropImageService.cs" />
-    <Compile Include="IImageCacheService.cs" />
-    <Compile Include="IHandleService.cs" />
-    <Compile Include="IActionFinderService.cs" />
-    <Compile Include="IPoolSpotService.cs" />
-    <Compile Include="ITransformService.cs" />
-    <Compile Include="ITravelInformationService.cs" />
-    <Compile Include="Execute.cs" />
+    <Compile Include="Event\WorldInformationChangedEvent.cs" />
+    <Compile Include="Interface\IConditionFinderService.cs" />
+    <Compile Include="Interface\ICropImageService.cs" />
+    <Compile Include="Interface\IImageCacheService.cs" />
+    <Compile Include="Interface\IHandleService.cs" />
+    <Compile Include="Interface\IActionFinderService.cs" />
+    <Compile Include="Interface\IPoolSpotService.cs" />
+    <Compile Include="Interface\ITransformService.cs" />
+    <Compile Include="Interface\ITravelInformationService.cs" />
+    <Compile Include="Static\Execute.cs" />
     <Compile Include="Event\HotkeyPressedEvent.cs" />
-    <Compile Include="Interface\IEvent.cs" />
+    <Compile Include="Event\IEvent.cs" />
     <Compile Include="Interface\IEventBus.cs" />
-    <Compile Include="InputHelper.cs" />
+    <Compile Include="Static\InputHelper.cs" />
     <Compile Include="Interface\ISettingsService.cs" />
     <Compile Include="Interface\IEventPublisher.cs" />
     <Compile Include="Event\PlayerInformationChangedEvent.cs" />
@@ -82,7 +84,7 @@
     <Compile Include="Settings\SmartActionSettings.cs" />
     <Compile Include="Settings\UiSettings.cs" />
     <Compile Include="Subscription.cs" />
-    <Compile Include="Condition.cs" />
+    <Compile Include="Static\Condition.cs" />
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\PlayerClass.cs" />
     <Compile Include="Enum\PlayerHealth.cs" />
@@ -92,29 +94,20 @@
     <Compile Include="Interface\IEventSubscriber.cs" />
     <Compile Include="Interface\IExtractInformationService.cs" />
     <Compile Include="Interface\ILogService.cs" />
-    <Compile Include="ImageHelper.cs" />
     <Compile Include="Interface\IModelService.cs" />
     <Compile Include="EventArgs\LogEntryEventArgs.cs" />
     <Compile Include="Interface\IResourceService.cs" />
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Enum\BuffName.cs" />
-    <Compile Include="Model\Log.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="Enum\WorldLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Skill.cs" />
     <Compile Include="Enum\SkillName.cs" />
-    <Compile Include="Waypoint.cs" />
-    <Compile Include="WindowHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AForge.Imaging">
-      <Version>2.2.5</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.3</Version>
-    </PackageReference>
+    <Compile Include="Settings\Waypoint.cs" />
+    <Compile Include="Static\WindowHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HotkeyListener\HotkeyListener.csproj">

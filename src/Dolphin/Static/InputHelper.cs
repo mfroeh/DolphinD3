@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using WindowsInput;
 
 namespace Dolphin
 {
@@ -27,19 +25,19 @@ namespace Dolphin
             {
                 case MouseButtons.Left:
                     // InputSimulator.SimulateKeyDown(VirtualKeyCode.SHIFT);
-                    PostMessage(handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
-                    PostMessage(handle, WM_LBUTTONUP, 0, lParam);
+                    WindowHelper.PostMessage(handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+                    WindowHelper.PostMessage(handle, WM_LBUTTONUP, 0, lParam);
                     // InputSimulator.SimulateKeyUp(VirtualKeyCode.SHIFT);
                     break;
 
                 case MouseButtons.Right:
-                    PostMessage(handle, WM_RBUTTONDOWN, MK_RBUTTON, lParam);
-                    PostMessage(handle, WM_RBUTTONUP, 0, lParam);
+                    WindowHelper.PostMessage(handle, WM_RBUTTONDOWN, MK_RBUTTON, lParam);
+                    WindowHelper.PostMessage(handle, WM_RBUTTONUP, 0, lParam);
                     break;
 
                 case MouseButtons.Middle:
-                    PostMessage(handle, WM_MBUTTONDOWN, MK_MBUTTON, lParam);
-                    PostMessage(handle, WM_MBUTTONUP, 0, lParam);
+                    WindowHelper.PostMessage(handle, WM_MBUTTONDOWN, MK_MBUTTON, lParam);
+                    WindowHelper.PostMessage(handle, WM_MBUTTONUP, 0, lParam);
                     break;
             }
         }
@@ -51,35 +49,24 @@ namespace Dolphin
 
         public static void SendClickAtCursorPos(IntPtr handle, MouseButtons button)
         {
-            var point = new Point();
-            GetCursorPos(ref point);
-
-            WindowHelper.ScreenToClient(handle, ref point);
+            var point = WindowHelper.ScreenToClient(handle, WindowHelper.GetCursorPos());
 
             SendClick(handle, button, point);
         }
 
-        public static void SendKey(IntPtr handle, Keys key, bool pressAlt = false)
+        /// if (pressAlt)  bool pressAlt = false
+        /// {
+        ///     lParam = (0x01 << 28);
+        /// }
+        public static void SendKey(IntPtr handle, Keys key)
         {
-            var lParam = 0;
-            if (pressAlt)
-            { // TODO: Untested, what cases to we need?
-                lParam = (0x01 << 28);
-            }
-
-            PostMessage(handle, WM_KEYDOWN, (uint)key, lParam);
-            PostMessage(handle, WM_KEYUP, (uint)key, lParam);
+            WindowHelper.PostMessage(handle, WM_KEYDOWN, (uint)key, 0);
+            WindowHelper.PostMessage(handle, WM_KEYUP, (uint)key, 0);
         }
-
-        [DllImport("user32.dll")]
-        private static extern bool GetCursorPos(ref Point lpPoint);
 
         private static int MakeLParam(Point point)
         {
             return (point.Y << 16) | (point.X & 0xFFFF);
         }
-
-        [DllImport("user32.dll")]
-        private static extern bool PostMessage(IntPtr hwnd, uint message, uint wParam, int lParam);
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Dolphin.Enum;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 
-namespace Dolphin.Service
+namespace Dolphin.Image
 {
     public class ImageCacheService : CacheServiceBase, IImageCacheService
     {

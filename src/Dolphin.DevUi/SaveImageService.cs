@@ -72,7 +72,7 @@ namespace Dolphin.DevUi
 
             for (int i = 0; i < 4; i++)
             {
-                var skill = cropWindowService.CropSkillbar(bitmap, i);
+                var skill = cropWindowService.CropSkill(bitmap, i);
 
                 skill.Save($"{OutputDirectoryDated}/Skill/Skill{i}.png");
             }
@@ -96,7 +96,7 @@ namespace Dolphin.DevUi
 
             for (int i = 4; i < 6; i++)
             {
-                var skill = cropWindowService.CropSkillbar(bitmap, i);
+                var skill = cropWindowService.CropSkill(bitmap, i);
 
                 skill.Save($"{OutputDirectoryDated}/Skill/Mouse/Skill{i}.png");
             }

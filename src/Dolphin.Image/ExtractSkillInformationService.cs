@@ -1,6 +1,7 @@
 ﻿using Dolphin.Enum;
 using System.Diagnostics;
 using System.Drawing;
+using System.Windows;
 
 namespace Dolphin.Image
 {
@@ -30,7 +31,7 @@ namespace Dolphin.Image
             {
                 var oldSkill = modelService.GetSkill(i);
 
-                var visibleSkillBitmap = imageService.CropSkillbar(bitmap, i);
+                var visibleSkillBitmap = imageService.CropSkill(bitmap, i);
                 var newSkill = ExtractSkill(visibleSkillBitmap, i, bitmap);
 
                 modelService.SetSkill(i, newSkill);
@@ -69,9 +70,12 @@ namespace Dolphin.Image
                 {
                     var skill = new Skill { Name = skillName, Index = index };
 
-                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index), index >= 4);
+                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index), index);
 
-                    Trace.WriteLine($"{skillName} is active: {skill.IsActive}");
+                    if (skill.IsActive)
+                    {
+                        Trace.WriteLine($"{skillName} is active!");
+                    }
 
                     if (similiaryPercentage >= 0.99f)
                     {
@@ -92,22 +96,22 @@ namespace Dolphin.Image
             return null;
         }
 
-        private bool IsActive(Bitmap bitmap, bool isMouse)
+        private bool IsActive(Bitmap bitmap, int index)
         {
-            if (isMouse)
+            if (index <= 3)
             {
-                var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/Mouse/SkillActive.png"));
+                var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive/SkillNotActive.png"));
 
                 Trace.WriteLine(result);
 
-                return result > 0.95f;
+                return result < 0.9f;
             }
             else
             {
-                var x = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive.png"));
+                var x = ImageHelper.Compare(bitmap, new Bitmap($"Resource/Skill/SkillActive/Skill{index}NotActive.png"));
                 Trace.WriteLine(x);
 
-                return x > 0.9f;
+                return x < 0.9f;
             }
         }
     }

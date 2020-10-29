@@ -104,6 +104,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dolphin.Image\Dolphin.Image.csproj">
+      <Project>{A643FF5D-D723-4223-9BDA-917DCB6FEFCD}</Project>
+      <Name>Dolphin.Image</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
       <Project>{1966956e-6203-42f0-b3d4-376d17d83677}</Project>
       <Name>Dolphin.Service</Name>

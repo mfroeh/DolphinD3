@@ -15,7 +15,7 @@ namespace Dolphin
 
         public Bitmap CropSkillActive(Bitmap image, int index);
 
-        public Bitmap CropSkillbar(Bitmap image, int index);
+        public Bitmap CropSkill(Bitmap image, int index);
 
         public Bitmap CropUrshiGemUp(Bitmap image);
 

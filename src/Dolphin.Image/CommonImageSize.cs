@@ -9,14 +9,15 @@ namespace Dolphin.Image
     {
         #region General
 
-        public static Size HealthbarSize = new Size { Width = 61, Height = 5 };
-        public static Size PlayerClassSize = new Size { Width = 15, Height = 11 };
-        public static Size ResourceSize = new Size { Height = 146, Width = 3 };
-        public static Size SkillActive = new Size { Height = 10, Width = 3 }; // TODO
-        public static Size SkillbarSkillSize = new Size { Width = 48, Height = 15 };
-        public static Size SkillbarSkillSizeMouse = new Size { Width = 46, Height = 15 };
+        public static Size HealthbarSize = new Size { Width = 81, Height = 5 };
+        public static Size PlayerClassSize = new Size { Width = 15, Height = 15 };
+        public static Size ResourceSize = new Size { Height = 195, Width = 3 };
+        public static Size SkillActive = new Size { Height = 10, Width = 4 }; // TODO
+        public static Size SkillbarSkillSize = new Size { Width = 15, Height = 15 };
 
         #endregion General
+
+        // TODO: STILL 1920 x 1080
 
         #region World
 

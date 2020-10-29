@@ -1,4 +1,5 @@
-﻿using Dolphin.Service;
+﻿using Dolphin.Image;
+using Dolphin.Service;
 using System.Windows;
 
 namespace Dolphin.DevUi
@@ -13,9 +14,11 @@ namespace Dolphin.DevUi
             base.OnStartup(e);
 
             var handleService = new HandleService();
+            handleService.MainLoop("Diablo III64");
+
             var transformService = new TransformService(handleService);
             var logService = new LogService(new Log());
-            var captureScreenService = new CaptureWindowService(handleService, transformService, logService);
+            var captureScreenService = new CaptureWindowService(handleService, logService);
             var cropImageService = new CropImageService(transformService, logService);
             var saveImageService = new SaveImageService(cropImageService);
 

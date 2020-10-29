@@ -58,7 +58,7 @@ namespace Dolphin
 
         protected virtual string GetTypeBasedKey<TKey>(TKey key)
         {
-            return $"typeof(key).Name_{key}";
+            return $"{typeof(TKey).Name}_{key}";
         }
     }
 }

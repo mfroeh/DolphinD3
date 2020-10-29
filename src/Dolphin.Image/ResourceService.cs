@@ -18,13 +18,13 @@ namespace Dolphin.Image
             this.handleService = handleService;
         }
 
-        public Bitmap Load<T>(T enumValue)
+        public Bitmap Load<T>(T value)
         {
-            var cachedBitmap = cacheService.Get<T, Bitmap>(enumValue);
+            var cachedBitmap = cacheService.Get<T, Bitmap>(value);
 
             if (cachedBitmap != null) return cachedBitmap;
 
-            var path = GetTypeBastedPath(enumValue);
+            var path = GetTypeBastedPath(value);
             try
             {
                 var bitmap = new Bitmap(path);
@@ -34,14 +34,14 @@ namespace Dolphin.Image
                     bitmap = ImageHelper.To24bppRgbFormat(bitmap);
                 }
 
-                cacheService.Add(enumValue, bitmap);
-                logService.AddEntry(this, $"Loaded Image from [{path}] for {enumValue} and added to Cache.", LogLevel.Debug);
+                cacheService.Add(value, bitmap);
+                logService.AddEntry(this, $"Loaded Image from [{path}] for {value} and added to Cache.", LogLevel.Debug);
 
                 return bitmap;
             }
             catch (Exception ex)
             {
-                logService.AddEntry(this, $"Couldent load image for {enumValue}", LogLevel.Warning, ex);
+                logService.AddEntry(this, $"Couldent load image for {value}", LogLevel.Warning, ex);
             }
 
             return default;
@@ -74,9 +74,9 @@ namespace Dolphin.Image
             return default;
         }
 
-        private string GetTypeBastedPath<T>(T enumValue)
+        private string GetTypeBastedPath<T>(T value)
         {
-            switch (enumValue)
+            switch (value)
             {
                 case BuffName buffName:
                     return $"Resource/Buff/{buffName}.png";
@@ -99,8 +99,11 @@ namespace Dolphin.Image
                 case ExtraInformation information:
                     return $"Resource/ExtraInformation/{information}.png";
 
+                case string @string:
+                    return $"Resource/{@string}";
+
                 default:
-                    throw new NotImplementedException($"Didnt implement GetTypeBasedKey for type {enumValue.GetType().Name} in ResourceService yet.");
+                    throw new NotImplementedException($"Didnt implement GetTypeBasedKey for type {value.GetType().Name} in ResourceService yet.");
             }
         }
     }

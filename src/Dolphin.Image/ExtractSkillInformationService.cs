@@ -98,21 +98,17 @@ namespace Dolphin.Image
 
         private bool IsActive(Bitmap bitmap, int index)
         {
+            Bitmap originalImage;
             if (index <= 3)
             {
-                var result = ImageHelper.Compare(bitmap, new Bitmap("Resource/Skill/SkillActive/SkillNotActive.png"));
-
-                Trace.WriteLine(result);
-
-                return result < 0.9f;
+                originalImage = resourceService.Load("Skill/SkillActive/SkillNotActive.png");
             }
             else
             {
-                var x = ImageHelper.Compare(bitmap, new Bitmap($"Resource/Skill/SkillActive/Skill{index}NotActive.png"));
-                Trace.WriteLine(x);
-
-                return x < 0.9f;
+                originalImage = resourceService.Load($"Skill/SkillActive/Skill{index}NotActive.png");
             }
+
+            return ImageHelper.Compare(bitmap, originalImage) < 0.9f;
         }
     }
 }

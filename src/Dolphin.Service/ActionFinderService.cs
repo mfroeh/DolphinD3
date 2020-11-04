@@ -36,7 +36,7 @@ namespace Dolphin.Service
 
                 case ActionName.DropInventory:
                     var columns = settingsService.MacroSettings.SpareColumns;
-                    var key = settingsService.GetKeybinding(Command.OpenInventory);
+                    var key = settingsService.GetKeybinding(CommandKeybinding.OpenInventory);
                     return () => actionService.DropInventory(handle, columns, key);
 
                 case ActionName.Salvage:
@@ -55,7 +55,7 @@ namespace Dolphin.Service
                 case ActionName.TravelAct2:
                 case ActionName.TravelAct34:
                 case ActionName.TravelAct5:
-                    return () => actionService.TravelTown(handle, actionName, settingsService.GetKeybinding(Command.OpenMap));
+                    return () => actionService.TravelTown(handle, actionName, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
 
                 case ActionName.TravelPool:
                     return () => actionService.TravelPool(handle);
@@ -64,7 +64,7 @@ namespace Dolphin.Service
                     return () => actionService.LowerDifficulty(handle);
 
                 case ActionName.SwapArmour:
-                    key = settingsService.GetKeybinding(Command.OpenInventory);
+                    key = settingsService.GetKeybinding(CommandKeybinding.OpenInventory);
                     var swapItemAmount = settingsService.MacroSettings.SwapItemsAmount;
                     return () => actionService.SwapArmour(handle, key, swapItemAmount);
 
@@ -104,13 +104,13 @@ namespace Dolphin.Service
                     return () => actionService.CubeConverterSingleSlot(handle, tokenSource, speed);
 
                 case ActionName.UpgradeGem:
-                    var key = settingsService.GetKeybinding(Command.TeleportToTown);
+                    var key = settingsService.GetKeybinding(CommandKeybinding.TeleportToTown);
                     var isEmpowered = settingsService.MacroSettings.Empowered;
                     var pickYourself = settingsService.MacroSettings.PickGemYourself;
                     return () => actionService.UpgradeGem(handle, tokenSource, isEmpowered, pickYourself, key);
 
                 case ActionName.Smart_UpgradeGem:
-                    key = settingsService.GetKeybinding(Command.TeleportToTown);
+                    key = settingsService.GetKeybinding(CommandKeybinding.TeleportToTown);
                     return () => actionService.UpgradeGem(handle, tokenSource, (int)@params[0], key);
 
                 default:

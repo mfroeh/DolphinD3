@@ -86,15 +86,15 @@ namespace Dolphin
             }
         };
 
-        public static IDictionary<Command, Keys> OtherKeybindings
+        public static IDictionary<CommandKeybinding, Keys> OtherKeybindings
         {
             get
             {
-                return new Dictionary<Command, Keys>
+                return new Dictionary<CommandKeybinding, Keys>
                 {
-                    { Command.TeleportToTown, Keys.T },
-                    { Command.OpenMap, Keys.M },
-                    { Command.OpenInventory, Keys.C }
+                    { CommandKeybinding.TeleportToTown, Keys.T },
+                    { CommandKeybinding.OpenMap, Keys.M },
+                    { CommandKeybinding.OpenInventory, Keys.C }
                 };
             }
         }
@@ -138,7 +138,7 @@ namespace Dolphin
 
         public MacroSettings MacroSettings { get; set; }
 
-        public IDictionary<Command, Keys> OtherKeybindings { get; set; }
+        public IDictionary<CommandKeybinding, Keys> OtherKeybindings { get; set; }
 
         public IList<Keys> SkillKeybindings { get; set; }
 

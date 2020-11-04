@@ -19,7 +19,7 @@ namespace Dolphin.Ui.ViewModel
     {
         private readonly ISettingsService settingsService;
         private readonly IDialogService dialogService;
-        private IDictionary<Command, Keys> otherKeybindings;
+        private IDictionary<CommandKeybinding, Keys> otherKeybindings;
         private ICollection<Keys> skillKeybindings;
 
         public SettingsTabViewModel(ISettingsService settingsService, IDialogService dialogService)
@@ -29,14 +29,14 @@ namespace Dolphin.Ui.ViewModel
 
             PossibleKeys = System.Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList();
             SkillKeybindings = new ObservableCollection<Keys>(settingsService.Settings.SkillKeybindings);
-            OtherKeybindings = new ObservableDictionary<Command, Keys>(settingsService.Settings.OtherKeybindings);
+            OtherKeybindings = new ObservableDictionary<CommandKeybinding, Keys>(settingsService.Settings.OtherKeybindings);
             updateInterval = settingsService.Settings.UpdateInterval;
             PoolSpots = new BindingList<Waypoint>(settingsService.MacroSettings.Poolspots);
 
             PoolSpots.ListChanged += PoolSpotsChangedHandler;
         }
 
-        public IDictionary<Command, Keys> OtherKeybindings
+        public IDictionary<CommandKeybinding, Keys> OtherKeybindings
         {
             get
             {

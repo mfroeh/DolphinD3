@@ -1,6 +1,6 @@
 ﻿namespace Dolphin.Enum
 {
-    public enum Command
+    public enum CommandKeybinding
     {
         None = 0,
         TeleportToTown = 1,

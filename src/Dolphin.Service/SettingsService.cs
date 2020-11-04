@@ -35,7 +35,7 @@ namespace Dolphin.Service
             return default;
         }
 
-        public Keys GetKeybinding(Command command)
+        public Keys GetKeybinding(CommandKeybinding command)
         {
             return Settings.OtherKeybindings[command];
         }

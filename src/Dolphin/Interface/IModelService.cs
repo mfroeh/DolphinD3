@@ -11,11 +11,11 @@ namespace Dolphin
 
         IEnumerable<PlayerHealth> GetPossibleHealthEnum();
 
-        IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum();
+        IEnumerable<Enum.PlayerResource> PossiblePrimaryResourceEnum();
 
-        IEnumerable<Enum.PlayerResource> GetPossibleSecondaryResourceEnum();
+        IEnumerable<Enum.PlayerResource> PossibleSecondaryResourceEnum();
 
-        IEnumerable<SkillName> GetPossibleSkills(bool isMouse);
+        IEnumerable<SkillName> PossibleSkills(bool isMouse);
 
         Skill GetSkill(SkillName name);
 

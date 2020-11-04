@@ -97,7 +97,7 @@ namespace Dolphin.Image
         {
             var oldPrimary = modelService.Player.PrimaryResourcePercentage;
 
-            var compareResult = GetHighestMatch(picturePart, modelService.GetPossiblePrimaryResourceEnum());
+            var compareResult = GetHighestMatch(picturePart, modelService.PossiblePrimaryResourceEnum());
             logService.AddEntry(this, $"Player primary resource is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.", LogLevel.Debug);
 
             modelService.SetPlayerPrimaryResource(compareResult.Item1);
@@ -117,7 +117,7 @@ namespace Dolphin.Image
 
             var oldSecondary = modelService.Player.SecondaryRessourcePercentage;
 
-            var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleSecondaryResourceEnum());
+            var compareResult = GetHighestMatch(picturePart, modelService.PossibleSecondaryResourceEnum());
             logService.AddEntry(this, $"Player secondary resource is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.", LogLevel.Debug);
 
             modelService.SetPlayerSecondaryResource(compareResult.Item1);

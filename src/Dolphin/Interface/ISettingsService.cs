@@ -14,7 +14,7 @@ namespace Dolphin
 
         ActionName GetActionName(Hotkey hotkey);
 
-        Keys GetKeybinding(Command command);
+        Keys GetKeybinding(CommandKeybinding command);
 
         public void ResetSettings<T>();
 
@@ -26,6 +26,6 @@ namespace Dolphin
 
         bool SkillIsEnabled(SkillName skill);
 
-        bool IsSmartActionEnabled(ActionName smartAction);
+        ActionName GetSmartActionName(Window window);
     }
 }

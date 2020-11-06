@@ -13,9 +13,9 @@ namespace Dolphin
 
         public Bitmap CropSecondaryResource(Bitmap image, PlayerClass playerClass);
 
-        public Bitmap CropSkillActive(Bitmap image, int index);
-
         public Bitmap CropSkill(Bitmap image, int index);
+
+        public Bitmap CropSkillActive(Bitmap image, int index);
 
         public Bitmap CropUrshiGemUp(Bitmap image);
 

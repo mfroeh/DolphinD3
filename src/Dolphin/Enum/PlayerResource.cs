@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Dolphin.Enum
 {
@@ -76,6 +75,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimaryEssence_80;
                     yield return PlayerResource.PrimaryEssence_100;
                     break;
+
                 case PlayerClass.BarbarianFemale:
                 case PlayerClass.BarbarianMale:
                     yield return PlayerResource.PrimaryRage_0;
@@ -85,6 +85,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimaryRage_80;
                     yield return PlayerResource.PrimaryRage_100;
                     break;
+
                 case PlayerClass.CrusaderFemale:
                 case PlayerClass.CrusaderMale:
                     yield return PlayerResource.PrimaryWrath_0;
@@ -94,6 +95,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimaryWrath_80;
                     yield return PlayerResource.PrimaryWrath_100;
                     break;
+
                 case PlayerClass.WitchDoctorFemale:
                 case PlayerClass.WitchDoctorMale:
                     yield return PlayerResource.PrimaryMana_0;
@@ -103,6 +105,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimaryMana_80;
                     yield return PlayerResource.PrimaryMana_100;
                     break;
+
                 case PlayerClass.DemonHunterFemale:
                 case PlayerClass.DemonHunterMale:
                     yield return PlayerResource.PrimaryHatred_0;
@@ -112,6 +115,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimaryHatred_80;
                     yield return PlayerResource.PrimaryHatred_100;
                     break;
+
                 case PlayerClass.MonkFemale:
                 case PlayerClass.MonkMale:
                     yield return PlayerResource.PrimarySpirit_0;
@@ -121,6 +125,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimarySpirit_80;
                     yield return PlayerResource.PrimarySpirit_100;
                     break;
+
                 case PlayerClass.WizardFemale:
                 case PlayerClass.WizardMale:
                     yield return PlayerResource.PrimaryArcanePower_0;
@@ -130,6 +135,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.PrimaryArcanePower_80;
                     yield return PlayerResource.PrimaryArcanePower_100;
                     break;
+
                 default:
                     yield break;
             }
@@ -153,6 +159,7 @@ namespace Dolphin.Enum
                     yield return PlayerResource.SecondaryDiscipline_80;
                     yield return PlayerResource.SecondaryDiscipline_100;
                     break;
+
                 default:
                     yield break;
             }

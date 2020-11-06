@@ -21,18 +21,23 @@ namespace Dolphin.Enum
                 case Window.Kadala:
                     yield return ActionName.Smart_Gamble;
                     break;
+
                 case Window.AcceptGrift:
                     yield return ActionName.Smart_AcceptGriftPopup;
                     break;
+
                 case Window.Urshi:
                     yield return ActionName.Smart_UpgradeGem;
                     break;
+
                 case Window.StartGame:
                     yield return ActionName.Smart_StartGame;
                     break;
+
                 case Window.Obelisk:
                     yield return ActionName.Smart_OpenRiftGrift;
                     break;
+
                 default:
                     yield break;
             }

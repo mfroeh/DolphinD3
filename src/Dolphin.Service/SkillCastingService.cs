@@ -24,7 +24,12 @@ namespace Dolphin.Service
         private void OnSkilCanBeCasted(object o, SkillCanBeCastedEvent @event)
         {
             var handle = handleService.GetHandle("Diablo III64");
-            if (handle?.Handle == default || !settingsService.SkillIsEnabled(@event.SkillName)) return;
+            if (handle?.Handle == default ||
+                !settingsService.SkillIsEnabled(@event.SkillName) ||
+                settingsService.SkillIndexIsSuspended(@event.SkillIndex))
+            {
+                return;
+            }
 
             Action action;
             if (@event.SkillIndex <= 3)

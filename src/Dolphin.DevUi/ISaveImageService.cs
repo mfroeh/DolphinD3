@@ -21,10 +21,10 @@ namespace Dolphin.DevUi
 
         void SavePlayerSkillsMouse(Bitmap bitmap);
 
+        void SaveUrshiGemUp(Bitmap bitmap, int gemUps);
+
         void SaveWindow(Bitmap bitmap, Window window);
 
         void SaveWorldLocation(Bitmap bitmap, WorldLocation location);
-
-        void SaveUrshiGemUp(Bitmap bitmap, int gemUps);
     }
 }

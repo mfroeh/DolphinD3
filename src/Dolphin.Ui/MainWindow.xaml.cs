@@ -1,5 +1,4 @@
-﻿using RestoreWindowPlace;
-using System;
+﻿using System;
 using System.Windows;
 
 namespace Dolphin.Ui

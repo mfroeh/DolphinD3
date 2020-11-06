@@ -1,7 +1,6 @@
 ﻿using Dolphin.Enum;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows;
 
 namespace Dolphin.Image
 {

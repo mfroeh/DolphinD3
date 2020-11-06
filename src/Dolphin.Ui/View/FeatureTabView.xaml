@@ -35,7 +35,6 @@
                         Content="Enabled"
                         IsChecked="{Binding SkillCastingEnabled}"
                         Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
-
                 </Grid>
             </GroupBox.Header>
             <Grid>
@@ -342,7 +341,6 @@
                     CommandParameter="{x:Static enum:ActionName.Smart_UpgradeGem}"
                     Content="Upgrade gem"
                     IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_UpgradeGem]}" />
-
 
                 <CheckBox
                     Grid.Column="4"

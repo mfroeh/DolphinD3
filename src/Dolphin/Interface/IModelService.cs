@@ -9,6 +9,10 @@ namespace Dolphin
 
         World World { get; }
 
+        Skill GetSkill(SkillName name);
+
+        Skill GetSkill(int index);
+
         IEnumerable<PlayerHealth> PossibleHealthEnum();
 
         IEnumerable<Enum.PlayerResource> PossiblePrimaryResourceEnum();
@@ -16,10 +20,6 @@ namespace Dolphin
         IEnumerable<Enum.PlayerResource> PossibleSecondaryResourceEnum();
 
         IEnumerable<SkillName> PossibleSkills(bool isMouse);
-
-        Skill GetSkill(SkillName name);
-
-        Skill GetSkill(int index);
 
         void SetPlayerHealth(PlayerHealth health);
 

@@ -3,12 +3,9 @@ using MvvmDialogs;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -17,10 +14,12 @@ namespace Dolphin.Ui.ViewModel
 {
     public class SettingsTabViewModel : ViewModelBase
     {
-        private readonly ISettingsService settingsService;
         private readonly IDialogService dialogService;
+        private readonly ISettingsService settingsService;
         private IDictionary<CommandKeybinding, Keys> otherKeybindings;
         private ICollection<Keys> skillKeybindings;
+
+        private uint updateInterval;
 
         public SettingsTabViewModel(ISettingsService settingsService, IDialogService dialogService)
         {
@@ -50,7 +49,17 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public BindingList<Waypoint> PoolSpots { get; set; }
+
         public ICollection<Keys> PossibleKeys { get; }
+
+        public ICommand ResetSettingsCommand
+        {
+            get
+            {
+                return new RelayCommand(ResetSettings);
+            }
+        }
 
         public ICollection<Keys> SkillKeybindings
         {
@@ -66,8 +75,6 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        private uint updateInterval;
-
         public string UpdateInterval
         {
             get => updateInterval.ToString();
@@ -80,14 +87,14 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public BindingList<Waypoint> PoolSpots { get; set; }
-
-        public ICommand ResetSettingsCommand
+        protected void ShowRestartDialog()
         {
-            get
-            {
-                return new RelayCommand(ResetSettings);
-            }
+            dialogService.ShowMessageBox(this, "A restart is required in order for these changes to take effect. Restarting now.", "Restart required", MessageBoxButton.OK);
+            var json = JsonConvert.SerializeObject(settingsService.Settings);
+            File.WriteAllText("settings.json", json);
+
+            System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
+            System.Windows.Application.Current.Shutdown(2);
         }
 
         private void PoolSpotsChangedHandler(object o, ListChangedEventArgs e)
@@ -108,16 +115,6 @@ namespace Dolphin.Ui.ViewModel
 
                 ShowRestartDialog();
             }
-        }
-
-        protected void ShowRestartDialog()
-        {
-            dialogService.ShowMessageBox(this, "A restart is required in order for these changes to take effect. Restarting now.", "Restart required", MessageBoxButton.OK);
-            var json = JsonConvert.SerializeObject(settingsService.Settings);
-            File.WriteAllText("settings.json", json);
-
-            System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
-            System.Windows.Application.Current.Shutdown(2);
         }
     }
 }

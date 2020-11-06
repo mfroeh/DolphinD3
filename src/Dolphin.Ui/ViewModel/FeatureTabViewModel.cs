@@ -11,9 +11,8 @@ namespace Dolphin.Ui.ViewModel
         private bool isOpenRift;
         private bool skillCastingEnabled;
         private ICommand skillCheckboxClicked;
-        private bool smartActionsEnabled;
-
         private ICommand smartActionCheckboxClicked;
+        private bool smartActionsEnabled;
 
         public FeatureTabViewModel(ISettingsService settingsService)
         {
@@ -43,6 +42,8 @@ namespace Dolphin.Ui.ViewModel
         }
 
         public ObservableDictionary<SkillName, bool> EnabledSkills { get; }
+
+        public ObservableDictionary<ActionName, bool> EnabledSmartActions { get; set; }
 
         public bool IsOpenRift
         {
@@ -74,6 +75,15 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public ICommand SmartActionCheckboxClicked
+        {
+            get
+            {
+                smartActionCheckboxClicked = smartActionCheckboxClicked ?? new RelayCommand((o) => ChangeSmartActionEnabled((ActionName)o));
+                return smartActionCheckboxClicked;
+            }
+        }
+
         public bool SmartActionsEnabled
         {
             get => smartActionsEnabled;
@@ -84,17 +94,6 @@ namespace Dolphin.Ui.ViewModel
                 RaisePropertyChanged(nameof(SmartActionsEnabled));
             }
         }
-
-        public ICommand SmartActionCheckboxClicked
-        {
-            get
-            {
-                smartActionCheckboxClicked = smartActionCheckboxClicked ?? new RelayCommand((o) => ChangeSmartActionEnabled((ActionName)o));
-                return smartActionCheckboxClicked;
-            }
-        }
-
-        public ObservableDictionary<ActionName, bool> EnabledSmartActions { get; set; }
 
         private void ChangeSkillEnabled(SkillName name)
         {

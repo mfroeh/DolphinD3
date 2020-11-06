@@ -28,6 +28,5 @@ namespace Dolphin.DevUi
 
             handleService.MainLoop();
         }
-
     }
 }

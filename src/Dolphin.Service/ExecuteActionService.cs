@@ -54,6 +54,8 @@ namespace Dolphin.Service
             if (handle?.Handle == default) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
+            if (actionName.IsSuspensionAction()) return;
+
             if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
             {
                 CancelAction(handle.Handle);

@@ -15,9 +15,9 @@ namespace Dolphin.DevUi
             Directory.CreateDirectory(Properties.Settings.Default.OutputDirectory);
         }
 
-        private string CurrentTime => DateTime.Now.ToString("HH_mm_ss");
-
         private string OutputDirectory => Properties.Settings.Default.OutputDirectory;
+
+        private string CurrentTime => DateTime.Now.ToString("HH_mm_ss");
 
         private string OutputDirectoryDated => $"{OutputDirectory}/{CurrentTime}";
 

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Dolphin.Enum
 {
@@ -39,6 +38,7 @@ namespace Dolphin.Enum
                     yield return SkillName.Simulacrum;
                     yield return SkillName.Devour;
                     break;
+
                 case PlayerClass.BarbarianFemale:
                 case PlayerClass.BarbarianMale:
                     yield break;

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheServiceBase.cs" />
+    <Compile Include="Enum\SmartActionName.cs" />
     <Compile Include="Static\CommonCoordinate.cs" />
     <Compile Include="Static\CommonSize.cs" />
     <Compile Include="Enum\ActionName.cs" />

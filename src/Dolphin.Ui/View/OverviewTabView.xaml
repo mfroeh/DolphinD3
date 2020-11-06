@@ -117,73 +117,116 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="{adonisUi:Space Top=2}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="64" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <Image
-                Grid.Row="1"
-                Grid.Column="0"
-                Source="{Binding Path=CurrentSkills[0], Mode=OneWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                Content="{Binding CurrentSkillState[0]}" />
-            <Image
-                Grid.Row="1"
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=8.5}" Content="Suspended" />
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=0}" Content="Castability" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="1"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[0]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="0"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[0], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[0]}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="2"
-                Source="{Binding Path=CurrentSkills[1], Mode=OneWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="2"
-                Content="{Binding CurrentSkillState[1]}" />
-            <Image
-                Grid.Row="1"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[1]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="1"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[1], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[1]}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="3"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[2]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="2"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[2], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[2]}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="4"
-                Source="{Binding Path=CurrentSkills[2], Mode=OneWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="4"
-                Content="{Binding CurrentSkillState[2]}" />
-            <Image
-                Grid.Row="1"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[3]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="3"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[3], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[3]}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="5"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[4]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="4"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[4], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[4]}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="6"
-                Source="{Binding Path=CurrentSkills[3], Mode=OneWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="6"
-                Content="{Binding CurrentSkillState[3]}" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="8"
-                Source="{Binding Path=CurrentSkills[4], Mode=OneWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="8"
-                Content="{Binding CurrentSkillState[4]}" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="10"
-                Source="{Binding Path=CurrentSkills[5], Mode=OneWay}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="10"
-                Content="{Binding CurrentSkillState[5]}" />
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[5]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="5"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[5], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[5]}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

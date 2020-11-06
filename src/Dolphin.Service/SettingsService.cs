@@ -76,7 +76,7 @@ namespace Dolphin.Service
             ResetSettings();
         }
 
-        public void SetHotkeyValue(ActionName key, WK.Libraries.HotkeyListenerNS.Hotkey value)
+        public void SetHotkeyValue(ActionName key, Hotkey value)
         {
             Settings.Hotkeys[key] = value;
         }
@@ -86,6 +86,11 @@ namespace Dolphin.Service
             Settings.IsPaused = newPaused;
 
             Publish(new PausedEvent { IsPaused = Settings.IsPaused, IsFromChanging = isFromChanging });
+        }
+
+        public bool SkillIndexIsSuspended(int skillIndex)
+        {
+            return Settings.SkillSuspensionStatus[skillIndex];
         }
 
         public bool SkillIsEnabled(SkillName skill)

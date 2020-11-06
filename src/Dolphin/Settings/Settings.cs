@@ -39,21 +39,20 @@ namespace Dolphin
                 var dict = new Dictionary<ActionName, Hotkey>();
                 foreach (var @enum in System.Enum.GetValues(typeof(ActionName)).Cast<ActionName>())
                 {
-                    if (!@enum.ToString().StartsWith("Smart_") && @enum != ActionName.None)
+                    if (!@enum.IsSmartAction() && @enum != ActionName.None)
                     {
-                        Hotkey hotkey = null;
-                        if (@enum == ActionName.CancelAction)
-                        {
-                            hotkey = new Hotkey(Keys.Escape);
-                        }
-                        else if (@enum == ActionName.Pause)
-                        {
-                            hotkey = new Hotkey(Keys.F10);
-                        }
-
-                        dict[@enum] = hotkey;
+                        dict[@enum] = null;
                     }
                 }
+
+                dict[ActionName.Pause] = new Hotkey(Keys.F10);
+                dict[ActionName.CancelAction] = new Hotkey(Keys.Escape);
+                dict[ActionName.Suspend_0] = new Hotkey(Keys.Control, Keys.D1);
+                dict[ActionName.Suspend_1] = new Hotkey(Keys.Control, Keys.D2);
+                dict[ActionName.Suspend_2] = new Hotkey(Keys.Control, Keys.D3);
+                dict[ActionName.Suspend_3] = new Hotkey(Keys.Control, Keys.D4);
+                dict[ActionName.Suspend_4] = new Hotkey(Keys.Control, Keys.D5);
+                dict[ActionName.Suspend_5] = new Hotkey(Keys.Control, Keys.D6);
 
                 return dict;
             }
@@ -101,6 +100,10 @@ namespace Dolphin
 
         public static IList<Keys> SkillKeybindigns => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
 
+        public static SmartActionSettings SmartActionSettings => new SmartActionSettings { IsOpenRift = true };
+
+        public static IList<bool> SuspendedSkillIndices => new bool[6];
+
         public static UiSettings UiSettings => new UiSettings
         {
             DisplayLogLevel = LogLevel.Warning,
@@ -109,9 +112,6 @@ namespace Dolphin
         };
 
         public static uint UpdateInterval => 100;
-
-        public static SmartActionSettings SmartActionSettings => new SmartActionSettings { IsOpenRift = true };
-
     }
 
     public class Settings
@@ -129,6 +129,7 @@ namespace Dolphin
                 UpdateInterval = InitialSettings.UpdateInterval;
                 EnabledSmartActions = InitialSettings.EnabledSmartActions;
                 SmartActionSettings = InitialSettings.SmartActionSettings;
+                SkillSuspensionStatus = InitialSettings.SuspendedSkillIndices;
             }
         }
 
@@ -147,6 +148,8 @@ namespace Dolphin
         public bool SkillCastingEnabled { get; set; }
 
         public IList<Keys> SkillKeybindings { get; set; }
+
+        public IList<bool> SkillSuspensionStatus { get; set; }
 
         public bool SmartActionsEnabled { get; set; }
 

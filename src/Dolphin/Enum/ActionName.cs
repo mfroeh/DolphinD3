@@ -2,6 +2,7 @@
 
 namespace Dolphin.Enum
 {
+    // TODO: Smart actions get their own enum type
     public enum ActionName
     {
         None = 0,
@@ -30,6 +31,12 @@ namespace Dolphin.Enum
         Smart_OpenRiftGrift = 22,
         Smart_Gamble = 23,
         Smart_UpgradeGem = 24,
+        Suspend_0 = 26,
+        Suspend_1 = 27,
+        Suspend_2 = 28,
+        Suspend_3 = 29,
+        Suspend_4 = 30,
+        Suspend_5 = 31
     }
 
     public static class ActionNameExtensionMethods
@@ -50,6 +57,11 @@ namespace Dolphin.Enum
         public static bool IsSmartAction(this ActionName action)
         {
             return action.ToString().StartsWith("Smart");
+        }
+
+        public static bool IsSuspensionAction(this ActionName action)
+        {
+            return action.ToString().StartsWith("Suspend");
         }
     }
 }

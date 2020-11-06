@@ -4,40 +4,46 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
-using System.Text;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace WK.Libraries.HotkeyListenerNS.Helpers
 {
     /// <summary>
-    /// Gathers the list of application attributes 
+    /// Gathers the list of application attributes
     /// derived from the currently active application.
     /// </summary>
     internal static class SourceAttributes
     {
         #region Fields
 
-        private static string _executableName = string.Empty;
-        private static string _executablePath = string.Empty;
-
-        // We will use this to get the selected 
+        // We will use this to get the selected
         // text from any active application.
         internal static TextSelectionReader _reader = new TextSelectionReader();
 
-        #endregion
+        private static string _executableName = string.Empty;
+        private static string _executablePath = string.Empty;
+
+        #endregion Fields
 
         #region Methods
 
         #region Public
+
+        /// <summary>
+        /// Gets the source application's Window Handle.
+        /// </summary>
+        public static IntPtr GetHandle()
+        {
+            return GetForegroundWindow();
+        }
 
         /// <summary>
         /// Gets the source application's process ID.
@@ -48,14 +54,6 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             GetWindowThreadProcessId(GetForegroundWindow().ToInt32(), out processID);
 
             return processID;
-        }
-
-        /// <summary>
-        /// Gets the source application's Window Handle.
-        /// </summary>
-        public static IntPtr GetHandle()
-        {
-            return GetForegroundWindow();
         }
 
         /// <summary>
@@ -85,28 +83,6 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         }
 
         /// <summary>
-        /// Gets the source application's window title text.
-        /// </summary>
-        public static string GetTitle()
-        {
-            const int capacity = 256;
-            StringBuilder content = null;
-            IntPtr handle = IntPtr.Zero;
-
-            try
-            {
-                content = new StringBuilder(capacity);
-                handle = GetForegroundWindow(); // windowHandle;
-            }
-            catch (Exception) { }
-
-            if (GetWindowText(handle, content, capacity) > 0)
-                return content.ToString();
-
-            return null;
-        }
-
-        /// <summary>
         /// Gets the currently selected text in the active application.
         /// </summary>
         /// <returns>The selected text, if any.</returns>
@@ -131,24 +107,46 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Gets the source application's window title text.
+        /// </summary>
+        public static string GetTitle()
+        {
+            const int capacity = 256;
+            StringBuilder content = null;
+            IntPtr handle = IntPtr.Zero;
+
+            try
+            {
+                content = new StringBuilder(capacity);
+                handle = GetForegroundWindow(); // windowHandle;
+            }
+            catch (Exception) { }
+
+            if (GetWindowText(handle, content, capacity) > 0)
+                return content.ToString();
+
+            return null;
+        }
+
+        #endregion Public
 
         #region Private
 
         [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
+        private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindowPtr();
+        private static extern IntPtr GetForegroundWindowPtr();
 
         [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         [DllImport("user32")]
         private static extern UInt32 GetWindowThreadProcessId(Int32 hWnd, out Int32 lpdwProcessId);
 
-        #endregion
+        #endregion Private
 
-        #endregion
+        #endregion Methods
     }
 }

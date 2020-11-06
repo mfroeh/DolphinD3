@@ -1,7 +1,6 @@
 ﻿using Dolphin.Enum;
-using Dolphin.Service;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
@@ -11,26 +10,28 @@ namespace Dolphin.Ui.ViewModel
         private readonly IEventBus eventBus;
         private readonly IHandleService handleService;
         private readonly IModelService modelService;
-        private readonly Subscription<PlayerInformationChangedEvent> playerInformationChanged;
-        private readonly Subscription<SkillRecognitionChangedEvent> skillRecognitionChanged;
-        private readonly Subscription<WorldInformationChangedEvent> worldInformationChanged;
-        private readonly Subscription<SkillCanBeCastedEvent> skillCanBeCasted;
+        private readonly ISettingsService settingsService;
 
-        public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService)
+        private ICommand negateSuspendedCommand;
+
+        public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService, ISettingsService settingsService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;
             this.handleService = handleService;
+            this.settingsService = settingsService;
 
-            playerInformationChanged = new Subscription<PlayerInformationChangedEvent>(OnPlayerInformationChanged);
-            skillRecognitionChanged = new Subscription<SkillRecognitionChangedEvent>(OnSkillRecognitionChanged);
-            worldInformationChanged = new Subscription<WorldInformationChangedEvent>(OnWorldInformationChanged);
-            skillCanBeCasted = new Subscription<SkillCanBeCastedEvent>(OnSkillCanBeCasted);
+            var playerInformationChanged = new Subscription<PlayerInformationChangedEvent>(OnPlayerInformationChanged);
+            var skillRecognitionChanged = new Subscription<SkillRecognitionChangedEvent>(OnSkillRecognitionChanged);
+            var worldInformationChanged = new Subscription<WorldInformationChangedEvent>(OnWorldInformationChanged);
+            var skillCanBeCasted = new Subscription<SkillCanBeCastedEvent>(OnSkillCanBeCasted);
+            var hotkeyPressed = new Subscription<HotkeyPressedEvent>(OnHotkeyPressed);
 
             SubscribeBus(playerInformationChanged);
             SubscribeBus(skillRecognitionChanged);
             SubscribeBus(worldInformationChanged);
             SubscribeBus(skillCanBeCasted);
+            SubscribeBus(hotkeyPressed);
 
             handleService.HandleStatusChanged += OnHandleChanged;
 
@@ -50,9 +51,13 @@ namespace Dolphin.Ui.ViewModel
             CurrentHealth = 0;
             CurrentPrimaryResource = 0;
             CurrentPrimaryResource = 0;
+
+            SkillIndexSuspensionStatus = new ObservableCollection<bool>(settingsService.Settings.SkillSuspensionStatus);
         }
 
         public int CurrentHealth { get; set; }
+
+        public WorldLocation CurrentLocation { get; set; }
 
         public string CurrentPlayerClass { get; set; }
 
@@ -62,13 +67,24 @@ namespace Dolphin.Ui.ViewModel
 
         public ObservableCollection<string> CurrentSkills { get; set; }
 
-        public uint DiabloProcessId { get; set; }
+        public ObservableCollection<string> CurrentSkillState { get; set; }
 
         public string DiabloClientRectangle { get; set; }
 
-        public WorldLocation CurrentLocation { get; set; }
+        public uint DiabloProcessId { get; set; }
+
+        public ICommand NegateSuspendedCommand
+        {
+            get
+            {
+                negateSuspendedCommand = negateSuspendedCommand ?? new RelayCommand((o) => NegateSuspended(int.Parse((string)o)));
+                return negateSuspendedCommand;
+            }
+        }
 
         public Window OpenWindow { get; set; }
+
+        public ObservableCollection<bool> SkillIndexSuspensionStatus { get; set; }
 
         private string GetResourcePath(SkillName skillName)
         {
@@ -94,6 +110,13 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        private void NegateSuspended(int index)
+        {
+            var newStatus = !SkillIndexSuspensionStatus[index];
+            SkillIndexSuspensionStatus[index] = newStatus;
+            settingsService.Settings.SkillSuspensionStatus[index] = newStatus;
+        }
+
         private void OnHandleChanged(object o, HandleChangedEventArgs e)
         {
             if (e.ProcessName == "Diablo III64")
@@ -102,6 +125,15 @@ namespace Dolphin.Ui.ViewModel
 
                 PropertySetter(newHandle.ProcessId, nameof(DiabloProcessId));
                 PropertySetter($"{newHandle.ClientRectangle.Width}x{newHandle.ClientRectangle.Height}", nameof(DiabloClientRectangle));
+            }
+        }
+
+        private void OnHotkeyPressed(object sender, HotkeyPressedEvent e)
+        {
+            var action = settingsService.GetActionName(e.PressedHotkey);
+            if (action.IsSuspensionAction())
+            {
+                NegateSuspended(int.Parse(action.ToString().Last().ToString()));
             }
         }
 
@@ -130,6 +162,12 @@ namespace Dolphin.Ui.ViewModel
             RaisePropertyChanged(nameof(CurrentSecondaryResource));
         }
 
+        private void OnSkillCanBeCasted(object o, SkillCanBeCastedEvent @event)
+        {
+            var skill = modelService.GetSkill(@event.SkillIndex);
+            CurrentSkillState[@event.SkillIndex] = skill.IsActive ? "Can cast [Active]" : "Can cast";
+        }
+
         private void OnSkillRecognitionChanged(object o, SkillRecognitionChangedEvent @event)
         {
             var newResourcePath = GetResourcePath(@event.NewSkillName);
@@ -139,14 +177,6 @@ namespace Dolphin.Ui.ViewModel
                 CurrentSkillState[@event.Index] = @event.NewSkillName == SkillName.None ? "" : "Cant be casted";
             }
         }
-
-        private void OnSkillCanBeCasted(object o, SkillCanBeCastedEvent @event)
-        {
-            var skill = modelService.GetSkill(@event.SkillIndex);
-            CurrentSkillState[@event.SkillIndex] = skill.IsActive ? "Can cast [Active]" : "Can cast";
-        }
-
-        public ObservableCollection<string> CurrentSkillState { get; set; }
 
         private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {

@@ -97,8 +97,8 @@
                 <Label Margin="{adonisUi:Space Top=0}" Content="Diablo III PID" />
                 <TextBox
                     Margin="{adonisUi:Space Top=0,
-                                            Bottom=1,
-                                            Left=0,
+                                            Bottom=0,
+                                            Left=1,
                                             Right=1}"
                     IsReadOnly="True"
                     Text="{Binding DiabloProcessId, Mode=OneWay}" />
@@ -107,7 +107,7 @@
                 <TextBox
                     Margin="{adonisUi:Space Top=0,
                                             Bottom=1,
-                                            Left=0,
+                                            Left=1,
                                             Right=1}"
                     IsReadOnly="True"
                     Text="{Binding DiabloClientRectangle, Mode=OneWay}" />

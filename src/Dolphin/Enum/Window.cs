@@ -31,8 +31,7 @@ namespace Dolphin.Enum
                     yield return ActionName.Smart_StartGame;
                     break;
                 case Window.Obelisk:
-                    yield return ActionName.Smart_OpenRift;
-                    yield return ActionName.Smart_OpenGrift;
+                    yield return ActionName.Smart_OpenRiftGrift;
                     break;
                 default:
                     yield break;

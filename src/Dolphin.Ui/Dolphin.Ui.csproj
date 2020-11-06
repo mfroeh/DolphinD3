@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BoolInverterConverter.cs" />
     <Compile Include="CustomFrameworkDialogFactory.cs" />
     <Compile Include="CustomMessageBox.cs" />
     <Compile Include="ShouldSerializeContractResolver.cs" />

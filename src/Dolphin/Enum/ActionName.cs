@@ -27,10 +27,9 @@ namespace Dolphin.Enum
         Reforge = 19,
         Smart_AcceptGriftPopup = 20,
         Smart_StartGame = 21,
-        Smart_OpenRift = 22,
+        Smart_OpenRiftGrift = 22,
         Smart_Gamble = 23,
         Smart_UpgradeGem = 24,
-        Smart_OpenGrift = 26
     }
 
     public static class ActionNameExtensionMethods

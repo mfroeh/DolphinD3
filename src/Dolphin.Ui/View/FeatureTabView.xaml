@@ -13,16 +13,31 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <GroupBox
-            Grid.Row="0"
-            Grid.Column="0"
-            Header="Skills">
+        <GroupBox Grid.Row="0" Grid.Column="0">
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Skills" />
+                    <CheckBox
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Content="Enabled"
+                        IsChecked="{Binding SkillCastingEnabled}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+
+                </Grid>
+            </GroupBox.Header>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
@@ -241,6 +256,102 @@
                             Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                     </Grid>
                 </GroupBox>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="0">
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Smart actions" />
+                    <CheckBox
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Content="Enabled"
+                        IsChecked="{Binding SmartActionsEnabled}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                </Grid>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Command="{Binding SmartActionCheckboxClicked}"
+                    CommandParameter="{x:Static enum:ActionName.Smart_AcceptGriftPopup}"
+                    Content="Accept grift popup"
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_AcceptGriftPopup]}" />
+
+                <CheckBox
+                    Grid.Column="1"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Command="{Binding SmartActionCheckboxClicked}"
+                    CommandParameter="{x:Static enum:ActionName.Smart_Gamble}"
+                    Content="Gamble"
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_Gamble]}" />
+
+                <CheckBox
+                    Grid.Column="2"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Command="{Binding SmartActionCheckboxClicked}"
+                    CommandParameter="{x:Static enum:ActionName.Smart_OpenRiftGrift}"
+                    Content="Open rift / grift"
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_OpenRiftGrift]}" />
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        Content="Rift"
+                        GroupName="Group1"
+                        IsChecked="{Binding IsOpenRift}" />
+                    <RadioButton
+                        Margin="{adonisUi:Space Top=0,
+                                                Right=0,
+                                                Bottom=0}"
+                        Content="Grift"
+                        GroupName="Group1"
+                        IsChecked="{Binding IsOpenRift, Converter={StaticResource BoolInverterConverter}}" />
+                </StackPanel>
+
+                <CheckBox
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Command="{Binding SmartActionCheckboxClicked}"
+                    CommandParameter="{x:Static enum:ActionName.Smart_UpgradeGem}"
+                    Content="Upgrade gem"
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_UpgradeGem]}" />
+
+
+                <CheckBox
+                    Grid.Column="4"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Command="{Binding SmartActionCheckboxClicked}"
+                    CommandParameter="{x:Static enum:ActionName.Smart_StartGame}"
+                    Content="Start game"
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_StartGame]}" />
             </Grid>
         </GroupBox>
     </Grid>

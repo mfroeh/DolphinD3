@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <local:BoolInverterConverter x:Key="BoolInverterConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

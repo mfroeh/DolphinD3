@@ -12,6 +12,8 @@ namespace Dolphin
 
         UiSettings UiSettings { get; }
 
+        SmartActionSettings SmartActionSettings { get; }
+
         ActionName GetActionName(Hotkey hotkey);
 
         Keys GetKeybinding(CommandKeybinding command);

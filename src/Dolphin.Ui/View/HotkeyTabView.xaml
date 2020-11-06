@@ -757,6 +757,11 @@
                     <RadioButton
                         Margin="{adonisUi:Space Left=1,
                                                 Bottom=0}"
+                        Content="Very slow"
+                        IsChecked="{Binding ConvertingSpeed, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enum:ConvertingSpeed.VerySlow}}" />
+                    <RadioButton
+                        Margin="{adonisUi:Space Left=1,
+                                                Bottom=0}"
                         Content="Slow"
                         IsChecked="{Binding ConvertingSpeed, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enum:ConvertingSpeed.Slow}}" />
                     <RadioButton

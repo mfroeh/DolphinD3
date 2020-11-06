@@ -70,8 +70,7 @@ namespace Dolphin.Service
                     return () => actionService.Gamble(handle, settingsService.MacroSettings.SelectedGambleItem);
 
                 case ActionName.Smart_AcceptGriftPopup:
-                case ActionName.Smart_OpenRift:
-                case ActionName.Smart_OpenGrift:
+                case ActionName.Smart_OpenRiftGrift:
                 case ActionName.Smart_StartGame:
                 case ActionName.Smart_Gamble:
                     return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);

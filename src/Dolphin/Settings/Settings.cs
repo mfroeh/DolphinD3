@@ -25,7 +25,7 @@ namespace Dolphin
                 {
                     ActionName.Smart_Gamble,
                     ActionName.Smart_AcceptGriftPopup,
-                    ActionName.Smart_OpenRift,
+                    ActionName.Smart_OpenRiftGrift,
                     ActionName.Smart_UpgradeGem,
                     ActionName.Smart_StartGame
                 };
@@ -109,6 +109,9 @@ namespace Dolphin
         };
 
         public static uint UpdateInterval => 100;
+
+        public static SmartActionSettings SmartActionSettings => new SmartActionSettings { IsOpenRift = true };
+
     }
 
     public class Settings
@@ -125,6 +128,7 @@ namespace Dolphin
                 UiSettings = InitialSettings.UiSettings;
                 UpdateInterval = InitialSettings.UpdateInterval;
                 EnabledSmartActions = InitialSettings.EnabledSmartActions;
+                SmartActionSettings = InitialSettings.SmartActionSettings;
             }
         }
 

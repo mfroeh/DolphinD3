@@ -64,6 +64,8 @@ namespace Dolphin.Ui.ViewModel
 
         public uint DiabloProcessId { get; set; }
 
+        public string DiabloClientRectangle { get; set; }
+
         public WorldLocation CurrentLocation { get; set; }
 
         public Window OpenWindow { get; set; }
@@ -96,7 +98,10 @@ namespace Dolphin.Ui.ViewModel
         {
             if (e.ProcessName == "Diablo III64")
             {
-                PropertySetter(e.NewProcessId, nameof(DiabloProcessId));
+                var newHandle = e.NewHandle;
+
+                PropertySetter(newHandle.ProcessId, nameof(DiabloProcessId));
+                PropertySetter($"{newHandle.ClientRectangle.Width}x{newHandle.ClientRectangle.Height}", nameof(DiabloClientRectangle));
             }
         }
 

@@ -9,7 +9,7 @@ namespace Dolphin
 
         World World { get; }
 
-        IEnumerable<PlayerHealth> GetPossibleHealthEnum();
+        IEnumerable<PlayerHealth> PossibleHealthEnum();
 
         IEnumerable<Enum.PlayerResource> PossiblePrimaryResourceEnum();
 

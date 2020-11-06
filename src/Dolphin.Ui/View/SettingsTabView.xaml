@@ -114,7 +114,7 @@
                     Grid.Row="1"
                     Grid.Column="8"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding Path=OtherKeybindings[(enum:Command)OpenMap]}" />
+                    SelectedItem="{Binding Path=OtherKeybindings[(enum:CommandKeybinding)OpenMap]}" />
 
                 <Label
                     Grid.Row="0"
@@ -129,7 +129,7 @@
                     Grid.Row="1"
                     Grid.Column="10"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding Path=OtherKeybindings[(enum:Command)TeleportToTown]}" />
+                    SelectedItem="{Binding Path=OtherKeybindings[(enum:CommandKeybinding)TeleportToTown]}" />
 
                 <Label
                     Grid.Row="0"
@@ -144,7 +144,7 @@
                     Grid.Row="1"
                     Grid.Column="12"
                     ItemsSource="{Binding PossibleKeys}"
-                    SelectedItem="{Binding Path=OtherKeybindings[(enum:Command)OpenInventory]}" />
+                    SelectedItem="{Binding Path=OtherKeybindings[(enum:CommandKeybinding)OpenInventory]}" />
             </Grid>
         </GroupBox>
         <GroupBox

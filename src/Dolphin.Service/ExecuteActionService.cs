@@ -28,9 +28,9 @@ namespace Dolphin.Service
             SubscribeBus(executeSmartAction);
         }
 
-        private void CancelAction()
+        private void CancelAction(IntPtr handle)
         {
-            InputHelper.SendKey(handleService.GetHandle("Diablo III64"), Keys.Escape);
+            InputHelper.SendKey(handle, Keys.Escape);
 
             if (tokenSource != null)
             {
@@ -51,23 +51,23 @@ namespace Dolphin.Service
         private void OnHotkeyPressed(object o, HotkeyPressedEvent e)
         {
             var handle = handleService.GetHandle("Diablo III64");
-            if (handle == default) return;
+            if (handle?.Handle == default) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
             if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
             {
-                CancelAction();
+                CancelAction(handle.Handle);
             }
             else if (actionName.IsCancelable() && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
-                var macro = actionFinderService.FindAction(actionName, handle, tokenSource);
+                var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource);
 
                 ExecuteAndResetTokenSourceAsync(macro);
             }
             else if (!actionName.IsSmartAction())
             {
-                var macro = actionFinderService.FindAction(actionName, handle, tokenSource);
+                var macro = actionFinderService.FindAction(actionName, handle.Handle);
 
                 Execute.AndForgetAsync(macro);
             }
@@ -76,20 +76,20 @@ namespace Dolphin.Service
         private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {
             var handle = handleService.GetHandle("Diablo III64");
-            if (handle == default || @event.NewOpenWindow == default) return;
+            if (handle?.Handle == default || @event.NewOpenWindow == default) return;
 
             var actionName = settingsService.GetSmartActionName(@event.NewOpenWindow);
             if (actionName == ActionName.Smart_UpgradeGem && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
-                var macro = actionFinderService.FindAction(actionName, handle, (int)@event.WindowExtraInformation[0]);
+                var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
 
                 ExecuteAndResetTokenSourceAsync(macro);
             }
             else if (actionName == ActionName.Smart_Gamble && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
-                var action = actionFinderService.FindAction(ActionName.Smart_Gamble, handle);
+                var action = actionFinderService.FindAction(ActionName.Smart_Gamble, handle.Handle);
 
                 ExecuteAndResetTokenSourceAsync(() =>
                 {
@@ -99,7 +99,7 @@ namespace Dolphin.Service
             }
             else if (actionName != default)
             {
-                var action = actionFinderService.FindAction(actionName, handle);
+                var action = actionFinderService.FindAction(actionName, handle.Handle);
 
                 Execute.AndForgetAsync(action);
             }

@@ -7,29 +7,15 @@ namespace Dolphin.Service
 {
     public class HandleService : IHandleService
     {
-        private IDictionary<string, IntPtr> handles = new Dictionary<string, IntPtr>();
+        private IDictionary<string, WindowInformation> handles = new Dictionary<string, WindowInformation>();
 
         public event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
 
-        public IntPtr GetHandle(string processName)
+        public WindowInformation GetHandle(string processName)
         {
-            handles.TryGetValue(processName, out IntPtr handle);
+            handles.TryGetValue(processName, out WindowInformation handle);
 
             return handle;
-        }
-
-        public void UpdateHandle(string processName)
-        {
-            var handle = WindowHelper.GetHWND(processName);
-
-            if (GetHandle(processName) != handle)
-            {
-                handles[processName] = handle;
-
-                var processId = WindowHelper.GetWindowThreadProcessId(handle);
-
-                HandleStatusChanged?.Invoke(this, new HandleChangedEventArgs { ProcessName = processName, NewHandle = handle, NewProcessId = processId });
-            }
         }
 
         public Task MainLoop(params string[] processNames)
@@ -46,6 +32,32 @@ namespace Dolphin.Service
                     Thread.Sleep(1000);
                 }
             });
+        }
+
+        public void UpdateHandle(string processName)
+        {
+            var hwnd = WindowHelper.GetHWND(processName);
+            var currentHandle = GetHandle(processName);
+
+            var processId = WindowHelper.GetWindowThreadProcessId(hwnd);
+            var clientRect = WindowHelper.GetClientRect(hwnd);
+
+            if (currentHandle == default ||
+                currentHandle.Handle != hwnd ||
+                currentHandle.ProcessId != processId ||
+                currentHandle.ClientRectangle != clientRect)
+            {
+                var handle = new WindowInformation
+                {
+                    ClientRectangle = WindowHelper.GetClientRect(hwnd),
+                    Handle = hwnd,
+                    ProcessId = WindowHelper.GetWindowThreadProcessId(hwnd),
+                    ProcessName = processName
+                };
+                handles[processName] = handle;
+
+                HandleStatusChanged?.Invoke(this, new HandleChangedEventArgs { ProcessName = processName, NewHandle = handle });
+            }
         }
     }
 }

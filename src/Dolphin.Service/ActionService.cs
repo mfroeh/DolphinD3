@@ -23,18 +23,6 @@ namespace Dolphin.Service
             return tokenSource.Token.IsCancellationRequested;
         }
 
-        public static void LeftClick(IntPtr handle)
-        {
-            InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
-            Thread.Sleep(10);
-        }
-
-        public static void RightClick(IntPtr handle)
-        {
-            InputHelper.SendClickAtCursorPos(handle, MouseButtons.Right);
-            Thread.Sleep(10);
-        }
-
         public void CubeConverterDualSlot(IntPtr handle, CancellationTokenSource tokenSource, ConvertingSpeed speed)
         {
             var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
@@ -193,6 +181,12 @@ namespace Dolphin.Service
             InputHelper.SendClick(handle, MouseButtons.Left, leave);
         }
 
+        public void LeftClick(IntPtr handle)
+        {
+            InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
+            Thread.Sleep(10);
+        }
+
         public void LowerDifficulty(IntPtr handle)
         {
             var lower = transformService.TransformCoordinate(CommonCoordinate.EscapeLowerDifficulty, RelativeCoordinatePosition.Right);
@@ -269,6 +263,12 @@ namespace Dolphin.Service
             Thread.Sleep(backwardsDelay);
 
             InputHelper.SendClick(handle, MouseButtons.Left, forwards);
+        }
+
+        public void RightClick(IntPtr handle)
+        {
+            InputHelper.SendClickAtCursorPos(handle, MouseButtons.Right);
+            Thread.Sleep(10);
         }
 
         public void Salvage(IntPtr handle, uint spareColumns)

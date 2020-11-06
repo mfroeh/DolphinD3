@@ -60,7 +60,7 @@ namespace Dolphin.Image
         {
             var oldHealth = modelService.Player.HealthPercentage;
 
-            var compareResult = GetHighestMatch(picturePart, modelService.GetPossibleHealthEnum());
+            var compareResult = GetHighestMatch(picturePart, modelService.PossibleHealthEnum());
             logService.AddEntry(this, $"Player health is most likley to be {compareResult.Item1}, with odds of {compareResult.Item2 * 100}%.", LogLevel.Debug);
 
             modelService.SetPlayerHealth(compareResult.Item1);

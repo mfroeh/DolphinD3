@@ -1,7 +1,6 @@
 ﻿using Dolphin.Enum;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Linq;
 
 namespace Dolphin.Service
@@ -22,7 +21,19 @@ namespace Dolphin.Service
 
         public World World { get; }
 
-        public IEnumerable<PlayerHealth> GetPossibleHealthEnum()
+        public Skill GetSkill(SkillName name)
+        {
+            return Player.Skills.FirstOrDefault(x => x?.Name == name);
+        }
+
+        public Skill GetSkill(int index)
+        {
+            if (index < Player.Skills.Count) return Player.Skills[index];
+
+            return null;
+        }
+
+        public IEnumerable<PlayerHealth> PossibleHealthEnum()
         {
             yield return PlayerHealth.H_0;
             yield return PlayerHealth.H_20;
@@ -45,18 +56,6 @@ namespace Dolphin.Service
         public IEnumerable<SkillName> PossibleSkills(bool isMouse) // TODO: Can all skills be on the right mouse button? then this isnt needed here
         {
             return Player.PossibleSkills(isMouse);
-        }
-
-        public Skill GetSkill(SkillName name)
-        {
-            return Player.Skills.FirstOrDefault(x => x?.Name == name);
-        }
-
-        public Skill GetSkill(int index)
-        {
-            if (index < Player.Skills.Count) return Player.Skills[index];
-
-            return null;
         }
 
         public void SetPlayerHealth(PlayerHealth health)

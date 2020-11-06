@@ -1,11 +1,11 @@
 ﻿using Dolphin.Enum;
 using System.Windows.Forms;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Service
 {
     public class SettingsService : EventSubscriberBase, ISettingsService, IEventPublisher<PausedEvent>
     {
-        private readonly Subscription<HotkeyPressedEvent> hotkeySubscription;
         private readonly ILogService logService;
 
         public SettingsService(IEventBus eventBus, Settings settings, ILogService logService) : base(eventBus)
@@ -13,7 +13,7 @@ namespace Dolphin.Service
             Settings = settings;
             this.logService = logService;
 
-            hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
+            var hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
             SubscribeBus(hotkeySubscription);
         }
 
@@ -25,7 +25,7 @@ namespace Dolphin.Service
 
         public UiSettings UiSettings => Settings.UiSettings;
 
-        public ActionName GetActionName(WK.Libraries.HotkeyListenerNS.Hotkey hotkey)
+        public ActionName GetActionName(Hotkey hotkey)
         {
             foreach (var item in Settings.Hotkeys)
             {
@@ -40,9 +40,17 @@ namespace Dolphin.Service
             return Settings.OtherKeybindings[command];
         }
 
-        public bool IsSmartActionEnabled(ActionName smartAction)
+        public ActionName GetSmartActionName(Window window)
         {
-            return Settings.EnabledSmartActions.Contains(smartAction);
+            foreach (var action in window.AssociatedActionNames())
+            {
+                if (IsSmartActionEnabled(action))
+                {
+                    return action;
+                }
+            }
+
+            return default;
         }
 
         public void NegateIsPaused(bool isFromChanging)
@@ -93,6 +101,11 @@ namespace Dolphin.Service
             {
                 NegateIsPaused(false);
             }
+        }
+
+        private bool IsSmartActionEnabled(ActionName smartAction)
+        {
+            return Settings.EnabledSmartActions.Contains(smartAction);
         }
     }
 }

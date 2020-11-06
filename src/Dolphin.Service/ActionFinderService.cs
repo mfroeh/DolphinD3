@@ -1,13 +1,11 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace Dolphin.Service
 {
     public class ActionFinderService : IActionFinderService
     {
-        private static readonly IList<ActionName> cancellableActions = new List<ActionName> { ActionName.CubeConverterDualSlot, ActionName.CubeConverterSingleSlot, ActionName.UpgradeGem };
         private readonly ActionService actionService;
         private readonly ILogService logService;
         private readonly ISettingsService settingsService;
@@ -21,18 +19,18 @@ namespace Dolphin.Service
 
         public Action FindAction(ActionName actionName, IntPtr handle, params object[] @params)
         {
-            if (cancellableActions.Contains(actionName))
+            if (actionName.IsCancelable())
             {
-                logService.AddEntry(this, $"Tried to recive Macro {actionName} as a non cancellable Macro.", LogLevel.Debug);
+                throw new Exception($"Tried to recive Macro {actionName} as a non cancellable Macro.");
             }
 
             switch (actionName)
             {
                 case ActionName.RightClick:
-                    return () => ActionService.RightClick(handle);
+                    return () => actionService.RightClick(handle);
 
                 case ActionName.LeftClick:
-                    return () => ActionService.LeftClick(handle);
+                    return () => actionService.LeftClick(handle);
 
                 case ActionName.DropInventory:
                     var columns = settingsService.MacroSettings.SpareColumns;
@@ -86,11 +84,9 @@ namespace Dolphin.Service
 
         public Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params)
         {
-            if (!cancellableActions.Contains(actionName))
+            if (!actionName.IsCancelable())
             {
-                logService.AddEntry(this, $"Tried to recive cancellable Macro {actionName} which is not avalible as a cancellable macro. This will still work.", LogLevel.Debug);
-
-                return FindAction(actionName, handle);
+                throw new Exception($"Tried to recive non cancelable Macro {actionName} as a cancellable Macro.");
             }
 
             switch (actionName)

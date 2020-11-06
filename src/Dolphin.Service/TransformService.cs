@@ -1,6 +1,4 @@
 ﻿using Dolphin.Enum;
-using System;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace Dolphin.Service
@@ -16,15 +14,13 @@ namespace Dolphin.Service
 
         public Point TransformCoordinate(Point sourceCoordinate, RelativeCoordinatePosition coordinatePosition = RelativeCoordinatePosition.Left, int originalWidth = 1920, int originalHeight = 1080)
         {
-            var handle = handleService.GetHandle("Diablo III64");
-
-            var rect = WindowHelper.GetClientRect(handle);
+            var rect = handleService.GetHandle("Diablo III64").ClientRectangle;
 
             var originalWidthF = (float)originalWidth;
             var originalHeightF = (float)originalHeight;
 
             var scaledY = (int)(rect.Height / originalHeightF * sourceCoordinate.Y);
-            
+
             int scaledX;
             if (coordinatePosition == RelativeCoordinatePosition.Left)
             {

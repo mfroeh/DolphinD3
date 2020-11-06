@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,8 +7,8 @@ namespace Dolphin.Service
 {
     public class PoolSpotService : IPoolSpotService
     {
+        private readonly ISettingsService settingsService;
         private readonly IList<Waypoint> visitedPoolspots = new List<Waypoint>();
-        private ISettingsService settingsService;
 
         public PoolSpotService(ISettingsService settingsService)
         {
@@ -51,14 +50,19 @@ namespace Dolphin.Service
             {
                 case 1:
                     return CommonCoordinate.MapAct1;
+
                 case 2:
                     return CommonCoordinate.MapAct2;
+
                 case 3:
                     return CommonCoordinate.MapAct3;
+
                 case 4:
                     return CommonCoordinate.MapAct4;
+
                 case 5:
                     return CommonCoordinate.MapAct5;
+
                 default:
                     throw new NotImplementedException();
             }

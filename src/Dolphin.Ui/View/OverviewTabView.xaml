@@ -102,6 +102,15 @@
                                             Right=1}"
                     IsReadOnly="True"
                     Text="{Binding DiabloProcessId, Mode=OneWay}" />
+
+                <Label Margin="{adonisUi:Space Top=0}" Content="Client Rectangle" />
+                <TextBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Bottom=1,
+                                            Left=0,
+                                            Right=1}"
+                    IsReadOnly="True"
+                    Text="{Binding DiabloClientRectangle, Mode=OneWay}" />
             </WrapPanel>
         </Grid>
         <Grid

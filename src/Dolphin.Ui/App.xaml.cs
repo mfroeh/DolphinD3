@@ -2,14 +2,12 @@
 using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
-using MvvmDialogs.DialogFactories;
 using MvvmDialogs.FrameworkDialogs;
 using Newtonsoft.Json;
 using RestoreWindowPlace;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,28 +22,21 @@ namespace Dolphin.Ui
     /// </summary>
     public partial class App : Application
     {
-        public WindowPlace WindowPlace { get; private set; }
-
         private IUnityContainer container = new UnityContainer();
 
-        private Settings LoadSettings()
+        public WindowPlace WindowPlace { get; private set; }
+
+        protected override void OnExit(ExitEventArgs e)
         {
-            var contractResolver = new ShouldSerializeContractResolver();
-            var serializerSettings = new JsonSerializerSettings { ContractResolver = contractResolver };
+            base.OnExit(e);
 
-            Settings settings;
-            try
+            if (e.ApplicationExitCode != 2)
             {
-                var json = File.ReadAllText("settings.json");
-
-                settings = JsonConvert.DeserializeObject<Settings>(json, serializerSettings);
+                var settings = container.Resolve<Settings>();
+                var json = JsonConvert.SerializeObject(settings);
+                File.WriteAllText("settings.json", json);
+                WindowPlace.Save();
             }
-            catch
-            {
-                settings = new Settings(true);
-            }
-
-            return settings;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -57,6 +48,7 @@ namespace Dolphin.Ui
             var settings = LoadSettings();
 
             #region Register
+
             container.RegisterInstance(settings);
 
             container.RegisterInstance(new Player());
@@ -106,7 +98,7 @@ namespace Dolphin.Ui
 
             container.RegisterType<ActionService, ActionService>(); // Does this work?
 
-            #endregion
+            #endregion Register
 
             container.AddExtension(new Diagnostic());
 
@@ -134,7 +126,9 @@ namespace Dolphin.Ui
                     try
                     {
                         var handle = handleService.GetHandle("Diablo III64");
-                        if (handle != IntPtr.Zero && !_settings.IsPaused)//!settingsService.Settings.IsPaused)
+                        if (handle?.Handle != default
+                            && !_settings.IsPaused
+                            && (_settings.SmartActionsEnabled || _settings.SkillCastingEnabled))
                         {
                             using (var image = captureService.CaptureWindow("Diablo III64"))
                             {
@@ -145,9 +139,17 @@ namespace Dolphin.Ui
                                 //await task2;
                                 //await task1;
                                 //await delayTask;
-                                extractSkillService.Extract(image);
-                                extractPlayerService.Extract(image);
-                                extractWorldService.Extract(image);
+
+                                if (_settings.SkillCastingEnabled)
+                                {
+                                    extractSkillService.Extract(image);
+                                    extractPlayerService.Extract(image);
+                                }
+
+                                if (_settings.SmartActionsEnabled)
+                                {
+                                    extractWorldService.Extract(image);
+                                }
                             }
                         }
                         Thread.Sleep((int)_settings.UpdateInterval);
@@ -163,17 +165,24 @@ namespace Dolphin.Ui
             container.Resolve<IEventSubscriber>("skill");
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        private Settings LoadSettings()
         {
-            base.OnExit(e);
+            var contractResolver = new ShouldSerializeContractResolver();
+            var serializerSettings = new JsonSerializerSettings { ContractResolver = contractResolver };
 
-            if (e.ApplicationExitCode != 2)
+            Settings settings;
+            try
             {
-                var settings = container.Resolve<Settings>();
-                var json = JsonConvert.SerializeObject(settings);
-                File.WriteAllText("settings.json", json);
-                WindowPlace.Save();
+                var json = File.ReadAllText("settings.json");
+
+                settings = JsonConvert.DeserializeObject<Settings>(json, serializerSettings);
             }
+            catch
+            {
+                settings = new Settings(true);
+            }
+
+            return settings;
         }
 
         /*

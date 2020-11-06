@@ -7,9 +7,8 @@ namespace Dolphin.Service
     public class HotkeyListenerService : EventSubscriberBase, IEventPublisher<HotkeyPressedEvent>
     {
         private readonly HotkeyListener hotkeyListener;
-        private readonly Subscription<PausedEvent> pausedSubscription;
-        private readonly ISettingsService settingsService; // TODO: Remove if not needed
         private readonly ILogService logService;
+        private readonly ISettingsService settingsService; // TODO: Remove if not needed
 
         public HotkeyListenerService(IEventBus eventBus, ISettingsService settingsService, HotkeyListener hotkeyListener, ILogService logService) : base(eventBus)
         {
@@ -17,7 +16,8 @@ namespace Dolphin.Service
             this.settingsService = settingsService;
             this.logService = logService;
 
-            pausedSubscription = new Subscription<PausedEvent>(PausedHandler);
+            var pausedSubscription = new Subscription<PausedEvent>(PausedHandler);
+
             SubscribeBus(pausedSubscription);
 
             hotkeyListener.HotkeyPressed += OnHotkeyPressed;

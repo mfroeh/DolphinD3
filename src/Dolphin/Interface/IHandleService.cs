@@ -7,7 +7,7 @@ namespace Dolphin
     {
         event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
 
-        IntPtr GetHandle(string processName);
+        WindowInformation GetHandle(string processName);
 
         Task MainLoop(params string[] processNames);
 

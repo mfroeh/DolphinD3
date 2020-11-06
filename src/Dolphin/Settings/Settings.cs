@@ -140,13 +140,13 @@ namespace Dolphin
 
         public IDictionary<CommandKeybinding, Keys> OtherKeybindings { get; set; }
 
+        public bool SkillCastingEnabled { get; set; }
+
         public IList<Keys> SkillKeybindings { get; set; }
 
         public bool SmartActionsEnabled { get; set; }
 
         public SmartActionSettings SmartActionSettings { get; set; }
-
-        public bool SmartSkillCastingEnabled { get; set; }
 
         public UiSettings UiSettings { get; set; }
 

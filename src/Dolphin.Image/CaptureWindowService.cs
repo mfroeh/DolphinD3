@@ -18,9 +18,10 @@ namespace Dolphin.Image
 
         public Bitmap CaptureWindow(string processName)
         {
-            var hwnd = handleService.GetHandle(processName);
+            var handle = handleService.GetHandle(processName);
+            if (handle?.Handle == default) return default;
 
-            return CaptureWindow(hwnd);
+            return CaptureWindow(handle.Handle);
         }
 
         public Bitmap CaptureWindow(IntPtr hwnd)

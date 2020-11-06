@@ -1,4 +1,6 @@
-﻿namespace Dolphin.Enum
+﻿using System.Collections.Generic;
+
+namespace Dolphin.Enum
 {
     public enum Window
     {
@@ -8,5 +10,33 @@
         Urshi = 3,
         Kadala = 4,
         Obelisk = 5
+    }
+
+    public static class WindowExtensionMethods
+    {
+        public static IEnumerable<ActionName> AssociatedActionNames(this Window window)
+        {
+            switch (window)
+            {
+                case Window.Kadala:
+                    yield return ActionName.Smart_Gamble;
+                    break;
+                case Window.AcceptGrift:
+                    yield return ActionName.Smart_AcceptGriftPopup;
+                    break;
+                case Window.Urshi:
+                    yield return ActionName.Smart_UpgradeGem;
+                    break;
+                case Window.StartGame:
+                    yield return ActionName.Smart_StartGame;
+                    break;
+                case Window.Obelisk:
+                    yield return ActionName.Smart_OpenRift;
+                    yield return ActionName.Smart_OpenGrift;
+                    break;
+                default:
+                    yield break;
+            }
+        }
     }
 }

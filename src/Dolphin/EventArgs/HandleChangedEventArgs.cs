@@ -4,9 +4,7 @@ namespace Dolphin
 {
     public class HandleChangedEventArgs : EventArgs
     {
-        public IntPtr NewHandle { get; set; }
-
-        public uint NewProcessId { get; set; }
+        public WindowInformation NewHandle { get; set; }
 
         public string ProcessName { get; set; }
     }

@@ -326,9 +326,9 @@ namespace Dolphin.Service
             InputHelper.SendClick(handle, MouseButtons.Left, mapWaypoint);
         }
 
-        public void TravelTown(IntPtr handle, ActionName actionName, Keys openMapKey)
+        public void TravelTown(IntPtr handle, int act, Keys openMapKey)
         {
-            var coordinates = travelService.GetTownCoordinates(actionName);
+            var coordinates = travelService.GetTownCoordinates(act);
 
             var backwards = transformService.TransformCoordinate(CommonCoordinate.MapBackwards, RelativeCoordinatePosition.Middle);
             var mapAct = transformService.TransformCoordinate(coordinates.Item1, RelativeCoordinatePosition.Middle);

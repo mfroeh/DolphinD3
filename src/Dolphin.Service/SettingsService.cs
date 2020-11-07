@@ -40,14 +40,11 @@ namespace Dolphin.Service
             return Settings.OtherKeybindings[command];
         }
 
-        public ActionName GetSmartActionName(Window window)
+        public SmartActionName GetSmartActionName(Window window)
         {
-            foreach (var action in window.AssociatedActionNames())
+            foreach (var action in window.AssociatedSmartActions())
             {
-                if (IsSmartActionEnabled(action))
-                {
-                    return action;
-                }
+                return action;
             }
 
             return default;
@@ -108,7 +105,7 @@ namespace Dolphin.Service
             }
         }
 
-        private bool IsSmartActionEnabled(ActionName smartAction)
+        private bool IsSmartActionEnabled(SmartActionName smartAction)
         {
             return Settings.EnabledSmartActions.Contains(smartAction);
         }

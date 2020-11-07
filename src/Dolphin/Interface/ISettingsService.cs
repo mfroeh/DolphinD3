@@ -18,7 +18,7 @@ namespace Dolphin
 
         Keys GetKeybinding(CommandKeybinding command);
 
-        ActionName GetSmartActionName(Window window);
+        SmartActionName GetSmartActionName(Window window);
 
         public void ResetSettings<T>();
 

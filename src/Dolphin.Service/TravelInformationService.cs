@@ -23,30 +23,9 @@ namespace Dolphin.Service
             return poolService.GetNextPoolSpot();
         }
 
-        public Tuple<Point, Point> GetTownCoordinates(ActionName actionName)
+        public Tuple<Point, Point> GetTownCoordinates(int act)
         {
-            return Tuple.Create(GetActCoordinate(actionName), GetTownCoordinate(actionName));
-        }
-
-        private Point GetActCoordinate(ActionName actionName)
-        {
-            switch (actionName)
-            {
-                case ActionName.TravelAct1:
-                    return CommonCoordinate.MapAct1;
-
-                case ActionName.TravelAct2:
-                    return CommonCoordinate.MapAct2;
-
-                case ActionName.TravelAct34:
-                    return CommonCoordinate.MapAct3;
-
-                case ActionName.TravelAct5:
-                    return CommonCoordinate.MapAct5;
-
-                default:
-                    return default;
-            }
+            return Tuple.Create(GetActCoordinate(act), GetTownCoordinate(act));
         }
 
         private Point GetActCoordinate(int act)
@@ -135,27 +114,6 @@ namespace Dolphin.Service
 
                 default:
                     return CommonCoordinate.KadalaTab2;
-            }
-        }
-
-        private Point GetTownCoordinate(ActionName actionName)
-        {
-            switch (actionName)
-            {
-                case ActionName.TravelAct1:
-                    return CommonCoordinate.MapAct1Town;
-
-                case ActionName.TravelAct2:
-                    return CommonCoordinate.MapAct2Town;
-
-                case ActionName.TravelAct34:
-                    return CommonCoordinate.MapAct3Town;
-
-                case ActionName.TravelAct5:
-                    return CommonCoordinate.MapAct5Town;
-
-                default:
-                    return default;
             }
         }
 

@@ -27,10 +27,10 @@ namespace Dolphin.Ui.ViewModel
                 }
             }
 
-            EnabledSmartActions = new ObservableDictionary<ActionName, bool>();
-            foreach (var actionName in System.Enum.GetValues(typeof(ActionName)).Cast<ActionName>())
+            EnabledSmartActions = new ObservableDictionary<SmartActionName, bool>();
+            foreach (var actionName in System.Enum.GetValues(typeof(SmartActionName)).Cast<SmartActionName>())
             {
-                if (actionName.IsSmartAction())
+                if (actionName != SmartActionName.None)
                 {
                     EnabledSmartActions[actionName] = settingsService.Settings.EnabledSmartActions.Contains(actionName);
                 }
@@ -43,7 +43,7 @@ namespace Dolphin.Ui.ViewModel
 
         public ObservableDictionary<SkillName, bool> EnabledSkills { get; }
 
-        public ObservableDictionary<ActionName, bool> EnabledSmartActions { get; set; }
+        public ObservableDictionary<SmartActionName, bool> EnabledSmartActions { get; set; }
 
         public bool IsOpenRift
         {
@@ -79,7 +79,7 @@ namespace Dolphin.Ui.ViewModel
         {
             get
             {
-                smartActionCheckboxClicked = smartActionCheckboxClicked ?? new RelayCommand((o) => ChangeSmartActionEnabled((ActionName)o));
+                smartActionCheckboxClicked = smartActionCheckboxClicked ?? new RelayCommand((o) => ChangeSmartActionEnabled((SmartActionName)o));
                 return smartActionCheckboxClicked;
             }
         }
@@ -109,7 +109,7 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        private void ChangeSmartActionEnabled(ActionName smartAction)
+        private void ChangeSmartActionEnabled(SmartActionName smartAction)
         {
             EnabledSmartActions[smartAction] = !EnabledSmartActions[smartAction];
 

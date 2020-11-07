@@ -6,8 +6,12 @@ namespace Dolphin
 {
     public interface IActionFinderService
     {
-        Action FindAction(ActionName actionName, IntPtr handle, params object[] @params);
+        Action FindAction(ActionName actionName, IntPtr handle);
 
-        Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params);
+        Action FindAction(SmartActionName actionName, IntPtr handle, params object[] @params);
+
+        Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource);
+
+        Action FindAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params);
     }
 }

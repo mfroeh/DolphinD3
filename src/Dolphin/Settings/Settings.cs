@@ -17,17 +17,17 @@ namespace Dolphin
             SkillName.Simulacrum
         };
 
-        public static IList<ActionName> EnabledSmartActions
+        public static IList<SmartActionName> EnabledSmartActions
         {
             get
             {
-                return new List<ActionName>
+                return new List<SmartActionName>
                 {
-                    ActionName.Smart_Gamble,
-                    ActionName.Smart_AcceptGriftPopup,
-                    ActionName.Smart_OpenRiftGrift,
-                    ActionName.Smart_UpgradeGem,
-                    ActionName.Smart_StartGame
+                    SmartActionName.Gamble,
+                    SmartActionName.AcceptGriftPopup,
+                    SmartActionName.OpenRiftGrift,
+                    SmartActionName.UpgradeGem,
+                    SmartActionName.StartGame
                 };
             }
         }
@@ -39,7 +39,7 @@ namespace Dolphin
                 var dict = new Dictionary<ActionName, Hotkey>();
                 foreach (var @enum in System.Enum.GetValues(typeof(ActionName)).Cast<ActionName>())
                 {
-                    if (!@enum.IsSmartAction() && @enum != ActionName.None)
+                    if (@enum != ActionName.None)
                     {
                         dict[@enum] = null;
                     }
@@ -135,7 +135,7 @@ namespace Dolphin
 
         public IList<SkillName> EnabledSkills { get; set; }
 
-        public IList<ActionName> EnabledSmartActions { get; set; }
+        public IList<SmartActionName> EnabledSmartActions { get; set; }
 
         public IDictionary<ActionName, Hotkey> Hotkeys { get; set; }
 

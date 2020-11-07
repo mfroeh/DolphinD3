@@ -2,7 +2,6 @@
 
 namespace Dolphin.Enum
 {
-    // TODO: Smart actions get their own enum type
     public enum ActionName
     {
         None = 0,
@@ -26,11 +25,6 @@ namespace Dolphin.Enum
         DropInventory = 17,
         Gamble = 18,
         Reforge = 19,
-        Smart_AcceptGriftPopup = 20,
-        Smart_StartGame = 21,
-        Smart_OpenRiftGrift = 22,
-        Smart_Gamble = 23,
-        Smart_UpgradeGem = 24,
         Suspend_0 = 26,
         Suspend_1 = 27,
         Suspend_2 = 28,
@@ -45,18 +39,12 @@ namespace Dolphin.Enum
         {
             ActionName.CubeConverterDualSlot,
             ActionName.CubeConverterSingleSlot,
-            ActionName.UpgradeGem,
-            ActionName.Smart_UpgradeGem
+            ActionName.UpgradeGem
         };
 
         public static bool IsCancelable(this ActionName action)
         {
             return cancelableActions.Contains(action);
-        }
-
-        public static bool IsSmartAction(this ActionName action)
-        {
-            return action.ToString().StartsWith("Smart");
         }
 
         public static bool IsSuspensionAction(this ActionName action)

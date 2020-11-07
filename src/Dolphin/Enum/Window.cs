@@ -14,28 +14,28 @@ namespace Dolphin.Enum
 
     public static class WindowExtensionMethods
     {
-        public static IEnumerable<ActionName> AssociatedActionNames(this Window window)
+        public static IEnumerable<SmartActionName> AssociatedSmartActions(this Window window)
         {
             switch (window)
             {
                 case Window.Kadala:
-                    yield return ActionName.Smart_Gamble;
+                    yield return SmartActionName.Gamble;
                     break;
 
                 case Window.AcceptGrift:
-                    yield return ActionName.Smart_AcceptGriftPopup;
+                    yield return SmartActionName.AcceptGriftPopup;
                     break;
 
                 case Window.Urshi:
-                    yield return ActionName.Smart_UpgradeGem;
+                    yield return SmartActionName.UpgradeGem;
                     break;
 
                 case Window.StartGame:
-                    yield return ActionName.Smart_StartGame;
+                    yield return SmartActionName.StartGame;
                     break;
 
                 case Window.Obelisk:
-                    yield return ActionName.Smart_OpenRiftGrift;
+                    yield return SmartActionName.OpenRiftGrift;
                     break;
 
                 default:

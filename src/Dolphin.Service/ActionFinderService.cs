@@ -17,7 +17,7 @@ namespace Dolphin.Service
             this.actionService = actionService;
         }
 
-        public Action FindAction(ActionName actionName, IntPtr handle, params object[] @params)
+        public Action FindAction(ActionName actionName, IntPtr handle)
         {
             if (actionName.IsCancelable())
             {
@@ -50,10 +50,13 @@ namespace Dolphin.Service
                     return () => actionService.Reforge(handle, settingsService.MacroSettings.ConvertingSpeed);
 
                 case ActionName.TravelAct1:
+                    return () => actionService.TravelTown(handle, 1, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
                 case ActionName.TravelAct2:
+                    return () => actionService.TravelTown(handle, 2, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
                 case ActionName.TravelAct34:
+                    return () => actionService.TravelTown(handle, 3, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
                 case ActionName.TravelAct5:
-                    return () => actionService.TravelTown(handle, actionName, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+                    return () => actionService.TravelTown(handle, 5, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
 
                 case ActionName.TravelPool:
                     return () => actionService.TravelPool(handle);
@@ -69,19 +72,12 @@ namespace Dolphin.Service
                 case ActionName.Gamble:
                     return () => actionService.Gamble(handle, settingsService.MacroSettings.SelectedGambleItem);
 
-                case ActionName.Smart_AcceptGriftPopup:
-                case ActionName.Smart_OpenRiftGrift:
-                case ActionName.Smart_StartGame:
-                case ActionName.Smart_Gamble:
-                    return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);
-                    break;
-
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params)
+        public Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource)
         {
             if (!actionName.IsCancelable())
             {
@@ -104,13 +100,46 @@ namespace Dolphin.Service
                     var pickYourself = settingsService.MacroSettings.PickGemYourself;
                     return () => actionService.UpgradeGem(handle, tokenSource, isEmpowered, pickYourself, key);
 
-                case ActionName.Smart_UpgradeGem:
-                    key = settingsService.GetKeybinding(CommandKeybinding.TeleportToTown);
-                    return () => actionService.UpgradeGem(handle, tokenSource, (int)@params[0], key);
-
                 default:
                     throw new NotImplementedException($"Cancellable Macro not implemented for {actionName}");
                     break;
+            }
+        }
+
+        public Action FindAction(SmartActionName actionName, IntPtr handle, params object[] @params)
+        {
+            if (actionName.IsCancelable())
+            {
+                throw new Exception($"Tried to recive cancelable smart action {actionName} as a non cancellable Macro.");
+            }
+
+            switch (actionName)
+            {
+                case SmartActionName.AcceptGriftPopup:
+                case SmartActionName.OpenRiftGrift:
+                case SmartActionName.StartGame:
+                case SmartActionName.Gamble:
+                    return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public Action FindAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params)
+        {
+            if (!actionName.IsCancelable())
+            {
+                throw new Exception($"Tried to recive non cancelable smart action {actionName} as a cancellable Macro.");
+            }
+
+            switch (actionName)
+            {
+                case SmartActionName.UpgradeGem:
+                    var key = settingsService.GetKeybinding(CommandKeybinding.TeleportToTown);
+                    return () => actionService.UpgradeGem(handle, tokenSource, (int)@params[0], key);
+
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

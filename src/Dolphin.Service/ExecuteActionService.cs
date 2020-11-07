@@ -54,8 +54,6 @@ namespace Dolphin.Service
             if (handle?.Handle == default) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
-            if (actionName.IsSuspensionAction()) return;
-
             if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
             {
                 CancelAction(handle.Handle);
@@ -67,7 +65,7 @@ namespace Dolphin.Service
 
                 ExecuteAndResetTokenSourceAsync(macro);
             }
-            else if (!actionName.IsSmartAction())
+            else if (!actionName.IsSuspensionAction())
             {
                 var macro = actionFinderService.FindAction(actionName, handle.Handle);
 
@@ -81,17 +79,17 @@ namespace Dolphin.Service
             if (handle?.Handle == default || @event.NewOpenWindow == default) return;
 
             var actionName = settingsService.GetSmartActionName(@event.NewOpenWindow);
-            if (actionName == ActionName.Smart_UpgradeGem && tokenSource == null)
+            if (actionName == SmartActionName.UpgradeGem && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
                 var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
 
                 ExecuteAndResetTokenSourceAsync(macro);
             }
-            else if (actionName == ActionName.Smart_Gamble && tokenSource == null)
+            else if (actionName == SmartActionName.Gamble && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
-                var action = actionFinderService.FindAction(ActionName.Smart_Gamble, handle.Handle);
+                var action = actionFinderService.FindAction(actionName, handle.Handle);
 
                 ExecuteAndResetTokenSourceAsync(() =>
                 {

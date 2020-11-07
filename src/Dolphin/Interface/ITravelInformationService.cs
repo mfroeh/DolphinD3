@@ -10,6 +10,6 @@ namespace Dolphin
 
         Tuple<Point, Point> GetNextPoolSpot();
 
-        Tuple<Point, Point> GetTownCoordinates(ActionName actionName);
+        Tuple<Point, Point> GetTownCoordinates(int act);
     }
 }

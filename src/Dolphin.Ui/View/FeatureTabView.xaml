@@ -291,27 +291,27 @@
                     Margin="{adonisUi:Space Top=0,
                                             Left=0}"
                     Command="{Binding SmartActionCheckboxClicked}"
-                    CommandParameter="{x:Static enum:ActionName.Smart_AcceptGriftPopup}"
+                    CommandParameter="{x:Static enum:SmartActionName.AcceptGriftPopup}"
                     Content="Accept grift popup"
-                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_AcceptGriftPopup]}" />
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)AcceptGriftPopup]}" />
 
                 <CheckBox
                     Grid.Column="1"
                     Margin="{adonisUi:Space Top=0,
                                             Left=0}"
                     Command="{Binding SmartActionCheckboxClicked}"
-                    CommandParameter="{x:Static enum:ActionName.Smart_Gamble}"
+                    CommandParameter="{x:Static enum:SmartActionName.Gamble}"
                     Content="Gamble"
-                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_Gamble]}" />
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)Gamble]}" />
 
                 <CheckBox
                     Grid.Column="2"
                     Margin="{adonisUi:Space Top=0,
                                             Left=0}"
                     Command="{Binding SmartActionCheckboxClicked}"
-                    CommandParameter="{x:Static enum:ActionName.Smart_OpenRiftGrift}"
+                    CommandParameter="{x:Static enum:SmartActionName.OpenRiftGrift}"
                     Content="Open rift / grift"
-                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_OpenRiftGrift]}" />
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)OpenRiftGrift]}" />
 
                 <StackPanel
                     Grid.Row="1"
@@ -338,18 +338,18 @@
                     Margin="{adonisUi:Space Top=0,
                                             Left=0}"
                     Command="{Binding SmartActionCheckboxClicked}"
-                    CommandParameter="{x:Static enum:ActionName.Smart_UpgradeGem}"
+                    CommandParameter="{x:Static enum:SmartActionName.UpgradeGem}"
                     Content="Upgrade gem"
-                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_UpgradeGem]}" />
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)UpgradeGem]}" />
 
                 <CheckBox
                     Grid.Column="4"
                     Margin="{adonisUi:Space Top=0,
                                             Left=0}"
                     Command="{Binding SmartActionCheckboxClicked}"
-                    CommandParameter="{x:Static enum:ActionName.Smart_StartGame}"
+                    CommandParameter="{x:Static enum:SmartActionName.StartGame}"
                     Content="Start game"
-                    IsChecked="{Binding Path=EnabledSmartActions[(enum:ActionName)Smart_StartGame]}" />
+                    IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)StartGame]}" />
             </Grid>
         </GroupBox>
     </Grid>

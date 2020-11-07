@@ -128,7 +128,8 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Vertical">
-                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=8.5}" Content="Suspended" />
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=0}" Content="Suspended" />
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=8.7}" Content="Active" />
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=0}" Content="Castability" />
             </StackPanel>
 
@@ -139,6 +140,7 @@
                                         Bottom=0}"
                 Orientation="Vertical">
                 <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[0]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[0]}" />
                 <Button
                     Command="{Binding NegateSuspendedCommand}"
                     CommandParameter="0"
@@ -155,6 +157,7 @@
                                         Bottom=0}"
                 Orientation="Vertical">
                 <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[1]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[1]}" />
                 <Button
                     Command="{Binding NegateSuspendedCommand}"
                     CommandParameter="1"
@@ -171,6 +174,8 @@
                                         Bottom=0}"
                 Orientation="Vertical">
                 <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[2]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[2]}" />
+
                 <Button
                     Command="{Binding NegateSuspendedCommand}"
                     CommandParameter="2"
@@ -187,6 +192,8 @@
                                         Bottom=0}"
                 Orientation="Vertical">
                 <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[3]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[3]}" />
+
                 <Button
                     Command="{Binding NegateSuspendedCommand}"
                     CommandParameter="3"
@@ -203,6 +210,8 @@
                                         Bottom=0}"
                 Orientation="Vertical">
                 <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[4]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[4]}" />
+
                 <Button
                     Command="{Binding NegateSuspendedCommand}"
                     CommandParameter="4"
@@ -219,6 +228,8 @@
                                         Bottom=0}"
                 Orientation="Vertical">
                 <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[5]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[5]}" />
+
                 <Button
                     Command="{Binding NegateSuspendedCommand}"
                     CommandParameter="5"

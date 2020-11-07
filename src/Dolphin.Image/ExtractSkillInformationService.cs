@@ -100,11 +100,11 @@ namespace Dolphin.Image
             Bitmap originalImage;
             if (index <= 3)
             {
-                originalImage = resourceService.Load("Skill/SkillActive/SkillNotActive.png");
+                originalImage = resourceService.Load("Skill/SkillInactive/SkillNotActive.png");
             }
             else
             {
-                originalImage = resourceService.Load($"Skill/SkillActive/Skill{index}NotActive.png");
+                originalImage = resourceService.Load($"Skill/SkillInactive/Skill{index}NotActive.png");
             }
 
             return ImageHelper.Compare(bitmap, originalImage) < 0.9f;

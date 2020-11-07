@@ -6,6 +6,7 @@ using MvvmDialogs.FrameworkDialogs;
 using Newtonsoft.Json;
 using RestoreWindowPlace;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -106,10 +107,21 @@ namespace Dolphin.Ui
             MainWindow = new MainWindow { DataContext = mainVM };
             MainWindow.Show();
 
+            var backgroundWorker = new BackgroundWorker();
+            backgroundWorker.DoWork += DoWork;
+            backgroundWorker.RunWorkerAsync();
+
+            // var task = Task.Factory.StartNew(() => TaskCreationOptions.LongRunning);
+
+            container.Resolve<IEventSubscriber>("macro");
+            container.Resolve<IEventSubscriber>("skill");
+        }
+
+        private void DoWork(object o, DoWorkEventArgs e)
+        {
             var handleService = container.Resolve<IHandleService>();
             Trace.WriteLine(handleService.GetHashCode());
             var logService = container.Resolve<ILogService>();
-            var random = new Random();
 
             handleService.MainLoop("Diablo III64");
 
@@ -119,50 +131,42 @@ namespace Dolphin.Ui
             var extractWorldService = container.Resolve<IExtractInformationService>("extractWorldInformation");
             var _settings = container.Resolve<Settings>();
 
-            var task = Task.Factory.StartNew(async () =>
+            while (true)
             {
-                while (true)
+                var watch = Stopwatch.StartNew();
+                try
                 {
-                    try
+                    var handle = handleService.GetHandle("Diablo III64");
+                    if (handle?.Handle != default
+                        && !_settings.IsPaused
+                        && (_settings.SmartActionsEnabled || _settings.SkillCastingEnabled))
                     {
-                        var handle = handleService.GetHandle("Diablo III64");
-                        if (handle?.Handle != default
-                            && !_settings.IsPaused
-                            && (_settings.SmartActionsEnabled || _settings.SkillCastingEnabled))
+                        using (var image = captureService.CaptureWindow("Diablo III64"))
                         {
-                            using (var image = captureService.CaptureWindow("Diablo III64"))
+
+
+                            if (_settings.SkillCastingEnabled)
                             {
-                                //var task1 = Task.Run(() => extractSkillService.Extract(image));
-                                //var task2 = Task.Run(() => extractPlayerService.Extract(image));
-                                //var delayTask = Task.Run(() => Thread.Sleep((int)delay));
-
-                                //await task2;
-                                //await task1;
-                                //await delayTask;
-
-                                if (_settings.SkillCastingEnabled)
-                                {
-                                    extractSkillService.Extract(image);
-                                    extractPlayerService.Extract(image);
-                                }
-
-                                if (_settings.SmartActionsEnabled)
-                                {
-                                    extractWorldService.Extract(image);
-                                }
+                                extractSkillService.Extract(image);
+                                extractPlayerService.Extract(image);
                             }
-                        }
-                        Thread.Sleep((int)_settings.UpdateInterval);
-                    }
-                    catch (Exception ex)
-                    {
-                        logService.AddEntry(this, "Caught exception in information extraction mmainloop", Enum.LogLevel.Error, ex);
-                    }
-                }
-            }, TaskCreationOptions.LongRunning);
 
-            container.Resolve<IEventSubscriber>("macro");
-            container.Resolve<IEventSubscriber>("skill");
+
+                            if (_settings.SmartActionsEnabled)
+                            {
+                                //   extractWorldService.Extract(image);
+                            }
+                            watch.Stop();
+                            Trace.WriteLine(watch.ElapsedMilliseconds);
+                        }
+                    }
+                    Thread.Sleep((int)_settings.UpdateInterval);
+                }
+                catch (Exception ex)
+                {
+                    logService.AddEntry(this, "Caught exception in information extraction mmainloop", Enum.LogLevel.Error, ex);
+                }
+            }
         }
 
         private Settings LoadSettings()

@@ -11,11 +11,12 @@ namespace Dolphin.Enum
         ShadowPower = 4,
         Vengeance = 5,
         BoneArmor = 6,
-        CommandSkeletons = 9,
-        Devour = 10,
-        SkeletalMage = 11,
-        Simulacrum = 12,
-        LandOfTheDead = 13
+        CommandSkeletons = 7,
+        Devour = 8,
+        SkeletalMage = 9,
+        Simulacrum = 10, // Missing
+        LandOfTheDead = 11,
+        BoneSpear = 12
     }
 
     public static class SkillNameExtensionMethods
@@ -37,6 +38,7 @@ namespace Dolphin.Enum
                     yield return SkillName.LandOfTheDead;
                     yield return SkillName.Simulacrum;
                     yield return SkillName.Devour;
+                    yield return SkillName.BoneSpear;
                     break;
 
                 case PlayerClass.BarbarianFemale:

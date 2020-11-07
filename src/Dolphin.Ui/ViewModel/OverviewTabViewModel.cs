@@ -46,7 +46,7 @@ namespace Dolphin.Ui.ViewModel
             };
 
             CurrentSkillState = new ObservableCollection<string> { "Cant cast", "Cant cast", "Cant cast", "Cant cast", "Cant cast", "Cant cast" };
-
+            CurrentActiveState = new ObservableCollection<string> { "Not active", "Not active", "Not active", "Not active", "Not active", "Not active", };
             CurrentPlayerClass = "pack://application:,,,/Resource/Skill/EmptyFrame.png";
             CurrentHealth = 0;
             CurrentPrimaryResource = 0;
@@ -68,7 +68,7 @@ namespace Dolphin.Ui.ViewModel
         public ObservableCollection<string> CurrentSkills { get; set; }
 
         public ObservableCollection<string> CurrentSkillState { get; set; }
-
+        public ObservableCollection<string> CurrentActiveState { get; set; }
         public string DiabloClientRectangle { get; set; }
 
         public uint DiabloProcessId { get; set; }
@@ -165,7 +165,8 @@ namespace Dolphin.Ui.ViewModel
         private void OnSkillCanBeCasted(object o, SkillCanBeCastedEvent @event)
         {
             var skill = modelService.GetSkill(@event.SkillIndex);
-            CurrentSkillState[@event.SkillIndex] = skill.IsActive ? "Can cast [Active]" : "Can cast";
+            CurrentSkillState[@event.SkillIndex] = "Can cast";
+            CurrentActiveState[@event.SkillIndex] = skill.IsActive ? "Active" : "Not active";
         }
 
         private void OnSkillRecognitionChanged(object o, SkillRecognitionChangedEvent @event)

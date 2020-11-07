@@ -19,9 +19,9 @@ namespace Dolphin.Image
 
         #region Skill
 
-        public static Point SkillbarSkill0Active = new Point { X = 931, Y = 1345 };
+        public static Point SkillbarSkill0Active = new Point { X = 842, Y = 1345 };
         public static Point SkillbarSkill0TopLeft = new Point { X = 846, Y = 1340 };
-        public static Point SkillbarSkill1Active = new Point { X = 842, Y = 1345 };
+        public static Point SkillbarSkill1Active = new Point { X = 931, Y = 1345 };
         public static Point SkillbarSkill1TopLeft = new Point { X = 935, Y = 1340 };
         public static Point SkillbarSkill2Active = new Point { X = 1020, Y = 1345 };
         public static Point SkillbarSkill2TopLeft = new Point { X = 1024, Y = 1340 };

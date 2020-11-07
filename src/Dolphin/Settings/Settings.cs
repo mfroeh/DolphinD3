@@ -8,30 +8,6 @@ namespace Dolphin
 {
     public static class InitialSettings
     {
-        public static IList<SkillName> EnabledSkills => new List<SkillName>
-        {
-            SkillName.Devour,
-            SkillName.LandOfTheDead,
-            SkillName.SkeletalMage,
-            SkillName.BoneArmor,
-            SkillName.Simulacrum
-        };
-
-        public static IList<SmartActionName> EnabledSmartActions
-        {
-            get
-            {
-                return new List<SmartActionName>
-                {
-                    SmartActionName.Gamble,
-                    SmartActionName.AcceptGriftPopup,
-                    SmartActionName.OpenRiftGrift,
-                    SmartActionName.UpgradeGem,
-                    SmartActionName.StartGame
-                };
-            }
-        }
-
         public static IDictionary<ActionName, Hotkey> Hotkeys
         {
             get
@@ -53,6 +29,7 @@ namespace Dolphin
                 dict[ActionName.Suspend_3] = new Hotkey(Keys.Control, Keys.D4);
                 dict[ActionName.Suspend_4] = new Hotkey(Keys.Control, Keys.D5);
                 dict[ActionName.Suspend_5] = new Hotkey(Keys.Control, Keys.D6);
+                dict[ActionName.SkillCastLoop] = new Hotkey(Keys.Control, Keys.O);
 
                 return dict;
             }
@@ -98,11 +75,54 @@ namespace Dolphin
             }
         }
 
+        public static SkillCastSettings SkillCastSettings
+        {
+            get
+            {
+                var configuration = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } }
+                };
+
+                return new SkillCastSettings
+                {
+                    SkillCastConfigurations = new List<SkillCastConfiguration> { configuration },
+                    SelectedSkillCastConfiguration = configuration
+                };
+            }
+        }
+
         public static IList<Keys> SkillKeybindigns => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
 
-        public static SmartActionSettings SmartActionSettings => new SmartActionSettings { IsOpenRift = true };
-
-        public static IList<bool> SuspendedSkillIndices => new bool[6];
+        public static SmartFeatureSettings SmartFeatureSettings
+        {
+            get
+            {
+                return new SmartFeatureSettings
+                {
+                    EnabledSkills = new List<SkillName>
+                                                {
+                                                    SkillName.Devour,
+                                                    SkillName.LandOfTheDead,
+                                                    SkillName.SkeletalMage,
+                                                    SkillName.BoneArmor,
+                                                    SkillName.Simulacrum
+                                                },
+                    EnabledSmartActions = new List<SmartActionName>
+                                                    {
+                                                        SmartActionName.Gamble,
+                                                        SmartActionName.AcceptGriftPopup,
+                                                        SmartActionName.OpenRiftGrift,
+                                                        SmartActionName.UpgradeGem,
+                                                        SmartActionName.StartGame
+                                                    },
+                    IsOpenRift = true,
+                    SkillSuspensionStatus = new bool[6],
+                    UpdateInterval = 100
+                };
+            }
+        }
 
         public static UiSettings UiSettings => new UiSettings
         {
@@ -110,8 +130,6 @@ namespace Dolphin
             LogPaused = false,
             IsDark = false
         };
-
-        public static uint UpdateInterval => 100;
     }
 
     public class Settings
@@ -120,22 +138,15 @@ namespace Dolphin
         {
             if (reset)
             {
-                EnabledSkills = InitialSettings.EnabledSkills;
                 Hotkeys = InitialSettings.Hotkeys;
                 MacroSettings = InitialSettings.MacroSettings;
                 OtherKeybindings = InitialSettings.OtherKeybindings;
                 SkillKeybindings = InitialSettings.SkillKeybindigns;
                 UiSettings = InitialSettings.UiSettings;
-                UpdateInterval = InitialSettings.UpdateInterval;
-                EnabledSmartActions = InitialSettings.EnabledSmartActions;
-                SmartActionSettings = InitialSettings.SmartActionSettings;
-                SkillSuspensionStatus = InitialSettings.SuspendedSkillIndices;
+                SmartFeatureSettings = InitialSettings.SmartFeatureSettings;
+                SkillCastSettings = InitialSettings.SkillCastSettings;
             }
         }
-
-        public IList<SkillName> EnabledSkills { get; set; }
-
-        public IList<SmartActionName> EnabledSmartActions { get; set; }
 
         public IDictionary<ActionName, Hotkey> Hotkeys { get; set; }
 
@@ -145,18 +156,12 @@ namespace Dolphin
 
         public IDictionary<CommandKeybinding, Keys> OtherKeybindings { get; set; }
 
-        public bool SkillCastingEnabled { get; set; }
+        public SkillCastSettings SkillCastSettings { get; set; }
 
         public IList<Keys> SkillKeybindings { get; set; }
 
-        public IList<bool> SkillSuspensionStatus { get; set; }
-
-        public bool SmartActionsEnabled { get; set; }
-
-        public SmartActionSettings SmartActionSettings { get; set; }
+        public SmartFeatureSettings SmartFeatureSettings { get; set; }
 
         public UiSettings UiSettings { get; set; }
-
-        public uint UpdateInterval { get; set; }
     }
 }

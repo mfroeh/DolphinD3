@@ -30,7 +30,8 @@ namespace Dolphin.Enum
         Suspend_2 = 28,
         Suspend_3 = 29,
         Suspend_4 = 30,
-        Suspend_5 = 31
+        Suspend_5 = 31,
+        SkillCastLoop = 32
     }
 
     public static class ActionNameExtensionMethods
@@ -39,7 +40,8 @@ namespace Dolphin.Enum
         {
             ActionName.CubeConverterDualSlot,
             ActionName.CubeConverterSingleSlot,
-            ActionName.UpgradeGem
+            ActionName.UpgradeGem,
+            ActionName.SkillCastLoop
         };
 
         public static bool IsCancelable(this ActionName action)

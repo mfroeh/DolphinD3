@@ -21,7 +21,9 @@ namespace Dolphin.Service
 
         public Settings Settings { get; private set; }
 
-        public SmartActionSettings SmartActionSettings => Settings.SmartActionSettings;
+        public SkillCastSettings SkillCastSettings => Settings.SkillCastSettings;
+
+        public SmartFeatureSettings SmartFeatureSettings => Settings.SmartFeatureSettings;
 
         public UiSettings UiSettings => Settings.UiSettings;
 
@@ -48,6 +50,11 @@ namespace Dolphin.Service
             }
 
             return default;
+        }
+
+        public bool IsSmartActionEnabled(SmartActionName smartAction)
+        {
+            return SmartFeatureSettings.EnabledSmartActions.Contains(smartAction);
         }
 
         public void NegateIsPaused(bool isFromChanging)
@@ -87,12 +94,12 @@ namespace Dolphin.Service
 
         public bool SkillIndexIsSuspended(int skillIndex)
         {
-            return Settings.SkillSuspensionStatus[skillIndex];
+            return SmartFeatureSettings.SkillSuspensionStatus[skillIndex];
         }
 
         public bool SkillIsEnabled(SkillName skill)
         {
-            return Settings.EnabledSkills.Contains(skill);
+            return SmartFeatureSettings.EnabledSkills.Contains(skill);
         }
 
         private void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)
@@ -103,11 +110,6 @@ namespace Dolphin.Service
             {
                 NegateIsPaused(false);
             }
-        }
-
-        private bool IsSmartActionEnabled(SmartActionName smartAction)
-        {
-            return Settings.EnabledSmartActions.Contains(smartAction);
         }
     }
 }

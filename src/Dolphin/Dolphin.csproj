@@ -48,6 +48,8 @@
     <Compile Include="CacheServiceBase.cs" />
     <Compile Include="Enum\SmartActionName.cs" />
     <Compile Include="EventArgs\ImageUpdatedEventArgs.cs" />
+    <Compile Include="Settings\SkillCastSettings.cs" />
+    <Compile Include="Settings\SkillCastConfiguration.cs" />
     <Compile Include="Static\CommonCoordinate.cs" />
     <Compile Include="Static\CommonSize.cs" />
     <Compile Include="Enum\ActionName.cs" />
@@ -83,7 +85,7 @@
     <Compile Include="Event\SkillCanBeCastedEvent.cs" />
     <Compile Include="Settings\MacroSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Settings\SmartActionSettings.cs" />
+    <Compile Include="Settings\SmartFeatureSettings.cs" />
     <Compile Include="Settings\UiSettings.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="Static\Condition.cs" />

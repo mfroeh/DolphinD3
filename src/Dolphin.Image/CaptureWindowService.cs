@@ -45,7 +45,7 @@ namespace Dolphin.Image
             return image != default;
         }
 
-        // TODO: Make more performant. This eats most of the performance.
+        // TODO: Make more performant. This eats most of the cpu usage.
         public Bitmap CaptureWindow(IntPtr hwnd)
         {
             if (hwnd == IntPtr.Zero)

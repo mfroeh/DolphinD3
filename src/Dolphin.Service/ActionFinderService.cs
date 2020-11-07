@@ -51,10 +51,13 @@ namespace Dolphin.Service
 
                 case ActionName.TravelAct1:
                     return () => actionService.TravelTown(handle, 1, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+
                 case ActionName.TravelAct2:
                     return () => actionService.TravelTown(handle, 2, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+
                 case ActionName.TravelAct34:
                     return () => actionService.TravelTown(handle, 3, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+
                 case ActionName.TravelAct5:
                     return () => actionService.TravelTown(handle, 5, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
 
@@ -100,13 +103,18 @@ namespace Dolphin.Service
                     var pickYourself = settingsService.MacroSettings.PickGemYourself;
                     return () => actionService.UpgradeGem(handle, tokenSource, isEmpowered, pickYourself, key);
 
+                case ActionName.SkillCastLoop:
+                    var configuration = settingsService.SkillCastSettings.SelectedSkillCastConfiguration;
+                    var keybindings = settingsService.Settings.SkillKeybindings;
+                    return () => actionService.SkillCastLoop(handle, tokenSource, configuration, keybindings);
+
                 default:
                     throw new NotImplementedException($"Cancellable Macro not implemented for {actionName}");
                     break;
             }
         }
 
-        public Action FindAction(SmartActionName actionName, IntPtr handle, params object[] @params)
+        public Action FindSmartAction(SmartActionName actionName, IntPtr handle, params object[] @params)
         {
             if (actionName.IsCancelable())
             {
@@ -120,12 +128,13 @@ namespace Dolphin.Service
                 case SmartActionName.StartGame:
                 case SmartActionName.Gamble:
                     return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);
+
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public Action FindAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params)
+        public Action FindSmartAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params)
         {
             if (!actionName.IsCancelable())
             {

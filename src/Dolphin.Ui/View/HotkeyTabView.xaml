@@ -362,6 +362,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
@@ -458,13 +459,41 @@
                     Grid.Row="3"
                     Grid.Column="0"
                     Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Skillcast loop
+                </Label>
+                <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)SkillCastLoop], Mode=OneWay}" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.SkillCastLoop}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
                                             Bottom=0,
                                             Right=.5}"
                     VerticalAlignment="Center">
                     Gem options
                 </Label>
                 <WrapPanel
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Margin="{adonisUi:Space Left=0,

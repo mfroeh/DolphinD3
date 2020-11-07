@@ -69,28 +69,24 @@ namespace Dolphin.Image
                 {
                     var skill = new Skill { Name = skillName, Index = index };
 
-                    skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index), index);
-
-                    if (skill.IsActive)
-                    {
-                        Trace.WriteLine($"{skillName} is active!");
-                    }
-
-                    if (similiaryPercentage >= 0.99f)
+                    if (similiaryPercentage >= 0.999f)
                     {
                         skill.CanBeCasted = true;
-                        logService.AddEntry(this, $"Skill{index} is {skillName}.", LogLevel.Debug);
-                    }
-                    else
-                    {
-                        logService.AddEntry(this, $"Skill{index} is {skillName}, but is either active or not castable.", LogLevel.Debug);
+
+                        skill.IsActive = IsActive(imageService.CropSkillActive(fullBitmap, index), index);
+
+                        if (skill.IsActive)
+                        {
+                            Trace.WriteLine($"{skillName} is active!");
+                        }
+                        // logService.AddEntry(this, $"Skill{index} is {skillName}.", LogLevel.Debug);
                     }
 
                     return skill;
                 }
             }
 
-            logService.AddEntry(this, $"Couldn't identify Skill{index}.", LogLevel.Debug);
+            // logService.AddEntry(this, $"Couldn't identify Skill{index}.", LogLevel.Debug);
 
             return null;
         }

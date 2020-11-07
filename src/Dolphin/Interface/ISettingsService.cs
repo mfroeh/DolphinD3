@@ -10,7 +10,9 @@ namespace Dolphin
 
         Settings Settings { get; }
 
-        SmartActionSettings SmartActionSettings { get; }
+        SkillCastSettings SkillCastSettings { get; }
+
+        SmartFeatureSettings SmartFeatureSettings { get; }
 
         UiSettings UiSettings { get; }
 
@@ -19,6 +21,8 @@ namespace Dolphin
         Keys GetKeybinding(CommandKeybinding command);
 
         SmartActionName GetSmartActionName(Window window);
+
+        bool IsSmartActionEnabled(SmartActionName smartAction);
 
         public void ResetSettings<T>();
 

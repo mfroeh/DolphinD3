@@ -8,10 +8,10 @@ namespace Dolphin
     {
         Action FindAction(ActionName actionName, IntPtr handle);
 
-        Action FindAction(SmartActionName actionName, IntPtr handle, params object[] @params);
+        Action FindSmartAction(SmartActionName actionName, IntPtr handle, params object[] @params);
 
         Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource);
 
-        Action FindAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params);
+        Action FindSmartAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params);
     }
 }

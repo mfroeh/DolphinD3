@@ -52,7 +52,7 @@ namespace Dolphin.Ui.ViewModel
             CurrentPrimaryResource = 0;
             CurrentPrimaryResource = 0;
 
-            SkillIndexSuspensionStatus = new ObservableCollection<bool>(settingsService.Settings.SkillSuspensionStatus);
+            SkillIndexSuspensionStatus = new ObservableCollection<bool>(settingsService.SmartFeatureSettings.SkillSuspensionStatus);
         }
 
         public int CurrentHealth { get; set; }
@@ -114,7 +114,7 @@ namespace Dolphin.Ui.ViewModel
         {
             var newStatus = !SkillIndexSuspensionStatus[index];
             SkillIndexSuspensionStatus[index] = newStatus;
-            settingsService.Settings.SkillSuspensionStatus[index] = newStatus;
+            settingsService.SmartFeatureSettings.SkillSuspensionStatus[index] = newStatus;
         }
 
         private void OnHandleChanged(object o, HandleChangedEventArgs e)

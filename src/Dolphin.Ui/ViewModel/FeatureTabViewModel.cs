@@ -32,13 +32,13 @@ namespace Dolphin.Ui.ViewModel
             {
                 if (actionName != SmartActionName.None)
                 {
-                    EnabledSmartActions[actionName] = settingsService.Settings.EnabledSmartActions.Contains(actionName);
+                    EnabledSmartActions[actionName] = settingsService.IsSmartActionEnabled(actionName);
                 }
             }
 
-            smartActionsEnabled = settingsService.Settings.SmartActionsEnabled;
-            skillCastingEnabled = settingsService.Settings.SkillCastingEnabled;
-            isOpenRift = settingsService.SmartActionSettings.IsOpenRift;
+            smartActionsEnabled = settingsService.SmartFeatureSettings.SmartActionsEnabled;
+            skillCastingEnabled = settingsService.SmartFeatureSettings.SkillCastingEnabled;
+            isOpenRift = settingsService.SmartFeatureSettings.IsOpenRift;
         }
 
         public ObservableDictionary<SkillName, bool> EnabledSkills { get; }
@@ -51,7 +51,7 @@ namespace Dolphin.Ui.ViewModel
             set
             {
                 isOpenRift = value;
-                settingsService.SmartActionSettings.IsOpenRift = value;
+                settingsService.SmartFeatureSettings.IsOpenRift = value;
             }
         }
 
@@ -61,7 +61,7 @@ namespace Dolphin.Ui.ViewModel
             set
             {
                 skillCastingEnabled = value;
-                settingsService.Settings.SkillCastingEnabled = value;
+                settingsService.SmartFeatureSettings.SkillCastingEnabled = value;
                 RaisePropertyChanged(nameof(SkillCastingEnabled));
             }
         }
@@ -90,7 +90,7 @@ namespace Dolphin.Ui.ViewModel
             set
             {
                 smartActionsEnabled = value;
-                settingsService.Settings.SmartActionsEnabled = value;
+                settingsService.SmartFeatureSettings.SmartActionsEnabled = value;
                 RaisePropertyChanged(nameof(SmartActionsEnabled));
             }
         }
@@ -99,13 +99,13 @@ namespace Dolphin.Ui.ViewModel
         {
             EnabledSkills[name] = !EnabledSkills[name];
 
-            if (settingsService.Settings.EnabledSkills.Contains(name))
+            if (settingsService.SmartFeatureSettings.EnabledSkills.Contains(name))
             {
-                settingsService.Settings.EnabledSkills.Remove(name);
+                settingsService.SmartFeatureSettings.EnabledSkills.Remove(name);
             }
             else
             {
-                settingsService.Settings.EnabledSkills.Add(name);
+                settingsService.SmartFeatureSettings.EnabledSkills.Add(name);
             }
         }
 
@@ -113,13 +113,13 @@ namespace Dolphin.Ui.ViewModel
         {
             EnabledSmartActions[smartAction] = !EnabledSmartActions[smartAction];
 
-            if (settingsService.Settings.EnabledSmartActions.Contains(smartAction))
+            if (settingsService.IsSmartActionEnabled(smartAction))
             {
-                settingsService.Settings.EnabledSmartActions.Remove(smartAction);
+                settingsService.SmartFeatureSettings.EnabledSmartActions.Remove(smartAction);
             }
             else
             {
-                settingsService.Settings.EnabledSmartActions.Add(smartAction);
+                settingsService.SmartFeatureSettings.EnabledSmartActions.Add(smartAction);
             }
         }
     }

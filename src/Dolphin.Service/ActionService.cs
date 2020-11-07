@@ -1,5 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -376,6 +378,38 @@ namespace Dolphin.Service
                     if (IsCancelled(tokenSource)) return;
                     Thread.Sleep(100);
                 }
+            }
+        }
+
+        public void SkillCastLoop(IntPtr handle, CancellationTokenSource tokenSource, SkillCastConfiguration configuration, IList<Keys> skillKeybindings)
+        {
+            foreach (var index in configuration.SkillIndices)
+            {
+                var delay = configuration.Delays[index];
+
+                var key = index <= 3 ? skillKeybindings[index] : default;
+                Execute.Action(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
+            }
+        }
+
+        private void SendKeyWithDelay(IntPtr handle, CancellationTokenSource tokenSource, int index, int delay, Keys key = default)
+        {
+            while (!IsCancelled(tokenSource))
+            {
+                if (index <= 3)
+                {
+                    InputHelper.SendKey(handle, key);
+                }
+                else if (index == 4)
+                {
+                    InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
+                }
+                else
+                {
+                    InputHelper.SendClickAtCursorPos(handle, MouseButtons.Right);
+                }
+
+                Thread.Sleep(delay);
             }
         }
     }

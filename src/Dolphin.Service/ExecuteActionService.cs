@@ -58,12 +58,19 @@ namespace Dolphin.Service
             {
                 CancelAction(handle.Handle);
             }
-            else if (actionName.IsCancelable() && tokenSource == null)
+            else if (actionName.IsCancelable())
             {
-                tokenSource = new CancellationTokenSource();
-                var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource);
+                if (tokenSource == null)
+                {
+                    tokenSource = new CancellationTokenSource();
+                    var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource);
 
-                ExecuteAndResetTokenSourceAsync(macro);
+                    ExecuteAndResetTokenSourceAsync(macro);
+                }
+                else
+                {
+                    tokenSource.Cancel();
+                }
             }
             else if (!actionName.IsSuspensionAction())
             {
@@ -82,14 +89,14 @@ namespace Dolphin.Service
             if (actionName == SmartActionName.UpgradeGem && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
-                var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
+                var macro = actionFinderService.FindSmartAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
 
                 ExecuteAndResetTokenSourceAsync(macro);
             }
             else if (actionName == SmartActionName.Gamble && tokenSource == null)
             {
                 tokenSource = new CancellationTokenSource();
-                var action = actionFinderService.FindAction(actionName, handle.Handle);
+                var action = actionFinderService.FindSmartAction(actionName, handle.Handle);
 
                 ExecuteAndResetTokenSourceAsync(() =>
                 {
@@ -99,7 +106,7 @@ namespace Dolphin.Service
             }
             else if (actionName != default)
             {
-                var action = actionFinderService.FindAction(actionName, handle.Handle);
+                var action = actionFinderService.FindSmartAction(actionName, handle.Handle);
 
                 Execute.AndForgetAsync(action);
             }

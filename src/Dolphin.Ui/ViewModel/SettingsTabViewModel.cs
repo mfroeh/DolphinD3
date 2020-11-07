@@ -29,7 +29,7 @@ namespace Dolphin.Ui.ViewModel
             PossibleKeys = System.Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList();
             SkillKeybindings = new ObservableCollection<Keys>(settingsService.Settings.SkillKeybindings);
             OtherKeybindings = new ObservableDictionary<CommandKeybinding, Keys>(settingsService.Settings.OtherKeybindings);
-            updateInterval = settingsService.Settings.UpdateInterval;
+            updateInterval = settingsService.SmartFeatureSettings.UpdateInterval;
             PoolSpots = new BindingList<Waypoint>(settingsService.MacroSettings.Poolspots);
 
             PoolSpots.ListChanged += PoolSpotsChangedHandler;
@@ -82,7 +82,7 @@ namespace Dolphin.Ui.ViewModel
             {
                 var intValue = uint.Parse(value);
                 updateInterval = intValue;
-                settingsService.Settings.UpdateInterval = intValue;
+                settingsService.SmartFeatureSettings.UpdateInterval = intValue;
                 RaisePropertyChanged(nameof(UpdateInterval));
             }
         }

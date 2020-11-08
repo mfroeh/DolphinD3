@@ -73,6 +73,13 @@
     <Compile Include="View\SettingsTabView.xaml.cs">
       <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SkillLoopTabView.xaml.cs">
+      <DependentUpon>SkillLoopTabView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\SkillLoopTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Resource Include="Resource\dolphin_88287.ico" />
     <Resource Include="Resource\dolphin_icon-icons.com_60855.ico" />
     <Compile Include="EnumBooleanConverter.cs" />

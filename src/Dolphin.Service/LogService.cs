@@ -22,7 +22,7 @@ namespace Dolphin.Service
 
         public void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
-            message = ex != null ? message : message + $", Exception: {ex}";
+            message = ex == null ? message : message + $", Exception: {ex}";
 
             var entry = new LogEntry
             {

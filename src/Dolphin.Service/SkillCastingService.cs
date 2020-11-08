@@ -50,6 +50,11 @@ namespace Dolphin.Service
             if (condition.Invoke())
             {
                 Execute.AndForgetAsync(action);
+                logService.AddEntry(this, $"Clicking skill... [{@event.SkillName}][{@event.SkillIndex}]");
+            }
+            else
+            {
+                logService.AddEntry(this, $"Condition for skill not fulfilled... [{@event.SkillName}][{@event.SkillIndex}]");
             }
         }
     }

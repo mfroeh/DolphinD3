@@ -8,25 +8,33 @@ namespace Dolphin
     {
         public static void Action(Action action)
         {
-            action.Invoke();
+            try
+            {
+                action.Invoke();
+            }
+            catch { /* Swallow */ };
         }
 
         public static Task AndForgetAsync(Action action)
         {
-            return Task.Run(action);
+            return Task.Run(() => Execute.Action(action));
         }
 
         public static void OnUIThread(Action action)
         {
-            var dispatcher = Application.Current.Dispatcher;
-            if (dispatcher.CheckAccess())
+            try
             {
-                action.Invoke();
+                var dispatcher = Application.Current.Dispatcher;
+                if (dispatcher.CheckAccess())
+                {
+                    action.Invoke();
+                }
+                else
+                {
+                    dispatcher.Invoke(action);
+                }
             }
-            else
-            {
-                dispatcher.Invoke(action);
-            }
+            catch { /* Swallow */ };
         }
 
         public static Task OnUIThreadAsync(Action action)

@@ -46,6 +46,7 @@ namespace Dolphin.Service
         public void Publish(HotkeyPressedEvent @event)
         {
             eventBus.Publish(@event);
+            logService.AddEntry(this, $"Published Hotkey pressed [{@event.PressedHotkey}]", Enum.LogLevel.Debug);
         }
 
         public void RefreshHotkeys(IList<Hotkey> newHotkeys)
@@ -98,10 +99,12 @@ namespace Dolphin.Service
                 {
                     hotkeyListener.Add(settingsService.Settings.Hotkeys[Enum.ActionName.Pause]);
                 }
+                logService.AddEntry(this, $"Pausing HotkeyListener...");
             }
             else
             {
                 ResumeListener();
+                logService.AddEntry(this, $"Resuming HotkeyListener...");
             }
         }
     }

@@ -106,6 +106,12 @@ namespace Dolphin.Service
                 case ActionName.SkillCastLoop:
                     var configuration = settingsService.SkillCastSettings.SelectedSkillCastConfiguration;
                     var keybindings = settingsService.Settings.SkillKeybindings;
+
+                    if (configuration == default)
+                    {
+                        logService.AddEntry(this, "SelectedSkillCastConfiguration was null", LogLevel.Warning);
+                        return () => { };
+                    }
                     return () => actionService.SkillCastLoop(handle, tokenSource, configuration, keybindings);
 
                 default:

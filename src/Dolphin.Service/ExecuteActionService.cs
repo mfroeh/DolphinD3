@@ -12,30 +12,22 @@ namespace Dolphin.Service
         private readonly IActionFinderService actionFinderService;
 
         private readonly IHandleService handleService;
+        private readonly ILogService logService;
         private readonly ISettingsService settingsService;
         private CancellationTokenSource tokenSource;
 
-        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, IActionFinderService actionFinderService, IHandleService handleService) : base(eventBus)
+        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, ILogService logService, IActionFinderService actionFinderService, IHandleService handleService) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.actionFinderService = actionFinderService;
             this.handleService = handleService;
+            this.logService = logService;
 
             var executeAction = new Subscription<HotkeyPressedEvent>(OnHotkeyPressed);
             var executeSmartAction = new Subscription<WorldInformationChangedEvent>(OnWorldInformationChanged);
 
             SubscribeBus(executeAction);
             SubscribeBus(executeSmartAction);
-        }
-
-        private void CancelAction(IntPtr handle)
-        {
-            InputHelper.SendKey(handle, Keys.Escape);
-
-            if (tokenSource != null)
-            {
-                tokenSource.Cancel();
-            }
         }
 
         private Task ExecuteAndResetTokenSourceAsync(Action action)
@@ -56,7 +48,15 @@ namespace Dolphin.Service
             var actionName = settingsService.GetActionName(e.PressedHotkey);
             if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
             {
-                CancelAction(handle.Handle);
+                if (tokenSource != null)
+                {
+                    tokenSource.Cancel();
+                    if (actionName == ActionName.CancelAction)
+                    {
+                        InputHelper.SendKey(handle.Handle, Keys.Escape);
+                    }
+                    logService.AddEntry(this, $"Cancelling current action... [{actionName}][{e.PressedHotkey}]");
+                }
             }
             else if (actionName.IsCancelable())
             {
@@ -66,10 +66,12 @@ namespace Dolphin.Service
                     var macro = actionFinderService.FindAction(actionName, handle.Handle, tokenSource);
 
                     ExecuteAndResetTokenSourceAsync(macro);
+                    logService.AddEntry(this, $"Beginning to execute... [{actionName}][{e.PressedHotkey}]");
                 }
                 else
                 {
                     tokenSource.Cancel();
+                    logService.AddEntry(this, $"Cancelling current action... [{actionName}][{e.PressedHotkey}]");
                 }
             }
             else if (!actionName.IsSuspensionAction())
@@ -77,6 +79,7 @@ namespace Dolphin.Service
                 var macro = actionFinderService.FindAction(actionName, handle.Handle);
 
                 Execute.AndForgetAsync(macro);
+                logService.AddEntry(this, $"Beginning to execute... [{actionName}][{e.PressedHotkey}]");
             }
         }
 
@@ -92,6 +95,7 @@ namespace Dolphin.Service
                 var macro = actionFinderService.FindSmartAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
 
                 ExecuteAndResetTokenSourceAsync(macro);
+                logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
             }
             else if (actionName == SmartActionName.Gamble && tokenSource == null)
             {
@@ -103,12 +107,14 @@ namespace Dolphin.Service
                     action.Invoke();
                     Thread.Sleep(200);
                 });
+                logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
             }
             else if (actionName != default)
             {
                 var action = actionFinderService.FindSmartAction(actionName, handle.Handle);
 
                 Execute.AndForgetAsync(action);
+                logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
             }
         }
     }

@@ -65,8 +65,7 @@
                         MinWidth="100"
                         Binding="{Binding Time}"
                         Header="Time"
-                        IsReadOnly="True"
-                        SortDirection="Descending" />
+                        IsReadOnly="True" />
 
                     <DataGridTextColumn
                         MinWidth="100"

@@ -1,5 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace Dolphin.Service
 {
@@ -14,29 +16,39 @@ namespace Dolphin.Service
             this.savePath = "log.txt";
         }
 
+        public Log InternalLog => internalLog;
+
         public event EventHandler<LogEntryEventArgs> EntryAdded;
 
         public void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
-            if (ex != null)
+            message = ex != null ? message : message + $", Exception: {ex}";
+
+            var entry = new LogEntry
             {
-                message += $", Exception: {ex}";
-            }
+                FullMessage = $"[{DateTime.Now}]---LogLevel: {logLevel}, Type: {origin.GetType().FullName}, Message: {message}",
+                LogLevel = logLevel,
+                Message = message,
+                Time = DateTime.Now,
+                Type = origin.GetType().Name
+            };
 
-            var fullMessage = $"[{DateTime.Now}]---LogLevel: {logLevel}, Type: {origin.GetType().FullName}, Message: {message}";
-
-            internalLog.Entries.Add(fullMessage);
+            internalLog.Entries.Add(entry);
             if (internalLog.Entries.Count >= 2500)
             {
                 SaveLog();
                 internalLog.Entries.Clear();
             }
 
-            Execute.OnUIThreadAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = DateTime.Now, Type = origin.GetType().Name }));
+            Execute.OnUIThreadAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { LogLevel = logLevel, LogEntry = entry }));
         }
 
         public void SaveLog()
         {
+            lock (internalLog)
+            {
+                File.AppendAllLines(savePath, internalLog.Entries.Select(x => x.FullMessage));
+            }
             //TODO: File.AppendAllLines(savePath, internalLog.Entries);
         }
     }

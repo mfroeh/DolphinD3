@@ -8,11 +8,14 @@
     xmlns:enum="clr-namespace:Dolphin.Enum;assembly=Dolphin"
     xmlns:local="clr-namespace:Dolphin.Ui.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    md:DialogServiceViews.IsRegistered="True"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
@@ -350,6 +353,67 @@
                     CommandParameter="{x:Static enum:SmartActionName.StartGame}"
                     Content="Start game"
                     IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)StartGame]}" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Profiles">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <DataGrid
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserReorderColumns="True"
+                    CanUserSortColumns="True"
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True"
+                    FrozenColumnCount="1"
+                    ItemsSource="{Binding SkillCastProfiles}"
+                    SelectedItem="{Binding SelectedSkillCastProfile}"
+                    SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            MinWidth="100"
+                            Binding="{Binding Name}"
+                            Header="Name"
+                            IsReadOnly="True" />
+
+                        <DataGridTextColumn
+                            MinWidth="400"
+                            Binding="{Binding SkillsAndDelays}"
+                            Header="Skills and delays"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="{adonisUi:Space Top=0}"
+                    Orientation="Vertical">
+                    <Button
+                        Margin="{adonisUi:Space Left=0,
+                                                Right=0,
+                                                Top=0}"
+                        Command="{Binding AddSkillCastProfile}"
+                        Content="Add new" />
+                    <Button
+                        Margin="{adonisUi:Space Left=0,
+                                                Right=0,
+                                                Top=0}"
+                        Command="{Binding ChangeSelectedSkillCastProfile}"
+                        Content="Change" />
+                    <Button
+                        Margin="{adonisUi:Space Left=0,
+                                                Right=0,
+                                                Top=0}"
+                        Command="{Binding DeleteSelectedSkillCastProfile}"
+                        Content="Delete" />
+                </StackPanel>
             </Grid>
         </GroupBox>
     </Grid>

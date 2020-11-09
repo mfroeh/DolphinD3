@@ -68,7 +68,7 @@
                         IsReadOnly="True" />
 
                     <DataGridTextColumn
-                        MinWidth="100"
+                        MinWidth="50"
                         Binding="{Binding LogLevel}"
                         Header="Severity"
                         IsReadOnly="True" />

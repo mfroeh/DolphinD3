@@ -82,12 +82,34 @@ namespace Dolphin
                 var configuration = new SkillCastConfiguration
                 {
                     SkillIndices = new List<int> { 0 },
-                    Delays = new Dictionary<int, int> { { 0, 250 } }
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 1"
+                };
+
+                var configuration2 = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 2"
+                };
+
+                var configuration3 = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 3"
+                };
+
+                var configuration4 = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 4"
                 };
 
                 return new SkillCastSettings
                 {
-                    SkillCastConfigurations = new List<SkillCastConfiguration> { configuration },
+                    SkillCastConfigurations = new List<SkillCastConfiguration> { configuration, configuration2, configuration3, configuration4 },
                     SelectedSkillCastConfiguration = configuration
                 };
             }

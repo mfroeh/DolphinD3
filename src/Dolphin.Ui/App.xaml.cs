@@ -2,6 +2,7 @@
 using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.ViewModel;
+using MvvmDialogs;
 using MvvmDialogs.FrameworkDialogs;
 using Newtonsoft.Json;
 using RestoreWindowPlace;
@@ -49,6 +50,7 @@ namespace Dolphin.Ui
             var settings = LoadSettings();
 
             #region Register
+            container.RegisterInstance(container); // TODO: Is this the proper way?
 
             container.RegisterInstance(settings);
 
@@ -90,7 +92,8 @@ namespace Dolphin.Ui
             container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
             container.RegisterType<IViewModelBase, FeatureTabViewModel>("featureTab");
             container.RegisterType<IViewModelBase, LogTabViewModel>("logTab");
-            container.RegisterType<IViewModelBase, ChangeHotkeyDialogViewModel>("changeHotkey");
+            container.RegisterType<IModalDialogViewModel, ChangeHotkeyDialogViewModel>("changeHotkey");
+            container.RegisterType<IModalDialogViewModel, ChangeSkillCastProfileDialogViewModel>("changeSkillCastProfileDialog");
             container.RegisterType<IViewModelBase, SettingsTabViewModel>("settingsTab");
             container.RegisterType<IViewModelBase, OverviewTabViewModel>("overviewTab");
 

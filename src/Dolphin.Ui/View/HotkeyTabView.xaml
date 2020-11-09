@@ -363,6 +363,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
@@ -486,6 +487,23 @@
                 <Label
                     Grid.Row="4"
                     Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    Content="Skillcast profile" />
+
+                <ComboBox
+                    Grid.Row="4"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    ItemsSource="{Binding SkillCastProfiles}"
+                    SelectedItem="{Binding SelectedSkillCastProfile}" />
+
+                <Label
+                    Grid.Row="5"
+                    Grid.Column="0"
                     Margin="{adonisUi:Space Left=0,
                                             Bottom=0,
                                             Right=.5}"
@@ -493,7 +511,7 @@
                     Gem options
                 </Label>
                 <WrapPanel
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Margin="{adonisUi:Space Left=0,

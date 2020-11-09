@@ -53,10 +53,11 @@ namespace Dolphin.Ui.Dialog
 
         public ICommand SaveCommand => new RelayCommand(SaveCommandAction);
 
-        public void SetHotkey(Hotkey currentHotkey)
+        public void Initialize(Hotkey currentHotkey, ActionName actionToEdit)
         {
             oldHotkey = currentHotkey;
             hotkey = currentHotkey;
+            EditingAction = actionToEdit;
         }
 
         private void SaveCommandAction(object o)

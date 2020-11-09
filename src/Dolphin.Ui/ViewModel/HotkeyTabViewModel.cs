@@ -3,6 +3,7 @@ using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using MvvmDialogs;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Unity;
@@ -118,13 +119,28 @@ namespace Dolphin.Ui.ViewModel
             ((HotkeyListenerService)hotkeyListener).RefreshHotkeys(newHotkeys);
         }
 
+        public string SelectedSkillCastProfile
+        {
+            get => settingsService.SkillCastSettings.SelectedSkillCastConfiguration?.ToString();
+            set
+            {
+                var profile = settingsService.SkillCastSettings.SkillCastConfigurations.First(x => x.Name == value);
+                settingsService.SkillCastSettings.SelectedSkillCastConfiguration = profile;
+                RaisePropertyChanged(nameof(SelectedSkillCastProfile));
+            }
+        }
+
+        public IList<string> SkillCastProfiles
+        {
+            get => settingsService.SkillCastSettings.SkillCastConfigurations.Select(x => x.Name).ToList();
+        }
+
         private void ShowChangeHotkeyDialog(ActionName actionAllocationToChange)
         {
             var oldHotkey = Hotkeys[actionAllocationToChange];
 
             var dialogViewModel = unityContainer.Resolve<ChangeHotkeyDialogViewModel>("changeHotkey");
-            dialogViewModel.SetHotkey(oldHotkey);
-            dialogViewModel.EditingAction = actionAllocationToChange;
+            dialogViewModel.Initialize(oldHotkey, actionAllocationToChange);
 
             settingsService.SetPaused(true, true);
 

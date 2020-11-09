@@ -48,13 +48,13 @@ namespace Dolphin.Service
             var actionName = settingsService.GetActionName(e.PressedHotkey);
             if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
             {
+                if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
+                {
+                    InputHelper.SendKey(handle.Handle, Keys.Escape);
+                }
                 if (tokenSource != null)
                 {
                     tokenSource.Cancel();
-                    if (actionName == ActionName.CancelAction)
-                    {
-                        InputHelper.SendKey(handle.Handle, Keys.Escape);
-                    }
                     logService.AddEntry(this, $"Cancelling current action... [{actionName}][{e.PressedHotkey}]");
                 }
             }

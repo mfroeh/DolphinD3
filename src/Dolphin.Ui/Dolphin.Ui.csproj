@@ -64,6 +64,10 @@
     <Compile Include="BoolInverterConverter.cs" />
     <Compile Include="CustomFrameworkDialogFactory.cs" />
     <Compile Include="CustomMessageBox.cs" />
+    <Compile Include="Dialog\ChangeSkillCastProfileDialog.xaml.cs">
+      <DependentUpon>ChangeSkillCastProfileDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\ChangeSkillCastProfileDialogViewModel.cs" />
     <Compile Include="ShouldSerializeContractResolver.cs" />
     <Compile Include="ViewModel\OverviewTabViewModel.cs" />
     <Compile Include="ViewModel\SettingsTabViewModel.cs" />
@@ -73,13 +77,6 @@
     <Compile Include="View\SettingsTabView.xaml.cs">
       <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SkillLoopTabView.xaml.cs">
-      <DependentUpon>SkillLoopTabView.xaml</DependentUpon>
-    </Compile>
-    <Page Include="View\SkillLoopTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Resource Include="Resource\dolphin_88287.ico" />
     <Resource Include="Resource\dolphin_icon-icons.com_60855.ico" />
     <Compile Include="EnumBooleanConverter.cs" />
@@ -105,6 +102,10 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Page Include="Dialog\ChangeHotkeyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialog\ChangeSkillCastProfileDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

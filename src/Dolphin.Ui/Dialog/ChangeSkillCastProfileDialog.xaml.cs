@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdonisUI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +14,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Dolphin.Ui.View
+namespace Dolphin.Ui.Dialog
 {
     /// <summary>
-    /// Interaction logic for SkillLoopTabView.xaml
+    /// Interaction logic for ChangeSkillCastProfileDialog.xaml
     /// </summary>
-    public partial class SkillLoopTabView : UserControl
+    public partial class ChangeSkillCastProfileDialog : AdonisWindow
     {
-        public SkillLoopTabView()
+        public ChangeSkillCastProfileDialog()
         {
             InitializeComponent();
+        }
+
+        internal void Initialize(SkillCastConfiguration skillCastProfile)
+        {
+            throw new NotImplementedException();
         }
     }
 }

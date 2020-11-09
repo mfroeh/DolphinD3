@@ -8,8 +8,14 @@ namespace Dolphin.Service
     public class HandleService : IHandleService
     {
         private IDictionary<string, WindowInformation> handles = new Dictionary<string, WindowInformation>();
+        private readonly ILogService logService;
 
         public event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
+
+        public HandleService(ILogService logService)
+        {
+            this.logService = logService;
+        }
 
         public WindowInformation GetHandle(string processName)
         {
@@ -57,6 +63,7 @@ namespace Dolphin.Service
                 handles[processName] = handle;
 
                 HandleStatusChanged?.Invoke(this, new HandleChangedEventArgs { ProcessName = processName, NewHandle = handle });
+                logService.AddEntry(this, $"Handle information changed [{processName}][{hwnd}][{clientRect}]");
             }
         }
     }

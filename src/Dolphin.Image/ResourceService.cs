@@ -35,7 +35,7 @@ namespace Dolphin.Image
                 }
 
                 cacheService.Add(value, bitmap);
-                logService.AddEntry(this, $"Loaded Image from [{path}] for {value} and added to Cache.", LogLevel.Debug);
+                logService.AddEntry(this, $"Loaded Image from [{path}] for {value} and added to Cache.");
 
                 return bitmap;
             }
@@ -62,7 +62,7 @@ namespace Dolphin.Image
                 }
 
                 cacheService.AddSkillBitmap(skillName, isMouse, bitmap);
-                logService.AddEntry(this, $"Loaded Image from [{path}] for {skillName} and added to Cache.", LogLevel.Debug);
+                logService.AddEntry(this, $"Loaded Image from [{path}] for {skillName} and added to Cache.");
 
                 return bitmap;
             }

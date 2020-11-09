@@ -1,5 +1,4 @@
 ﻿using Dolphin.Enum;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Dolphin
@@ -12,12 +11,12 @@ namespace Dolphin
 
         public bool PickGemYourself { get; set; }
 
+        public IList<Waypoint> Poolspots { get; set; }
+
         public ItemType SelectedGambleItem { get; set; }
 
         public uint SpareColumns { get; set; }
 
         public uint SwapItemsAmount { get; set; }
-
-        public IList<Waypoint> Poolspots { get; set; }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Dolphin.Enum;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,13 +8,6 @@ namespace Dolphin
 {
     public static class InitialSettings
     {
-        private static IList<ActionName> _nonMacroableActions = new List<ActionName> { ActionName.None, ActionName.OpenRift, ActionName.AcceptGriftPopup, ActionName.StartGame };
-
-        public static uint UpdateInterval => 100;
-
-        public static IList<SkillName> EnabledSkills => new List<SkillName>() { SkillName.Devour, SkillName.LandOfTheDead,
-                                        SkillName.SkeletalMage, SkillName.BoneArmor, SkillName.Simulacrum, SkillName.BloodRush };
-
         public static IDictionary<ActionName, Hotkey> Hotkeys
         {
             get
@@ -24,21 +15,22 @@ namespace Dolphin
                 var dict = new Dictionary<ActionName, Hotkey>();
                 foreach (var @enum in System.Enum.GetValues(typeof(ActionName)).Cast<ActionName>())
                 {
-                    if (!_nonMacroableActions.Contains(@enum))
+                    if (@enum != ActionName.None)
                     {
-                        Hotkey hotkey = null;
-                        if (@enum == ActionName.CancelAction)
-                        {
-                            hotkey = new Hotkey(Keys.Escape);
-                        }
-                        else if (@enum == ActionName.Pause)
-                        {
-                            hotkey = new Hotkey(Keys.F10);
-                        }
-
-                        dict[@enum] = hotkey;
+                        dict[@enum] = null;
                     }
                 }
+
+                dict[ActionName.Pause] = new Hotkey(Keys.F10);
+                dict[ActionName.CancelAction] = new Hotkey(Keys.Escape);
+                dict[ActionName.Suspend_0] = new Hotkey(Keys.Control, Keys.D1);
+                dict[ActionName.Suspend_1] = new Hotkey(Keys.Control, Keys.D2);
+                dict[ActionName.Suspend_2] = new Hotkey(Keys.Control, Keys.D3);
+                dict[ActionName.Suspend_3] = new Hotkey(Keys.Control, Keys.D4);
+                dict[ActionName.Suspend_4] = new Hotkey(Keys.Control, Keys.D5);
+                dict[ActionName.Suspend_5] = new Hotkey(Keys.Control, Keys.D6);
+                dict[ActionName.SkillCastLoop] = new Hotkey(Keys.Control, Keys.O);
+
                 return dict;
             }
         }
@@ -51,25 +43,108 @@ namespace Dolphin
             SwapItemsAmount = 3,
             Poolspots = new List<Waypoint>
             {
-                new Waypoint{Act = 1, Name = "CemetryOfTheForsaken" },
-                new Waypoint{Act = 2, Name = "HowlingPlateau"}
+                new Waypoint { Act = 1, Name = "CemetryOfTheForsaken"},
+                new Waypoint { Act = 1, Name = "LeoricsManor" },
+                new Waypoint { Act = 1, Name = "DrownedTemple" },
+                new Waypoint { Act = 1, Name = "FieldsOfMisery" },
+                new Waypoint { Act = 1, Name = "SouthernHighlands" },
+                new Waypoint { Act = 1, Name = "TheWeepingHollow" },
+                new Waypoint { Act = 2, Name = "HowlingPlateau" },
+                new Waypoint { Act = 2, Name = "RoadToAlcarnus" },
+                new Waypoint { Act = 3, Name = "BrideOfKorsikk" },
+                new Waypoint { Act = 3, Name = "TheBattlefields" },
+                new Waypoint { Act = 3, Name = "TowerOfTheCursedLevel1" },
+                new Waypoint { Act = 3, Name = "TowerOfTheDamnedLevel1" },
+                new Waypoint { Act = 3, Name = "RakkisCrossing" },
+                new Waypoint { Act = 4, Name = "RealmOfFracturedFate" },
+                new Waypoint { Act = 4, Name = "LowerRealmOfInfernalFate" },
+                new Waypoint { Act = 4, Name = "PandemoniumFortressLevel1" },
             }
         };
 
-        public static IDictionary<Command, Keys> OtherKeybindings
+        public static IDictionary<CommandKeybinding, Keys> OtherKeybindings
         {
             get
             {
-                return new Dictionary<Command, Keys>
+                return new Dictionary<CommandKeybinding, Keys>
                 {
-                    { Command.TeleportToTown, Keys.T },
-                    { Command.OpenMap, Keys.M },
-                    { Command.OpenInventory, Keys.C }
+                    { CommandKeybinding.TeleportToTown, Keys.T },
+                    { CommandKeybinding.OpenMap, Keys.M },
+                    { CommandKeybinding.OpenInventory, Keys.C }
+                };
+            }
+        }
+
+        public static SkillCastSettings SkillCastSettings
+        {
+            get
+            {
+                var configuration = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 1"
+                };
+
+                var configuration2 = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 2"
+                };
+
+                var configuration3 = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 3"
+                };
+
+                var configuration4 = new SkillCastConfiguration
+                {
+                    SkillIndices = new List<int> { 0 },
+                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Name = "Profile 4"
+                };
+
+                return new SkillCastSettings
+                {
+                    SkillCastConfigurations = new List<SkillCastConfiguration> { configuration, configuration2, configuration3, configuration4 },
+                    SelectedSkillCastConfiguration = configuration
                 };
             }
         }
 
         public static IList<Keys> SkillKeybindigns => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
+
+        public static SmartFeatureSettings SmartFeatureSettings
+        {
+            get
+            {
+                return new SmartFeatureSettings
+                {
+                    EnabledSkills = new List<SkillName>
+                                                {
+                                                    SkillName.Devour,
+                                                    SkillName.LandOfTheDead,
+                                                    SkillName.SkeletalMage,
+                                                    SkillName.BoneArmor,
+                                                    SkillName.Simulacrum
+                                                },
+                    EnabledSmartActions = new List<SmartActionName>
+                                                    {
+                                                        SmartActionName.Gamble,
+                                                        SmartActionName.AcceptGriftPopup,
+                                                        SmartActionName.OpenRiftGrift,
+                                                        SmartActionName.UpgradeGem,
+                                                        SmartActionName.StartGame
+                                                    },
+                    IsOpenRift = true,
+                    SkillSuspensionStatus = new bool[6],
+                    UpdateInterval = 100
+                };
+            }
+        }
 
         public static UiSettings UiSettings => new UiSettings
         {
@@ -81,34 +156,34 @@ namespace Dolphin
 
     public class Settings
     {
-        public IList<SkillName> EnabledSkills { get; set; }
-
-        public IDictionary<Enum.ActionName, Hotkey> Hotkeys { get; set; }
-
-        [JsonIgnore]
-        public bool IsPaused { get; set; }
-
-        public MacroSettings MacroSettings { get; set; }
-
-        public IDictionary<Command, Keys> OtherKeybindings { get; set; }
-        public IList<Keys> SkillKeybindings { get; set; }
-
-        public UiSettings UiSettings { get; set; }
-
-        public uint UpdateInterval { get; set; }
-
-        public Settings(bool initialize = false)
+        public Settings(bool reset = false)
         {
-            if (initialize)
+            if (reset)
             {
-                EnabledSkills = InitialSettings.EnabledSkills;
                 Hotkeys = InitialSettings.Hotkeys;
                 MacroSettings = InitialSettings.MacroSettings;
                 OtherKeybindings = InitialSettings.OtherKeybindings;
                 SkillKeybindings = InitialSettings.SkillKeybindigns;
                 UiSettings = InitialSettings.UiSettings;
-                UpdateInterval = InitialSettings.UpdateInterval;
+                SmartFeatureSettings = InitialSettings.SmartFeatureSettings;
+                SkillCastSettings = InitialSettings.SkillCastSettings;
             }
         }
+
+        public IDictionary<ActionName, Hotkey> Hotkeys { get; set; }
+
+        public bool IsPaused { get; set; }
+
+        public MacroSettings MacroSettings { get; set; }
+
+        public IDictionary<CommandKeybinding, Keys> OtherKeybindings { get; set; }
+
+        public SkillCastSettings SkillCastSettings { get; set; }
+
+        public IList<Keys> SkillKeybindings { get; set; }
+
+        public SmartFeatureSettings SmartFeatureSettings { get; set; }
+
+        public UiSettings UiSettings { get; set; }
     }
 }

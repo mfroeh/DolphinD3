@@ -9,7 +9,6 @@ namespace Dolphin.Service
         private readonly IHandleService handleService;
         private readonly ILogService logService;
         private readonly ISettingsService settingsService;
-        private readonly Subscription<SkillCanBeCastedEvent> skillSubscription;
 
         public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService, IHandleService handleService, ILogService logService) : base(eventBus)
         {
@@ -18,36 +17,44 @@ namespace Dolphin.Service
             this.conditionFinderService = conditionFinderService;
             this.handleService = handleService;
 
-            skillSubscription = new Subscription<SkillCanBeCastedEvent>(CastSkill);
+            var skillSubscription = new Subscription<SkillCanBeCastedEvent>(OnSkilCanBeCasted);
             SubscribeBus(skillSubscription);
         }
 
-        private void CastSkill(object o, SkillCanBeCastedEvent @event)
+        private void OnSkilCanBeCasted(object o, SkillCanBeCastedEvent @event)
         {
-            var handle = handleService.GetHandle();
-
-            if (handle == default) return;
-            if (!settingsService.SkillIsEnabled(@event.SkillName)) return;
+            var handle = handleService.GetHandle("Diablo III64");
+            if (handle?.Handle == default ||
+                !settingsService.SkillIsEnabled(@event.SkillName) ||
+                settingsService.SkillIndexIsSuspended(@event.SkillIndex))
+            {
+                return;
+            }
 
             Action action;
             if (@event.SkillIndex <= 3)
             {
                 var key = settingsService.Settings.SkillKeybindings[@event.SkillIndex];
-                action = () => InputHelper.SendKey(handle, key);
+                action = () => InputHelper.SendKey(handle.Handle, key);
             }
             else if (@event.SkillIndex == 4)
             {
-                action = () => InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
+                action = () => InputHelper.SendClickAtCursorPos(handle.Handle, MouseButtons.Left);
             }
             else
             {
-                action = () => InputHelper.SendClickAtCursorPos(handle, MouseButtons.Right);
+                action = () => InputHelper.SendClickAtCursorPos(handle.Handle, MouseButtons.Right);
             }
 
             var condition = conditionFinderService.FindCondition(@event.SkillName);
             if (condition.Invoke())
             {
                 Execute.AndForgetAsync(action);
+                logService.AddEntry(this, $"Clicking skill... [{@event.SkillName}][{@event.SkillIndex}]");
+            }
+            else
+            {
+                logService.AddEntry(this, $"Condition for skill not fulfilled... [{@event.SkillName}][{@event.SkillIndex}]");
             }
         }
     }

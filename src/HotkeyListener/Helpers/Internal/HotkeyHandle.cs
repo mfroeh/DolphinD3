@@ -4,23 +4,20 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.Collections.Generic;
-
-using WK.Libraries.HotkeyListenerNS.Models;
 
 namespace WK.Libraries.HotkeyListenerNS.Helpers
 {
     /// <summary>
-    /// Provides the base Hotkey handle for intercepting 
+    /// Provides the base Hotkey handle for intercepting
     /// and receiving all registered global Hotkey events.
     /// </summary>
     [DebuggerStepThrough]
@@ -41,14 +38,14 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             Hotkeys = new Dictionary<int, string>();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Fields
 
-        private const int WM_HOTKEY = 0x312;
         public Dictionary<int, string> Hotkeys;
+        private const int WM_HOTKEY = 0x312;
 
-        #endregion
+        #endregion Fields
 
         #region Methods
 
@@ -69,6 +66,14 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         }
 
         /// <summary>
+        /// Remove all the registered Hotkeys from the global Key watcher.
+        /// </summary>
+        public void RemoveAllKeys()
+        {
+            this.Unregister();
+        }
+
+        /// <summary>
         /// Removes any specified Hotkey from the global Key watcher.
         /// </summary>
         /// <param name="hotkey">The Hotkey to remove.</param>
@@ -77,15 +82,7 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             this.Unregister(hotkey);
         }
 
-        /// <summary>
-        /// Remove all the registered Hotkeys from the global Key watcher.
-        /// </summary>
-        public void RemoveAllKeys()
-        {
-            this.Unregister();
-        }
-
-        #endregion
+        #endregion Public
 
         #region Private
 
@@ -156,12 +153,12 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             Hotkeys.Clear();
         }
 
-        #endregion
+        #endregion Private
 
         #region Overrides
 
         /// <summary>
-        /// Overrides the default window message processing 
+        /// Overrides the default window message processing
         /// to detect the registered Hotkeys when pressed.
         /// </summary>
         /// <param name="m"></param>
@@ -176,9 +173,9 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
                 base.WndProc(ref m);
         }
 
-        #endregion
+        #endregion Overrides
 
-        #endregion
+        #endregion Methods
 
         #region Events
 
@@ -189,8 +186,8 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         /// </summary>
         public event EventHandler<HotkeyEventArgs> HotkeyPressed;
 
-        #endregion
+        #endregion Public
 
-        #endregion
+        #endregion Events
     }
 }

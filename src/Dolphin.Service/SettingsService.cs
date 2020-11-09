@@ -1,30 +1,33 @@
 ﻿using Dolphin.Enum;
 using System.Windows.Forms;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Service
 {
     public class SettingsService : EventSubscriberBase, ISettingsService, IEventPublisher<PausedEvent>
     {
-        private readonly Subscription<HotkeyPressedEvent> hotkeySubscription;
         private readonly ILogService logService;
-        private Settings settings;
 
         public SettingsService(IEventBus eventBus, Settings settings, ILogService logService) : base(eventBus)
         {
-            this.settings = settings;
+            Settings = settings;
             this.logService = logService;
 
-            hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
+            var hotkeySubscription = new Subscription<HotkeyPressedEvent>(HotkeyPressedHandler);
             SubscribeBus(hotkeySubscription);
         }
 
         public MacroSettings MacroSettings => Settings.MacroSettings;
 
-        public Settings Settings => settings;
+        public Settings Settings { get; private set; }
+
+        public SkillCastSettings SkillCastSettings => Settings.SkillCastSettings;
+
+        public SmartFeatureSettings SmartFeatureSettings => Settings.SmartFeatureSettings;
 
         public UiSettings UiSettings => Settings.UiSettings;
 
-        public ActionName GetActionName(WK.Libraries.HotkeyListenerNS.Hotkey hotkey)
+        public ActionName GetActionName(Hotkey hotkey)
         {
             foreach (var item in Settings.Hotkeys)
             {
@@ -34,9 +37,24 @@ namespace Dolphin.Service
             return default;
         }
 
-        public Keys GetKeybinding(Command command)
+        public Keys GetKeybinding(CommandKeybinding command)
         {
             return Settings.OtherKeybindings[command];
+        }
+
+        public SmartActionName GetSmartActionName(Window window)
+        {
+            foreach (var action in window.AssociatedSmartActions())
+            {
+                return action;
+            }
+
+            return default;
+        }
+
+        public bool IsSmartActionEnabled(SmartActionName smartAction)
+        {
+            return SmartFeatureSettings.EnabledSmartActions.Contains(smartAction);
         }
 
         public void NegateIsPaused(bool isFromChanging)
@@ -53,16 +71,16 @@ namespace Dolphin.Service
 
         public void ResetSettings()
         {
-            settings = new Settings(true);
+            Settings = new Settings(true);
         }
 
-        // Todo: Implement for specific types?
+        // Todo: Implement for specific subtypes?
         public void ResetSettings<T>()
         {
             ResetSettings();
         }
 
-        public void SetHotkeyValue(ActionName key, WK.Libraries.HotkeyListenerNS.Hotkey value)
+        public void SetHotkeyValue(ActionName key, Hotkey value)
         {
             Settings.Hotkeys[key] = value;
         }
@@ -74,9 +92,14 @@ namespace Dolphin.Service
             Publish(new PausedEvent { IsPaused = Settings.IsPaused, IsFromChanging = isFromChanging });
         }
 
+        public bool SkillIndexIsSuspended(int skillIndex)
+        {
+            return SmartFeatureSettings.SkillSuspensionStatus[skillIndex];
+        }
+
         public bool SkillIsEnabled(SkillName skill)
         {
-            return Settings.EnabledSkills.Contains(skill);
+            return SmartFeatureSettings.EnabledSkills.Contains(skill);
         }
 
         private void HotkeyPressedHandler(object o, HotkeyPressedEvent @event)

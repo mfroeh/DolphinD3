@@ -4,21 +4,20 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace WK.Libraries.HotkeyListenerNS.Helpers
 {
     /// <summary>
-    /// The core class that helps in the management  
+    /// The core class that helps in the management
     /// of system-wide Hotkeys within applications.
     /// </summary>
     [DebuggerStepThrough]
@@ -58,7 +57,7 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             Windows = 8
         }
 
-        #endregion
+        #endregion Enumerations
 
         #region Methods
 
@@ -74,9 +73,9 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         {
             if (strKey == null)
                 strKey = "";
-        
+
             Keys key = Keys.None;
-            
+
             try
             {
                 if (string.IsNullOrEmpty(strKey))
@@ -121,7 +120,7 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         public static bool RegisterKey(Control handle, int hotkeyID, Keys key)
         {
             HotKeyModifiers keyModifier = HotKeyModifiers.None;
-        
+
             keyModifier |= CheckModifier(key, Keys.Control, HotKeyModifiers.Control);
             keyModifier |= CheckModifier(key, Keys.Alt, HotKeyModifiers.Alt);
             keyModifier |= CheckModifier(key, Keys.Shift, HotKeyModifiers.Shift);
@@ -141,7 +140,7 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             return UnregisterHotKey(handle.Handle, hotkeyID);
         }
 
-        #endregion
+        #endregion Public
 
         #region Private
 
@@ -159,12 +158,12 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        #endregion
+        #endregion Win32 Management
 
         #region Hotkey Management
 
         /// <summary>
-        /// Checks whether a specified Hotkey modifier is 
+        /// Checks whether a specified Hotkey modifier is
         /// available within a provided Hotkey.
         /// </summary>
         /// <param name="key">The key(s).</param>
@@ -181,10 +180,10 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             return HotKeyModifiers.None;
         }
 
-        #endregion
+        #endregion Hotkey Management
 
-        #endregion
+        #endregion Private
 
-        #endregion
+        #endregion Methods
     }
 }

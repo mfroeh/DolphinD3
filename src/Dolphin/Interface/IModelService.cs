@@ -9,17 +9,17 @@ namespace Dolphin
 
         World World { get; }
 
-        IEnumerable<PlayerHealth> GetPossibleHealthEnum();
-
-        IEnumerable<Enum.PlayerResource> GetPossiblePrimaryResourceEnum();
-
-        IEnumerable<Enum.PlayerResource> GetPossibleSecondary();
-
-        IEnumerable<SkillName> GetPossibleSkills(bool isMouse);
-
         Skill GetSkill(SkillName name);
 
         Skill GetSkill(int index);
+
+        IEnumerable<PlayerHealth> PossibleHealthEnum();
+
+        IEnumerable<Enum.PlayerResource> PossiblePrimaryResourceEnum();
+
+        IEnumerable<Enum.PlayerResource> PossibleSecondaryResourceEnum();
+
+        IEnumerable<SkillName> PossibleSkills();
 
         void SetPlayerHealth(PlayerHealth health);
 

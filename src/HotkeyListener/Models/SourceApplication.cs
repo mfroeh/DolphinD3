@@ -4,11 +4,10 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
 using System.Diagnostics;
@@ -43,14 +42,9 @@ namespace WK.Libraries.HotkeyListenerNS.Models
             Selection = selection;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Properties
-
-        /// <summary>
-        /// Gets the application's process-ID.
-        /// </summary>
-        public int ID { get; }
 
         /// <summary>
         /// Gets the appliation's window-handle.
@@ -58,31 +52,36 @@ namespace WK.Libraries.HotkeyListenerNS.Models
         public IntPtr Handle { get; }
 
         /// <summary>
+        /// Gets the application's process-ID.
+        /// </summary>
+        public int ID { get; }
+
+        /// <summary>
         /// Gets the application's name.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the application's absolute path.
+        /// </summary>
+        public string Path { get; }
+
+        /// <summary>
+        /// Gets the currently selected text in the application.
+        /// </summary>
+        public string Selection { get; internal set; }
 
         /// <summary>
         /// Gets the application's title-text.
         /// </summary>
         public string Title { get; }
 
-        /// <summary>
-        /// Gets the application's absolute path.
-        /// </summary>
-        public string Path { get; }
-        
-        /// <summary>
-        /// Gets the currently selected text in the application.
-        /// </summary>
-        public string Selection { get; internal set; }
-
-        #endregion
+        #endregion Properties
 
         #region Overrides
 
         /// <summary>
-        /// Returns a <see cref="string"/> containing the list 
+        /// Returns a <see cref="string"/> containing the list
         /// of application details provided.
         /// </summary>
         public override string ToString()
@@ -91,6 +90,6 @@ namespace WK.Libraries.HotkeyListenerNS.Models
                    $"Title: {Title}; Path: {Path}";
         }
 
-        #endregion
+        #endregion Overrides
     }
 }

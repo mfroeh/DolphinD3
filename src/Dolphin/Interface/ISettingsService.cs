@@ -10,11 +10,19 @@ namespace Dolphin
 
         Settings Settings { get; }
 
+        SkillCastSettings SkillCastSettings { get; }
+
+        SmartFeatureSettings SmartFeatureSettings { get; }
+
         UiSettings UiSettings { get; }
 
         ActionName GetActionName(Hotkey hotkey);
 
-        void SetPaused(bool newPaused, bool isFromChanging);
+        Keys GetKeybinding(CommandKeybinding command);
+
+        SmartActionName GetSmartActionName(Window window);
+
+        bool IsSmartActionEnabled(SmartActionName smartAction);
 
         public void ResetSettings<T>();
 
@@ -22,8 +30,10 @@ namespace Dolphin
 
         void SetHotkeyValue(ActionName key, Hotkey value);
 
-        bool SkillIsEnabled(SkillName skill);
+        void SetPaused(bool newPaused, bool isFromChanging);
 
-        Keys GetKeybinding(Command command);
+        bool SkillIndexIsSuspended(int skillIndex);
+
+        bool SkillIsEnabled(SkillName skill);
     }
 }

@@ -1,11 +1,9 @@
-﻿using WK.Libraries.HotkeyListenerNS;
-
-namespace Dolphin
+﻿namespace Dolphin
 {
     public class PausedEvent : IEvent
     {
-        public bool IsPaused { get; set; }
-
         public bool IsFromChanging { get; set; }
+
+        public bool IsPaused { get; set; }
     }
 }

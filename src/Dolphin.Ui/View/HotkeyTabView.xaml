@@ -362,6 +362,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
@@ -458,13 +460,58 @@
                     Grid.Row="3"
                     Grid.Column="0"
                     Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Skillcast loop
+                </Label>
+                <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)SkillCastLoop], Mode=OneWay}" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.SkillCastLoop}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    Content="Skillcast profile" />
+
+                <ComboBox
+                    Grid.Row="4"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    ItemsSource="{Binding SkillCastProfiles}"
+                    SelectedItem="{Binding SelectedSkillCastProfile}" />
+
+                <Label
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
                                             Bottom=0,
                                             Right=.5}"
                     VerticalAlignment="Center">
                     Gem options
                 </Label>
                 <WrapPanel
-                    Grid.Row="3"
+                    Grid.Row="5"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Margin="{adonisUi:Space Left=0,
@@ -757,6 +804,11 @@
                     <RadioButton
                         Margin="{adonisUi:Space Left=1,
                                                 Bottom=0}"
+                        Content="Very slow"
+                        IsChecked="{Binding ConvertingSpeed, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enum:ConvertingSpeed.VerySlow}}" />
+                    <RadioButton
+                        Margin="{adonisUi:Space Left=1,
+                                                Bottom=0}"
                         Content="Slow"
                         IsChecked="{Binding ConvertingSpeed, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enum:ConvertingSpeed.Slow}}" />
                     <RadioButton
@@ -771,6 +823,197 @@
                         Content="Fast"
                         IsChecked="{Binding ConvertingSpeed, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enum:ConvertingSpeed.Fast}}" />
                 </WrapPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="{adonisUi:Space Left=0}"
+            Header="Suspend skill casting">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Toggle skill 1
+                </Label>
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)Suspend_0], Mode=OneWay}" />
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.Suspend_0}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Toggle skill 2
+                </Label>
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)Suspend_1], Mode=OneWay}" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.Suspend_1}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Toggle skill 3
+                </Label>
+                <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)Suspend_2], Mode=OneWay}" />
+                <Button
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.Suspend_2}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Toggle skill 4
+                </Label>
+                <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)Suspend_3], Mode=OneWay}" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.Suspend_3}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Toggle skill 5
+                </Label>
+                <TextBox
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)Suspend_4], Mode=OneWay}" />
+                <Button
+                    Grid.Row="4"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.Suspend_4}">
+                    Change
+                </Button>
+
+                <Label
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    VerticalAlignment="Center">
+                    Toggle skill 6
+                </Label>
+                <TextBox
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    MinWidth="70"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0}"
+                    HorizontalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=Hotkeys[(enum:ActionName)Suspend_5], Mode=OneWay}" />
+                <Button
+                    Grid.Row="5"
+                    Grid.Column="3"
+                    Margin="{adonisUi:Space Left=0,
+                                            Bottom=0,
+                                            Right=.5}"
+                    Command="{Binding ChangeHotkeyCommand}"
+                    CommandParameter="{x:Static enum:ActionName.Suspend_5}">
+                    Change
+                </Button>
             </Grid>
         </GroupBox>
     </Grid>

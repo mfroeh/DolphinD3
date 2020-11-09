@@ -1,8 +1,9 @@
-﻿using RestoreWindowPlace;
-using System;
+﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -21,6 +22,13 @@ namespace Dolphin.Ui
             base.OnClosed(e);
 
             Application.Current.Shutdown();
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(((Hyperlink)sender).NavigateUri.OriginalString);
+
+            e.Handled = true;
         }
     }
 }

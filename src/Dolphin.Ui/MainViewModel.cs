@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Unity;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.ViewModel
 {
     public class MainViewModel : ViewModelBase, IEventSubscriber
     {
@@ -18,25 +18,25 @@ namespace Dolphin.Ui
             this.eventBus = eventBus;
             this.settingsService = settingsService;
 
-            var tab0 = container.Resolve<IViewModelBase>("hotkeyTab");
-            tab0.Parent = this;
-            Children.Add(tab0);
+            var hotkeyTab = container.Resolve<IViewModel>("hotkeyTab");
+            hotkeyTab.Parent = this;
+            Children.Add(hotkeyTab);
 
-            var tab1 = container.Resolve<IViewModelBase>("featureTab");
-            tab1.Parent = this;
-            Children.Add(tab1);
+            var featureTab = container.Resolve<IViewModel>("featureTab");
+            featureTab.Parent = this;
+            Children.Add(featureTab);
 
-            var tab2 = container.Resolve<IViewModelBase>("logTab");
-            tab2.Parent = this;
-            Children.Add(tab2);
+            var logTab = container.Resolve<IViewModel>("logTab");
+            logTab.Parent = this;
+            Children.Add(logTab);
 
-            var tab3 = container.Resolve<IViewModelBase>("settingsTab");
-            tab3.Parent = this;
-            Children.Add(tab3);
+            var settingsTab = container.Resolve<IViewModel>("settingsTab");
+            settingsTab.Parent = this;
+            Children.Add(settingsTab);
 
-            var tab4 = container.Resolve<IViewModelBase>("overviewTab");
-            tab4.Parent = this;
-            Children.Add(tab4);
+            var overviewTab = container.Resolve<IViewModel>("overviewTab");
+            overviewTab.Parent = this;
+            Children.Add(overviewTab);
 
             IsDark = settingsService.Settings.UiSettings.IsDark;
             Status = "Ready";
@@ -45,7 +45,7 @@ namespace Dolphin.Ui
             SubscribeBus(pauseSubscription);
         }
 
-        public ICollection<IViewModelBase> Children { get; } = new ObservableCollection<IViewModelBase>();
+        public ICollection<IViewModel> Children { get; } = new ObservableCollection<IViewModel>();
 
         public bool IsDark
         {

@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resource\dolphin_icon-icons.com_60855.ico</ApplicationIcon>
+    <ApplicationIcon>dolphin.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -61,8 +61,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CustomFrameworkDialogFactory.cs" />
-    <Compile Include="CustomMessageBox.cs" />
+    <Compile Include="BoolInverterConverter.cs" />
+    <Compile Include="Dialog\CustomFrameworkDialogFactory.cs" />
+    <Compile Include="AdonisUiMessageBox.cs" />
+    <Compile Include="Dialog\IDialogViewModel.cs" />
+    <Compile Include="Dialog\View\ChangeSkillCastProfileDialog.xaml.cs">
+      <DependentUpon>ChangeSkillCastProfileDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\ViewModel\ChangeSkillCastProfileDialogViewModel.cs" />
+    <Compile Include="IMessageBoxService.cs" />
+    <Compile Include="MessageBoxService.cs" />
+    <Compile Include="ShouldSerializeContractResolver.cs" />
+    <Compile Include="SplashScreen.xaml.cs">
+      <DependentUpon>SplashScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\OverviewTabViewModel.cs" />
     <Compile Include="ViewModel\SettingsTabViewModel.cs" />
     <Compile Include="View\OverviewTabView.xaml.cs">
@@ -71,8 +83,6 @@
     <Compile Include="View\SettingsTabView.xaml.cs">
       <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
-    <Resource Include="Resource\dolphin_88287.ico" />
-    <Resource Include="Resource\dolphin_icon-icons.com_60855.ico" />
     <Compile Include="EnumBooleanConverter.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="ViewModel\FeatureTabViewModel.cs" />
@@ -86,16 +96,20 @@
     <Compile Include="View\LogTabView.xaml.cs">
       <DependentUpon>LogTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\ChangeHotkeyDialog.xaml.cs">
+    <Compile Include="Dialog\View\ChangeHotkeyDialog.xaml.cs">
       <DependentUpon>ChangeHotkeyDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\ChangeHotkeyDialogViewModel.cs" />
+    <Compile Include="Dialog\ViewModel\ChangeHotkeyDialogViewModel.cs" />
     <Compile Include="ViewModel\HotkeyTabViewModel.cs" />
-    <Compile Include="IViewModelBase.cs" />
+    <Compile Include="IViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModelBase.cs" />
-    <Page Include="Dialog\ChangeHotkeyDialog.xaml">
+    <Page Include="Dialog\View\ChangeHotkeyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialog\View\ChangeSkillCastProfileDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,6 +125,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SplashScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FeatureTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +203,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dolphin.Image\Dolphin.Image.csproj">
+      <Project>{a643ff5d-d723-4223-9bda-917dcb6fefcd}</Project>
+      <Name>Dolphin.Image</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dolphin.Service\Dolphin.Service.csproj">
       <Project>{1966956e-6203-42f0-b3d4-376d17d83677}</Project>
       <Name>Dolphin.Service</Name>
@@ -1218,6 +1240,19 @@
   <ItemGroup>
     <Resource Include="Resource\Class\NecromancerFemale.png" />
     <Resource Include="Resource\Class\NecromancerMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Class\CrusaderFemale.png" />
+    <Resource Include="Resource\Class\CrusaderMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\splashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\dolphin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="dolphin.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

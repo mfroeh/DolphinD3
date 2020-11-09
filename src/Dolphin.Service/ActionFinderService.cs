@@ -1,446 +1,159 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace Dolphin.Service
 {
     public class ActionFinderService : IActionFinderService
     {
-        private static readonly IList<ActionName> cancellableMacros = new List<ActionName> { ActionName.CubeConverterDualSlot, ActionName.CubeConverterSingleSlot, ActionName.UpgradeGem };
+        private readonly ActionService actionService;
         private readonly ILogService logService;
         private readonly ISettingsService settingsService;
-        private readonly ITransformService transformService;
-        private readonly ITravelInformationService travelService;
 
-        public ActionFinderService(ISettingsService settingsService, ILogService logService, ITravelInformationService travelService, ITransformService transformService)
+        public ActionFinderService(ISettingsService settingsService, ILogService logService, ActionService actionService)
         {
             this.settingsService = settingsService;
             this.logService = logService;
-            this.travelService = travelService;
-            this.transformService = transformService;
+            this.actionService = actionService;
         }
 
         public Action FindAction(ActionName actionName, IntPtr handle)
         {
-            if (cancellableMacros.Contains(actionName))
+            if (actionName.IsCancelable())
             {
-                logService.AddEntry(this, $"Tried to recive Macro {actionName} as a non cancellable Macro.");
+                throw new Exception($"Tried to recive Macro {actionName} as a non cancellable Macro.");
             }
 
             switch (actionName)
             {
                 case ActionName.RightClick:
-                    return () => RightClick(handle);
+                    return () => actionService.RightClick(handle);
 
                 case ActionName.LeftClick:
-                    return () => LeftClick(handle);
+                    return () => actionService.LeftClick(handle);
 
                 case ActionName.DropInventory:
-                    return () => DropInventory(handle);
+                    var columns = settingsService.MacroSettings.SpareColumns;
+                    var key = settingsService.GetKeybinding(CommandKeybinding.OpenInventory);
+                    return () => actionService.DropInventory(handle, columns, key);
 
                 case ActionName.Salvage:
-                    return () => Salvage(handle);
+                    return () => actionService.Salvage(handle, settingsService.MacroSettings.SpareColumns);
 
                 case ActionName.OpenGrift:
-                    return () => OpenGrift(handle);
+                    return () => actionService.OpenGrift(handle);
 
                 case ActionName.LeaveGame:
-                    return () => LeaveGame(handle);
+                    return () => actionService.LeaveGame(handle);
 
                 case ActionName.Reforge:
-                    return () => Reforge(handle);
+                    return () => actionService.Reforge(handle, settingsService.MacroSettings.ConvertingSpeed);
 
                 case ActionName.TravelAct1:
+                    return () => actionService.TravelTown(handle, 1, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+
                 case ActionName.TravelAct2:
+                    return () => actionService.TravelTown(handle, 2, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+
                 case ActionName.TravelAct34:
+                    return () => actionService.TravelTown(handle, 3, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
+
                 case ActionName.TravelAct5:
-                    return () => TravelTown(handle, actionName);
+                    return () => actionService.TravelTown(handle, 5, settingsService.GetKeybinding(CommandKeybinding.OpenMap));
 
                 case ActionName.TravelPool:
-                    return () => TravelPool(handle);
+                    return () => actionService.TravelPool(handle);
 
                 case ActionName.NormalizeDifficulty:
-                    return () => LowerDifficulty(handle);
+                    return () => actionService.LowerDifficulty(handle);
 
                 case ActionName.SwapArmour:
-                    return () => SwapArmour(handle);
+                    key = settingsService.GetKeybinding(CommandKeybinding.OpenInventory);
+                    var swapItemAmount = settingsService.MacroSettings.SwapItemsAmount;
+                    return () => actionService.SwapArmour(handle, key, swapItemAmount);
 
                 case ActionName.Gamble:
-                    return () => Gamble(handle);
-                case ActionName.AcceptGriftPopup:
-                case ActionName.OpenRift:
-                case ActionName.StartGame:
-                    return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.");
-                    break;
+                    return () => actionService.Gamble(handle, settingsService.MacroSettings.SelectedGambleItem);
+
                 default:
-                    throw new NotImplementedException($"Non cancellable Macro not implemented for {actionName}");
-                    break;
+                    throw new NotImplementedException();
             }
         }
 
         public Action FindAction(ActionName actionName, IntPtr handle, CancellationTokenSource tokenSource)
         {
-            if (!cancellableMacros.Contains(actionName))
+            if (!actionName.IsCancelable())
             {
-                logService.AddEntry(this, $"Tried to recive cancellable Macro {actionName} which is not avalible as a cancellable macro. This will still work.");
-
-                return FindAction(actionName, handle);
+                throw new Exception($"Tried to recive non cancelable Macro {actionName} as a cancellable Macro.");
             }
 
             switch (actionName)
             {
                 case ActionName.CubeConverterDualSlot:
-                    return () => CubeConverterDualSlot(handle, tokenSource);
+                    var speed = settingsService.MacroSettings.ConvertingSpeed;
+                    return () => actionService.CubeConverterDualSlot(handle, tokenSource, speed);
 
                 case ActionName.CubeConverterSingleSlot:
-                    return () => CubeConverterSingleSlot(handle, tokenSource);
+                    speed = settingsService.MacroSettings.ConvertingSpeed;
+                    return () => actionService.CubeConverterSingleSlot(handle, tokenSource, speed);
 
                 case ActionName.UpgradeGem:
-                    return () => UpgradeGem(handle, tokenSource);
+                    var key = settingsService.GetKeybinding(CommandKeybinding.TeleportToTown);
+                    var isEmpowered = settingsService.MacroSettings.Empowered;
+                    var pickYourself = settingsService.MacroSettings.PickGemYourself;
+                    return () => actionService.UpgradeGem(handle, tokenSource, isEmpowered, pickYourself, key);
+
+                case ActionName.SkillCastLoop:
+                    var configuration = settingsService.SkillCastSettings.SelectedSkillCastConfiguration;
+                    var keybindings = settingsService.Settings.SkillKeybindings;
+
+                    if (configuration == default)
+                    {
+                        logService.AddEntry(this, "SelectedSkillCastConfiguration was null", LogLevel.Warning);
+                        return () => { };
+                    }
+                    return () => actionService.SkillCastLoop(handle, tokenSource, configuration, keybindings);
 
                 default:
                     throw new NotImplementedException($"Cancellable Macro not implemented for {actionName}");
-                    break;
             }
         }
 
-        private static bool IsCancelled(CancellationTokenSource tokenSource)
+        public Action FindSmartAction(SmartActionName actionName, IntPtr handle, params object[] @params)
         {
-            if (tokenSource == null) return true;
-
-            return tokenSource.Token.IsCancellationRequested;
-
-            try
+            if (actionName.IsCancelable())
             {
-                if (tokenSource.Token.IsCancellationRequested)
-                {
-                    Trace.WriteLine("Cancellation requested!");
-                }
-
-                return tokenSource.Token.IsCancellationRequested;
+                throw new Exception($"Tried to recive cancelable smart action {actionName} as a non cancellable Macro.");
             }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Exception when trying to see if TokenSource was canceled, {ex}");
 
-                return true;
+            switch (actionName)
+            {
+                case SmartActionName.AcceptGriftPopup:
+                case SmartActionName.OpenRiftGrift:
+                case SmartActionName.StartGame:
+                case SmartActionName.Gamble:
+                    return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);
+
+                default:
+                    throw new NotImplementedException();
             }
         }
 
-        private static void LeftClick(IntPtr handle)
+        public Action FindSmartAction(SmartActionName actionName, IntPtr handle, CancellationTokenSource tokenSource, params object[] @params)
         {
-            InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
-            Thread.Sleep(10);
-        }
-
-        private static void RightClick(IntPtr handle)
-        {
-            InputHelper.SendClickAtCursorPos(handle, MouseButtons.Right);
-            Thread.Sleep(10);
-        }
-
-        private void CubeConverterDualSlot(IntPtr handle, CancellationTokenSource tokenSource)
-        {
-            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
-            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
-            var fill = transformService.TransformCoordinate(CommonCoordinate.CubeFill);
-            var transmute = transformService.TransformCoordinate(CommonCoordinate.CubeTransmute);
-            var backwards = transformService.TransformCoordinate(CommonCoordinate.CubeBackwards);
-            var forwards = transformService.TransformCoordinate(CommonCoordinate.CubeForwards);
-
-            var itemClickDelay = 130;
-            var transmuteDelay = 130;
-            var fillDelay = 0; // Care, Thread.Sleep(0)!
-            var backwardsDelay = 0; // Care, Thread.Sleep(0)!
-            if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Slow)
+            if (!actionName.IsCancelable())
             {
-                fillDelay = 100;
-                backwardsDelay = 100;
-            }
-            else if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Fast)
-            {
-                itemClickDelay = 60;
-                transmuteDelay = 60;
+                throw new Exception($"Tried to recive non cancelable smart action {actionName} as a cancellable Macro.");
             }
 
-            for (int i = 0; i < 3; i++)
+            switch (actionName)
             {
-                for (int j = 0; j < 10; j++)
-                {
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Right, item.X + j * step.Width, item.Y + i * step.Height * 2);
-                    Thread.Sleep(itemClickDelay);
+                case SmartActionName.UpgradeGem:
+                    var key = settingsService.GetKeybinding(CommandKeybinding.TeleportToTown);
+                    return () => actionService.UpgradeGem(handle, tokenSource, (int)@params[0], key);
 
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, fill);
-                    Thread.Sleep(fillDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, transmute);
-                    Thread.Sleep(transmuteDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, backwards);
-                    Thread.Sleep(backwardsDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, forwards);
-                }
-            }
-        }
-
-        private void CubeConverterSingleSlot(IntPtr handle, CancellationTokenSource tokenSource)
-        {
-            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
-            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
-            var fill = transformService.TransformCoordinate(CommonCoordinate.CubeFill);
-            var transmute = transformService.TransformCoordinate(CommonCoordinate.CubeTransmute);
-            var backwards = transformService.TransformCoordinate(CommonCoordinate.CubeBackwards);
-            var forwards = transformService.TransformCoordinate(CommonCoordinate.CubeForwards);
-
-            var itemClickDelay = 130;
-            var transmuteDelay = 130;
-            var fillDelay = 0; // Care, Thread.Sleep(0)!
-            var backwardsDelay = 0; // Care, Thread.Sleep(0)!
-            if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Slow)
-            {
-                fillDelay = 100;
-                backwardsDelay = 100;
-            }
-            else if (settingsService.MacroSettings.ConvertingSpeed == ConvertingSpeed.Fast)
-            {
-                itemClickDelay = 60;
-                transmuteDelay = 60;
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < 10; j++)
-                {
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Right, item.X + j * step.Width, item.Y + i * step.Height);
-                    Thread.Sleep(itemClickDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, fill);
-                    Thread.Sleep(fillDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, transmute);
-                    Thread.Sleep(transmuteDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, backwards);
-                    Thread.Sleep(backwardsDelay);
-
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendClick(handle, MouseButtons.Left, forwards);
-                }
-            }
-        }
-
-        private void DropInventory(IntPtr handle)
-        {
-            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopRightSpot, RelativeCoordinatePosition.Right);
-            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
-
-            var columnIterations = 10 - settingsService.MacroSettings.SpareColumns;
-
-            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
-
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < columnIterations; j++)
-                {
-                    InputHelper.SendClick(handle, MouseButtons.Left, item.X - j * step.Width, item.Y + i * step.Height);
-                    InputHelper.SendClickAtCursorPos(handle, MouseButtons.Left);
-                }
-            }
-
-            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
-        }
-
-        private void Gamble(IntPtr handle)
-        {
-            var gambleItem = settingsService.MacroSettings.SelectedGambleItem;
-            var _tab = travelService.GetKadalaTabCoordinate(gambleItem);
-            var _item = travelService.GetKadalaItemCoordinate(gambleItem);
-
-            var tab = transformService.TransformCoordinate(_tab);
-            var item = transformService.TransformCoordinate(_item);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, tab);
-
-            for (int i = 0; i < 60; i++)
-            {
-                InputHelper.SendClick(handle, MouseButtons.Left, item);
-            }
-        }
-
-        private void LeaveGame(IntPtr handle)
-        {
-            var leave = transformService.TransformCoordinate(CommonCoordinate.EscapeLeave);
-
-            InputHelper.SendKey(handle, Keys.Escape);
-            InputHelper.SendClick(handle, MouseButtons.Left, leave);
-        }
-
-        private void LowerDifficulty(IntPtr handle)
-        {
-            var lower = transformService.TransformCoordinate(CommonCoordinate.EscapeLowerDifficulty, RelativeCoordinatePosition.Right);
-
-            InputHelper.SendKey(handle, Keys.Escape);
-
-            for (int i = 0; i < 19; i++)
-            {
-                InputHelper.SendClick(handle, MouseButtons.Left, lower);
-                InputHelper.SendKey(handle, Keys.Enter);
-            }
-
-            InputHelper.SendKey(handle, Keys.Escape);
-        }
-
-        private void OpenGrift(IntPtr handle)
-        {
-            var grift = transformService.TransformCoordinate(CommonCoordinate.PortalGriftButton);
-            var accept = transformService.TransformCoordinate(CommonCoordinate.PortalAccept);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, grift);
-            InputHelper.SendClick(handle, MouseButtons.Left, accept);
-        }
-
-        private void OpenRift(IntPtr handle)
-        {
-            var rift = transformService.TransformCoordinate(CommonCoordinate.PortalRiftButton);
-            var accept = transformService.TransformCoordinate(CommonCoordinate.PortalAccept);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, rift);
-            InputHelper.SendClick(handle, MouseButtons.Left, accept);
-        }
-
-        private void Reforge(IntPtr handle)
-        {
-            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
-            var fill = transformService.TransformCoordinate(CommonCoordinate.CubeFill);
-            var transmute = transformService.TransformCoordinate(CommonCoordinate.CubeTransmute);
-            var backwards = transformService.TransformCoordinate(CommonCoordinate.CubeBackwards);
-            var forwards = transformService.TransformCoordinate(CommonCoordinate.CubeForwards);
-
-            InputHelper.SendClick(handle, MouseButtons.Right, item);
-            Thread.Sleep(100);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, fill);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, transmute);
-            Thread.Sleep(100);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, backwards);
-            InputHelper.SendClick(handle, MouseButtons.Left, forwards);
-        }
-
-        private void Salvage(IntPtr handle)
-        {
-            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopRightSpot, RelativeCoordinatePosition.Right);
-            var menu = transformService.TransformCoordinate(CommonCoordinate.BlacksmithMenu);
-            var anvil = transformService.TransformCoordinate(CommonCoordinate.BlacksmithAnvil);
-            var step = transformService.TransformSize(CommonSize.InventoryStepSize);
-
-            var columnIterations = 10 - settingsService.MacroSettings.SpareColumns;
-
-            InputHelper.SendClick(handle, MouseButtons.Left, menu);
-            InputHelper.SendClick(handle, MouseButtons.Left, anvil);
-
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < columnIterations; j++)
-                {
-                    InputHelper.SendClick(handle, MouseButtons.Left, item.X - j * step.Width, item.Y + i * step.Height);
-                    InputHelper.SendKey(handle, Keys.Enter);
-                    InputHelper.SendKey(handle, Keys.Enter);
-                }
-            }
-        }
-
-        private void SwapArmour(IntPtr handle)
-        {
-            // Allow different spots
-            var step = transformService.TransformSize(CommonSize.InventoryStepSize, RelativeCoordinatePosition.Right);
-            var item = transformService.TransformCoordinate(CommonCoordinate.InventoryTopLeftSpot, RelativeCoordinatePosition.Right);
-
-            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenInventory));
-
-            for (int i = 0; i < settingsService.MacroSettings.SwapItemsAmount; i++)
-            {
-                InputHelper.SendClick(handle, MouseButtons.Right, item.X, item.Y + i * step.Height * 2);
-            }
-        }
-
-        private void TravelPool(IntPtr handle)
-        {
-            var poolSpot = travelService.GetNextPoolSpot();
-
-            if (poolSpot == default) return;
-
-            var _mapAct = poolSpot.Item1;
-            var _mapWaypoint = poolSpot.Item2;
-
-            var backwards = transformService.TransformCoordinate(CommonCoordinate.MapBackwards, RelativeCoordinatePosition.Middle);
-            var mapAct = transformService.TransformCoordinate(_mapAct, RelativeCoordinatePosition.Middle);
-            var mapWaypoint = transformService.TransformCoordinate(_mapWaypoint, RelativeCoordinatePosition.Middle);
-
-            InputHelper.SendClick(handle, MouseButtons.Left, backwards);
-            InputHelper.SendClick(handle, MouseButtons.Left, mapAct);
-            InputHelper.SendClick(handle, MouseButtons.Left, mapWaypoint);
-        }
-
-        private void TravelTown(IntPtr handle, ActionName actionName)
-        {
-            var _mapAct = travelService.GetActCoordinate(actionName);
-            var _mapTown = travelService.GetTownCoordinate(actionName);
-
-            var backwards = transformService.TransformCoordinate(CommonCoordinate.MapBackwards, RelativeCoordinatePosition.Middle);
-            var mapAct = transformService.TransformCoordinate(_mapAct, RelativeCoordinatePosition.Middle);
-            var mapTown = transformService.TransformCoordinate(_mapTown, RelativeCoordinatePosition.Middle);
-
-            InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.OpenMap));
-            InputHelper.SendClick(handle, MouseButtons.Left, backwards);
-            InputHelper.SendClick(handle, MouseButtons.Left, mapAct);
-            InputHelper.SendClick(handle, MouseButtons.Left, mapTown);
-        }
-
-        private void UpgradeGem(IntPtr handle, CancellationTokenSource tokenSource)
-        {
-            var firstGem = transformService.TransformCoordinate(CommonCoordinate.UrshiFirstGem);
-            var upgrade = transformService.TransformCoordinate(CommonCoordinate.UrshiUpgrade);
-
-            var iterations = settingsService.MacroSettings.Empowered ? 5 : 4;
-
-            if (!settingsService.MacroSettings.PickGemYourself)
-            {
-                if (IsCancelled(tokenSource)) return;
-                InputHelper.SendClick(handle, MouseButtons.Left, firstGem);
-                Thread.Sleep(100);
-            }
-
-            for (int i = 0; i < iterations; i++)
-            {
-                if (iterations - i == 3)
-                {
-                    if (IsCancelled(tokenSource)) return;
-                    InputHelper.SendKey(handle, settingsService.GetKeybinding(Command.TeleportToTown));
-                }
-
-                if (IsCancelled(tokenSource)) return;
-                InputHelper.SendClick(handle, MouseButtons.Left, upgrade);
-
-                for (int _ = 0; _ < 18; _++)
-                {
-                    if (IsCancelled(tokenSource)) return;
-                    Thread.Sleep(100);
-                }
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

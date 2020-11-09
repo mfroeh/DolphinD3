@@ -12,6 +12,8 @@ namespace Dolphin.Ui.ViewModel
 {
     public class HotkeyTabViewModel : ViewModelBase
     {
+        #region Private Fields
+
         private readonly IDialogService dialogService;
         private readonly IEventPublisher<HotkeyPressedEvent> hotkeyListener;
         private readonly ISettingsService settingsService;
@@ -24,6 +26,10 @@ namespace Dolphin.Ui.ViewModel
         private ItemType selectedItem;
 
         private uint spareColumns;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public HotkeyTabViewModel(IUnityContainer unityContainer, IDialogService dialogService, ISettingsService settingsService, [Dependency("hotkeyListener")] IEventPublisher<HotkeyPressedEvent> hotkeyListener)
         {
@@ -41,6 +47,10 @@ namespace Dolphin.Ui.ViewModel
             pickGem = settingsService.Settings.MacroSettings.PickGemYourself;
             convertingSpeed = settingsService.Settings.MacroSettings.ConvertingSpeed;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public ICommand ChangeHotkeyCommand
         {
@@ -102,6 +112,22 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public string SelectedSkillCastProfile
+        {
+            get => settingsService.SkillCastSettings.SelectedSkillCastConfiguration?.ToString();
+            set
+            {
+                var profile = settingsService.SkillCastSettings.SkillCastConfigurations.First(x => x.Name == value);
+                settingsService.SkillCastSettings.SelectedSkillCastConfiguration = profile;
+                RaisePropertyChanged(nameof(SelectedSkillCastProfile));
+            }
+        }
+
+        public IList<string> SkillCastProfiles
+        {
+            get => settingsService.SkillCastSettings.SkillCastConfigurations.Select(x => x.Name).ToList();
+        }
+
         public uint SpareColumnIndex
         {
             get => spareColumns;
@@ -113,6 +139,10 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        #endregion Public Properties
+
+        #region Private Methods
+
         private void NotifyHotkeysChanged(IList<Hotkey> newHotkeys)
         {
             ((HotkeyListenerService)hotkeyListener).RefreshHotkeys(newHotkeys);
@@ -122,9 +152,8 @@ namespace Dolphin.Ui.ViewModel
         {
             var oldHotkey = Hotkeys[actionAllocationToChange];
 
-            var dialogViewModel = unityContainer.Resolve<ChangeHotkeyDialogViewModel>("changeHotkey");
-            dialogViewModel.SetHotkey(oldHotkey);
-            dialogViewModel.EditingAction = actionAllocationToChange;
+            var dialogViewModel = unityContainer.Resolve<ChangeHotkeyDialogViewModel>();
+            dialogViewModel.Initialize(oldHotkey, actionAllocationToChange);
 
             settingsService.SetPaused(true, true);
 
@@ -147,11 +176,13 @@ namespace Dolphin.Ui.ViewModel
                 settingsService.SetHotkeyValue(actionAllocationToChange, hotkey);
                 Hotkeys[actionAllocationToChange] = hotkey;
 
-                RaisePropertyChanged("Hotkeys");
+                RaisePropertyChanged(nameof(Hotkeys));
                 NotifyHotkeysChanged(settingsService.Settings.Hotkeys.Values.ToList());
             }
 
             settingsService.SetPaused(false, true);
         }
+
+        #endregion Private Methods
     }
 }

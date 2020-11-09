@@ -4,50 +4,253 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
- * 
- * I've had the privilege of building "pervasive" Desktop 
- * applications for products of my own. However, one of the 
- * key features required in most of them was the ability to 
- * invoke features whenever a user triggered a certain key or 
- * combination of keys. After looking around, I found one really 
- * functional library, "SmartHotkey", and it worked really well. 
- * However, there was a need for some few additional features 
- * in my products which led me to rebuilding the project and 
- * improving it even further. And thus came "HotkeyListener". 
- * 
+ *
+ * I've had the privilege of building "pervasive" Desktop
+ * applications for products of my own. However, one of the
+ * key features required in most of them was the ability to
+ * invoke features whenever a user triggered a certain key or
+ * combination of keys. After looking around, I found one really
+ * functional library, "SmartHotkey", and it worked really well.
+ * However, there was a need for some few additional features
+ * in my products which led me to rebuilding the project and
+ * improving it even further. And thus came "HotkeyListener".
+ *
  * This project combines two open-source libraries:
- * 
+ *
  *  (1) SmartHotKey: https://www.codeproject.com/Articles/100199/Smart-Hotkey-Handler-NET
  *  (2) Hotkey Selection Control: https://www.codeproject.com/Articles/15085/A-simple-hotkey-selection-control-for-NET
- *  
+ *
  * Improvements:
- *  
+ *
  *  (1) Provides a CRUD-like model for managing hotkeys.
  *  (2) Introduction of a Hotkey class that lets you easily register and manage hotkeys.
  *  (3) Ability to suspend and resume individual hotkeys or a list of registered.
  *  (4) Ability to fetch source application info from where a hotkey is triggered.
  *  (5) Ability to enable any Windows control to provide Hotkey selection features.
  *  (6) And so much more...
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
-using System.Linq;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
-
-using WK.Libraries.HotkeyListenerNS.Models;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 using WK.Libraries.HotkeyListenerNS.Helpers;
+using WK.Libraries.HotkeyListenerNS.Models;
 
 namespace WK.Libraries.HotkeyListenerNS
 {
     /// <summary>
-    /// A library that provides support for registering and 
+    /// Creates a standard hotkey for
+    /// use with <see cref="HotkeyListener"/>.
+    /// </summary>
+    [Serializable]
+    [DebuggerStepThrough]
+    public class Hotkey
+    {
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hotkey"/> class.
+        /// </summary>
+        public Hotkey() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hotkey"/> class.
+        /// </summary>
+        /// <param name="hotkey">
+        /// The hotkey in string format.
+        /// </param>
+        public Hotkey(string hotkey)
+        {
+            var hotkeyObj = HotkeyListener.Convert(hotkey);
+
+            KeyCode = hotkeyObj.KeyCode;
+            Modifiers = hotkeyObj.Modifiers;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hotkey"/> class.
+        /// </summary>
+        /// <param name="keyCode">
+        /// The hotkey's keyboard code.
+        /// </param>
+        public Hotkey(Keys keyCode = Keys.None)
+        {
+            KeyCode = keyCode;
+            Modifiers = Keys.None;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hotkey"/> class.
+        /// </summary>
+        /// <param name="modifiers">
+        /// The hotkey's modifier flags. The flags indicate which
+        /// combination of CTRL, SHIFT, and ALT keys will be detected.
+        /// </param>
+        /// <param name="keyCode">
+        /// The hotkey's keyboard code.
+        /// </param>
+        public Hotkey(Keys modifiers = Keys.None, Keys keyCode = Keys.None)
+        {
+            KeyCode = keyCode;
+            Modifiers = modifiers;
+        }
+
+        #endregion Constructor
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the hotkey's keyboard code.
+        /// </summary>
+        public Keys KeyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hotkey's modifier flags. The flags indicate
+        /// which combination of CTRL, SHIFT, and ALT keys will be detected.
+        /// </summary>
+        public Keys Modifiers { get; set; }
+
+        /// <summary>
+        /// Determines whether this hotkey
+        /// has been suspended from use.
+        /// </summary>
+        public bool Suspended
+        {
+            get => HotkeyListener._suspendedKeys.Contains(ToString());
+        }
+
+        #endregion Properties
+
+        #region Overrides
+
+        /// <summary>
+        /// Overrides the system-default object non-equality operator
+        /// for a customized Hotkey non-equality-check operator.
+        /// </summary>
+        /// <returns></returns>
+        public static bool operator !=(Hotkey x, Hotkey y)
+        {
+            return !(x == y);
+        }
+
+        /// <summary>
+        /// Overrides the system-default object equality operator
+        /// for a customized Hotkey equality-check operator.
+        /// </summary>
+        /// <returns></returns>
+        public static bool operator ==(Hotkey x, Hotkey y)
+        {
+            if (x is null)
+                return y is null;
+
+            return x.Equals(y);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">
+        /// The object to compare with the current object.
+        /// </param>
+        /// <returns>
+        /// true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Hotkey))
+                return false;
+
+            var other = obj as Hotkey;
+
+            return
+                KeyCode == other.KeyCode &&
+                Modifiers == other.Modifiers;
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current object.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns a string conversion containing the Hotkey's
+        /// <see cref="KeyCode"/> and <see cref="Modifiers"/> keys.
+        /// </summary>
+        /// <returns><see cref="String"/></returns>
+        public override string ToString()
+        {
+            if (Modifiers == Keys.None)
+                return KeyCode.ToString();
+            else
+                return HotkeyListener.Convert(this);
+        }
+
+        #endregion Overrides
+    }
+
+    /// <summary>
+    /// Provides data for the <see cref="HotkeyListener.HotkeyPressed"/> event.
+    /// </summary>
+    public class HotkeyEventArgs : EventArgs
+    {
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotkeyEventArgs"/> class.
+        /// </summary>
+        public HotkeyEventArgs() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotkeyEventArgs"/> class.
+        /// </summary>
+        /// <param name="source">
+        /// The source application from where
+        /// the Hotkey was triggered.
+        /// </param>
+        public HotkeyEventArgs(SourceApplication source)
+        {
+            SourceApplication = new SourceApplication(
+                source.ID,
+                source.Handle,
+                source.Name,
+                source.Title,
+                source.Path,
+                source.Selection
+            );
+        }
+
+        #endregion Constructor
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the hotkey that was pressed.
+        /// </summary>
+        public Hotkey Hotkey { get; internal set; }
+
+        /// <summary>
+        /// Gets the details of the application
+        /// from where the hotkey was pressed.
+        /// </summary>
+        public SourceApplication SourceApplication { get; internal set; }
+
+        #endregion Properties
+    }
+
+    /// <summary>
+    /// A library that provides support for registering and
     /// attaching events to global hotkeys in .NET applications.
     /// </summary>
     [DebuggerStepThrough]
@@ -77,17 +280,21 @@ namespace WK.Libraries.HotkeyListenerNS
             SetDefaults();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Fields
 
-        // This is the handle that will be used to register, 
+        // This is the handle that will be used to register,
         // unregister, and listen to the hotkey triggers.
         internal static HotkeyHandle _handle = new HotkeyHandle();
 
         // Saves the list of hotkeys suspended.
         internal static List<string> _suspendedKeys =
             new List<string>();
+
+        // We will use this to convert keys into
+        // their respective string formats.
+        private static HotkeySelector _selector = new HotkeySelector();
 
         // Saves the list of Form suspension actions.
         private Dictionary<Form, Action> _suspendedActions =
@@ -96,39 +303,79 @@ namespace WK.Libraries.HotkeyListenerNS
         // Saves the list of forms suspended.
         private List<Form> _suspendedForms = new List<Form>();
 
-        // We will use this to convert keys into 
-        // their respective string formats.
-        private static HotkeySelector _selector = new HotkeySelector();
-
-        #endregion
+        #endregion Fields
 
         #region Properties
 
         #region Public
 
         /// <summary>
-        /// Gets a value determining whether the 
+        /// Gets a value determining whether the
         /// hotkeys set have been suspended.
         /// </summary>
         public bool Suspended { get; private set; }
 
-        #endregion
+        #endregion Public
 
-        #endregion
+        #endregion Properties
 
         #region Methods
 
         #region Public
 
         /// <summary>
+        /// [Special] Converts a hotkey string to its variant <see cref="Hotkey"/> object.
+        /// </summary>
+        public static Hotkey Convert(string hotkey)
+        {
+            Keys keyCode = Keys.None;
+            Keys modifiers = Keys.None;
+
+            hotkey = hotkey.Replace(" ", "");
+            hotkey = hotkey.Replace(",", "");
+            hotkey = hotkey.Replace("+", "");
+
+            if (hotkey.Contains("Control"))
+            {
+                modifiers |= Keys.Control;
+                hotkey = hotkey.Replace("Control", "");
+            }
+
+            if (hotkey.Contains("Shift"))
+            {
+                modifiers |= Keys.Shift;
+                hotkey = hotkey.Replace("Shift", "");
+            }
+
+            if (hotkey.Contains("Alt"))
+            {
+                modifiers |= Keys.Alt;
+                hotkey = hotkey.Replace("Alt", "");
+            }
+
+            keyCode = (Keys)Enum.Parse(typeof(Keys), hotkey, true);
+
+            return new Hotkey(modifiers, keyCode);
+        }
+
+        /// <summary>
+        /// [Special] Converts keys or key combinations to their string types.
+        /// </summary>
+        /// <param name="hotkey">The hotkey to convert.</param>
+        public static string Convert(Hotkey hotkey)
+        {
+            return _selector.Convert(hotkey);
+        }
+
+        /// <summary>
         /// Adds a hotkey to the global Key watcher.
         /// </summary>
         /// <param name="hotkey">The hotkey to add.</param>
         /// <returns>
-        /// True if successful or false if not. 
-        /// Ensure you inform the user if the 
-        /// hotkey fails to be registered. This 
-        /// is mostly due to a hotkey being 
+        /// True if successful or false if not.
+        /// Ensure you inform the user if the
+        /// hotkey fails to be registered. This
+        /// is mostly due to a hotkey being
         /// already in use by another application.
         /// </returns>
         public bool Add(Hotkey hotkey)
@@ -144,13 +391,13 @@ namespace WK.Libraries.HotkeyListenerNS
         /// </summary>
         /// <param name="hotkeys">The hotkeys to add.</param>
         /// <returns>
-        /// The list of hotkeys passed and their 
+        /// The list of hotkeys passed and their
         /// results when trying to register them.
-        /// Their results will each denote a true 
-        /// if successful or false if not. 
-        /// Ensure you inform the user if one 
-        /// hotkey fails to be registered. This 
-        /// is mostly due to a hotkey being 
+        /// Their results will each denote a true
+        /// if successful or false if not.
+        /// Ensure you inform the user if one
+        /// hotkey fails to be registered. This
+        /// is mostly due to a hotkey being
         /// already in use by another application.
         /// </returns>
         public Dictionary<string, bool> Add(Hotkey[] hotkeys)
@@ -166,61 +413,16 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Updates an existing hotkey 
-        /// in the global Key watcher.
+        /// [Special] Gets the currently selected text in the active application.
         /// </summary>
-        /// <param name="currentHotkey">The hotkey to modify.</param>
-        /// <param name="newHotkey">The new hotkey to be set.</param>
-        public void Update(Hotkey currentHotkey, Hotkey newHotkey)
+        /// <returns>The selected text, if any.</returns>
+        public string GetSelection()
         {
-            Update(currentHotkey.ToString(), newHotkey.ToString());
-
-            HotkeyUpdated?.Invoke(this, new HotkeyUpdatedEventArgs(currentHotkey, newHotkey));
+            return SourceAttributes.GetSelection();
         }
 
         /// <summary>
-        /// Updates an existing hotkey 
-        /// in the global Key watcher.
-        /// </summary>
-        /// <param name="currentHotkey">
-        /// A reference to the variable 
-        /// containing the hotkey to modify.
-        /// </param>
-        /// <param name="newHotkey">
-        /// The new hotkey to be set.
-        /// </param>
-        public void Update(ref Hotkey currentHotkey, Hotkey newHotkey)
-        {
-            currentHotkey = newHotkey;
-
-            Update(currentHotkey.ToString(), newHotkey.ToString());
-
-            HotkeyUpdated?.Invoke(this, new HotkeyUpdatedEventArgs(currentHotkey, newHotkey));
-        }
-
-        /// <summary>
-        /// Updates an existing hotkey 
-        /// in the global Key watcher.
-        /// </summary>
-        /// <param name="currentHotkey">
-        /// A reference to the variable 
-        /// containing the hotkey to modify.
-        /// </param>
-        /// <param name="newHotkey">
-        /// A reference to the variable containing 
-        /// the new hotkey to be set.
-        /// </param>
-        public void Update(ref Hotkey currentHotkey, ref Hotkey newHotkey)
-        {
-            currentHotkey = newHotkey;
-
-            Update(currentHotkey.ToString(), newHotkey.ToString());
-
-            HotkeyUpdated?.Invoke(this, new HotkeyUpdatedEventArgs(currentHotkey, newHotkey));
-        }
-
-        /// <summary>
-        /// Removes any specific hotkey 
+        /// Removes any specific hotkey
         /// from the global Key watcher.
         /// </summary>
         /// <param name="hotkey">The hotkey to remove.</param>
@@ -230,7 +432,7 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Removes a list of hotkeys from 
+        /// Removes a list of hotkeys from
         /// the global Key watcher.
         /// </summary>
         /// <param name="hotkeys">The hotkeys to remove.</param>
@@ -243,7 +445,7 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Remove all the registered hotkeys 
+        /// Remove all the registered hotkeys
         /// from the global Key watcher.
         /// </summary>
         public void RemoveAll()
@@ -252,121 +454,7 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Suspends the hotkey(s) set 
-        /// in the global Key watcher.
-        /// </summary>
-        public bool Suspend()
-        {
-            if (!Suspended)
-            {
-                _suspendedKeys.Clear();
-
-                foreach (var item in _handle.Hotkeys)
-                {
-                    _suspendedKeys.Add(item.Value);
-                }
-
-                foreach (var key in _handle.Hotkeys.Values.ToList())
-                {
-                    Remove(key);
-                }
-
-                Suspended = true;
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Suspends a specific hotkey set 
-        /// from the global Key watcher.
-        /// </summary>
-        /// <param name="hotkey">The hotkey to suspend.</param>
-        public bool Suspend(Hotkey hotkey)
-        {
-            string hotkeyString = hotkey.ToString();
-
-            if (_handle.Hotkeys.ContainsValue(hotkeyString) &&
-                !_suspendedKeys.Contains(hotkeyString))
-            {
-                _suspendedKeys.Add(hotkeyString);
-
-                Remove(hotkey);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Suspends the hotkey(s) set whenever a particular Form is active. 
-        /// This is useful in Forms where the user requires modifying certain 
-        /// hotkeys without triggering them when active.
-        /// </summary>
-        /// <param name="form">
-        /// The Form to suspend listening to hotkeys when active.
-        /// </param>
-        /// <param name="onDeactivate">
-        /// The action to be called when the Form has been deactivated.
-        /// </param>
-        public bool SuspendOn(Form form, Action onDeactivate = null)
-        {
-            try
-            {
-                form.Activated += OnActivateForm;
-                form.Deactivate += OnDeactivateForm;
-
-                if (onDeactivate != null)
-                    _suspendedActions.Add(form, onDeactivate);
-
-                _suspendedForms.Add(form);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Suspends the hotkey(s) set whenever a list of Forms are active. 
-        /// This is useful in Forms where the user requires modifying certain 
-        /// hotkeys without triggering them when active.
-        /// </summary>
-        /// <param name="forms">
-        /// The Forms to suspend listening to hotkeys when active.
-        /// </param>
-        /// <param name="onDeactivate">
-        /// The actions to be called respectively 
-        /// when each Form has been deactivated.
-        /// </param>
-        public bool SuspendOn(Form[] forms, Action[] onDeactivate = null)
-        {
-            try
-            {
-                for (int i = 0; i < forms.Length; i++)
-                {
-                    SuspendOn(forms[i], onDeactivate[i]);
-                }
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Resumes using the hotkey(s) that 
+        /// Resumes using the hotkey(s) that
         /// were set in the global Key watcher.
         /// </summary>
         public bool Resume()
@@ -392,7 +480,7 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Resumes listening to a specific hotkey that 
+        /// Resumes listening to a specific hotkey that
         /// was suspended from the global Key watcher.
         /// </summary>
         /// <param name="hotkey">The hotkey to resume using.</param>
@@ -476,59 +564,174 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// [Special] Gets the currently selected text in the active application.
+        /// Suspends the hotkey(s) set
+        /// in the global Key watcher.
         /// </summary>
-        /// <returns>The selected text, if any.</returns>
-        public string GetSelection()
+        public bool Suspend()
         {
-            return SourceAttributes.GetSelection();
+            if (!Suspended)
+            {
+                _suspendedKeys.Clear();
+
+                foreach (var item in _handle.Hotkeys)
+                {
+                    _suspendedKeys.Add(item.Value);
+                }
+
+                foreach (var key in _handle.Hotkeys.Values.ToList())
+                {
+                    Remove(key);
+                }
+
+                Suspended = true;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
-        /// [Special] Converts a hotkey string to its variant <see cref="Hotkey"/> object.
+        /// Suspends a specific hotkey set
+        /// from the global Key watcher.
         /// </summary>
-        public static Hotkey Convert(string hotkey)
+        /// <param name="hotkey">The hotkey to suspend.</param>
+        public bool Suspend(Hotkey hotkey)
         {
-            Keys keyCode = Keys.None;
-            Keys modifiers = Keys.None;
+            string hotkeyString = hotkey.ToString();
 
-            hotkey = hotkey.Replace(" ", "");
-            hotkey = hotkey.Replace(",", "");
-            hotkey = hotkey.Replace("+", "");
-
-            if (hotkey.Contains("Control"))
+            if (_handle.Hotkeys.ContainsValue(hotkeyString) &&
+                !_suspendedKeys.Contains(hotkeyString))
             {
-                modifiers |= Keys.Control;
-                hotkey = hotkey.Replace("Control", "");
-            }
+                _suspendedKeys.Add(hotkeyString);
 
-            if (hotkey.Contains("Shift"))
+                Remove(hotkey);
+
+                return true;
+            }
+            else
             {
-                modifiers |= Keys.Shift;
-                hotkey = hotkey.Replace("Shift", "");
+                return false;
             }
-
-            if (hotkey.Contains("Alt"))
-            {
-                modifiers |= Keys.Alt;
-                hotkey = hotkey.Replace("Alt", "");
-            }
-
-            keyCode = (Keys)Enum.Parse(typeof(Keys), hotkey, true);
-
-            return new Hotkey(modifiers, keyCode);
         }
 
         /// <summary>
-        /// [Special] Converts keys or key combinations to their string types.
+        /// Suspends the hotkey(s) set whenever a particular Form is active.
+        /// This is useful in Forms where the user requires modifying certain
+        /// hotkeys without triggering them when active.
         /// </summary>
-        /// <param name="hotkey">The hotkey to convert.</param>
-        public static string Convert(Hotkey hotkey)
+        /// <param name="form">
+        /// The Form to suspend listening to hotkeys when active.
+        /// </param>
+        /// <param name="onDeactivate">
+        /// The action to be called when the Form has been deactivated.
+        /// </param>
+        public bool SuspendOn(Form form, Action onDeactivate = null)
         {
-            return _selector.Convert(hotkey);
+            try
+            {
+                form.Activated += OnActivateForm;
+                form.Deactivate += OnDeactivateForm;
+
+                if (onDeactivate != null)
+                    _suspendedActions.Add(form, onDeactivate);
+
+                _suspendedForms.Add(form);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        #endregion
+        /// <summary>
+        /// Suspends the hotkey(s) set whenever a list of Forms are active.
+        /// This is useful in Forms where the user requires modifying certain
+        /// hotkeys without triggering them when active.
+        /// </summary>
+        /// <param name="forms">
+        /// The Forms to suspend listening to hotkeys when active.
+        /// </param>
+        /// <param name="onDeactivate">
+        /// The actions to be called respectively
+        /// when each Form has been deactivated.
+        /// </param>
+        public bool SuspendOn(Form[] forms, Action[] onDeactivate = null)
+        {
+            try
+            {
+                for (int i = 0; i < forms.Length; i++)
+                {
+                    SuspendOn(forms[i], onDeactivate[i]);
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing hotkey
+        /// in the global Key watcher.
+        /// </summary>
+        /// <param name="currentHotkey">The hotkey to modify.</param>
+        /// <param name="newHotkey">The new hotkey to be set.</param>
+        public void Update(Hotkey currentHotkey, Hotkey newHotkey)
+        {
+            Update(currentHotkey.ToString(), newHotkey.ToString());
+
+            HotkeyUpdated?.Invoke(this, new HotkeyUpdatedEventArgs(currentHotkey, newHotkey));
+        }
+
+        /// <summary>
+        /// Updates an existing hotkey
+        /// in the global Key watcher.
+        /// </summary>
+        /// <param name="currentHotkey">
+        /// A reference to the variable
+        /// containing the hotkey to modify.
+        /// </param>
+        /// <param name="newHotkey">
+        /// The new hotkey to be set.
+        /// </param>
+        public void Update(ref Hotkey currentHotkey, Hotkey newHotkey)
+        {
+            currentHotkey = newHotkey;
+
+            Update(currentHotkey.ToString(), newHotkey.ToString());
+
+            HotkeyUpdated?.Invoke(this, new HotkeyUpdatedEventArgs(currentHotkey, newHotkey));
+        }
+
+        /// <summary>
+        /// Updates an existing hotkey
+        /// in the global Key watcher.
+        /// </summary>
+        /// <param name="currentHotkey">
+        /// A reference to the variable
+        /// containing the hotkey to modify.
+        /// </param>
+        /// <param name="newHotkey">
+        /// A reference to the variable containing
+        /// the new hotkey to be set.
+        /// </param>
+        public void Update(ref Hotkey currentHotkey, ref Hotkey newHotkey)
+        {
+            currentHotkey = newHotkey;
+
+            Update(currentHotkey.ToString(), newHotkey.ToString());
+
+            HotkeyUpdated?.Invoke(this, new HotkeyUpdatedEventArgs(currentHotkey, newHotkey));
+        }
+
+        #endregion Public
 
         #region Private
 
@@ -554,7 +757,50 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Updates an existing hotkey 
+        /// Attaches the major hotkey events
+        /// to the Hotkey Listener.
+        /// </summary>
+        private void AttachEvents()
+        {
+            _handle.HotkeyPressed += (s, e) =>
+            {
+                HotkeyPressed?.Invoke(null, new HotkeyEventArgs { Hotkey = e.Hotkey });
+            };
+        }
+
+        /// <summary>
+        /// Removes any specific hotkey
+        /// from the global Key watcher.
+        /// </summary>
+        /// <param name="hotkey">The hotkey to remove.</param>
+        private void Remove(string hotkey)
+        {
+            _handle.RemoveKey(hotkey);
+        }
+
+        /// <summary>
+        /// Removes a list of hotkeys from
+        /// the global Key watcher.
+        /// </summary>
+        /// <param name="hotkeys">The hotkeys to remove.</param>
+        private void Remove(string[] hotkeys)
+        {
+            foreach (string key in hotkeys)
+            {
+                Remove(key);
+            }
+        }
+
+        /// <summary>
+        /// Applies the library's default options and settings.
+        /// </summary>
+        private void SetDefaults()
+        {
+            AttachEvents();
+        }
+
+        /// <summary>
+        /// Updates an existing hotkey
         /// in the global Key watcher.
         /// </summary>
         /// <param name="currentHotkey">The hotkey to modify.</param>
@@ -580,11 +826,11 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Updates an existing hotkey 
+        /// Updates an existing hotkey
         /// in the global Key watcher.
         /// </summary>
         /// <param name="currentHotkey">
-        /// A reference to the variable 
+        /// A reference to the variable
         /// containing the hotkey to modify.
         /// </param>
         /// <param name="newHotkey">
@@ -611,15 +857,15 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
-        /// Updates an existing hotkey 
+        /// Updates an existing hotkey
         /// in the global Key watcher.
         /// </summary>
         /// <param name="currentHotkey">
-        /// A reference to the variable 
+        /// A reference to the variable
         /// containing the hotkey to modify.
         /// </param>
         /// <param name="newHotkey">
-        /// A reference to the variable containing 
+        /// A reference to the variable containing
         /// the new hotkey to be set.
         /// </param>
         private void Update(ref string currentHotkey, ref string newHotkey)
@@ -642,58 +888,23 @@ namespace WK.Libraries.HotkeyListenerNS
             catch (Exception) { }
         }
 
-        /// <summary>
-        /// Removes any specific hotkey 
-        /// from the global Key watcher.
-        /// </summary>
-        /// <param name="hotkey">The hotkey to remove.</param>
-        private void Remove(string hotkey)
-        {
-            _handle.RemoveKey(hotkey);
-        }
+        #endregion Private
 
-        /// <summary>
-        /// Removes a list of hotkeys from 
-        /// the global Key watcher.
-        /// </summary>
-        /// <param name="hotkeys">The hotkeys to remove.</param>
-        private void Remove(string[] hotkeys)
-        {
-            foreach (string key in hotkeys)
-            {
-                Remove(key);
-            }
-        }
-
-        /// <summary>
-        /// Applies the library's default options and settings.
-        /// </summary>
-        private void SetDefaults()
-        {
-            AttachEvents();
-        }
-
-        /// <summary>
-        /// Attaches the major hotkey events 
-        /// to the Hotkey Listener.
-        /// </summary>
-        private void AttachEvents()
-        {
-            _handle.HotkeyPressed += (s, e) =>
-            {
-                HotkeyPressed?.Invoke(null, new HotkeyEventArgs { Hotkey = e.Hotkey });
-            };
-        }
-
-        #endregion
-
-        #endregion
+        #endregion Methods
 
         #region Events
 
         #region Public
 
         #region Event Handlers
+
+        /// <summary>
+        /// Represents the method that will handle a <see cref="HotkeyPressed"/>
+        /// event that has no event data.
+        /// </summary>
+        /// <param name="sender">The hotkey sender object.</param>
+        /// <param name="e">The <see cref="HotkeyEventArgs"/> data.</param>
+        public delegate void HotkeyEventHandler(object sender, HotkeyEventArgs e);
 
         /// <summary>
         /// Raised whenever a registered Hotkey is pressed.
@@ -709,15 +920,7 @@ namespace WK.Libraries.HotkeyListenerNS
         [Description("Raised whenever a registered Hotkey has been updated.")]
         public event EventHandler<HotkeyUpdatedEventArgs> HotkeyUpdated = null;
 
-        /// <summary>
-        /// Represents the method that will handle a <see cref="HotkeyPressed"/> 
-        /// event that has no event data.
-        /// </summary>
-        /// <param name="sender">The hotkey sender object.</param>
-        /// <param name="e">The <see cref="HotkeyEventArgs"/> data.</param>
-        public delegate void HotkeyEventHandler(object sender, HotkeyEventArgs e);
-
-        #endregion
+        #endregion Event Handlers
 
         #region Event Arguments
 
@@ -728,10 +931,10 @@ namespace WK.Libraries.HotkeyListenerNS
         {
             #region Fields
 
-            private Hotkey _updatedHotkey;
             private Hotkey _newHotkey;
+            private Hotkey _updatedHotkey;
 
-            #endregion
+            #endregion Fields
 
             #region Constructor
 
@@ -750,17 +953,9 @@ namespace WK.Libraries.HotkeyListenerNS
                 _newHotkey = newHotkey;
             }
 
-            #endregion
+            #endregion Constructor
 
             #region Properties
-
-            /// <summary>
-            /// Gets the currently updated Hotkey.
-            /// </summary>
-            public Hotkey UpdatedHotkey
-            {
-                get => _updatedHotkey;
-            }
 
             /// <summary>
             /// Gets the Hotkey's newly updated value.
@@ -770,12 +965,20 @@ namespace WK.Libraries.HotkeyListenerNS
                 get => _newHotkey;
             }
 
-            #endregion
+            /// <summary>
+            /// Gets the currently updated Hotkey.
+            /// </summary>
+            public Hotkey UpdatedHotkey
+            {
+                get => _updatedHotkey;
+            }
+
+            #endregion Properties
         }
 
-        #endregion
+        #endregion Event Arguments
 
-        #endregion
+        #endregion Public
 
         #region Private
 
@@ -798,213 +1001,8 @@ namespace WK.Libraries.HotkeyListenerNS
             catch (Exception) { }
         }
 
-        #endregion
+        #endregion Private
 
-        #endregion
-    }
-
-    /// <summary>
-    /// Creates a standard hotkey for 
-    /// use with <see cref="HotkeyListener"/>.
-    /// </summary>
-    [Serializable]
-    [DebuggerStepThrough]
-    public class Hotkey
-    {
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hotkey"/> class.
-        /// </summary>
-        public Hotkey() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hotkey"/> class.
-        /// </summary>
-        /// <param name="hotkey">
-        /// The hotkey in string format.
-        /// </param>
-        public Hotkey(string hotkey)
-        {
-            var hotkeyObj = HotkeyListener.Convert(hotkey);
-
-            KeyCode = hotkeyObj.KeyCode;
-            Modifiers = hotkeyObj.Modifiers;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hotkey"/> class.
-        /// </summary>
-        /// <param name="keyCode">
-        /// The hotkey's keyboard code.
-        /// </param>
-        public Hotkey(Keys keyCode = Keys.None)
-        {
-            KeyCode = keyCode;
-            Modifiers = Keys.None;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hotkey"/> class.
-        /// </summary>
-        /// <param name="modifiers">
-        /// The hotkey's modifier flags. The flags indicate which 
-        /// combination of CTRL, SHIFT, and ALT keys will be detected.
-        /// </param>
-        /// <param name="keyCode">
-        /// The hotkey's keyboard code.
-        /// </param>
-        public Hotkey(Keys modifiers = Keys.None, Keys keyCode = Keys.None)
-        {
-            KeyCode = keyCode;
-            Modifiers = modifiers;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the hotkey's keyboard code.
-        /// </summary>
-        public Keys KeyCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the hotkey's modifier flags. The flags indicate 
-        /// which combination of CTRL, SHIFT, and ALT keys will be detected.
-        /// </summary>
-        public Keys Modifiers { get; set; }
-
-        /// <summary>
-        /// Determines whether this hotkey 
-        /// has been suspended from use.
-        /// </summary>
-        public bool Suspended
-        {
-            get => HotkeyListener._suspendedKeys.Contains(ToString());
-        }
-
-        #endregion
-
-        #region Overrides
-
-        /// <summary>
-        /// Returns a string conversion containing the Hotkey's 
-        /// <see cref="KeyCode"/> and <see cref="Modifiers"/> keys.
-        /// </summary>
-        /// <returns><see cref="String"/></returns>
-        public override string ToString()
-        {
-            if (Modifiers == Keys.None)
-                return KeyCode.ToString();
-            else
-                return HotkeyListener.Convert(this);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current object.
-        /// </returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">
-        /// The object to compare with the current object.
-        /// </param>
-        /// <returns>
-        /// true if the specified object is equal to the current object; otherwise, false.
-        /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Hotkey))
-                return false;
-
-            var other = obj as Hotkey;
-
-            return
-                KeyCode == other.KeyCode &&
-                Modifiers == other.Modifiers;
-        }
-
-        /// <summary>
-        /// Overrides the system-default object equality operator 
-        /// for a customized Hotkey equality-check operator.
-        /// </summary>
-        /// <returns></returns>
-        public static bool operator ==(Hotkey x, Hotkey y)
-        {
-            if (x is null)
-                return y is null;
-
-            return x.Equals(y);
-        }
-
-        /// <summary>
-        /// Overrides the system-default object non-equality operator 
-        /// for a customized Hotkey non-equality-check operator.
-        /// </summary>
-        /// <returns></returns>
-        public static bool operator !=(Hotkey x, Hotkey y)
-        {
-            return !(x == y);
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Provides data for the <see cref="HotkeyListener.HotkeyPressed"/> event.
-    /// </summary>
-    public class HotkeyEventArgs : EventArgs
-    {
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HotkeyEventArgs"/> class.
-        /// </summary>
-        public HotkeyEventArgs() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HotkeyEventArgs"/> class.
-        /// </summary>
-        /// <param name="source">
-        /// The source application from where 
-        /// the Hotkey was triggered.
-        /// </param>
-        public HotkeyEventArgs(SourceApplication source)
-        {
-            SourceApplication = new SourceApplication(
-                source.ID,
-                source.Handle,
-                source.Name,
-                source.Title,
-                source.Path,
-                source.Selection
-            );
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the hotkey that was pressed.
-        /// </summary>
-        public Hotkey Hotkey { get; internal set; }
-
-        /// <summary>
-        /// Gets the details of the application 
-        /// from where the hotkey was pressed.
-        /// </summary>
-        public SourceApplication SourceApplication { get; internal set; }
-
-        #endregion
+        #endregion Events
     }
 }

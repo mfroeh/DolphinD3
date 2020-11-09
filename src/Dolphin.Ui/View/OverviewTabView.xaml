@@ -24,6 +24,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
@@ -38,7 +39,7 @@
             <WrapPanel
                 Grid.Row="0"
                 Grid.Column="1"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="1"
                 Orientation="Vertical">
                 <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="Health" />
                 <TextBox
@@ -67,73 +68,176 @@
             </WrapPanel>
             <WrapPanel
                 Grid.Row="0"
-                Grid.Column="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="1"
+                Margin="{adonisUi:Space Top=0}"
+                Orientation="Vertical">
+                <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="Location" />
+                <TextBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Bottom=0,
+                                            Left=1,
+                                            Right=0}"
+                    IsReadOnly="True"
+                    Text="{Binding CurrentLocation, Mode=OneWay}" />
+                <Label Margin="{adonisUi:Space Top=0, Right=0}" Content="Open Window" />
+                <TextBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Bottom=0,
+                                            Left=1,
+                                            Right=0}"
+                    IsReadOnly="True"
+                    Text="{Binding OpenWindow, Mode=OneWay}" />
+            </WrapPanel>
+
+            <WrapPanel
+                Grid.Row="0"
+                Grid.Column="4"
                 Orientation="Vertical">
                 <Label Margin="{adonisUi:Space Top=0}" Content="Diablo III PID" />
                 <TextBox
                     Margin="{adonisUi:Space Top=0,
-                                            Bottom=1,
-                                            Left=0,
+                                            Bottom=0,
+                                            Left=1,
                                             Right=1}"
                     IsReadOnly="True"
                     Text="{Binding DiabloProcessId, Mode=OneWay}" />
+
+                <Label Margin="{adonisUi:Space Top=0}" Content="Client Rectangle" />
+                <TextBox
+                    Margin="{adonisUi:Space Top=0,
+                                            Bottom=1,
+                                            Left=1,
+                                            Right=1}"
+                    IsReadOnly="True"
+                    Text="{Binding DiabloClientRectangle, Mode=OneWay}" />
             </WrapPanel>
         </Grid>
         <Grid
             Grid.Row="1"
             Grid.Column="0"
             Margin="{adonisUi:Space Top=2}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="64" />
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="64" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <Image
-                Grid.Row="1"
-                Grid.Column="0"
-                Source="{Binding Path=CurrentSkills[0], Mode=OneWay}" />
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=0}" Content="Suspended" />
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=8.7}" Content="Active" />
+                <Label Margin="{adonisUi:Space Left=0, Top=0, Bottom=0}" Content="Castability" />
+            </StackPanel>
 
-            <Image
-                Grid.Row="1"
+            <StackPanel
+                Grid.Column="1"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[0]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[0]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="0"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[0], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[0]}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="2"
-                Source="{Binding Path=CurrentSkills[1], Mode=OneWay}" />
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[1]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[1]}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="1"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[1], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[1]}" />
+            </StackPanel>
 
-            <Image
-                Grid.Row="1"
+            <StackPanel
+                Grid.Column="3"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[2]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[2]}" />
+
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="2"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[2], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[2]}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="4"
-                Source="{Binding Path=CurrentSkills[2], Mode=OneWay}" />
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[3]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[3]}" />
 
-            <Image
-                Grid.Row="1"
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="3"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[3], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[3]}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="5"
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[4]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[4]}" />
+
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="4"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[4], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[4]}" />
+            </StackPanel>
+
+            <StackPanel
                 Grid.Column="6"
-                Source="{Binding Path=CurrentSkills[3], Mode=OneWay}" />
+                Margin="{adonisUi:Space Left=0,
+                                        Top=0,
+                                        Bottom=0}"
+                Orientation="Vertical">
+                <Label HorizontalAlignment="Center" Content="{Binding Path=SkillIndexSuspensionStatus[5]}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Path=CurrentActiveState[5]}" />
 
-            <Image
-                Grid.Row="1"
-                Grid.Column="8"
-                Source="{Binding Path=CurrentSkills[4], Mode=OneWay}" />
-
-            <Image
-                Grid.Row="1"
-                Grid.Column="10"
-                Source="{Binding Path=CurrentSkills[5], Mode=OneWay}" />
+                <Button
+                    Command="{Binding NegateSuspendedCommand}"
+                    CommandParameter="5"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{Binding Path=CurrentSkills[5], Mode=OneWay}" />
+                </Button>
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentSkillState[5]}" />
+            </StackPanel>
         </Grid>
-        <Button
-            Grid.Row="3"
-            Command="{Binding Cmd}"
-            Content="Clickme" />
     </Grid>
 </UserControl>

@@ -2,11 +2,11 @@
 
 namespace Dolphin.Ui
 {
-    public class ViewModelBase : IViewModelBase
+    public class ViewModelBase : IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public IViewModelBase Parent { get; set; }
+        public IViewModel Parent { get; set; }
 
         public void RaisePropertyChanged(string propertyName)
         {

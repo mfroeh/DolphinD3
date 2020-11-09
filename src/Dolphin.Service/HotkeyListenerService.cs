@@ -7,9 +7,8 @@ namespace Dolphin.Service
     public class HotkeyListenerService : EventSubscriberBase, IEventPublisher<HotkeyPressedEvent>
     {
         private readonly HotkeyListener hotkeyListener;
-        private readonly Subscription<PausedEvent> pausedSubscription;
-        private readonly ISettingsService settingsService; // TODO: Remove if not needed
         private readonly ILogService logService;
+        private readonly ISettingsService settingsService;
 
         public HotkeyListenerService(IEventBus eventBus, ISettingsService settingsService, HotkeyListener hotkeyListener, ILogService logService) : base(eventBus)
         {
@@ -17,10 +16,11 @@ namespace Dolphin.Service
             this.settingsService = settingsService;
             this.logService = logService;
 
-            hotkeyListener.HotkeyPressed += OnHotkeyPressed;
+            var pausedSubscription = new Subscription<PausedEvent>(PausedHandler);
 
-            pausedSubscription = new Subscription<PausedEvent>(PausedHandler);
             SubscribeBus(pausedSubscription);
+
+            hotkeyListener.HotkeyPressed += OnHotkeyPressed;
 
             foreach (var hotkey in settingsService.Settings.Hotkeys.Values.ToList().Where(x => x != null))
             {
@@ -46,6 +46,7 @@ namespace Dolphin.Service
         public void Publish(HotkeyPressedEvent @event)
         {
             eventBus.Publish(@event);
+            logService.AddEntry(this, $"Published Hotkey pressed [{@event.PressedHotkey}]", Enum.LogLevel.Debug);
         }
 
         public void RefreshHotkeys(IList<Hotkey> newHotkeys)
@@ -98,10 +99,12 @@ namespace Dolphin.Service
                 {
                     hotkeyListener.Add(settingsService.Settings.Hotkeys[Enum.ActionName.Pause]);
                 }
+                logService.AddEntry(this, $"Pausing HotkeyListener...");
             }
             else
             {
                 ResumeListener();
+                logService.AddEntry(this, $"Resuming HotkeyListener...");
             }
         }
     }

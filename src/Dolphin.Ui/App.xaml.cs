@@ -1,14 +1,18 @@
-﻿using Dolphin.Service;
+﻿using Dolphin.Image;
+using Dolphin.Service;
 using Dolphin.Ui.Dialog;
+using Dolphin.Ui.View;
 using Dolphin.Ui.ViewModel;
+using MvvmDialogs;
 using MvvmDialogs.DialogFactories;
+using MvvmDialogs.DialogTypeLocators;
 using MvvmDialogs.FrameworkDialogs;
 using Newtonsoft.Json;
 using RestoreWindowPlace;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,29 +27,136 @@ namespace Dolphin.Ui
     /// </summary>
     public partial class App : Application
     {
-        public WindowPlace WindowPlace { get; }
+        private readonly IUnityContainer container = new UnityContainer();
 
-        private IUnityContainer container = new UnityContainer();
+        public WindowPlace WindowPlace { get; private set; }
 
-        public App()
+        protected override void OnExit(ExitEventArgs e)
         {
-            WindowPlace = new WindowPlace("placement.config");
+            base.OnExit(e);
+
+            if (e.ApplicationExitCode != 2)
+            {
+                var settings = container.Resolve<Settings>();
+                var json = JsonConvert.SerializeObject(settings);
+                container.Resolve<ILogService>().SaveLog();
+                File.WriteAllText("settings.json", json);
+                WindowPlace.Save();
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
+            var splashScreen = new SplashScreen();
+            MainWindow = splashScreen;
+            splashScreen.Show();
+
+            Task.Factory.StartNew(() =>
+            {
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Registering dependencies");
+                RegisterTypes();
+
+                // var task = Task.Factory.StartNew(() => TaskCreationOptions.LongRunning);
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Starting BackgroundWorker");
+                var backgroundWorker = new BackgroundWorker();
+                backgroundWorker.DoWork += DoWork;
+                backgroundWorker.RunWorkerAsync();
+
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Resolving dependencies");
+                container.Resolve<IEventSubscriber>("macro");
+                container.Resolve<IEventSubscriber>("skill");
+
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Launching main window");
+                Execute.OnUIThread(() =>
+                {
+                    WindowPlace = new WindowPlace("placement.config");
+
+                    var mainVM = container.Resolve<IViewModel>("main");
+                    MainWindow = new MainWindow { DataContext = mainVM };
+                    MainWindow.Show();
+                    splashScreen.Close();
+                });
+            });
+        }
+
+        private void DoWork(object o, DoWorkEventArgs e)
+        {
+            var handleService = container.Resolve<IHandleService>();
+            Trace.WriteLine(handleService.GetHashCode());
+            var logService = container.Resolve<ILogService>();
+
+            handleService.MainLoop("Diablo III64");
+
+            var captureService = container.Resolve<ICaptureWindowService>();
+            var extractSkillService = container.Resolve<IExtractInformationService>("extractSkillInformation");
+            var extractPlayerService = container.Resolve<IExtractInformationService>("extractPlayerInformation");
+            var extractWorldService = container.Resolve<IExtractInformationService>("extractWorldInformation");
+            var _settings = container.Resolve<Settings>();
+
+            while (true)
+            {
+                var watch = Stopwatch.StartNew();
+                try
+                {
+                    var handle = handleService.GetHandle("Diablo III64");
+                    if (handle?.Handle != default
+                        && !_settings.IsPaused
+                        && (_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
+                    {
+                        using (var image = captureService.CaptureWindow("Diablo III64"))
+                        {
+                            if (_settings.SmartFeatureSettings.SkillCastingEnabled)
+                            {
+                                extractSkillService.Extract(image);
+                                extractPlayerService.Extract(image);
+                            }
+
+                            if (_settings.SmartFeatureSettings.SmartActionsEnabled)
+                            {
+                                // extractWorldService.Extract(image);
+                            }
+                            watch.Stop();
+                            Trace.WriteLine(watch.ElapsedMilliseconds);
+                        }
+                    }
+                    Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
+                }
+                catch (Exception ex)
+                {
+                    logService.AddEntry(this, "Caught exception in information extraction mmainloop", Enum.LogLevel.Error, ex);
+                }
+            }
+        }
+
+        private Settings LoadSettings()
+        {
+            var contractResolver = new ShouldSerializeContractResolver();
+            var serializerSettings = new JsonSerializerSettings { ContractResolver = contractResolver };
+
+            Settings settings;
             try
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<Settings>(json);
-                container.RegisterInstance(settings);
+
+                settings = JsonConvert.DeserializeObject<Settings>(json, serializerSettings);
             }
             catch
             {
-                container.RegisterInstance(new Settings(true));
+                settings = new Settings(true);
             }
+
+            return settings;
+        }
+
+        private void RegisterTypes()
+        {
+            var settings = LoadSettings();
+
+            #region Register
+
+            container.RegisterInstance(settings);
 
             container.RegisterInstance(new Player());
             container.RegisterInstance(new World());
@@ -58,19 +169,22 @@ namespace Dolphin.Ui
             container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
+            container.RegisterType<IEventPublisher<WorldInformationChangedEvent>, ExtractWorldInformationService>("extractWorldInformation");
 
-            container.RegisterType<IEventSubscriber, MacroExecutionService>("macro");
+            container.RegisterType<IEventSubscriber, ExecuteActionService>("macro");
             container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
 
             container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("extractPlayerInformation");
             container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("extractSkillInformation");
+            container.RegisterType<IExtractInformationService, ExtractWorldInformationService>("extractWorldInformation");
 
-            container.RegisterType<IDiabloCacheService, CacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ICaptureWindowService, CaptureWindowService>();
+            container.RegisterType<ICropImageService, CropImageService>();
             container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IModelService, ModelService>();
             container.RegisterType<IResourceService, ResourceService>();
-            container.RegisterType<IDiabloCacheService, CacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IActionFinderService, ActionFinderService>();
@@ -79,97 +193,28 @@ namespace Dolphin.Ui
             container.RegisterType<ITravelInformationService, TravelInformationService>();
             container.RegisterType<IConditionFinderService, ConditionFinderService>();
 
-            container.RegisterType<IViewModelBase, MainViewModel>("main");
-            container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
-            container.RegisterType<IViewModelBase, FeatureTabViewModel>("featureTab");
-            container.RegisterType<IViewModelBase, LogTabViewModel>("logTab");
-            container.RegisterType<IViewModelBase, ChangeHotkeyDialogViewModel>("changeHotkey");
-            container.RegisterType<IViewModelBase, SettingsTabViewModel>("settingsTab");
-            container.RegisterType<IViewModelBase, OverviewTabViewModel>("overviewTab");
+            container.RegisterType<ActionService, ActionService>();
 
+            container.RegisterType<IViewModel, MainViewModel>("main");
+            container.RegisterType<IViewModel, HotkeyTabViewModel>("hotkeyTab");
+            container.RegisterType<IViewModel, FeatureTabViewModel>("featureTab");
+            container.RegisterType<IViewModel, LogTabViewModel>("logTab");
+            container.RegisterType<IViewModel, SettingsTabViewModel>("settingsTab");
+            container.RegisterType<IViewModel, OverviewTabViewModel>("overviewTab");
+
+            container.RegisterType<IDialogService, DialogService>();
+            container.RegisterType<IDialogFactory, ReflectionDialogFactory>();
+            container.RegisterType<IDialogTypeLocator, NamingConventionDialogTypeLocator>();
             container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
-            container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
+
+            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("hotkey");
+            container.RegisterType<IDialogViewModel, ChangeSkillCastProfileDialogViewModel>("skillCast");
+
+            container.RegisterType<IMessageBoxService, MessageBoxService>();
+
+            #endregion Register
 
             container.AddExtension(new Diagnostic());
-
-            var mainVM = container.Resolve<IViewModelBase>("main");
-            MainWindow = new MainWindow { DataContext = mainVM };
-            MainWindow.Show();
-
-            var handleService = container.Resolve<IHandleService>();
-            Trace.WriteLine(handleService.GetHashCode());
-            var logService = container.Resolve<ILogService>();
-            var random = new Random();
-
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    handleService.UpdateHandle();
-                    Thread.Sleep(1000);
-                }
-            });
-
-            //Task.Run(() =>
-            //{
-            //    while (true)
-            //    {
-            //        logService.AddEntry(this, $"Some random double: {random.NextDouble()}");
-            //        Thread.Sleep(1000);
-            //    }
-            //});
-
-            var captureService = container.Resolve<ICaptureWindowService>();
-            var extractSkillService = container.Resolve<IExtractInformationService>("extractSkillInformation");
-            var extractPlayerService = container.Resolve<IExtractInformationService>("extractPlayerInformation");
-            var _settings = container.Resolve<Settings>();
-
-            var task = Task.Factory.StartNew(async () =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        var handle = handleService.GetHandle();
-                        if (handle != IntPtr.Zero && !_settings.IsPaused)//!settingsService.Settings.IsPaused)
-                        {
-                            using (var image = captureService.CaptureWindow("Diablo III64"))
-                            {
-                                //var task1 = Task.Run(() => extractSkillService.Extract(image));
-                                //var task2 = Task.Run(() => extractPlayerService.Extract(image));
-                                //var delayTask = Task.Run(() => Thread.Sleep((int)delay));
-
-                                //await task2;
-                                //await task1;
-                                //await delayTask;
-                                extractSkillService.Extract(image);
-                                extractPlayerService.Extract(image);
-                            }
-                        }
-                        Thread.Sleep((int)_settings.UpdateInterval);
-                    }
-                    catch (Exception ex)
-                    {
-                        logService.AddEntry(this, "Caught exception in information extraction mmainloop", Enum.LogLevel.Error, ex);
-                    }
-                }
-            }, TaskCreationOptions.LongRunning);
-
-            container.Resolve<IEventSubscriber>("macro");
-            container.Resolve<IEventSubscriber>("skill");
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            base.OnExit(e);
-
-            if (e.ApplicationExitCode != 2)
-            {
-                var settings = container.Resolve<Settings>();
-                var json = JsonConvert.SerializeObject(settings);
-                File.WriteAllText("settings.json", json);
-                WindowPlace.Save();
-            }
         }
 
         /*

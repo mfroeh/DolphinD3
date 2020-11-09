@@ -54,7 +54,7 @@
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
                 FrozenColumnCount="1"
-                HorizontalScrollBarVisibility="Hidden"
+                HorizontalScrollBarVisibility="Auto"
                 ItemsSource="{Binding LogMessages}"
                 SelectedItem="{Binding SelectedLogItem}"
                 SelectionMode="Single"
@@ -65,11 +65,10 @@
                         MinWidth="100"
                         Binding="{Binding Time}"
                         Header="Time"
-                        IsReadOnly="True"
-                        SortDirection="Descending" />
+                        IsReadOnly="True" />
 
                     <DataGridTextColumn
-                        MinWidth="100"
+                        MinWidth="50"
                         Binding="{Binding LogLevel}"
                         Header="Severity"
                         IsReadOnly="True" />

@@ -33,27 +33,20 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CacheService.cs" />
-    <Compile Include="CaptureWindowService.cs" />
+    <Compile Include="ActionService.cs" />
     <Compile Include="ConditionFinderService.cs" />
-    <Compile Include="EventBus.cs" />
-    <Compile Include="ExtractPlayerInformationService.cs" />
-    <Compile Include="ExtractSkillInformationService.cs" />
-    <Compile Include="ExtractWorldInformationService.cs" />
     <Compile Include="HandleService.cs" />
-    <Compile Include="MacroExecutionService.cs" />
+    <Compile Include="ExecuteActionService.cs" />
     <Compile Include="HotkeyListenerService.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="ActionFinderService.cs" />
     <Compile Include="ModelService.cs" />
     <Compile Include="PoolSpotService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceService.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="SkillCastingService.cs" />
     <Compile Include="TransformService.cs" />
     <Compile Include="TravelInformationService.cs" />
-    <Compile Include="WorldInformationChangedEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dolphin\Dolphin.csproj">

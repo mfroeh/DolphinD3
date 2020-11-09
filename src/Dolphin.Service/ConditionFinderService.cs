@@ -1,7 +1,5 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Dolphin.Service
 {
@@ -23,6 +21,7 @@ namespace Dolphin.Service
             if (property == null)
             {
                 logService.AddEntry(this, $"{skillName} has no condition defined, defaulting to just return true.");
+
                 return () => true;
             }
 

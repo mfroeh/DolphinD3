@@ -4,20 +4,19 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.Windows.Automation;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace WK.Libraries.HotkeyListenerNS.Helpers
 {
@@ -64,75 +63,18 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             };
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Fields
 
         // Array of methods to use to try and get the selected text
         private Func<string>[] _selectionMethods;
-        
-        #endregion
+
+        #endregion Fields
 
         #region Methods
 
         #region Public
-
-        /// <summary>
-        /// Tries to get the currently selected text from the active control.
-        /// </summary>
-        /// <returns>
-        ///     Returns the currently selected text from the active control or null when all methods
-        ///     of retrieving the currently selected text from the active control failed.
-        /// </returns>
-        public string TryGetSelectedTextFromActiveControl()
-        {
-            try
-            {
-                foreach (var action in _selectionMethods)
-                {
-                    var result = action.Invoke();
-                    
-                    if (result != null)
-                        return result;
-                }
-            }
-            catch { }
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Tries to get the currently selected text from the active control and applies a filter to it.
-        /// </summary>
-        /// <typeparam name="T">The type of objects returned in an IEnumerable.</typeparam>
-        /// <param name="filter">The filter to apply to the text retrieved before returning the results.</param>
-        /// <returns>
-        ///     Returns the filtered results from the currently selected text from the active control or an
-        ///     empty IEnumerable of T when all methods of retrieving the currently selected text from the
-        ///     active control failed.
-        /// </returns>
-        /// <remarks>
-        ///     The result of the first filter that returns at least one result of T will be returned, other
-        ///     methods will not be used after this. When a filter returns an empty IEnumerable (even though
-        ///     the method did actually retrieve selected text from the active control) the next method
-        ///     will be tried.
-        /// </remarks>
-        public IEnumerable<T> TryGetSelectedTextFromActiveControl<T>(Func<string, IEnumerable<T>> filter)
-        {
-            try
-            {
-                foreach (var action in _selectionMethods)
-                {
-                    var result = filter.Invoke(action.Invoke());
-
-                    if (result.Any())
-                        return result;
-                }
-            }
-            catch { }
-
-            return Enumerable.Empty<T>();
-        }
 
         /// <summary>
         /// Uses the clipboard to try and retrieve selected text from the active control.
@@ -184,7 +126,64 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Tries to get the currently selected text from the active control.
+        /// </summary>
+        /// <returns>
+        ///     Returns the currently selected text from the active control or null when all methods
+        ///     of retrieving the currently selected text from the active control failed.
+        /// </returns>
+        public string TryGetSelectedTextFromActiveControl()
+        {
+            try
+            {
+                foreach (var action in _selectionMethods)
+                {
+                    var result = action.Invoke();
+
+                    if (result != null)
+                        return result;
+                }
+            }
+            catch { }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Tries to get the currently selected text from the active control and applies a filter to it.
+        /// </summary>
+        /// <typeparam name="T">The type of objects returned in an IEnumerable.</typeparam>
+        /// <param name="filter">The filter to apply to the text retrieved before returning the results.</param>
+        /// <returns>
+        ///     Returns the filtered results from the currently selected text from the active control or an
+        ///     empty IEnumerable of T when all methods of retrieving the currently selected text from the
+        ///     active control failed.
+        /// </returns>
+        /// <remarks>
+        ///     The result of the first filter that returns at least one result of T will be returned, other
+        ///     methods will not be used after this. When a filter returns an empty IEnumerable (even though
+        ///     the method did actually retrieve selected text from the active control) the next method
+        ///     will be tried.
+        /// </remarks>
+        public IEnumerable<T> TryGetSelectedTextFromActiveControl<T>(Func<string, IEnumerable<T>> filter)
+        {
+            try
+            {
+                foreach (var action in _selectionMethods)
+                {
+                    var result = filter.Invoke(action.Invoke());
+
+                    if (result.Any())
+                        return result;
+                }
+            }
+            catch { }
+
+            return Enumerable.Empty<T>();
+        }
+
+        #endregion Public
 
         #region Private
 
@@ -268,7 +267,7 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
                 }
             }
             catch (Exception) { }
-            
+
             // Failed. Return empty string.
             return string.Empty;
         }
@@ -286,20 +285,11 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, uint Msg, out int wParam, out int lParam);
 
-        #endregion
+        #endregion SendMessage Overloads
 
-        private const uint WM_GETTEXTLENGTH = 0x000E;
-        private const uint WM_GETTEXT = 0x000D;
         private const uint EM_GETSEL = 0xB0;
-
-        [DllImport("user32.dll", ExactSpelling = true)]
-        private static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll", ExactSpelling = true)]
-        private static extern IntPtr GetFocus();
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowThreadProcessId(int handle, out int processId);
+        private const uint WM_GETTEXT = 0x000D;
+        private const uint WM_GETTEXTLENGTH = 0x000E;
 
         [DllImport("user32", SetLastError = true, ExactSpelling = true)]
         private static extern int AttachThreadInput(int idAttach, int idAttachTo, bool fAttach);
@@ -307,10 +297,19 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         [DllImport("kernel32.dll")]
         private static extern int GetCurrentThreadId();
 
-        #endregion
+        [DllImport("user32.dll", ExactSpelling = true)]
+        private static extern IntPtr GetFocus();
 
-        #endregion
+        [DllImport("user32.dll", ExactSpelling = true)]
+        private static extern IntPtr GetForegroundWindow();
 
-        #endregion
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowThreadProcessId(int handle, out int processId);
+
+        #endregion Win32 APIs
+
+        #endregion Private
+
+        #endregion Methods
     }
 }

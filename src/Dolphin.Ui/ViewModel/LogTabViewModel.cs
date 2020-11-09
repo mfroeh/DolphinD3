@@ -8,43 +8,39 @@ using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
 {
-    public class LogEntry
-    {
-        public string FullMessage { get; set; }
-
-        public LogLevel LogLevel { get; set; }
-
-        public string Message { get; set; }
-
-        public string Time { get; set; }
-
-        public string Type { get; set; }
-    }
-
     public class LogTabViewModel : ViewModelBase
     {
+        #region Private Fields
+
         private readonly object logLock = new object();
         private readonly ILogService logService;
-
         private readonly ISettingsService settingsService;
 
         private ICommand clipLogEntryCommand;
-
         private LogLevel displayLogLevel;
-
         private bool logPaused;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public LogTabViewModel(ISettingsService settingsService, ILogService logService)
         {
-            BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
-
             this.logService = logService;
             this.settingsService = settingsService;
             logService.EntryAdded += OnEntryAdded;
 
             displayLogLevel = settingsService.UiSettings.DisplayLogLevel;
             logPaused = settingsService.UiSettings.LogPaused;
+
+            LogMessages = new ObservableCollection<LogEntry>();
+
+            BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public ICommand ClipLogEntryCommand
         {
@@ -63,10 +59,12 @@ namespace Dolphin.Ui.ViewModel
                 displayLogLevel = value;
                 settingsService.Settings.UiSettings.DisplayLogLevel = value;
                 RaisePropertyChanged(nameof(DisplayLogLevel));
+                LogMessages = new ObservableCollection<LogEntry>(logService.InternalLog.Entries.Where(x => x.LogLevel.CompareTo(value) <= 0));
+                RaisePropertyChanged(nameof(LogMessages));
             }
         }
 
-        public ObservableCollection<LogEntry> LogMessages { get; } = new ObservableCollection<LogEntry>();
+        public ObservableCollection<LogEntry> LogMessages { get; set; }
 
         public bool LogPaused
         {
@@ -79,35 +77,22 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public IEnumerable<LogLevel> PossibleLogLevel
-        {
-            get
-            {
-                return System.Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
-            }
-        }
+        public IEnumerable<LogLevel> PossibleLogLevel => System.Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
 
-        public LogEntry SelectedLogItem
-        {
-            get;
-            set;
-        }
+        public LogEntry SelectedLogItem { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
 
         private void OnEntryAdded(object sender, LogEntryEventArgs e)
         {
-            if (!LogPaused)
+            if (!LogPaused && e.LogLevel.CompareTo(DisplayLogLevel) <= 0)
             {
-                return;
-                if (e.LogLevel.CompareTo(DisplayLogLevel) <= 0)
-                {
-                    if (LogMessages.Count > 500)
-                    {
-                        LogMessages.Clear();
-                    }
-
-                    LogMessages.Add(new LogEntry { Message = e.Message, LogLevel = e.LogLevel, Time = e.Time.ToString("HH:mm:ss"), FullMessage = e.FullMessage, Type = e.Type }); // TODO: Prepend
-                }
+                LogMessages.Add(e.LogEntry);
             }
         }
+
+        #endregion Private Methods
     }
 }

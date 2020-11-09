@@ -1,7 +1,5 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Dolphin.Service
@@ -15,28 +13,22 @@ namespace Dolphin.Service
             this.poolService = poolService;
         }
 
-        public Point GetActCoordinate(ActionName actionName)
+        public Tuple<Point, Point> GetKadalaCoordinates(ItemType itemType)
         {
-            switch (actionName)
-            {
-                case ActionName.TravelAct1:
-                    return CommonCoordinate.MapAct1;
-
-                case ActionName.TravelAct2:
-                    return CommonCoordinate.MapAct2;
-
-                case ActionName.TravelAct34:
-                    return CommonCoordinate.MapAct3;
-
-                case ActionName.TravelAct5:
-                    return CommonCoordinate.MapAct5;
-
-                default:
-                    return default;
-            }
+            return Tuple.Create(GetKadalaTabCoordinate(itemType), GetKadalaItemCoordinate(itemType));
         }
 
-        public Point GetActCoordinate(int act)
+        public Tuple<Point, Point> GetNextPoolSpot()
+        {
+            return poolService.GetNextPoolSpot();
+        }
+
+        public Tuple<Point, Point> GetTownCoordinates(int act)
+        {
+            return Tuple.Create(GetActCoordinate(act), GetTownCoordinate(act));
+        }
+
+        private Point GetActCoordinate(int act)
         {
             switch (act)
             {
@@ -60,7 +52,7 @@ namespace Dolphin.Service
             }
         }
 
-        public Point GetKadalaItemCoordinate(ItemType itemType)
+        private Point GetKadalaItemCoordinate(ItemType itemType)
         {
             switch (itemType)
             {
@@ -100,11 +92,11 @@ namespace Dolphin.Service
                     return CommonCoordinate.KadalaItemRight4;
 
                 default:
-                    return new Point(0, 0);
+                    return default;
             }
         }
 
-        public Point GetKadalaTabCoordinate(ItemType itemType)
+        private Point GetKadalaTabCoordinate(ItemType itemType)
         {
             switch (itemType)
             {
@@ -125,33 +117,7 @@ namespace Dolphin.Service
             }
         }
 
-        public Tuple<Point, Point> GetNextPoolSpot()
-        {
-            return poolService.GetNextPoolSpot();
-        }
-
-        public Point GetTownCoordinate(ActionName actionName)
-        {
-            switch (actionName)
-            {
-                case ActionName.TravelAct1:
-                    return CommonCoordinate.MapAct1Town;
-
-                case ActionName.TravelAct2:
-                    return CommonCoordinate.MapAct2Town;
-
-                case ActionName.TravelAct34:
-                    return CommonCoordinate.MapAct3Town;
-
-                case ActionName.TravelAct5:
-                    return CommonCoordinate.MapAct5Town;
-
-                default:
-                    return default;
-            }
-        }
-
-        public Point GetTownCoordinate(int act)
+        private Point GetTownCoordinate(int act)
         {
             switch (act)
             {

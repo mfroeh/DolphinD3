@@ -1,6 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Dolphin.Service
 {
@@ -15,38 +16,39 @@ namespace Dolphin.Service
             this.savePath = "log.txt";
         }
 
+        public Log InternalLog => internalLog;
+
         public event EventHandler<LogEntryEventArgs> EntryAdded;
 
         public void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
-            // TODO: Add the origin to the logmesasge (Filename or something) origin.GetType().Namespace
+            message = ex == null ? message : message + $", Exception: {ex}";
 
-            var currentTime = DateTime.Now;
-            var fullMessage = $"[{currentTime}]---LogLevel: {logLevel}, Type: {origin.GetType().FullName}, Message: {message}";
-
-            if (ex != null)
+            var entry = new LogEntry
             {
-                fullMessage += $", Exception: {ex}";
-                message += $", Exception: {ex}";
-            }
+                FullMessage = $"[{DateTime.Now}]---LogLevel: {logLevel}, Type: {origin.GetType().FullName}, Message: {message}",
+                LogLevel = logLevel,
+                Message = message,
+                Time = DateTime.Now,
+                Type = origin.GetType().Name
+            };
 
-            internalLog.Entries.Add(fullMessage);
-            if (internalLog.Entries.Count >= 100)
+            internalLog.Entries.Add(entry);
+            if (internalLog.Entries.Count >= 2500)
             {
                 SaveLog();
                 internalLog.Entries.Clear();
             }
 
-            Execute.AndForgetAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { Message = message, LogLevel = logLevel, FullMessage = fullMessage, Time = currentTime, Type = origin.GetType().FullName }));
+            Execute.OnUIThreadAsync(() => EntryAdded?.Invoke(this, new LogEntryEventArgs { LogLevel = logLevel, LogEntry = entry }));
         }
 
         public void SaveLog()
         {
-            try
+            lock (internalLog)
             {
-                //File.AppendAllLines(savePath, internalLog.Entries);
+                File.AppendAllLines(savePath, internalLog.Entries.Where(x => x.LogLevel.CompareTo(LogLevel.Info) <= 0).Select(x => x.FullMessage));
             }
-            catch { } // TODO:
         }
     }
 }

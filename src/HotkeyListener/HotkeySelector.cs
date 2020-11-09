@@ -4,26 +4,25 @@
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeySelector.
  * License      : MIT.
- * 
+ *
  */
 
-#endregion
-
+#endregion Copyright
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.ComponentModel;
-using System.Collections.Generic;
 
 namespace WK.Libraries.HotkeyListenerNS
 {
     /// <summary>
-    /// Provides support for enabling standard Windows controls 
-    /// and User controls to select hotkeys at runtime. 
-    /// Combined with the <see cref="HotkeyListener"/> class, 
-    /// you can easily enable the selection and registering of 
+    /// Provides support for enabling standard Windows controls
+    /// and User controls to select hotkeys at runtime.
+    /// Combined with the <see cref="HotkeyListener"/> class,
+    /// you can easily enable the selection and registering of
     /// hotkeys for a seamless end-user experience.
     /// </summary>
     [DebuggerStepThrough]
@@ -48,218 +47,57 @@ namespace WK.Libraries.HotkeyListenerNS
             InitializeComponent();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Fields
-
-        // These variables store the selected hotkey and modifier key(s).
-        private Keys _hotkey = Keys.None;
-        private Keys _modifiers = Keys.None;
-
-        // ArrayLists used to enforce the use of proper modifiers.
-        // Shift+A isn't a valid hotkey, for instance.
-        private ArrayList _needNonShiftModifier = null;
-        private ArrayList _needNonAltGrModifier = null;
 
         // Stores the list of enabled hotkey selection controls.
         private List<Control> _controls = new List<Control>();
 
-        #endregion
+        // These variables store the selected hotkey and modifier key(s).
+        private Keys _hotkey = Keys.None;
+
+        private Keys _modifiers = Keys.None;
+
+        private ArrayList _needNonAltGrModifier = null;
+
+        // ArrayLists used to enforce the use of proper modifiers.
+        // Shift+A isn't a valid hotkey, for instance.
+        private ArrayList _needNonShiftModifier = null;
+
+        #endregion Fields
 
         #region Properties
 
         #region Public
 
         /// <summary>
-        /// Gets or sets the text to be displayed in a 
-        /// control when no hotkey has been set. 
+        /// Gets or sets the text to be displayed in a
+        /// control when no hotkey has been set.
         /// (Preferred default text is "None")
         /// </summary>
         public string EmptyHotkeyText { get; set; } = "None";
 
         /// <summary>
-        /// Gets or sets the text to be displayed in a control 
+        /// Gets or sets the text to be displayed in a control
         /// when an invalid or unsupported hotkey is pressed.
         /// (Preferred default text is "(Unsupported)")
         /// </summary>
         public string InvalidHotkeyText { get; set; } = "Unsupported";
 
-        #endregion
+        #endregion Public
 
-        #endregion
+        #endregion Properties
 
         #region Methods
 
         #region Public
-    
-        /// <summary>
-        /// Enables a control for hotkey selection and previewing.
-        /// This will make use of the control's Text property to 
-        /// preview the current hotkey selected.
-        /// </summary>
-        /// <param name="control">The control to enable.</param>
-        public bool Enable(Control control)
-        {
-            try
-            {
-                control.Text = EmptyHotkeyText;
-                
-                control.KeyPress += new KeyPressEventHandler(OnKeyPress);
-                control.KeyDown += new KeyEventHandler(OnKeyDown);
-                control.KeyUp += new KeyEventHandler(OnKeyUp);
-                
-                ResetModifiers();
-
-                try
-                {
-                    _controls.Add(control);
-                }
-                catch (Exception) { }
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
 
         /// <summary>
-        /// Enables a control for hotkey selection and previewing.
-        /// This will make use of the control's Text property to 
-        /// preview the current hotkey selected.
-        /// </summary>
-        /// <param name="control">The control to enable.</param>
-        /// <param name="hotkey">Assign the default hotkey to be previewed in the control.</param>
-        public bool Enable(Control control, Hotkey hotkey)
-        {
-            try
-            {
-                Enable(control);
-
-                _hotkey = hotkey.KeyCode;
-                _modifiers = hotkey.Modifiers;
-
-                Refresh(control);
-                
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Disables a control for hotkey selection and previewing.
-        /// </summary>
-        /// <param name="control">The control to disable.</param>
-        /// <param name="clearKeys">Clear the control's previewed keys?</param>
-        public bool Disable(Control control, bool clearKeys = true)
-        {
-            try
-            {
-                control.KeyPress -= OnKeyPress;
-                control.KeyDown -= OnKeyDown;
-                control.KeyUp -= OnKeyUp;
-
-                if (clearKeys)
-                    control.Text = string.Empty;
-
-                try
-                {
-                    if (_controls.Contains(control))
-                        _controls.Remove(control);
-                }
-                catch (Exception) { }
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether a specific 
-        /// control is enabled for hotkey selection.
-        /// </summary>
-        /// <param name="control">The control to determine.</param>
-        public bool IsEnabled(Control control)
-        {
-            if (_controls.Contains(control))
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// Sets a hotkey selection to be previewed in a control. 
-        /// Thsi does not automatically enable the control for 
-        /// hotkey selection. For this, please use the <see cref="Enable(Control)"/> method.
-        /// </summary>
-        /// <param name="control">The control to set.</param>
-        /// <param name="hotkey">Provide a standard key or key combination string.</param>
-        public bool Set(Control control, Hotkey hotkey)
-        {
-            try
-            {
-                Refresh(control);
-
-                control.Text = Convert(hotkey);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-    
-        /// <summary>
-        /// Sets a hotkey selection to be previewed in a control. 
-        /// Thsi does not automatically enable the control for 
-        /// hotkey selection. For this, please use the <see cref="Enable(Control)"/> method.
-        /// </summary>
-        /// <param name="control">The control to set.</param>
-        /// <param name="key">Provide a standard key selection.</param>
-        /// <param name="modifiers">Provide a modifier key selection.</param>
-        public bool Set(Control control, Keys key, Keys modifiers)
-        {
-            try
-            {
-                _hotkey = key;
-                _modifiers = modifiers;
-
-                Refresh(control);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Clears the currently previewed hotkey 
+        /// Clears the currently previewed hotkey
         /// selection displayed in a control.
         /// </summary>
         public void Clear(Control control)
-        {
-            this._hotkey = Keys.None;
-            this._modifiers = Keys.None;
-
-            Refresh(control);
-        }
-
-        /// <summary>
-        /// (Variant of the <see cref="Clear(Control)"/> method) 
-        /// Clears the currently previewed hotkey 
-        /// selection displayed in a control.
-        /// </summary>
-        public void Reset(Control control)
         {
             this._hotkey = Keys.None;
             this._modifiers = Keys.None;
@@ -300,14 +138,14 @@ namespace WK.Libraries.HotkeyListenerNS
                         }
                         else
                         {
-                            // User pressed Shift and an invalid key (e.g. a letter or a number), 
+                            // User pressed Shift and an invalid key (e.g. a letter or a number),
                             // that needs another set of modifier keys.
                             this._hotkey = Keys.None;
                         }
                     }
                 }
 
-                // Without this code, pressing only Ctrl 
+                // Without this code, pressing only Ctrl
                 // will show up as "Control + ControlKey", etc.
                 if (this._hotkey == Keys.Menu || /* Alt */
                     this._hotkey == Keys.ShiftKey ||
@@ -342,25 +180,175 @@ namespace WK.Libraries.HotkeyListenerNS
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Disables a control for hotkey selection and previewing.
+        /// </summary>
+        /// <param name="control">The control to disable.</param>
+        /// <param name="clearKeys">Clear the control's previewed keys?</param>
+        public bool Disable(Control control, bool clearKeys = true)
+        {
+            try
+            {
+                control.KeyPress -= OnKeyPress;
+                control.KeyDown -= OnKeyDown;
+                control.KeyUp -= OnKeyUp;
+
+                if (clearKeys)
+                    control.Text = string.Empty;
+
+                try
+                {
+                    if (_controls.Contains(control))
+                        _controls.Remove(control);
+                }
+                catch (Exception) { }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Enables a control for hotkey selection and previewing.
+        /// This will make use of the control's Text property to
+        /// preview the current hotkey selected.
+        /// </summary>
+        /// <param name="control">The control to enable.</param>
+        public bool Enable(Control control)
+        {
+            try
+            {
+                control.Text = EmptyHotkeyText;
+
+                control.KeyPress += new KeyPressEventHandler(OnKeyPress);
+                control.KeyDown += new KeyEventHandler(OnKeyDown);
+                control.KeyUp += new KeyEventHandler(OnKeyUp);
+
+                ResetModifiers();
+
+                try
+                {
+                    _controls.Add(control);
+                }
+                catch (Exception) { }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Enables a control for hotkey selection and previewing.
+        /// This will make use of the control's Text property to
+        /// preview the current hotkey selected.
+        /// </summary>
+        /// <param name="control">The control to enable.</param>
+        /// <param name="hotkey">Assign the default hotkey to be previewed in the control.</param>
+        public bool Enable(Control control, Hotkey hotkey)
+        {
+            try
+            {
+                Enable(control);
+
+                _hotkey = hotkey.KeyCode;
+                _modifiers = hotkey.Modifiers;
+
+                Refresh(control);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether a specific
+        /// control is enabled for hotkey selection.
+        /// </summary>
+        /// <param name="control">The control to determine.</param>
+        public bool IsEnabled(Control control)
+        {
+            if (_controls.Contains(control))
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// (Variant of the <see cref="Clear(Control)"/> method)
+        /// Clears the currently previewed hotkey
+        /// selection displayed in a control.
+        /// </summary>
+        public void Reset(Control control)
+        {
+            this._hotkey = Keys.None;
+            this._modifiers = Keys.None;
+
+            Refresh(control);
+        }
+
+        /// <summary>
+        /// Sets a hotkey selection to be previewed in a control.
+        /// Thsi does not automatically enable the control for
+        /// hotkey selection. For this, please use the <see cref="Enable(Control)"/> method.
+        /// </summary>
+        /// <param name="control">The control to set.</param>
+        /// <param name="hotkey">Provide a standard key or key combination string.</param>
+        public bool Set(Control control, Hotkey hotkey)
+        {
+            try
+            {
+                Refresh(control);
+
+                control.Text = Convert(hotkey);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Sets a hotkey selection to be previewed in a control.
+        /// Thsi does not automatically enable the control for
+        /// hotkey selection. For this, please use the <see cref="Enable(Control)"/> method.
+        /// </summary>
+        /// <param name="control">The control to set.</param>
+        /// <param name="key">Provide a standard key selection.</param>
+        /// <param name="modifiers">Provide a modifier key selection.</param>
+        public bool Set(Control control, Keys key, Keys modifiers)
+        {
+            try
+            {
+                _hotkey = key;
+                _modifiers = modifiers;
+
+                Refresh(control);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        #endregion Public
 
         #region Private
 
         /// <summary>
-        /// Resets the hotkey modifiers to their defaults.
-        /// </summary>
-        private void ResetModifiers()
-        {
-            // Fill the ArrayLists that contain  
-            // all invalid hotkey combinations.
-            _needNonShiftModifier = new ArrayList();
-            _needNonAltGrModifier = new ArrayList();
-
-            PopulateModifierLists();
-        }
-
-        /// <summary>
-        /// Populates the ArrayLists specifying disallowed Hotkeys 
+        /// Populates the ArrayLists specifying disallowed Hotkeys
         /// such as Shift+A, Ctrl+Alt+4 (produces 'dollar' sign).
         /// </summary>
         private void PopulateModifierLists()
@@ -418,7 +406,7 @@ namespace WK.Libraries.HotkeyListenerNS
         /// The control providing hotkey selection.
         /// </param>
         /// <param name="internalCall">
-        /// Specifies whether this function is 
+        /// Specifies whether this function is
         /// called internally or by the user.
         /// </param>
         private void Refresh(Control control, bool internalCall)
@@ -485,7 +473,7 @@ namespace WK.Libraries.HotkeyListenerNS
                             }
                             else
                             {
-                                // User pressed Shift and an invalid key (e.g. a letter or a number), 
+                                // User pressed Shift and an invalid key (e.g. a letter or a number),
                                 // that needs another set of modifier keys.
                                 this._hotkey = Keys.None;
 
@@ -497,7 +485,7 @@ namespace WK.Libraries.HotkeyListenerNS
                     }
                 }
 
-                // Without this code, pressing only Ctrl 
+                // Without this code, pressing only Ctrl
                 // will show up as "Control + ControlKey", etc.
                 if (this._hotkey == Keys.Menu || /* Alt */
                     this._hotkey == Keys.ShiftKey ||
@@ -519,16 +507,29 @@ namespace WK.Libraries.HotkeyListenerNS
             catch (Exception) { }
         }
 
-        #endregion
+        /// <summary>
+        /// Resets the hotkey modifiers to their defaults.
+        /// </summary>
+        private void ResetModifiers()
+        {
+            // Fill the ArrayLists that contain
+            // all invalid hotkey combinations.
+            _needNonShiftModifier = new ArrayList();
+            _needNonAltGrModifier = new ArrayList();
 
-        #endregion
+            PopulateModifierLists();
+        }
+
+        #endregion Private
+
+        #endregion Methods
 
         #region Events
 
         #region Private
 
         /// <summary>
-        /// Fires when a key is pressed down. Here, we'll want to update the Text  
+        /// Fires when a key is pressed down. Here, we'll want to update the Text
         /// property to notify the user what key combination is currently pressed.
         /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -560,6 +561,15 @@ namespace WK.Libraries.HotkeyListenerNS
         }
 
         /// <summary>
+        /// Prevents anything entered in Input controls from being displayed.
+        /// Without this, a "A" key press would appear as "aControl, Alt + A".
+        /// </summary>
+        private void OnKeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        /// <summary>
         /// Fires when all keys are released. If the current hotkey isn't valid, reset it.
         /// Otherwise, do nothing and keep the Text and hotkey as it was.
         /// </summary>
@@ -573,17 +583,8 @@ namespace WK.Libraries.HotkeyListenerNS
             }
         }
 
-        /// <summary>
-        /// Prevents anything entered in Input controls from being displayed.
-        /// Without this, a "A" key press would appear as "aControl, Alt + A".
-        /// </summary>
-        private void OnKeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
+        #endregion Private
 
-        #endregion
-
-        #endregion
+        #endregion Events
     }
 }

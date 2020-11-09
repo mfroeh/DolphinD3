@@ -5,7 +5,7 @@ namespace Dolphin
 {
     public interface IResourceService
     {
-        Bitmap Load<TEnum>(TEnum enumValue);
+        Bitmap Load<T>(T value);
 
         Bitmap LoadSkillBitmap(SkillName skillName, bool isMouse);
     }

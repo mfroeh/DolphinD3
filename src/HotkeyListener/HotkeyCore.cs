@@ -1,29 +1,24 @@
-﻿#region Copyright
-
-/*
+﻿/*
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
  *
  */
 
-#endregion Copyright
-
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace WK.Libraries.HotkeyListenerNS.Helpers
+namespace WK.Libraries.HotkeyListenerNS
 {
     /// <summary>
-    /// The core class that helps in the management
-    /// of system-wide Hotkeys within applications.
+    /// The core class that helps in the management of system-wide Hotkeys within applications.
     /// </summary>
     [DebuggerStepThrough]
     internal sealed class HotkeyCore
     {
-        #region Enumerations
+        #region Internal Enums
 
         /// <summary>
         /// Provides a list of supported Hotkey modifiers.
@@ -57,11 +52,9 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             Windows = 8
         }
 
-        #endregion Enumerations
+        #endregion Internal Enums
 
-        #region Methods
-
-        #region Public
+        #region Public Methods
 
         /// <summary>
         /// Parses and registers any provided Hotkey.
@@ -130,6 +123,19 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             return RegisterHotKey(handle.Handle, hotkeyID, keyModifier, key & Keys.KeyCode);
         }
 
+        public static bool RegisterKey(IntPtr hwnd, int hotkeyId, Keys key)
+        {
+            HotKeyModifiers keyModifier = HotKeyModifiers.None;
+
+            keyModifier |= CheckModifier(key, Keys.Control, HotKeyModifiers.Control);
+            keyModifier |= CheckModifier(key, Keys.Alt, HotKeyModifiers.Alt);
+            keyModifier |= CheckModifier(key, Keys.Shift, HotKeyModifiers.Shift);
+            keyModifier |= CheckModifier(key, Keys.LWin, HotKeyModifiers.Windows);
+            keyModifier |= CheckModifier(key, Keys.RWin, HotKeyModifiers.Windows);
+
+            return RegisterHotKey(hwnd, hotkeyId, keyModifier, key & Keys.KeyCode);
+        }
+
         /// <summary>
         /// Unregisters any already active Hotkey.
         /// </summary>
@@ -140,11 +146,9 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             return UnregisterHotKey(handle.Handle, hotkeyID);
         }
 
-        #endregion Public
+        #endregion Public Methods
 
-        #region Private
-
-        #region Win32 Management
+        #region Internal Methods
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern int GlobalAddAtom(string lpString);
@@ -152,19 +156,12 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
         internal static extern ushort GlobalDeleteAtom(int nAtom);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int keyId, HotKeyModifiers fsModifiers, Keys vk);
+        #endregion Internal Methods
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-        #endregion Win32 Management
-
-        #region Hotkey Management
+        #region Private Methods
 
         /// <summary>
-        /// Checks whether a specified Hotkey modifier is
-        /// available within a provided Hotkey.
+        /// Checks whether a specified Hotkey modifier is available within a provided Hotkey.
         /// </summary>
         /// <param name="key">The key(s).</param>
         /// <param name="keyModifier">The key modifier from <see cref="Keys"/> enumeration.</param>
@@ -180,10 +177,12 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             return HotKeyModifiers.None;
         }
 
-        #endregion Hotkey Management
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int keyId, HotKeyModifiers fsModifiers, Keys vk);
 
-        #endregion Private
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        #endregion Methods
+        #endregion Private Methods
     }
 }

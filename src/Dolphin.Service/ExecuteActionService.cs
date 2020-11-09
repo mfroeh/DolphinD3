@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Threading;
+using Unity;
+using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Service
 {
@@ -16,7 +19,8 @@ namespace Dolphin.Service
         private readonly ISettingsService settingsService;
         private CancellationTokenSource tokenSource;
 
-        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, ILogService logService, IActionFinderService actionFinderService, IHandleService handleService) : base(eventBus)
+        public ExecuteActionService(IEventBus eventBus, ISettingsService settingsService, ILogService logService, IActionFinderService actionFinderService, IHandleService handleService
+            ) : base(eventBus)
         {
             this.settingsService = settingsService;
             this.actionFinderService = actionFinderService;
@@ -46,12 +50,13 @@ namespace Dolphin.Service
             if (handle.IsDefault()) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
-            if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
+            if (actionName == ActionName.Pause || (e.PressedHotkey.KeyCode == Keys.Escape && e.PressedHotkey.Modifiers == Keys.None))
             {
-                if (e.PressedHotkey == settingsService.Settings.Hotkeys[ActionName.CancelAction])
+                if (e.PressedHotkey.KeyCode == Keys.Escape && tokenSource == null)
                 {
                     InputHelper.SendKey(handle.Handle, Keys.Escape);
                 }
+
                 if (tokenSource != null)
                 {
                     tokenSource.Cancel();

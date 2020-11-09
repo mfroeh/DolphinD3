@@ -65,6 +65,7 @@ namespace Dolphin.Ui
                 backgroundWorker.RunWorkerAsync();
 
                 Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Resolving dependencies");
+                
                 container.Resolve<IEventSubscriber>("macro");
                 container.Resolve<IEventSubscriber>("skill");
 
@@ -106,7 +107,7 @@ namespace Dolphin.Ui
                         || !(_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
                     {
                         Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
-                        
+
                         continue;
                     }
 

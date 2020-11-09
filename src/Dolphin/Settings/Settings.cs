@@ -22,7 +22,6 @@ namespace Dolphin
                 }
 
                 dict[ActionName.Pause] = new Hotkey(Keys.F10);
-                dict[ActionName.CancelAction] = new Hotkey(Keys.Escape);
                 dict[ActionName.Suspend_0] = new Hotkey(Keys.Control, Keys.D1);
                 dict[ActionName.Suspend_1] = new Hotkey(Keys.Control, Keys.D2);
                 dict[ActionName.Suspend_2] = new Hotkey(Keys.Control, Keys.D3);

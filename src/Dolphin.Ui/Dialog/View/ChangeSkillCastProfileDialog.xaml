@@ -26,17 +26,19 @@
         <Label
             Grid.Row="0"
             Grid.Column="0"
+            Margin="{adonisUi:Space}"
             Content="Name" />
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
+            Margin="{adonisUi:Space}"
             Text="{Binding Name}" />
 
         <StackPanel
             Grid.Row="1"
             Grid.ColumnSpan="2"
             Orientation="Horizontal">
-            <StackPanel Margin="{adonisUi:Space Left=0}">
+            <StackPanel Margin="{adonisUi:Space}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="1st skill delay" />
                 <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[0]}" />
             </StackPanel>

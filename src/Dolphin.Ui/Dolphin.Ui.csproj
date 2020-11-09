@@ -61,7 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BoolInverterConverter.cs" />
+    <Compile Include="Converter\BoolInverterConverter.cs" />
     <Compile Include="Dialog\CustomFrameworkDialogFactory.cs" />
     <Compile Include="AdonisUiMessageBox.cs" />
     <Compile Include="Dialog\IDialogViewModel.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="View\SettingsTabView.xaml.cs">
       <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EnumBooleanConverter.cs" />
+    <Compile Include="Converter\EnumBooleanConverter.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="ViewModel\FeatureTabViewModel.cs" />
     <Compile Include="ViewModel\LogTabViewModel.cs" />

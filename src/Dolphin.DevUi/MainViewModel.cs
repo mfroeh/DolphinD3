@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Window = Dolphin.Enum.Window;
@@ -79,6 +80,17 @@ namespace Dolphin.DevUi
 
         public Window SelectedWindow { get; set; } = Window.Urshi;
 
+        private string status;
+        public string Status
+        {
+            get => status;
+            set
+            {
+                status = value;
+                RaisePropertyChanged(nameof(Status));
+            }
+        }
+
         public WorldLocation SelectedWorldLocation { get; set; } = WorldLocation.Grift;
 
         private void ExecuteSaveAction(Action<Bitmap> action)
@@ -88,27 +100,27 @@ namespace Dolphin.DevUi
             if (image != null)
             {
                 action.Invoke(image);
-                //MessageBox.Show("Saved.");
+                Execute.AndForgetAsync(() =>
+                {
+                    Status = "Saved!";
+                    Thread.Sleep(500);
+                    Status = "";
+                });
             }
             else
             {
-                MessageBox.Show("No active Diablo III process found.");
+                Execute.AndForgetAsync(() =>
+                {
+                    Status = "No active Diablo III process found.";
+                    Thread.Sleep(500);
+                    Status = "";
+                });
             }
         }
 
         private void ExecuteSaveAction<T>(Action<Bitmap, T> action, T parameter)
         {
-            var image = captureWindowService.CaptureWindow("Diablo III64");
-
-            if (image != null)
-            {
-                action.Invoke(image, parameter);
-                //MessageBox.Show("Saved.");
-            }
-            else
-            {
-                MessageBox.Show("No active Diablo III process found.");
-            }
+            ExecuteSaveAction((x) => action.Invoke(x, parameter));
         }
 
         private void RaisePropertyChanged(string propertyName)

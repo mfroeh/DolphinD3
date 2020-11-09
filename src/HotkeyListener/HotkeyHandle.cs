@@ -1,29 +1,36 @@
-﻿#region Copyright
-
-/*
+﻿/*
  * Developer    : Willy Kimura (WK).
  * Library      : HotkeyListener.
  * License      : MIT.
  *
  */
 
-#endregion Copyright
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace WK.Libraries.HotkeyListenerNS.Helpers
+namespace WK.Libraries.HotkeyListenerNS
 {
     /// <summary>
-    /// Provides the base Hotkey handle for intercepting
-    /// and receiving all registered global Hotkey events.
+    /// Provides the base Hotkey handle for intercepting and receiving all registered global Hotkey events.
     /// </summary>
     [DebuggerStepThrough]
     internal sealed class HotkeyHandle : Control
     {
-        #region Constructor
+        #region Public Fields
+
+        public Dictionary<int, string> Hotkeys;
+
+        #endregion Public Fields
+
+        #region Private Fields
+
+        private const int WM_HOTKEY = 0x312;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HotkeyHandle"/> class.
@@ -38,18 +45,9 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             Hotkeys = new Dictionary<int, string>();
         }
 
-        #endregion Constructor
+        #endregion Public Constructors
 
-        #region Fields
-
-        public Dictionary<int, string> Hotkeys;
-        private const int WM_HOTKEY = 0x312;
-
-        #endregion Fields
-
-        #region Methods
-
-        #region Public
+        #region Public Methods
 
         /// <summary>
         /// Adds a Hotkey to the global Key watcher.
@@ -82,9 +80,28 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             this.Unregister(hotkey);
         }
 
-        #endregion Public
+        #endregion Public Methods
 
-        #region Private
+        #region Protected Methods
+
+        /// <summary>
+        /// Overrides the default window message processing to detect the registered Hotkeys when pressed.
+        /// </summary>
+        /// <param name="m"></param>
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_HOTKEY)
+            {
+                var hotkey = HotkeyRepresentation.AsHotkey(this.Hotkeys[m.WParam.ToInt32()]);
+                HotkeyPressed?.Invoke(null, new HotkeyEventArgs { Hotkey = hotkey });
+            }
+            else
+                base.WndProc(ref m);
+        }
+
+        #endregion Protected Methods
+
+        #region Private Methods
 
         /// <summary>
         /// Validates and registers any given Hotkey.
@@ -153,31 +170,7 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
             Hotkeys.Clear();
         }
 
-        #endregion Private
-
-        #region Overrides
-
-        /// <summary>
-        /// Overrides the default window message processing
-        /// to detect the registered Hotkeys when pressed.
-        /// </summary>
-        /// <param name="m"></param>
-        protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == WM_HOTKEY)
-            {
-                var hotkey = HotkeyListener.Convert(this.Hotkeys[m.WParam.ToInt32()]);
-                HotkeyPressed?.Invoke(null, new HotkeyEventArgs { Hotkey = hotkey });
-            }
-            else
-                base.WndProc(ref m);
-        }
-
-        #endregion Overrides
-
-        #endregion Methods
-
-        #region Events
+        #endregion Private Methods
 
         #region Public
 
@@ -187,7 +180,5 @@ namespace WK.Libraries.HotkeyListenerNS.Helpers
         public event EventHandler<HotkeyEventArgs> HotkeyPressed;
 
         #endregion Public
-
-        #endregion Events
     }
 }

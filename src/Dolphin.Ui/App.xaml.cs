@@ -101,25 +101,29 @@ namespace Dolphin.Ui
                 try
                 {
                     var handle = handleService.GetHandle("Diablo III64");
-                    if (handle?.Handle != default
-                        && !_settings.IsPaused
-                        && (_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
+                    if (handle.IsDefault()
+                        || !_settings.IsPaused
+                        || !(_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
                     {
-                        using (var image = captureService.CaptureWindow("Diablo III64"))
-                        {
-                            if (_settings.SmartFeatureSettings.SkillCastingEnabled)
-                            {
-                                extractSkillService.Extract(image);
-                                extractPlayerService.Extract(image);
-                            }
+                        Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
+                        
+                        continue;
+                    }
 
-                            if (_settings.SmartFeatureSettings.SmartActionsEnabled)
-                            {
-                                // extractWorldService.Extract(image);
-                            }
-                            watch.Stop();
-                            Trace.WriteLine(watch.ElapsedMilliseconds);
+                    using (var image = captureService.CaptureWindow("Diablo III64"))
+                    {
+                        if (_settings.SmartFeatureSettings.SkillCastingEnabled)
+                        {
+                            extractSkillService.Extract(image);
+                            extractPlayerService.Extract(image);
                         }
+
+                        if (_settings.SmartFeatureSettings.SmartActionsEnabled)
+                        {
+                            // extractWorldService.Extract(image);
+                        }
+                        watch.Stop();
+                        Trace.WriteLine(watch.ElapsedMilliseconds);
                     }
                     Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
                 }

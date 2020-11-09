@@ -80,7 +80,7 @@
                         IsReadOnly="True" />
 
                     <DataGridTextColumn
-                        MinWidth="300"
+                        MinWidth="250"
                         Binding="{Binding Message}"
                         Header="Message"
                         IsReadOnly="True" />

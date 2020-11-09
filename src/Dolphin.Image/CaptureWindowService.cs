@@ -23,7 +23,7 @@ namespace Dolphin.Image
         public Bitmap CaptureWindow(string processName)
         {
             var handle = handleService.GetHandle(processName);
-            if (handle?.Handle == default) return default;
+            if (handle.IsDefault()) return default;
 
             return CaptureWindow(handle.Handle);
         }
@@ -31,7 +31,7 @@ namespace Dolphin.Image
         public bool UpdateImage(string processName)
         {
             var handle = handleService.GetHandle(processName);
-            if (handle?.Handle == default) return default;
+            if (handle.IsDefault()) return default;
 
             return UpdateImage(handle.Handle);
         }
@@ -48,7 +48,7 @@ namespace Dolphin.Image
         // TODO: Make more performant. This eats most of the cpu usage.
         public Bitmap CaptureWindow(IntPtr hwnd)
         {
-            if (hwnd == IntPtr.Zero)
+            if (hwnd == default)
             {
                 logService.AddEntry(this, $"Got empty handle when trying to capture window.", LogLevel.Debug);
 

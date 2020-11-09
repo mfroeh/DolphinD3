@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>WK.Libraries.HotkeyListenerNS</RootNamespace>
     <AssemblyName>HotkeyListener</AssemblyName>
-	<PackageID>HotkeyListener</PackageID>
+    <PackageID>HotkeyListener</PackageID>
     <RepositoryUrl>https://github.com/Willy-Kimura/HotkeyListener.git</RepositoryUrl>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -42,36 +42,18 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Internal\TextSelectionReader.cs" />
-    <Compile Include="Helpers\SourceAttributes.cs" />
-    <Compile Include="Helpers\Internal\HotkeyHandle.cs">
+    <Compile Include="Hotkey.cs" />
+    <Compile Include="HotkeyRepresentation.cs" />
+    <Compile Include="HotkeyCore.cs" />
+    <Compile Include="EventArgs\HotkeyEventArgs.cs" />
+    <Compile Include="HotkeyHandle.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Helpers\Internal\HotkeyCore.cs" />
-    <Compile Include="HotkeyListener.Designer.cs">
-      <DependentUpon>HotkeyListener.cs</DependentUpon>
-    </Compile>
-    <Compile Include="HotkeySelector.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="HotkeyListener.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="HotkeySelector.Designer.cs">
-      <DependentUpon>HotkeySelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SourceApplication.cs" />
+    <Compile Include="EventArgs\HotkeyUpdatedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HotkeyListener.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Helpers\Internal\HotkeyHandle.resx">
-      <DependentUpon>HotkeyHandle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="HotkeyListener.Designer.resx">
-      <DependentUpon>HotkeyListener.Designer.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

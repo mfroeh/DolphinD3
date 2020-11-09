@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Dolphin.Service
@@ -36,8 +37,8 @@ namespace Dolphin.Service
 
             var itemClickDelay = 130;
             var transmuteDelay = 130;
-            var fillDelay = 0; // Care, Thread.Sleep(0)!
-            var backwardsDelay = 0; // Care, Thread.Sleep(0)!
+            var fillDelay = 0;
+            var backwardsDelay = 0;
             if (speed == ConvertingSpeed.Slow)
             {
                 fillDelay = 100;
@@ -93,8 +94,8 @@ namespace Dolphin.Service
 
             var itemClickDelay = 130;
             var transmuteDelay = 130;
-            var fillDelay = 0; // Care, Thread.Sleep(0)!
-            var backwardsDelay = 0; // Care, Thread.Sleep(0)!
+            var fillDelay = 0;
+            var backwardsDelay = 0;
             if (speed == ConvertingSpeed.Slow)
             {
                 fillDelay = 100;
@@ -232,8 +233,8 @@ namespace Dolphin.Service
 
             var itemClickDelay = 130;
             var transmuteDelay = 130;
-            var fillDelay = 0; // Care, Thread.Sleep(0)!
-            var backwardsDelay = 0; // Care, Thread.Sleep(0)!
+            var fillDelay = 0;
+            var backwardsDelay = 0;
             if (speed == ConvertingSpeed.Slow)
             {
                 fillDelay = 100;
@@ -388,8 +389,15 @@ namespace Dolphin.Service
                 var delay = configuration.Delays[index];
 
                 var key = index <= 3 ? skillKeybindings[index] : default;
-                Execute.Action(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
+                Execute.AndForgetAsync(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
             }
+
+            while (!IsCancelled(tokenSource))
+            {
+                Thread.Sleep(20);
+            }
+
+            return;
         }
 
         private void SendKeyWithDelay(IntPtr handle, CancellationTokenSource tokenSource, int index, int delay, Keys key = default)

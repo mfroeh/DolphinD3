@@ -365,6 +365,7 @@
 
                 <DataGrid
                     Grid.Column="0"
+                    MaxHeight="200"
                     Margin="{adonisUi:Space Top=0,
                                             Left=0}"
                     AutoGenerateColumns="False"

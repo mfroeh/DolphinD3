@@ -43,7 +43,7 @@ namespace Dolphin.Service
         private void OnHotkeyPressed(object o, HotkeyPressedEvent e)
         {
             var handle = handleService.GetHandle("Diablo III64");
-            if (handle?.Handle == default) return;
+            if (handle.IsDefault()) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
             if (actionName == ActionName.CancelAction || actionName == ActionName.Pause)
@@ -86,7 +86,7 @@ namespace Dolphin.Service
         private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {
             var handle = handleService.GetHandle("Diablo III64");
-            if (handle?.Handle == default || @event.NewOpenWindow == default) return;
+            if (handle.IsDefault() || @event.NewOpenWindow == default) return;
 
             var actionName = settingsService.GetSmartActionName(@event.NewOpenWindow);
             if (actionName == SmartActionName.UpgradeGem && tokenSource == null)

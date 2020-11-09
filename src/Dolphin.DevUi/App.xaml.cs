@@ -1,5 +1,6 @@
 ﻿using Dolphin.Image;
 using Dolphin.Service;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Dolphin.DevUi
@@ -12,21 +13,21 @@ namespace Dolphin.DevUi
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            var handleService = new HandleService(null);
-            handleService.MainLoop("Diablo III64");
-
-            var transformService = new TransformService(handleService);
+            
             var logService = new LogService(new Log());
+            var handleService = new HandleService(logService);
+            var transformService = new TransformService(handleService);
             var captureScreenService = new CaptureWindowService(handleService, logService);
             var cropImageService = new CropImageService(transformService, logService);
             var saveImageService = new SaveImageService(cropImageService);
 
-            var window = new MainWindow();
-            window.DataContext = new MainViewModel(captureScreenService, saveImageService);
-            window.Show();
+            handleService.MainLoop("Diablo III64");
 
-            handleService.MainLoop();
+            var window = new MainWindow
+            {
+                DataContext = new MainViewModel(captureScreenService, saveImageService)
+            };
+            window.Show();
         }
     }
 }

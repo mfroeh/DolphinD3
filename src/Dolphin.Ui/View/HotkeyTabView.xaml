@@ -499,7 +499,7 @@
                                             Bottom=0,
                                             Right=.5}"
                     ItemsSource="{Binding SkillCastProfiles}"
-                    SelectedItem="{Binding SelectedSkillCastProfile}" />
+                    SelectedIndex="{Binding SelectedSkillCastProfile}" />
 
                 <Label
                     Grid.Row="5"

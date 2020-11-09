@@ -16,6 +16,10 @@ namespace Dolphin.Ui
             {
                 property.Ignored = true;
             }
+            else if (typeof(SkillCastSettings).IsAssignableFrom(member.DeclaringType) && member.Name == nameof(SkillCastSettings.SelectedSkillCastConfiguration))
+            {
+                property.Ignored = true;
+            }
 
             return property;
         }

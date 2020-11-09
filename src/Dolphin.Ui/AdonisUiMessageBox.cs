@@ -4,16 +4,12 @@ using System.Windows;
 
 namespace Dolphin.Ui
 {
-    internal class CustomMessageBox : IMessageBox
+    internal class AdonisUiMessageBox : IMessageBox
     {
         private readonly AdonisUI.Controls.MessageBoxModel messageBoxModel;
         private readonly MessageBoxSettings settings;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomMessageBox"/> class.
-        /// </summary>
-        /// <param name="settings">The settings for the folder browser dialog.</param>
-        public CustomMessageBox(MessageBoxSettings settings)
+        public AdonisUiMessageBox(MessageBoxSettings settings)
         {
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
@@ -25,21 +21,12 @@ namespace Dolphin.Ui
             SetUpIcon();
         }
 
-        /// <summary>
-        /// Opens a message box with specified owner.
-        /// </summary>
-        /// <param name="owner">
-        /// Handle to the window that owns the dialog.
-        /// </param>
-        /// <returns>
-        /// A <see cref="MessageBoxResult"/> value that specifies which message box button is
-        /// clicked by the user.
-        /// </returns>
-        public System.Windows.MessageBoxResult Show(Window owner)
+        public MessageBoxResult Show(Window owner)
         {
             if (owner == null) throw new ArgumentNullException(nameof(owner));
 
             var result = AdonisUI.Controls.MessageBox.Show(owner, messageBoxModel);
+
             return ToMessageBoxResult(result);
         }
 
@@ -81,7 +68,7 @@ namespace Dolphin.Ui
                     break;
 
                 default:
-                    messageBoxModel.Buttons = new[] { AdonisUI.Controls.MessageBoxButtons.Yes() };
+                    messageBoxModel.Buttons = new[] { AdonisUI.Controls.MessageBoxButtons.Ok() };
                     break;
             }
         }
@@ -94,12 +81,16 @@ namespace Dolphin.Ui
                     messageBoxModel.Icon = AdonisUI.Controls.MessageBoxImage.Error;
                     break;
 
-                case MessageBoxImage.Information:
-                    messageBoxModel.Icon = AdonisUI.Controls.MessageBoxImage.Information;
+                case MessageBoxImage.Question:
+                    messageBoxModel.Icon = AdonisUI.Controls.MessageBoxImage.Question;
                     break;
 
                 case MessageBoxImage.Warning:
                     messageBoxModel.Icon = AdonisUI.Controls.MessageBoxImage.Warning;
+                    break;
+
+                case MessageBoxImage.Information:
+                    messageBoxModel.Icon = AdonisUI.Controls.MessageBoxImage.Information;
                     break;
 
                 default:

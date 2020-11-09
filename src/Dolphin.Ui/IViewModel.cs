@@ -2,9 +2,9 @@
 
 namespace Dolphin.Ui
 {
-    public interface IViewModelBase : INotifyPropertyChanged
+    public interface IViewModel : INotifyPropertyChanged
     {
-        IViewModelBase Parent { get; set; }
+        IViewModel Parent { get; set; }
 
         void RaisePropertyChanged(string propertyName);
     }

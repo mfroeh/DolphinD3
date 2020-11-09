@@ -116,7 +116,6 @@ namespace Dolphin.Service
 
                 default:
                     throw new NotImplementedException($"Cancellable Macro not implemented for {actionName}");
-                    break;
             }
         }
 

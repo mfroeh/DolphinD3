@@ -1,5 +1,4 @@
 ﻿using Dolphin.Enum;
-using MvvmDialogs;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -7,20 +6,30 @@ using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Ui.Dialog
 {
-    public class ChangeHotkeyDialogViewModel : ViewModelBase, IModalDialogViewModel
+    public class ChangeHotkeyDialogViewModel : ViewModelBase, IDialogViewModel
     {
-        private readonly IDialogService dialogService;
+        #region Private Fields
+
+        private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
 
         private bool? dialogResult;
         private Hotkey hotkey;
         private Hotkey oldHotkey;
 
-        public ChangeHotkeyDialogViewModel(ISettingsService settingsService, IDialogService dialogService)
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public ChangeHotkeyDialogViewModel(ISettingsService settingsService, IMessageBoxService messageBoxService)
         {
             this.settingsService = settingsService;
-            this.dialogService = dialogService;
+            this.messageBoxService = messageBoxService;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public ICommand CancelCommand => new RelayCommand((_) => DialogResult = false);
 
@@ -33,7 +42,7 @@ namespace Dolphin.Ui.Dialog
             set
             {
                 dialogResult = value;
-                RaisePropertyChanged("DialogResult");
+                RaisePropertyChanged(nameof(DialogResult));
             }
         }
 
@@ -45,7 +54,7 @@ namespace Dolphin.Ui.Dialog
             set
             {
                 hotkey = value;
-                RaisePropertyChanged("Hotkey");
+                RaisePropertyChanged(nameof(Hotkey));
             }
         }
 
@@ -53,12 +62,21 @@ namespace Dolphin.Ui.Dialog
 
         public ICommand SaveCommand => new RelayCommand(SaveCommandAction);
 
-        public void Initialize(Hotkey currentHotkey, ActionName actionToEdit)
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public void Initialize(params object[] @params)
         {
-            oldHotkey = currentHotkey;
-            hotkey = currentHotkey;
-            EditingAction = actionToEdit;
+            oldHotkey = (Hotkey)@params[0];
+            hotkey = (Hotkey)@params[0];
+
+            EditingAction = (ActionName)@params[1];
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private void SaveCommandAction(object o)
         {
@@ -76,25 +94,15 @@ namespace Dolphin.Ui.Dialog
 
                 if (actionWithSameHotkey != ActionName.None)
                 {
-                    var result = ShowWarningMessageBox($"{Hotkey} is already allocated to {actionWithSameHotkey}. Delete existing allocation?");
+                    var result = messageBoxService.ShowYesNo(this, "Hotkey allocation found", $"{Hotkey} is already allocated to {actionWithSameHotkey}. Delete existing allocation?");
 
-                    if (!result) return;
+                    if (result != MessageBoxResult.Yes) return;
                 }
             }
 
             DialogResult = true;
         }
 
-        private bool ShowWarningMessageBox(string text)
-        {
-            var result = dialogService.ShowMessageBox(
-                            this,
-                            text,
-                            "Existing Hotkey allocation found",
-                            MessageBoxButton.OKCancel,
-                            MessageBoxImage.Warning);
-
-            return result == MessageBoxResult.OK;
-        }
+        #endregion Private Methods
     }
 }

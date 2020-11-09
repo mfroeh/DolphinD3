@@ -59,7 +59,7 @@ namespace Dolphin.Image
 
         private Skill ExtractSkill(Bitmap picturePart, int index, Bitmap fullBitmap)
         {
-            foreach (var skillName in modelService.PossibleSkills(index >= 4))
+            foreach (var skillName in modelService.PossibleSkills())
             {
                 var template = resourceService.LoadSkillBitmap(skillName, index >= 4);
                 var similiaryPercentage = ImageHelper.Compare(picturePart, template);

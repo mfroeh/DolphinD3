@@ -12,28 +12,37 @@ namespace Dolphin.Ui.ViewModel
 {
     public class FeatureTabViewModel : ViewModelBase
     {
+        #region Private Fields
+
         private readonly IDialogService dialogService;
+        private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
         private readonly IUnityContainer unityContainer;
         private ICommand addSkillCastProfile;
         private ICommand changeSelectedSkillCastProfile;
         private ICommand deleteSelectedSkillCastProfile;
         private bool isOpenRift;
+        private SkillCastConfiguration selectedSkillCastConfiguration;
         private bool skillCastingEnabled;
         private ICommand skillCheckboxClicked;
         private ICommand smartActionCheckboxClicked;
         private bool smartActionsEnabled;
 
-        public FeatureTabViewModel(ISettingsService settingsService, IUnityContainer unityContainer, IDialogService dialogService)
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public FeatureTabViewModel(ISettingsService settingsService, IUnityContainer unityContainer, IDialogService dialogService, IMessageBoxService messageBoxService)
         {
             this.settingsService = settingsService;
             this.dialogService = dialogService;
             this.unityContainer = unityContainer;
+            this.messageBoxService = messageBoxService;
 
             EnabledSkills = new ObservableDictionary<SkillName, bool>();
             foreach (var playerClass in System.Enum.GetValues(typeof(PlayerClass)).Cast<PlayerClass>())
             {
-                foreach (var skill in playerClass.PossibleSkills(false))
+                foreach (var skill in playerClass.PossibleSkills())
                 {
                     EnabledSkills[skill] = settingsService.SkillIsEnabled(skill);
                 }
@@ -56,11 +65,14 @@ namespace Dolphin.Ui.ViewModel
             SelectedSkillCastProfile = SkillCastProfiles.FirstOrDefault();
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public ICommand AddSkillCastProfile
         {
             get
             {
-
                 addSkillCastProfile = addSkillCastProfile ?? new RelayCommand((o) =>
                 {
                     var profile = new SkillCastConfiguration
@@ -83,7 +95,6 @@ namespace Dolphin.Ui.ViewModel
             {
                 changeSelectedSkillCastProfile = changeSelectedSkillCastProfile ?? new RelayCommand((o) =>
                 {
-
                     if (SelectedSkillCastProfile != default)
                     {
                         SkillCastProfileDialog(SelectedSkillCastProfile, false);
@@ -100,10 +111,12 @@ namespace Dolphin.Ui.ViewModel
             {
                 deleteSelectedSkillCastProfile = deleteSelectedSkillCastProfile ?? new RelayCommand((o) =>
                 {
+                    //if (SelectedSkillCastProfile != settingsService.SkillCastSettings.SelectedSkillCastConfiguration)
+                    //{
                     settingsService.SkillCastSettings.SkillCastConfigurations.Remove(SelectedSkillCastProfile);
                     SkillCastProfiles.Remove(SelectedSkillCastProfile);
-
                     SelectedSkillCastProfile = SkillCastProfiles.FirstOrDefault();
+                    //}
                 });
 
                 return deleteSelectedSkillCastProfile;
@@ -123,8 +136,6 @@ namespace Dolphin.Ui.ViewModel
                 settingsService.SmartFeatureSettings.IsOpenRift = value;
             }
         }
-
-        private SkillCastConfiguration selectedSkillCastConfiguration;
 
         public SkillCastConfiguration SelectedSkillCastProfile
         {
@@ -179,6 +190,10 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        #endregion Public Properties
+
+        #region Private Methods
+
         private void ChangeSkillEnabled(SkillName name)
         {
             EnabledSkills[name] = !EnabledSkills[name];
@@ -209,7 +224,7 @@ namespace Dolphin.Ui.ViewModel
 
         private void SkillCastProfileDialog(SkillCastConfiguration skillCastProfile, bool isNew)
         {
-            var dialogViewModel = unityContainer.Resolve<ChangeSkillCastProfileDialogViewModel>("changeSkillCastProfile");
+            var dialogViewModel = unityContainer.Resolve<IDialogViewModel>("skillCast");
             dialogViewModel.Initialize(skillCastProfile);
 
             bool? success = dialogService.ShowDialog(this, dialogViewModel);
@@ -228,5 +243,7 @@ namespace Dolphin.Ui.ViewModel
                 }
             }
         }
+
+        #endregion Private Methods
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Dolphin.Enum;
-using MvvmDialogs;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,17 +13,23 @@ namespace Dolphin.Ui.ViewModel
 {
     public class SettingsTabViewModel : ViewModelBase
     {
-        private readonly IDialogService dialogService;
+        #region Private Fields
+
+        private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
         private IDictionary<CommandKeybinding, Keys> otherKeybindings;
         private ICollection<Keys> skillKeybindings;
 
         private uint updateInterval;
 
-        public SettingsTabViewModel(ISettingsService settingsService, IDialogService dialogService)
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public SettingsTabViewModel(ISettingsService settingsService, IMessageBoxService messageBoxService)
         {
             this.settingsService = settingsService;
-            this.dialogService = dialogService;
+            this.messageBoxService = messageBoxService;
 
             PossibleKeys = System.Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList();
             SkillKeybindings = new ObservableCollection<Keys>(settingsService.Settings.SkillKeybindings);
@@ -35,11 +40,16 @@ namespace Dolphin.Ui.ViewModel
             PoolSpots.ListChanged += PoolSpotsChangedHandler;
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public IDictionary<CommandKeybinding, Keys> OtherKeybindings
         {
             get
             {
                 settingsService.Settings.OtherKeybindings = otherKeybindings; // This cant be the right way. How does this work?
+
                 return otherKeybindings;
             }
             set
@@ -57,7 +67,7 @@ namespace Dolphin.Ui.ViewModel
         {
             get
             {
-                return new RelayCommand(ResetSettings);
+                return new RelayCommand(ShowResetDialog);
             }
         }
 
@@ -66,6 +76,7 @@ namespace Dolphin.Ui.ViewModel
             get
             {
                 settingsService.Settings.SkillKeybindings = skillKeybindings.ToList(); // This cant be the right way
+
                 return skillKeybindings;
             }
             set
@@ -87,34 +98,32 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        protected void ShowRestartDialog()
-        {
-            dialogService.ShowMessageBox(this, "A restart is required in order for these changes to take effect. Restarting now.", "Restart required", MessageBoxButton.OK);
-            var json = JsonConvert.SerializeObject(settingsService.Settings);
-            File.WriteAllText("settings.json", json);
+        #endregion Public Properties
 
-            System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
-            System.Windows.Application.Current.Shutdown(2);
-        }
+        #region Private Methods
 
         private void PoolSpotsChangedHandler(object o, ListChangedEventArgs e)
         {
             settingsService.MacroSettings.Poolspots = PoolSpots.ToList();
         }
 
-        private void ResetSettings(object o)
+        private void ShowResetDialog(object o)
         {
-            var result = dialogService.ShowMessageBox(this, "Are you sure you want to reset all existing settings?",
-                            "Reset settings",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Warning);
-
+            var result = messageBoxService.ShowYesNo(this, "Reset settings", "Are you sure you want to reset the settings?", MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 settingsService.ResetSettings();
 
-                ShowRestartDialog();
+                messageBoxService.ShowOK(this, "A restart is required in order for these changes to take effect. Restarting now.", "Restart required");
+
+                var json = JsonConvert.SerializeObject(settingsService.Settings);
+                File.WriteAllText("settings.json", json);
+
+                System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
+                System.Windows.Application.Current.Shutdown(2);
             }
         }
+
+        #endregion Private Methods
     }
 }

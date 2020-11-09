@@ -47,9 +47,8 @@ namespace Dolphin.Service
         {
             lock (internalLog)
             {
-                File.AppendAllLines(savePath, internalLog.Entries.Select(x => x.FullMessage));
+                File.AppendAllLines(savePath, internalLog.Entries.Where(x => x.LogLevel.CompareTo(LogLevel.Info) <= 0).Select(x => x.FullMessage));
             }
-            //TODO: File.AppendAllLines(savePath, internalLog.Entries);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

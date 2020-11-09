@@ -37,27 +37,27 @@
             Orientation="Horizontal">
             <StackPanel Margin="{adonisUi:Space Left=0}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="1st skill delay" />
-                <TextBox Text="{Binding Path=Delays[0]}" />
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[0]}" />
             </StackPanel>
             <StackPanel Margin="{adonisUi:Space Left=0}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="2nd skill delay" />
-                <TextBox Text="{Binding Path=Delays[1]}" />
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[1]}" />
             </StackPanel>
             <StackPanel Margin="{adonisUi:Space Left=0}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="3rd skill delay" />
-                <TextBox Text="{Binding Path=Delays[2]}" />
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[2]}" />
             </StackPanel>
             <StackPanel Margin="{adonisUi:Space Left=0}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="4th skill delay" />
-                <TextBox Text="{Binding Path=Delays[3]}" />
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[3]}" />
             </StackPanel>
             <StackPanel Margin="{adonisUi:Space Left=0}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="5th skill delay" />
-                <TextBox Text="{Binding Path=Delays[4]}" />
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[4]}" />
             </StackPanel>
             <StackPanel Margin="{adonisUi:Space Left=0}">
                 <Label Margin="{adonisUi:Space Left=0, Top=0, Right=0}" Content="6th skill delay" />
-                <TextBox Text="{Binding Path=Delays[5]}" />
+                <TextBox PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding Path=Delays[5]}" />
             </StackPanel>
         </StackPanel>
 

@@ -10,13 +10,19 @@ namespace Dolphin.Ui.ViewModel
 {
     public class LogTabViewModel : ViewModelBase
     {
+        #region Private Fields
+
         private readonly object logLock = new object();
         private readonly ILogService logService;
         private readonly ISettingsService settingsService;
-        
+
         private ICommand clipLogEntryCommand;
         private LogLevel displayLogLevel;
         private bool logPaused;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public LogTabViewModel(ISettingsService settingsService, ILogService logService)
         {
@@ -31,6 +37,10 @@ namespace Dolphin.Ui.ViewModel
 
             BindingOperations.EnableCollectionSynchronization(LogMessages, logLock);
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public ICommand ClipLogEntryCommand
         {
@@ -71,6 +81,10 @@ namespace Dolphin.Ui.ViewModel
 
         public LogEntry SelectedLogItem { get; set; }
 
+        #endregion Public Properties
+
+        #region Private Methods
+
         private void OnEntryAdded(object sender, LogEntryEventArgs e)
         {
             if (!LogPaused && e.LogLevel.CompareTo(DisplayLogLevel) <= 0)
@@ -78,5 +92,7 @@ namespace Dolphin.Ui.ViewModel
                 LogMessages.Add(e.LogEntry);
             }
         }
+
+        #endregion Private Methods
     }
 }

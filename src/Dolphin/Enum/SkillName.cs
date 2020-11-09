@@ -21,12 +21,12 @@ namespace Dolphin.Enum
 
     public static class SkillNameExtensionMethods
     {
-        public static IEnumerable<SkillName> PossibleSkills(this Player player, bool isMouse)
+        public static IEnumerable<SkillName> PossibleSkills(this Player player)
         {
-            return PossibleSkills(player.Class, isMouse);
+            return PossibleSkills(player.Class);
         }
 
-        public static IEnumerable<SkillName> PossibleSkills(this PlayerClass @class, bool isMouse)
+        public static IEnumerable<SkillName> PossibleSkills(this PlayerClass @class)
         {
             switch (@class)
             {

@@ -1,8 +1,11 @@
 ﻿using Dolphin.Image;
 using Dolphin.Service;
 using Dolphin.Ui.Dialog;
+using Dolphin.Ui.View;
 using Dolphin.Ui.ViewModel;
 using MvvmDialogs;
+using MvvmDialogs.DialogFactories;
+using MvvmDialogs.DialogTypeLocators;
 using MvvmDialogs.FrameworkDialogs;
 using Newtonsoft.Json;
 using RestoreWindowPlace;
@@ -11,7 +14,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Unity;
 using Unity.Lifetime;
@@ -24,7 +26,7 @@ namespace Dolphin.Ui
     /// </summary>
     public partial class App : Application
     {
-        private IUnityContainer container = new UnityContainer();
+        private readonly IUnityContainer container = new UnityContainer();
 
         public WindowPlace WindowPlace { get; private set; }
 
@@ -50,7 +52,6 @@ namespace Dolphin.Ui
             var settings = LoadSettings();
 
             #region Register
-            container.RegisterInstance(container); // TODO: Is this the proper way?
 
             container.RegisterInstance(settings);
 
@@ -66,6 +67,7 @@ namespace Dolphin.Ui
             container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
             container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
             container.RegisterType<IEventPublisher<WorldInformationChangedEvent>, ExtractWorldInformationService>("extractWorldInformation");
+
             container.RegisterType<IEventSubscriber, ExecuteActionService>("macro");
             container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
 
@@ -88,25 +90,30 @@ namespace Dolphin.Ui
             container.RegisterType<ITravelInformationService, TravelInformationService>();
             container.RegisterType<IConditionFinderService, ConditionFinderService>();
 
-            container.RegisterType<IViewModelBase, MainViewModel>("main");
-            container.RegisterType<IViewModelBase, HotkeyTabViewModel>("hotkeyTab");
-            container.RegisterType<IViewModelBase, FeatureTabViewModel>("featureTab");
-            container.RegisterType<IViewModelBase, LogTabViewModel>("logTab");
-            container.RegisterType<IModalDialogViewModel, ChangeHotkeyDialogViewModel>("changeHotkey");
-            container.RegisterType<IModalDialogViewModel, ChangeSkillCastProfileDialogViewModel>("changeSkillCastProfileDialog");
-            container.RegisterType<IViewModelBase, SettingsTabViewModel>("settingsTab");
-            container.RegisterType<IViewModelBase, OverviewTabViewModel>("overviewTab");
+            container.RegisterType<ActionService, ActionService>();
 
+            container.RegisterType<IViewModel, MainViewModel>("main");
+            container.RegisterType<IViewModel, HotkeyTabViewModel>("hotkeyTab");
+            container.RegisterType<IViewModel, FeatureTabViewModel>("featureTab");
+            container.RegisterType<IViewModel, LogTabViewModel>("logTab");
+            container.RegisterType<IViewModel, SettingsTabViewModel>("settingsTab");
+            container.RegisterType<IViewModel, OverviewTabViewModel>("overviewTab");
+
+            container.RegisterType<IDialogService, DialogService>();
+            container.RegisterType<IDialogFactory, ReflectionDialogFactory>();
+            container.RegisterType<IDialogTypeLocator, NamingConventionDialogTypeLocator>();
             container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
-            container.RegisterType<MvvmDialogs.IDialogService, MvvmDialogs.DialogService>();
 
-            container.RegisterType<ActionService, ActionService>(); // Does this work?
+            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("hotkey");
+            container.RegisterType<IDialogViewModel, ChangeSkillCastProfileDialogViewModel>("skillCast");
+
+            container.RegisterType<IMessageBoxService, MessageBoxService>();
 
             #endregion Register
 
             container.AddExtension(new Diagnostic());
 
-            var mainVM = container.Resolve<IViewModelBase>("main");
+            var mainVM = container.Resolve<IViewModel>("main");
             MainWindow = new MainWindow { DataContext = mainVM };
             MainWindow.Show();
 
@@ -146,18 +153,15 @@ namespace Dolphin.Ui
                     {
                         using (var image = captureService.CaptureWindow("Diablo III64"))
                         {
-
-
                             if (_settings.SmartFeatureSettings.SkillCastingEnabled)
                             {
                                 extractSkillService.Extract(image);
                                 extractPlayerService.Extract(image);
                             }
 
-
                             if (_settings.SmartFeatureSettings.SmartActionsEnabled)
                             {
-                                //   extractWorldService.Extract(image);
+                                // extractWorldService.Extract(image);
                             }
                             watch.Stop();
                             Trace.WriteLine(watch.ElapsedMilliseconds);

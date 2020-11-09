@@ -8,7 +8,7 @@ namespace Dolphin.Service
     {
         private readonly HotkeyListener hotkeyListener;
         private readonly ILogService logService;
-        private readonly ISettingsService settingsService; // TODO: Remove if not needed
+        private readonly ISettingsService settingsService;
 
         public HotkeyListenerService(IEventBus eventBus, ISettingsService settingsService, HotkeyListener hotkeyListener, ILogService logService) : base(eventBus)
         {

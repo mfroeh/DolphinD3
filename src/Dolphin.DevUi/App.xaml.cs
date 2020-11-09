@@ -13,7 +13,7 @@ namespace Dolphin.DevUi
         {
             base.OnStartup(e);
 
-            var handleService = new HandleService();
+            var handleService = new HandleService(null);
             handleService.MainLoop("Diablo III64");
 
             var transformService = new TransformService(handleService);

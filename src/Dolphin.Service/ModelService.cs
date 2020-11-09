@@ -53,9 +53,9 @@ namespace Dolphin.Service
             return Player.PossibleSecondaryResource();
         }
 
-        public IEnumerable<SkillName> PossibleSkills(bool isMouse) // TODO: Can all skills be on the right mouse button? then this isnt needed here
+        public IEnumerable<SkillName> PossibleSkills()
         {
-            return Player.PossibleSkills(isMouse);
+            return Player.PossibleSkills();
         }
 
         public void SetPlayerHealth(PlayerHealth health)

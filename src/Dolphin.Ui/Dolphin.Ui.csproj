@@ -62,12 +62,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BoolInverterConverter.cs" />
-    <Compile Include="CustomFrameworkDialogFactory.cs" />
-    <Compile Include="CustomMessageBox.cs" />
-    <Compile Include="Dialog\ChangeSkillCastProfileDialog.xaml.cs">
+    <Compile Include="Dialog\CustomFrameworkDialogFactory.cs" />
+    <Compile Include="AdonisUiMessageBox.cs" />
+    <Compile Include="Dialog\IDialogViewModel.cs" />
+    <Compile Include="Dialog\View\ChangeSkillCastProfileDialog.xaml.cs">
       <DependentUpon>ChangeSkillCastProfileDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\ChangeSkillCastProfileDialogViewModel.cs" />
+    <Compile Include="Dialog\ViewModel\ChangeSkillCastProfileDialogViewModel.cs" />
+    <Compile Include="IMessageBoxService.cs" />
+    <Compile Include="MessageBoxService.cs" />
     <Compile Include="ShouldSerializeContractResolver.cs" />
     <Compile Include="ViewModel\OverviewTabViewModel.cs" />
     <Compile Include="ViewModel\SettingsTabViewModel.cs" />
@@ -92,20 +95,20 @@
     <Compile Include="View\LogTabView.xaml.cs">
       <DependentUpon>LogTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\ChangeHotkeyDialog.xaml.cs">
+    <Compile Include="Dialog\View\ChangeHotkeyDialog.xaml.cs">
       <DependentUpon>ChangeHotkeyDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\ChangeHotkeyDialogViewModel.cs" />
+    <Compile Include="Dialog\ViewModel\ChangeHotkeyDialogViewModel.cs" />
     <Compile Include="ViewModel\HotkeyTabViewModel.cs" />
-    <Compile Include="IViewModelBase.cs" />
+    <Compile Include="IViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModelBase.cs" />
-    <Page Include="Dialog\ChangeHotkeyDialog.xaml">
+    <Page Include="Dialog\View\ChangeHotkeyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialog\ChangeSkillCastProfileDialog.xaml">
+    <Page Include="Dialog\View\ChangeSkillCastProfileDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,7 +19,7 @@ namespace Dolphin
 
         IEnumerable<Enum.PlayerResource> PossibleSecondaryResourceEnum();
 
-        IEnumerable<SkillName> PossibleSkills(bool isMouse);
+        IEnumerable<SkillName> PossibleSkills();
 
         void SetPlayerHealth(PlayerHealth health);
 

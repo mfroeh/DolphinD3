@@ -74,7 +74,7 @@ namespace Dolphin.Service
             Settings = new Settings(true);
         }
 
-        // Todo: Implement for specific types?
+        // Todo: Implement for specific subtypes?
         public void ResetSettings<T>()
         {
             ResetSettings();

@@ -7,12 +7,18 @@ namespace Dolphin.Ui.ViewModel
 {
     public class OverviewTabViewModel : ViewModelBase, IEventSubscriber
     {
+        #region Private Fields
+
         private readonly IEventBus eventBus;
         private readonly IHandleService handleService;
         private readonly IModelService modelService;
         private readonly ISettingsService settingsService;
 
         private ICommand negateSuspendedCommand;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService, ISettingsService settingsService)
         {
@@ -55,6 +61,12 @@ namespace Dolphin.Ui.ViewModel
             SkillIndexSuspensionStatus = new ObservableCollection<bool>(settingsService.SmartFeatureSettings.SkillSuspensionStatus);
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public ObservableCollection<string> CurrentActiveState { get; set; }
+
         public int CurrentHealth { get; set; }
 
         public WorldLocation CurrentLocation { get; set; }
@@ -68,7 +80,7 @@ namespace Dolphin.Ui.ViewModel
         public ObservableCollection<string> CurrentSkills { get; set; }
 
         public ObservableCollection<string> CurrentSkillState { get; set; }
-        public ObservableCollection<string> CurrentActiveState { get; set; }
+
         public string DiabloClientRectangle { get; set; }
 
         public uint DiabloProcessId { get; set; }
@@ -85,6 +97,10 @@ namespace Dolphin.Ui.ViewModel
         public Window OpenWindow { get; set; }
 
         public ObservableCollection<bool> SkillIndexSuspensionStatus { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
 
         private string GetResourcePath(SkillName skillName)
         {
@@ -197,9 +213,6 @@ namespace Dolphin.Ui.ViewModel
             eventBus.Subscribe(subscription);
         }
 
-        private void UnsubscribeBus<T>(Subscription<T> subscription) where T : IEvent
-        {
-            eventBus.Unsubscribe(subscription);
-        }
+        #endregion Private Methods
     }
 }

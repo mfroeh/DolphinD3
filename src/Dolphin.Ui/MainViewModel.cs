@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Unity;
 
-namespace Dolphin.Ui
+namespace Dolphin.Ui.ViewModel
 {
     public class MainViewModel : ViewModelBase, IEventSubscriber
     {
@@ -18,23 +18,23 @@ namespace Dolphin.Ui
             this.eventBus = eventBus;
             this.settingsService = settingsService;
 
-            var hotkeyTab = container.Resolve<IViewModelBase>("hotkeyTab");
+            var hotkeyTab = container.Resolve<IViewModel>("hotkeyTab");
             hotkeyTab.Parent = this;
             Children.Add(hotkeyTab);
 
-            var featureTab = container.Resolve<IViewModelBase>("featureTab");
+            var featureTab = container.Resolve<IViewModel>("featureTab");
             featureTab.Parent = this;
             Children.Add(featureTab);
 
-            var logTab = container.Resolve<IViewModelBase>("logTab");
+            var logTab = container.Resolve<IViewModel>("logTab");
             logTab.Parent = this;
             Children.Add(logTab);
 
-            var settingsTab = container.Resolve<IViewModelBase>("settingsTab");
+            var settingsTab = container.Resolve<IViewModel>("settingsTab");
             settingsTab.Parent = this;
             Children.Add(settingsTab);
 
-            var overviewTab = container.Resolve<IViewModelBase>("overviewTab");
+            var overviewTab = container.Resolve<IViewModel>("overviewTab");
             overviewTab.Parent = this;
             Children.Add(overviewTab);
 
@@ -45,7 +45,7 @@ namespace Dolphin.Ui
             SubscribeBus(pauseSubscription);
         }
 
-        public ICollection<IViewModelBase> Children { get; } = new ObservableCollection<IViewModelBase>();
+        public ICollection<IViewModel> Children { get; } = new ObservableCollection<IViewModel>();
 
         public bool IsDark
         {

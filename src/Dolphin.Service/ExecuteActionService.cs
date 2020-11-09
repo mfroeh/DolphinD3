@@ -47,16 +47,17 @@ namespace Dolphin.Service
         private void OnHotkeyPressed(object o, HotkeyPressedEvent e)
         {
             var handle = handleService.GetHandle("Diablo III64");
+
+            if (e.PressedHotkey.KeyCode == Keys.Escape && e.PressedHotkey.Modifiers == Keys.None && tokenSource == null)
+            {
+                InputHelper.SendKey(handle.IsDefault() ? WindowHelper.GetForegroundWindow() : handle.Handle, Keys.Escape);
+            }
+
             if (handle.IsDefault()) return;
 
             var actionName = settingsService.GetActionName(e.PressedHotkey);
             if (actionName == ActionName.Pause || (e.PressedHotkey.KeyCode == Keys.Escape && e.PressedHotkey.Modifiers == Keys.None))
             {
-                if (e.PressedHotkey.KeyCode == Keys.Escape && tokenSource == null)
-                {
-                    InputHelper.SendKey(handle.Handle, Keys.Escape);
-                }
-
                 if (tokenSource != null)
                 {
                     tokenSource.Cancel();

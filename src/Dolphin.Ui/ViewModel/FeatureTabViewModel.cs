@@ -14,10 +14,8 @@ namespace Dolphin.Ui.ViewModel
     {
         #region Private Fields
 
-        private readonly IDialogService dialogService;
         private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
-        private readonly IUnityContainer unityContainer;
         private ICommand addSkillCastProfile;
         private ICommand changeSelectedSkillCastProfile;
         private ICommand deleteSelectedSkillCastProfile;
@@ -32,11 +30,9 @@ namespace Dolphin.Ui.ViewModel
 
         #region Public Constructors
 
-        public FeatureTabViewModel(ISettingsService settingsService, IUnityContainer unityContainer, IDialogService dialogService, IMessageBoxService messageBoxService)
+        public FeatureTabViewModel(ISettingsService settingsService, IMessageBoxService messageBoxService)
         {
             this.settingsService = settingsService;
-            this.dialogService = dialogService;
-            this.unityContainer = unityContainer;
             this.messageBoxService = messageBoxService;
 
             EnabledSkills = new ObservableDictionary<SkillName, bool>();
@@ -224,10 +220,7 @@ namespace Dolphin.Ui.ViewModel
 
         private void ChangeSkillCastProfileDialog(SkillCastConfiguration skillCastProfile)
         {
-            var dialogViewModel = unityContainer.Resolve<IDialogViewModel>("skillCast");
-            dialogViewModel.Initialize(skillCastProfile);
-
-            bool? success = dialogService.ShowDialog(this, dialogViewModel);
+            bool? success = messageBoxService.ShowCustomDialog(this, "skillCast", skillCastProfile);
             if (success == true)
             {
                 var index = SkillCastProfiles.IndexOf(skillCastProfile);

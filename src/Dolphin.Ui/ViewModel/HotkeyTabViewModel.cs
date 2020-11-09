@@ -114,10 +114,10 @@ namespace Dolphin.Ui.ViewModel
 
         public string SelectedSkillCastProfile
         {
-            get => settingsService.SkillCastSettings.SelectedSkillCastConfiguration?.ToString();
+            get => settingsService.SkillCastSettings.SelectedSkillCastConfiguration?.Name;
             set
             {
-                var profile = settingsService.SkillCastSettings.SkillCastConfigurations.First(x => x.Name == value);
+                var profile = settingsService.SkillCastSettings.SkillCastConfigurations.FirstOrDefault(x => x.Name == value);
                 settingsService.SkillCastSettings.SelectedSkillCastConfiguration = profile;
                 RaisePropertyChanged(nameof(SelectedSkillCastProfile));
             }

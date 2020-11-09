@@ -45,7 +45,7 @@ namespace Dolphin.Ui.ViewModel
             SubscribeBus(pauseSubscription);
         }
 
-        public ICollection<IViewModel> Children { get; } = new ObservableCollection<IViewModel>();
+        public ObservableCollection<IViewModel> Children { get; } = new ObservableCollection<IViewModel>();
 
         public bool IsDark
         {

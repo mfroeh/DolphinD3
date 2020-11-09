@@ -72,6 +72,9 @@
     <Compile Include="IMessageBoxService.cs" />
     <Compile Include="MessageBoxService.cs" />
     <Compile Include="ShouldSerializeContractResolver.cs" />
+    <Compile Include="SplashScreen.xaml.cs">
+      <DependentUpon>SplashScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\OverviewTabViewModel.cs" />
     <Compile Include="ViewModel\SettingsTabViewModel.cs" />
     <Compile Include="View\OverviewTabView.xaml.cs">
@@ -124,6 +127,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SplashScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FeatureTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1239,6 +1246,9 @@
   <ItemGroup>
     <Resource Include="Resource\Class\CrusaderFemale.png" />
     <Resource Include="Resource\Class\CrusaderMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\splashScreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

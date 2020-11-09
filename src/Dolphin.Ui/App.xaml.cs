@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Unity;
 using Unity.Lifetime;
@@ -38,6 +39,7 @@ namespace Dolphin.Ui
             {
                 var settings = container.Resolve<Settings>();
                 var json = JsonConvert.SerializeObject(settings);
+                container.Resolve<ILogService>().SaveLog();
                 File.WriteAllText("settings.json", json);
                 WindowPlace.Save();
             }
@@ -47,84 +49,36 @@ namespace Dolphin.Ui
         {
             base.OnStartup(e);
 
-            WindowPlace = new WindowPlace("placement.config");
+            var splashScreen = new SplashScreen();
+            MainWindow = splashScreen;
+            splashScreen.Show();
 
-            var settings = LoadSettings();
+            Task.Factory.StartNew(() =>
+            {
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Registering dependencies");
+                RegisterTypes();
 
-            #region Register
+                // var task = Task.Factory.StartNew(() => TaskCreationOptions.LongRunning);
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Starting BackgroundWorker");
+                var backgroundWorker = new BackgroundWorker();
+                backgroundWorker.DoWork += DoWork;
+                backgroundWorker.RunWorkerAsync();
 
-            container.RegisterInstance(settings);
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Resolving dependencies");
+                container.Resolve<IEventSubscriber>("macro");
+                container.Resolve<IEventSubscriber>("skill");
 
-            container.RegisterInstance(new Player());
-            container.RegisterInstance(new World());
-            container.RegisterInstance(new Log());
-            container.RegisterInstance(new HotkeyListener());
+                Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Launching main window");
+                Execute.OnUIThread(() =>
+                {
+                    WindowPlace = new WindowPlace("placement.config");
 
-            container.RegisterType<IEventBus, EventBus>(new ContainerControlledLifetimeManager());
-
-            container.RegisterType<IEventPublisher<PlayerInformationChangedEvent>, ExtractPlayerInformationService>("extractPlayerInformation");
-            container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
-            container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
-            container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
-            container.RegisterType<IEventPublisher<WorldInformationChangedEvent>, ExtractWorldInformationService>("extractWorldInformation");
-
-            container.RegisterType<IEventSubscriber, ExecuteActionService>("macro");
-            container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
-
-            container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("extractPlayerInformation");
-            container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("extractSkillInformation");
-            container.RegisterType<IExtractInformationService, ExtractWorldInformationService>("extractWorldInformation");
-
-            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ICaptureWindowService, CaptureWindowService>();
-            container.RegisterType<ICropImageService, CropImageService>();
-            container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IModelService, ModelService>();
-            container.RegisterType<IResourceService, ResourceService>();
-            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IActionFinderService, ActionFinderService>();
-            container.RegisterType<ITransformService, TransformService>();
-            container.RegisterType<IPoolSpotService, PoolSpotService>();
-            container.RegisterType<ITravelInformationService, TravelInformationService>();
-            container.RegisterType<IConditionFinderService, ConditionFinderService>();
-
-            container.RegisterType<ActionService, ActionService>();
-
-            container.RegisterType<IViewModel, MainViewModel>("main");
-            container.RegisterType<IViewModel, HotkeyTabViewModel>("hotkeyTab");
-            container.RegisterType<IViewModel, FeatureTabViewModel>("featureTab");
-            container.RegisterType<IViewModel, LogTabViewModel>("logTab");
-            container.RegisterType<IViewModel, SettingsTabViewModel>("settingsTab");
-            container.RegisterType<IViewModel, OverviewTabViewModel>("overviewTab");
-
-            container.RegisterType<IDialogService, DialogService>();
-            container.RegisterType<IDialogFactory, ReflectionDialogFactory>();
-            container.RegisterType<IDialogTypeLocator, NamingConventionDialogTypeLocator>();
-            container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
-
-            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("hotkey");
-            container.RegisterType<IDialogViewModel, ChangeSkillCastProfileDialogViewModel>("skillCast");
-
-            container.RegisterType<IMessageBoxService, MessageBoxService>();
-
-            #endregion Register
-
-            container.AddExtension(new Diagnostic());
-
-            var mainVM = container.Resolve<IViewModel>("main");
-            MainWindow = new MainWindow { DataContext = mainVM };
-            MainWindow.Show();
-
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += DoWork;
-            backgroundWorker.RunWorkerAsync();
-
-            // var task = Task.Factory.StartNew(() => TaskCreationOptions.LongRunning);
-
-            container.Resolve<IEventSubscriber>("macro");
-            container.Resolve<IEventSubscriber>("skill");
+                    var mainVM = container.Resolve<IViewModel>("main");
+                    MainWindow = new MainWindow { DataContext = mainVM };
+                    MainWindow.Show();
+                    splashScreen.Close();
+                });
+            });
         }
 
         private void DoWork(object o, DoWorkEventArgs e)
@@ -194,6 +148,73 @@ namespace Dolphin.Ui
             }
 
             return settings;
+        }
+
+        private void RegisterTypes()
+        {
+            var settings = LoadSettings();
+
+            #region Register
+
+            container.RegisterInstance(settings);
+
+            container.RegisterInstance(new Player());
+            container.RegisterInstance(new World());
+            container.RegisterInstance(new Log());
+            container.RegisterInstance(new HotkeyListener());
+
+            container.RegisterType<IEventBus, EventBus>(new ContainerControlledLifetimeManager());
+
+            container.RegisterType<IEventPublisher<PlayerInformationChangedEvent>, ExtractPlayerInformationService>("extractPlayerInformation");
+            container.RegisterType<IEventPublisher<SkillCanBeCastedEvent>, ExtractSkillInformationService>("extractSkillInformation");
+            container.RegisterType<IEventPublisher<SkillRecognitionChangedEvent>, ExtractSkillInformationService>("extractSkillInformation");
+            container.RegisterType<IEventPublisher<HotkeyPressedEvent>, HotkeyListenerService>("hotkeyListener");
+            container.RegisterType<IEventPublisher<WorldInformationChangedEvent>, ExtractWorldInformationService>("extractWorldInformation");
+
+            container.RegisterType<IEventSubscriber, ExecuteActionService>("macro");
+            container.RegisterType<IEventSubscriber, SkillCastingService>("skill");
+
+            container.RegisterType<IExtractInformationService, ExtractPlayerInformationService>("extractPlayerInformation");
+            container.RegisterType<IExtractInformationService, ExtractSkillInformationService>("extractSkillInformation");
+            container.RegisterType<IExtractInformationService, ExtractWorldInformationService>("extractWorldInformation");
+
+            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ICaptureWindowService, CaptureWindowService>();
+            container.RegisterType<ICropImageService, CropImageService>();
+            container.RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IModelService, ModelService>();
+            container.RegisterType<IResourceService, ResourceService>();
+            container.RegisterType<IImageCacheService, ImageCacheService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IHandleService, HandleService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IActionFinderService, ActionFinderService>();
+            container.RegisterType<ITransformService, TransformService>();
+            container.RegisterType<IPoolSpotService, PoolSpotService>();
+            container.RegisterType<ITravelInformationService, TravelInformationService>();
+            container.RegisterType<IConditionFinderService, ConditionFinderService>();
+
+            container.RegisterType<ActionService, ActionService>();
+
+            container.RegisterType<IViewModel, MainViewModel>("main");
+            container.RegisterType<IViewModel, HotkeyTabViewModel>("hotkeyTab");
+            container.RegisterType<IViewModel, FeatureTabViewModel>("featureTab");
+            container.RegisterType<IViewModel, LogTabViewModel>("logTab");
+            container.RegisterType<IViewModel, SettingsTabViewModel>("settingsTab");
+            container.RegisterType<IViewModel, OverviewTabViewModel>("overviewTab");
+
+            container.RegisterType<IDialogService, DialogService>();
+            container.RegisterType<IDialogFactory, ReflectionDialogFactory>();
+            container.RegisterType<IDialogTypeLocator, NamingConventionDialogTypeLocator>();
+            container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
+
+            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("hotkey");
+            container.RegisterType<IDialogViewModel, ChangeSkillCastProfileDialogViewModel>("skillCast");
+
+            container.RegisterType<IMessageBoxService, MessageBoxService>();
+
+            #endregion Register
+
+            container.AddExtension(new Diagnostic());
         }
 
         /*

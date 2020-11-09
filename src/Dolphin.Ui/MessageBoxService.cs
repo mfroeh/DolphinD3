@@ -16,7 +16,7 @@ namespace Dolphin.Ui
 
         public MessageBoxResult ShowOK(INotifyPropertyChanged parentViewmodel, string title, string message, MessageBoxImage icon = MessageBoxImage.Information)
         {
-            return dialogService.ShowMessageBox(parentViewmodel, title, message, MessageBoxButton.OK, icon);
+            return dialogService.ShowMessageBox(parentViewmodel, message, title, MessageBoxButton.OK, icon);
         }
 
         public void ShowOK(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.Information)
@@ -28,7 +28,7 @@ namespace Dolphin.Ui
 
         public MessageBoxResult ShowOKCancel(INotifyPropertyChanged parentViewmodel, string title, string message, MessageBoxImage icon = MessageBoxImage.None)
         {
-            return dialogService.ShowMessageBox(parentViewmodel, title, message, MessageBoxButton.OKCancel, icon);
+            return dialogService.ShowMessageBox(parentViewmodel, message, title, MessageBoxButton.OKCancel, icon);
         }
 
         public void ShowOKCancel(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.None)
@@ -40,7 +40,7 @@ namespace Dolphin.Ui
 
         public MessageBoxResult ShowYesNo(INotifyPropertyChanged parentViewmodel, string title, string message, MessageBoxImage icon = MessageBoxImage.None)
         {
-            return dialogService.ShowMessageBox(parentViewmodel, title, message, MessageBoxButton.YesNo, icon);
+            return dialogService.ShowMessageBox(parentViewmodel,  message, title, MessageBoxButton.YesNo, icon);
         }
 
         public void ShowYesNo(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.None)
@@ -52,7 +52,7 @@ namespace Dolphin.Ui
 
         public MessageBoxResult ShowYesNoCancel(INotifyPropertyChanged parentViewmodel, string title, string message, MessageBoxImage icon = MessageBoxImage.Question)
         {
-            return dialogService.ShowMessageBox(parentViewmodel, title, message, MessageBoxButton.YesNoCancel, icon);
+            return dialogService.ShowMessageBox(parentViewmodel, message, title, MessageBoxButton.YesNoCancel, icon);
         }
 
         public void ShowYesNoCancel(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.Question)

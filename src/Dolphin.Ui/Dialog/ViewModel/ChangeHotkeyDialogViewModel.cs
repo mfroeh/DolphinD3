@@ -94,7 +94,7 @@ namespace Dolphin.Ui.Dialog
 
                 if (actionWithSameHotkey != ActionName.None)
                 {
-                    var result = messageBoxService.ShowYesNo(this, "Hotkey allocation found", $"{Hotkey} is already allocated to {actionWithSameHotkey}. Delete existing allocation?");
+                    var result = messageBoxService.ShowYesNo(this, "Hotkey allocation found", $"{Hotkey} is already allocated to {actionWithSameHotkey}. Delete existing allocation?", MessageBoxImage.Warning);
 
                     if (result != MessageBoxResult.Yes) return;
                 }

@@ -8,8 +8,9 @@
     xmlns:local="clr-namespace:Dolphin.Ui.Dialog"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
-    Title="Change profile"
+    Title="Change Skillcast profile"
     md:DialogServiceViews.IsRegistered="True"
+    SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>

@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resource\dolphin_icon-icons.com_60855.ico</ApplicationIcon>
+    <ApplicationIcon>dolphin.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -83,8 +83,6 @@
     <Compile Include="View\SettingsTabView.xaml.cs">
       <DependentUpon>SettingsTabView.xaml</DependentUpon>
     </Compile>
-    <Resource Include="Resource\dolphin_88287.ico" />
-    <Resource Include="Resource\dolphin_icon-icons.com_60855.ico" />
     <Compile Include="EnumBooleanConverter.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="ViewModel\FeatureTabViewModel.cs" />
@@ -1249,6 +1247,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resource\splashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\dolphin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="dolphin.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

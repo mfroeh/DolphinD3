@@ -114,7 +114,7 @@ namespace Dolphin.Ui.ViewModel
             {
                 settingsService.ResetSettings();
 
-                messageBoxService.ShowOK(this, "A restart is required in order for these changes to take effect. Restarting now.", "Restart required");
+                messageBoxService.ShowOK(this, "Restart required", "A restart is required in order for these changes to take effect. Restarting now.");
 
                 var json = JsonConvert.SerializeObject(settingsService.Settings);
                 File.WriteAllText("settings.json", json);

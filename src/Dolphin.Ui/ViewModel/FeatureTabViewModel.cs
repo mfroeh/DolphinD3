@@ -81,8 +81,11 @@ namespace Dolphin.Ui.ViewModel
                         SkillIndices = new List<int>(),
                         Delays = new Dictionary<int, int>()
                     };
+                    SkillCastProfiles.Add(profile);
+                    settingsService.SkillCastSettings.SkillCastConfigurations.Add(profile);
 
-                    SkillCastProfileDialog(profile, true);
+                    SelectedSkillCastProfile = profile;
+                    ChangeSkillCastProfileDialog(profile);
                 });
 
                 return addSkillCastProfile;
@@ -97,7 +100,7 @@ namespace Dolphin.Ui.ViewModel
                 {
                     if (SelectedSkillCastProfile != default)
                     {
-                        SkillCastProfileDialog(SelectedSkillCastProfile, false);
+                        ChangeSkillCastProfileDialog(SelectedSkillCastProfile);
                     }
                 });
 
@@ -111,12 +114,9 @@ namespace Dolphin.Ui.ViewModel
             {
                 deleteSelectedSkillCastProfile = deleteSelectedSkillCastProfile ?? new RelayCommand((o) =>
                 {
-                    //if (SelectedSkillCastProfile != settingsService.SkillCastSettings.SelectedSkillCastConfiguration)
-                    //{
                     settingsService.SkillCastSettings.SkillCastConfigurations.Remove(SelectedSkillCastProfile);
                     SkillCastProfiles.Remove(SelectedSkillCastProfile);
                     SelectedSkillCastProfile = SkillCastProfiles.FirstOrDefault();
-                    //}
                 });
 
                 return deleteSelectedSkillCastProfile;
@@ -222,7 +222,7 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        private void SkillCastProfileDialog(SkillCastConfiguration skillCastProfile, bool isNew)
+        private void ChangeSkillCastProfileDialog(SkillCastConfiguration skillCastProfile)
         {
             var dialogViewModel = unityContainer.Resolve<IDialogViewModel>("skillCast");
             dialogViewModel.Initialize(skillCastProfile);
@@ -230,17 +230,9 @@ namespace Dolphin.Ui.ViewModel
             bool? success = dialogService.ShowDialog(this, dialogViewModel);
             if (success == true)
             {
-                if (isNew)
-                {
-                    SkillCastProfiles.Add(skillCastProfile);
-                    settingsService.SkillCastSettings.SkillCastConfigurations.Add(skillCastProfile);
-                }
-                else
-                {
-                    var index = SkillCastProfiles.IndexOf(skillCastProfile);
-                    SkillCastProfiles.Remove(skillCastProfile);
-                    SkillCastProfiles.Insert(index, skillCastProfile);
-                }
+                var index = SkillCastProfiles.IndexOf(skillCastProfile);
+                SkillCastProfiles.Remove(skillCastProfile);
+                SkillCastProfiles.Insert(index, skillCastProfile);
             }
         }
 

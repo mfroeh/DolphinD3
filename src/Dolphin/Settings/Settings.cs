@@ -110,7 +110,7 @@ namespace Dolphin
                 return new SkillCastSettings
                 {
                     SkillCastConfigurations = new List<SkillCastConfiguration> { configuration, configuration2, configuration3, configuration4 },
-                    SelectedSkillCastConfiguration = configuration
+                    SelectedIndex = 0
                 };
             }
         }

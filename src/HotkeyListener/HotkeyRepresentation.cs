@@ -21,7 +21,7 @@ namespace WK.Libraries.HotkeyListenerNS
                     list.Add((int)k);
                 }
 
-                return list;
+                return new List<int>();
             }
         }
 
@@ -61,7 +61,7 @@ namespace WK.Libraries.HotkeyListenerNS
                 list.Add((int)Keys.Scroll);
                 list.Add((int)Keys.Pause);
 
-                return list;
+                return new List<int>(); // list;
             }
         }
 

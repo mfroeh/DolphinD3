@@ -112,13 +112,12 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public string SelectedSkillCastProfile
+        public int SelectedSkillCastProfile
         {
-            get => settingsService.SkillCastSettings.SelectedSkillCastConfiguration?.Name;
+            get => settingsService.SkillCastSettings.SelectedIndex;
             set
             {
-                var profile = settingsService.SkillCastSettings.SkillCastConfigurations.FirstOrDefault(x => x.Name == value);
-                settingsService.SkillCastSettings.SelectedSkillCastConfiguration = profile;
+                settingsService.SkillCastSettings.SelectedIndex = value;
                 RaisePropertyChanged(nameof(SelectedSkillCastProfile));
             }
         }

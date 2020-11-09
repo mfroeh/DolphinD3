@@ -13,4 +13,12 @@ namespace Dolphin
 
         public string ProcessName { get; set; }
     }
+
+    public static class WindowInformationExtensionMethod
+    {
+        public static bool IsDefault(this WindowInformation info)
+        {
+            return info is null || info.Handle == default;
+        }
+    }
 }

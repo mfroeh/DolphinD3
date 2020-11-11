@@ -48,6 +48,7 @@ namespace Dolphin.Image
         // TODO: Make more performant. This eats most of the cpu usage.
         public Bitmap CaptureWindow(IntPtr hwnd)
         {
+            var watch = Stopwatch.StartNew();
             if (hwnd == default)
             {
                 logService.AddEntry(this, $"Got empty handle when trying to capture window.", LogLevel.Debug);
@@ -63,7 +64,8 @@ namespace Dolphin.Image
                 WindowHelper.PrintWindow(hwnd, dc, 0);
                 graphics.ReleaseHdc();
             }
-
+            watch.Stop();
+            Trace.WriteLine($"Image:{watch.ElapsedMilliseconds}");
             return bitmap;
         }
     }

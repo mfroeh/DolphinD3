@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,12 +55,19 @@ namespace Dolphin.Service
                 currentHandle.ProcessId != processId ||
                 currentHandle.ClientRectangle != clientRect)
             {
+                var rect = WindowHelper.GetClientRect(hwnd);
+                //var bitmap = new Bitmap(rect.Width - rect.X, rect.Height - rect.Y, PixelFormat.Format24bppRgb);
+                //var graphics = Graphics.FromImage(bitmap);
+
                 var handle = new WindowInformation
                 {
-                    ClientRectangle = WindowHelper.GetClientRect(hwnd),
+                    ClientRectangle = rect,
                     Handle = hwnd,
                     ProcessId = WindowHelper.GetWindowThreadProcessId(hwnd),
-                    ProcessName = processName
+                    ProcessName = processName,
+                    //WindowBitmap = bitmap,
+                    //Graphics = graphics,
+                    //GraphicsHdc = graphics.GetHdc()
                 };
                 handles[processName] = handle;
 

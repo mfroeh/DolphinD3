@@ -50,7 +50,7 @@ namespace Dolphin.Service
 
             if (e.PressedHotkey.KeyCode == Keys.Escape && e.PressedHotkey.Modifiers == Keys.None && tokenSource == null)
             {
-                InputHelper.SendKey(handle.IsDefault() ? WindowHelper.GetForegroundWindow() : handle.Handle, Keys.Escape);
+                InputHelper.SendKey(WindowHelper.GetForegroundWindow(), Keys.Escape);
             }
 
             if (handle.IsDefault()) return;

@@ -60,6 +60,11 @@ namespace Dolphin.Ui.ViewModel
             CurrentPrimaryResource = 0;
             CurrentPrimaryResource = 0;
 
+            var handle = handleService.GetHandle("Diablo III64");
+
+            DiabloProcessId = handle != null ? handle.ProcessId : 0;
+            DiabloClientRectangle = handle != null ? $"{handle.ClientRectangle.Width}x{handle.ClientRectangle.Height}" : "0x0";
+
             SkillIndexSuspensionStatus = new ObservableCollection<bool>(settingsService.SmartFeatureSettings.SkillSuspensionStatus);
         }
 
@@ -203,7 +208,7 @@ namespace Dolphin.Ui.ViewModel
             if (CurrentSkills[@event.Index] != newResourcePath)
             {
                 CurrentSkills[@event.Index] = newResourcePath;
-                CurrentSkillState[@event.Index] = @event.NewSkillName == SkillName.None ? "" : "Cant be casted";
+                CurrentSkillState[@event.Index] = @event.NewSkillName == SkillName.None ? "" : "Cant cast";
             }
         }
 

@@ -103,7 +103,7 @@ namespace Dolphin.Ui
                 {
                     var handle = handleService.GetHandle("Diablo III64");
                     if (handle.IsDefault()
-                        || !_settings.IsPaused
+                        || _settings.IsPaused
                         || !(_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
                     {
                         Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
@@ -111,7 +111,10 @@ namespace Dolphin.Ui
                         continue;
                     }
 
-                    using (var image = captureService.CaptureWindow("Diablo III64"))
+                    var image = captureService.CaptureWindow("Diablo III64");
+
+                    //image.Save("test.png");
+
                     {
                         if (_settings.SmartFeatureSettings.SkillCastingEnabled)
                         {

@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="SkillCastingService.cs" />
+    <Compile Include="StartProcessService.cs" />
     <Compile Include="TransformService.cs" />
     <Compile Include="TravelInformationService.cs" />
   </ItemGroup>

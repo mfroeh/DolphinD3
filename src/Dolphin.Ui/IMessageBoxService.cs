@@ -1,4 +1,5 @@
 ﻿using Dolphin.Ui.Dialog;
+using MvvmDialogs.FrameworkDialogs.OpenFile;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -26,5 +27,7 @@ namespace Dolphin.Ui
         MessageBoxResult ShowYesNoCancel(INotifyPropertyChanged parentViewModel, string title, string message, MessageBoxImage icon = MessageBoxImage.Question);
 
         void ShowYesNoCancel(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.Question);
+
+        string ShowOpenFileDialog(INotifyPropertyChanged parentViewModel, OpenFileDialogSettings settings);
     }
 }

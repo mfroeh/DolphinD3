@@ -1,7 +1,10 @@
 ﻿using Dolphin.Ui.Dialog;
 using MvvmDialogs;
+using MvvmDialogs.FrameworkDialogs.OpenFile;
 using System;
 using System.ComponentModel;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using Unity;
 
@@ -82,6 +85,13 @@ namespace Dolphin.Ui
             var result = ShowYesNoCancel(parentViewModel, title, message, icon);
 
             afterDialog.Invoke(result);
+        }
+
+        public string ShowOpenFileDialog(INotifyPropertyChanged parentViewModel, OpenFileDialogSettings settings)
+        {
+            var sucess = dialogService.ShowOpenFileDialog(parentViewModel, settings);
+
+            return sucess == true ? settings.FileName : "";
         }
     }
 }

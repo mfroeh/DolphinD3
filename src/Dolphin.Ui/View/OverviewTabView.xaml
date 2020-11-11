@@ -111,6 +111,20 @@
                                             Right=1}"
                     IsReadOnly="True"
                     Text="{Binding DiabloClientRectangle, Mode=OneWay}" />
+                <Button
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=1,
+                                            Right=1}"
+                    Command="{Binding StartProcessCommand}"
+                    CommandParameter="Diablo III64"
+                    Content="Start Diablo" />
+                <Button
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=1,
+                                            Right=1}"
+                    Command="{Binding StartProcessCommand}"
+                    CommandParameter="TurboHUD"
+                    Content="Start TurboHUD" />
             </WrapPanel>
         </Grid>
         <Grid

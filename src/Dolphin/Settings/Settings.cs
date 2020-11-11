@@ -149,7 +149,12 @@ namespace Dolphin
         {
             DisplayLogLevel = LogLevel.Warning,
             LogPaused = false,
-            IsDark = false
+            IsDark = false,
+            ExecuteablePaths = new Dictionary<string, string>
+            {
+                { "Diablo III64", "" },
+                { "TurboHUD", "" }
+            }
         };
     }
 

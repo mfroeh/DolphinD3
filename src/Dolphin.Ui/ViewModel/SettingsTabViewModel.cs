@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -36,6 +37,7 @@ namespace Dolphin.Ui.ViewModel
             OtherKeybindings = new ObservableDictionary<CommandKeybinding, Keys>(settingsService.Settings.OtherKeybindings);
             updateInterval = settingsService.SmartFeatureSettings.UpdateInterval;
             PoolSpots = new BindingList<Waypoint>(settingsService.MacroSettings.Poolspots);
+            ExecuteablePaths = new Dictionary<string, string>(settingsService.UiSettings.ExecuteablePaths);
 
             PoolSpots.ListChanged += PoolSpotsChangedHandler;
         }
@@ -85,6 +87,42 @@ namespace Dolphin.Ui.ViewModel
                 RaisePropertyChanged(nameof(SkillKeybindings));
             }
         }
+
+        public ICommand ChangePathCommand
+        {
+            get
+            {
+                return new RelayCommand((name) =>
+                {
+                    var initialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                    settingsService.UiSettings.ExecuteablePaths.TryGetValue((string)name, out var currentPath);
+                    if (!string.IsNullOrEmpty(currentPath) && Directory.Exists(Path.GetDirectoryName(currentPath)))
+                    {
+                        initialDirectory = Path.GetDirectoryName(currentPath);
+                    }
+
+                    var settings = new MvvmDialogs.FrameworkDialogs.OpenFile.OpenFileDialogSettings
+                    {
+                        Multiselect = false,
+                        CheckFileExists = true,
+                        Filter = "Executables (.exe)|*.exe",
+                        InitialDirectory = initialDirectory
+                    };
+
+                    var newPath = messageBoxService.ShowOpenFileDialog(this, settings);
+                    if (!string.IsNullOrEmpty(newPath))
+                    {
+                        settingsService.UiSettings.ExecuteablePaths[(string)name] = newPath;
+                        ExecuteablePaths[(string)name] = newPath;
+                        RaisePropertyChanged(nameof(ExecuteablePaths));
+                    }
+                });
+
+            }
+        }
+
+        public IDictionary<string, string> ExecuteablePaths { get; set; }
 
         public string UpdateInterval
         {

@@ -65,7 +65,7 @@ namespace Dolphin.Ui
                 backgroundWorker.RunWorkerAsync();
 
                 Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Resolving dependencies");
-                
+
                 container.Resolve<IEventSubscriber>("macro");
                 container.Resolve<IEventSubscriber>("skill");
 
@@ -197,6 +197,7 @@ namespace Dolphin.Ui
             container.RegisterType<IPoolSpotService, PoolSpotService>();
             container.RegisterType<ITravelInformationService, TravelInformationService>();
             container.RegisterType<IConditionFinderService, ConditionFinderService>();
+            container.RegisterType<IStartProcessService, StartProcessService>();
 
             container.RegisterType<ActionService, ActionService>();
 

@@ -114,7 +114,7 @@ namespace Dolphin
             }
         }
 
-        public static IList<Keys> SkillKeybindigns => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
+        public static IList<Keys> SkillKeybindings => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
 
         public static SmartFeatureSettings SmartFeatureSettings
         {
@@ -167,7 +167,7 @@ namespace Dolphin
                 Hotkeys = InitialSettings.Hotkeys;
                 MacroSettings = InitialSettings.MacroSettings;
                 OtherKeybindings = InitialSettings.OtherKeybindings;
-                SkillKeybindings = InitialSettings.SkillKeybindigns;
+                SkillKeybindings = InitialSettings.SkillKeybindings;
                 UiSettings = InitialSettings.UiSettings;
                 SmartFeatureSettings = InitialSettings.SmartFeatureSettings;
                 SkillCastSettings = InitialSettings.SkillCastSettings;

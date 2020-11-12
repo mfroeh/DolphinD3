@@ -69,15 +69,17 @@ namespace Dolphin.Service
             eventBus.Publish(@event);
         }
 
-        public void ResetSettings()
+        public void ResetSettings(string propertyName)
         {
-            Settings = new Settings(true);
-        }
-
-        // Todo: Implement for specific subtypes?
-        public void ResetSettings<T>()
-        {
-            ResetSettings();
+            if (propertyName == "All")
+            {
+                Settings = new Settings(true);
+            }
+            else
+            {
+                var initialValue = typeof(InitialSettings).GetProperty(propertyName).GetValue(null);
+                typeof(Settings).GetProperty(propertyName).SetValue(Settings, initialValue);
+            }
         }
 
         public void SetHotkeyValue(ActionName key, Hotkey value)

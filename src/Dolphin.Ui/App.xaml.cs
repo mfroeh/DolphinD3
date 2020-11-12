@@ -216,8 +216,9 @@ namespace Dolphin.Ui
             container.RegisterType<IDialogTypeLocator, NamingConventionDialogTypeLocator>();
             container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
 
-            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("hotkey");
+            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("changeHotkey");
             container.RegisterType<IDialogViewModel, ChangeSkillCastProfileDialogViewModel>("skillCast");
+            container.RegisterType<IDialogViewModel, ResetSettingsDialogViewModel>("resetSettings");
 
             container.RegisterType<IMessageBoxService, MessageBoxService>();
 

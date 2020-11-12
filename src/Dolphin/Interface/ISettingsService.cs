@@ -24,9 +24,7 @@ namespace Dolphin
 
         bool IsSmartActionEnabled(SmartActionName smartAction);
 
-        public void ResetSettings<T>();
-
-        public void ResetSettings();
+        public void ResetSettings(string propertyName);
 
         void SetHotkeyValue(ActionName key, Hotkey value);
 

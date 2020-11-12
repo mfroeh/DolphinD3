@@ -2,7 +2,7 @@
 
 namespace Dolphin.Ui
 {
-    public class ViewModelBase : IViewModel
+    public abstract class ViewModelBase : IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

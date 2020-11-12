@@ -64,11 +64,16 @@
     <Compile Include="Converter\BoolInverterConverter.cs" />
     <Compile Include="Dialog\CustomFrameworkDialogFactory.cs" />
     <Compile Include="AdonisUiMessageBox.cs" />
+    <Compile Include="Dialog\DialogViewModelBase.cs" />
     <Compile Include="Dialog\IDialogViewModel.cs" />
+    <Compile Include="Dialog\ViewModel\ResetSettingsDialogViewModel.cs" />
     <Compile Include="Dialog\View\ChangeSkillCastProfileDialog.xaml.cs">
       <DependentUpon>ChangeSkillCastProfileDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialog\ViewModel\ChangeSkillCastProfileDialogViewModel.cs" />
+    <Compile Include="Dialog\View\ResetSettingsDialog.xaml.cs">
+      <DependentUpon>ResetSettingsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IMessageBoxService.cs" />
     <Compile Include="MessageBoxService.cs" />
     <Compile Include="ShouldSerializeContractResolver.cs" />
@@ -110,6 +115,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialog\View\ChangeSkillCastProfileDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialog\View\ResetSettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

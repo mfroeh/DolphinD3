@@ -22,7 +22,6 @@ namespace Dolphin
                 }
 
                 dict[ActionName.Pause] = new Hotkey(Keys.F10);
-                dict[ActionName.CancelAction] = new Hotkey(Keys.Escape);
                 dict[ActionName.Suspend_0] = new Hotkey(Keys.Control, Keys.D1);
                 dict[ActionName.Suspend_1] = new Hotkey(Keys.Control, Keys.D2);
                 dict[ActionName.Suspend_2] = new Hotkey(Keys.Control, Keys.D3);
@@ -115,7 +114,7 @@ namespace Dolphin
             }
         }
 
-        public static IList<Keys> SkillKeybindigns => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
+        public static IList<Keys> SkillKeybindings => new Keys[] { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
 
         public static SmartFeatureSettings SmartFeatureSettings
         {
@@ -150,7 +149,12 @@ namespace Dolphin
         {
             DisplayLogLevel = LogLevel.Warning,
             LogPaused = false,
-            IsDark = false
+            IsDark = false,
+            ExecuteablePaths = new Dictionary<string, string>
+            {
+                { "Diablo III64", "" },
+                { "TurboHUD", "" }
+            }
         };
     }
 
@@ -163,7 +167,7 @@ namespace Dolphin
                 Hotkeys = InitialSettings.Hotkeys;
                 MacroSettings = InitialSettings.MacroSettings;
                 OtherKeybindings = InitialSettings.OtherKeybindings;
-                SkillKeybindings = InitialSettings.SkillKeybindigns;
+                SkillKeybindings = InitialSettings.SkillKeybindings;
                 UiSettings = InitialSettings.UiSettings;
                 SmartFeatureSettings = InitialSettings.SmartFeatureSettings;
                 SkillCastSettings = InitialSettings.SkillCastSettings;

@@ -14,10 +14,9 @@ namespace Dolphin.Ui.ViewModel
     {
         #region Private Fields
 
-        private readonly IDialogService dialogService;
         private readonly IEventPublisher<HotkeyPressedEvent> hotkeyListener;
+        private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
-        private readonly IUnityContainer unityContainer;
         private ICommand changeHotkeyCommand;
 
         private ConvertingSpeed convertingSpeed;
@@ -31,12 +30,11 @@ namespace Dolphin.Ui.ViewModel
 
         #region Public Constructors
 
-        public HotkeyTabViewModel(IUnityContainer unityContainer, IDialogService dialogService, ISettingsService settingsService, [Dependency("hotkeyListener")] IEventPublisher<HotkeyPressedEvent> hotkeyListener)
+        public HotkeyTabViewModel(ISettingsService settingsService, [Dependency("hotkeyListener")] IEventPublisher<HotkeyPressedEvent> hotkeyListener, IMessageBoxService messageBoxService)
         {
-            this.unityContainer = unityContainer;
-            this.dialogService = dialogService;
             this.settingsService = settingsService;
             this.hotkeyListener = hotkeyListener;
+            this.messageBoxService = messageBoxService;
 
             Hotkeys = new Dictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
             ItemTypes = System.Enum.GetValues(typeof(ItemType)).Cast<ItemType>().ToList();
@@ -150,16 +148,13 @@ namespace Dolphin.Ui.ViewModel
         private void ShowChangeHotkeyDialog(ActionName actionAllocationToChange)
         {
             var oldHotkey = Hotkeys[actionAllocationToChange];
-
-            var dialogViewModel = unityContainer.Resolve<ChangeHotkeyDialogViewModel>();
-            dialogViewModel.Initialize(oldHotkey, actionAllocationToChange);
-
             settingsService.SetPaused(true, true);
 
-            bool? success = dialogService.ShowDialog(this, dialogViewModel);
-            if (success == true && oldHotkey != dialogViewModel.Hotkey)
+            var result = messageBoxService.ShowCustomDialog<ChangeHotkeyDialogViewModel>(this, oldHotkey, actionAllocationToChange);
+            var viewModel = result.Item2;
+            if (result.Item1 == true && oldHotkey != viewModel.Hotkey)
             {
-                var hotkey = dialogViewModel.Hotkey;
+                var hotkey = viewModel.Hotkey;
 
                 var listCopy = Hotkeys.Select(item => item).ToList();
                 foreach (var item in listCopy)
@@ -168,7 +163,7 @@ namespace Dolphin.Ui.ViewModel
                     {
                         settingsService.SetHotkeyValue(item.Key, null);
                         Hotkeys[item.Key] = null;
-                        break; // There can only ever be
+                        break; // There can only ever be one
                     }
                 }
 

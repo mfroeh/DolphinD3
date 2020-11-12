@@ -26,6 +26,7 @@ namespace Dolphin.Service
             {
                 AddHotkey(hotkey);
             }
+            hotkeyListener.Add(new Hotkey(System.Windows.Forms.Keys.Escape));
         }
 
         public void AddHotkey(Hotkey hotkey)
@@ -59,15 +60,22 @@ namespace Dolphin.Service
             }
 
             hotkeyListener.RemoveAll();
+
             foreach (var hotkey in newHotkeys)
             {
                 if (hotkey != null) AddHotkey(hotkey);
             }
+            hotkeyListener.Add(new Hotkey(System.Windows.Forms.Keys.Escape));
 
             if (wasSuspended)
             {
                 hotkeyListener.Suspend();
             }
+        }
+
+        public void RemoveHotkey(Hotkey hotkey)
+        {
+            hotkeyListener.Remove(hotkey);
         }
 
         public void ResumeListener()

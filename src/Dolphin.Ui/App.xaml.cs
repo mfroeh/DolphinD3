@@ -65,6 +65,7 @@ namespace Dolphin.Ui
                 backgroundWorker.RunWorkerAsync();
 
                 Execute.OnUIThread(() => splashScreen.ProgressStatus.Content = "Resolving dependencies");
+
                 container.Resolve<IEventSubscriber>("macro");
                 container.Resolve<IEventSubscriber>("skill");
 
@@ -102,15 +103,18 @@ namespace Dolphin.Ui
                 {
                     var handle = handleService.GetHandle("Diablo III64");
                     if (handle.IsDefault()
-                        || !_settings.IsPaused
+                        || _settings.IsPaused
                         || !(_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
                     {
                         Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
-                        
+
                         continue;
                     }
 
-                    using (var image = captureService.CaptureWindow("Diablo III64"))
+                    var image = captureService.CaptureWindow("Diablo III64");
+
+                    //image.Save("test.png");
+
                     {
                         if (_settings.SmartFeatureSettings.SkillCastingEnabled)
                         {
@@ -196,6 +200,7 @@ namespace Dolphin.Ui
             container.RegisterType<IPoolSpotService, PoolSpotService>();
             container.RegisterType<ITravelInformationService, TravelInformationService>();
             container.RegisterType<IConditionFinderService, ConditionFinderService>();
+            container.RegisterType<IStartProcessService, StartProcessService>();
 
             container.RegisterType<ActionService, ActionService>();
 
@@ -211,8 +216,9 @@ namespace Dolphin.Ui
             container.RegisterType<IDialogTypeLocator, NamingConventionDialogTypeLocator>();
             container.RegisterType<IFrameworkDialogFactory, CustomFrameworkDialogFactory>();
 
-            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("hotkey");
+            container.RegisterType<IDialogViewModel, ChangeHotkeyDialogViewModel>("changeHotkey");
             container.RegisterType<IDialogViewModel, ChangeSkillCastProfileDialogViewModel>("skillCast");
+            container.RegisterType<IDialogViewModel, ResetSettingsDialogViewModel>("resetSettings");
 
             container.RegisterType<IMessageBoxService, MessageBoxService>();
 

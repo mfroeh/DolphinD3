@@ -1,4 +1,6 @@
 ﻿using Dolphin.Enum;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Dolphin
 {
@@ -9,5 +11,7 @@ namespace Dolphin
         public bool IsDark { get; set; }
 
         public bool LogPaused { get; set; }
+
+        public IDictionary<string, string> ExecuteablePaths { get; set; }
     }
 }

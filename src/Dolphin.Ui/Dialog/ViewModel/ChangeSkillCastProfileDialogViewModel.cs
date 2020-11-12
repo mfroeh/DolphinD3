@@ -1,21 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 
 namespace Dolphin.Ui.Dialog
 {
-    public class ChangeSkillCastProfileDialogViewModel : ViewModelBase, IDialogViewModel
+    public class ChangeSkillCastProfileDialogViewModel : DialogViewModelBase, IDialogViewModel
     {
-        #region Private Fields
-
         private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
-        private bool? dialogResult;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public ChangeSkillCastProfileDialogViewModel(ISettingsService settingsService, IMessageBoxService messageBoxService)
         {
@@ -23,38 +15,13 @@ namespace Dolphin.Ui.Dialog
             this.messageBoxService = messageBoxService;
         }
 
-        #endregion Public Constructors
-
-        #region Public Properties
-
-        public ICommand CancelCommand => new RelayCommand((_) => DialogResult = false);
-
         public SkillCastConfiguration CurrentConfiguration { get; set; }
 
         public ObservableCollection<int> Delays { get; set; }
 
-        public bool? DialogResult
-        {
-            get
-            {
-                return dialogResult;
-            }
-            set
-            {
-                dialogResult = value;
-                RaisePropertyChanged("DialogResult");
-            }
-        }
-
         public string Name { get; set; }
 
-        public ICommand SaveCommand => new RelayCommand(SaveCommandAction);
-
-        #endregion Public Properties
-
-        #region Public Methods
-
-        public void Initialize(params object[] @params)
+        public override void Initialize(params object[] @params)
         {
             var configuration = (SkillCastConfiguration)@params[0];
 
@@ -68,11 +35,7 @@ namespace Dolphin.Ui.Dialog
             }
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
-        private void SaveCommandAction(object o)
+        protected override void DialogOkClicked(object o)
         {
             if (settingsService.SkillCastSettings.SkillCastConfigurations.Any(x => x.Name == Name && x != CurrentConfiguration))
             {
@@ -97,7 +60,5 @@ namespace Dolphin.Ui.Dialog
 
             DialogResult = true;
         }
-
-        #endregion Private Methods
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dolphin.Enum;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
@@ -13,19 +14,20 @@ namespace Dolphin.Ui.ViewModel
         private readonly IHandleService handleService;
         private readonly IModelService modelService;
         private readonly ISettingsService settingsService;
-
+        private readonly IStartProcessService processService;
         private ICommand negateSuspendedCommand;
 
         #endregion Private Fields
 
         #region Public Constructors
 
-        public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService, ISettingsService settingsService)
+        public OverviewTabViewModel(IEventBus eventBus, IModelService modelService, IHandleService handleService, ISettingsService settingsService, IStartProcessService processService)
         {
             this.eventBus = eventBus;
             this.modelService = modelService;
             this.handleService = handleService;
             this.settingsService = settingsService;
+            this.processService = processService;
 
             var playerInformationChanged = new Subscription<PlayerInformationChangedEvent>(OnPlayerInformationChanged);
             var skillRecognitionChanged = new Subscription<SkillRecognitionChangedEvent>(OnSkillRecognitionChanged);
@@ -57,6 +59,11 @@ namespace Dolphin.Ui.ViewModel
             CurrentHealth = 0;
             CurrentPrimaryResource = 0;
             CurrentPrimaryResource = 0;
+
+            var handle = handleService.GetHandle("Diablo III64");
+
+            DiabloProcessId = handle != null ? handle.ProcessId : 0;
+            DiabloClientRectangle = handle != null ? $"{handle.ClientRectangle.Width}x{handle.ClientRectangle.Height}" : "0x0";
 
             SkillIndexSuspensionStatus = new ObservableCollection<bool>(settingsService.SmartFeatureSettings.SkillSuspensionStatus);
         }
@@ -97,6 +104,16 @@ namespace Dolphin.Ui.ViewModel
         public Window OpenWindow { get; set; }
 
         public ObservableCollection<bool> SkillIndexSuspensionStatus { get; set; }
+
+        public ICommand StartProcessCommand => new RelayCommand(o =>
+        {
+            settingsService.UiSettings.ExecuteablePaths.TryGetValue((string)o, out var path);
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                processService.Start(path);
+            }
+        });
 
         #endregion Public Properties
 
@@ -191,7 +208,7 @@ namespace Dolphin.Ui.ViewModel
             if (CurrentSkills[@event.Index] != newResourcePath)
             {
                 CurrentSkills[@event.Index] = newResourcePath;
-                CurrentSkillState[@event.Index] = @event.NewSkillName == SkillName.None ? "" : "Cant be casted";
+                CurrentSkillState[@event.Index] = @event.NewSkillName == SkillName.None ? "" : "Cant cast";
             }
         }
 

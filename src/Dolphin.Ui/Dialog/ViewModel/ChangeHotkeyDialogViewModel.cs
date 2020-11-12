@@ -6,44 +6,18 @@ using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Ui.Dialog
 {
-    public class ChangeHotkeyDialogViewModel : ViewModelBase, IDialogViewModel
+    public class ChangeHotkeyDialogViewModel : DialogViewModelBase, IDialogViewModel
     {
-        #region Private Fields
-
         private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
 
-        private bool? dialogResult;
         private Hotkey hotkey;
         private Hotkey oldHotkey;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public ChangeHotkeyDialogViewModel(ISettingsService settingsService, IMessageBoxService messageBoxService)
         {
             this.settingsService = settingsService;
             this.messageBoxService = messageBoxService;
-        }
-
-        #endregion Public Constructors
-
-        #region Public Properties
-
-        public ICommand CancelCommand => new RelayCommand((_) => DialogResult = false);
-
-        public bool? DialogResult
-        {
-            get
-            {
-                return dialogResult;
-            }
-            set
-            {
-                dialogResult = value;
-                RaisePropertyChanged(nameof(DialogResult));
-            }
         }
 
         public ActionName EditingAction { get; set; }
@@ -60,13 +34,7 @@ namespace Dolphin.Ui.Dialog
 
         public ICommand RevertCommand => new RelayCommand((_) => Hotkey = oldHotkey);
 
-        public ICommand SaveCommand => new RelayCommand(SaveCommandAction);
-
-        #endregion Public Properties
-
-        #region Public Methods
-
-        public void Initialize(params object[] @params)
+        public override void Initialize(params object[] @params)
         {
             oldHotkey = (Hotkey)@params[0];
             hotkey = (Hotkey)@params[0];
@@ -74,11 +42,7 @@ namespace Dolphin.Ui.Dialog
             EditingAction = (ActionName)@params[1];
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
-        private void SaveCommandAction(object o)
+        protected override void DialogOkClicked(object o)
         {
             if (Hotkey != null)
             {
@@ -102,7 +66,5 @@ namespace Dolphin.Ui.Dialog
 
             DialogResult = true;
         }
-
-        #endregion Private Methods
     }
 }

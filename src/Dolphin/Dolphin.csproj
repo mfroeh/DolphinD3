@@ -48,6 +48,7 @@
     <Compile Include="CacheServiceBase.cs" />
     <Compile Include="Enum\SmartActionName.cs" />
     <Compile Include="EventArgs\ImageUpdatedEventArgs.cs" />
+    <Compile Include="Interface\IStartProcessService.cs" />
     <Compile Include="Settings\SkillCastSettings.cs" />
     <Compile Include="Settings\SkillCastConfiguration.cs" />
     <Compile Include="Static\CommonCoordinate.cs" />

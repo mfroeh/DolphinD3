@@ -6,7 +6,6 @@ namespace Dolphin.Enum
     {
         None = 0,
         Pause = 1,
-        CancelAction = 25,
         CubeConverterSingleSlot = 2,
         CubeConverterDualSlot = 3,
         RightClick = 4,

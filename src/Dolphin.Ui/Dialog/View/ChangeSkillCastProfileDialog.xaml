@@ -70,12 +70,12 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Orientation="Horizontal">
-            <Button Margin="{adonisUi:Space Bottom=1, Right=1}" Command="{Binding CancelCommand}">Cancel</Button>
+            <Button Margin="{adonisUi:Space Bottom=1, Right=1}" Command="{Binding DialogCancelCommand}">Cancel</Button>
             <Button
                 Margin="{adonisUi:Space Bottom=1,
                                         Right=1,
                                         Left=0}"
-                Command="{Binding SaveCommand}"
+                Command="{Binding DialogOkCommand}"
                 IsDefault="True"
                 Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}">
                 Save

@@ -12,6 +12,12 @@ namespace Dolphin
         public uint ProcessId { get; set; }
 
         public string ProcessName { get; set; }
+
+        public IntPtr GraphicsHdc { get; set; }
+
+        public Graphics Graphics { get; set; }
+
+        public Bitmap WindowBitmap { get; set; }
     }
 
     public static class WindowInformationExtensionMethod

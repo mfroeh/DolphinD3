@@ -10,7 +10,7 @@ namespace Dolphin.Ui
     {
         bool? ShowCustomDialog(INotifyPropertyChanged parentViewModel, string name, params object[] viewModelParams);
 
-        Tuple<bool?, T> ShowCustomDialog<T>(INotifyPropertyChanged parentViewModel, string name, params object[] viewModelParams) where T : IDialogViewModel;
+        Tuple<bool?, T> ShowCustomDialog<T>(INotifyPropertyChanged parentViewModel, params object[] viewModelParams) where T : IDialogViewModel;
 
         void ShowOK(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.Information);
 

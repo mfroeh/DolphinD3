@@ -220,8 +220,8 @@ namespace Dolphin.Ui.ViewModel
 
         private void ChangeSkillCastProfileDialog(SkillCastConfiguration skillCastProfile)
         {
-            bool? success = messageBoxService.ShowCustomDialog(this, "skillCast", skillCastProfile);
-            if (success == true)
+            var result = messageBoxService.ShowCustomDialog<ChangeSkillCastProfileDialogViewModel>(this, skillCastProfile);
+            if (result.Item1 == true)
             {
                 var index = SkillCastProfiles.IndexOf(skillCastProfile);
                 SkillCastProfiles.Remove(skillCastProfile);

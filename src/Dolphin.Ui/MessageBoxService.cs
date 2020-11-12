@@ -29,14 +29,14 @@ namespace Dolphin.Ui
             return dialogService.ShowDialog(parentViewModel, viewModel);
         }
 
-        public Tuple<bool?, T> ShowCustomDialog<T>(INotifyPropertyChanged parentViewModel, string name, params object[] viewModelParams) where T : IDialogViewModel
+        public Tuple<bool?, T> ShowCustomDialog<T>(INotifyPropertyChanged parentViewModel, params object[] viewModelParams) where T : IDialogViewModel
         {
-            var viewModel = unityContainer.Resolve<IDialogViewModel>(name);
+            var viewModel = unityContainer.Resolve<T>();
             viewModel.Initialize(viewModelParams);
 
             var result = dialogService.ShowDialog(parentViewModel, viewModel);
 
-            return Tuple.Create(result, (T)viewModel);
+            return Tuple.Create(result, viewModel);
         }
 
         public MessageBoxResult ShowOK(INotifyPropertyChanged parentViewmodel, string title, string message, MessageBoxImage icon = MessageBoxImage.Information)

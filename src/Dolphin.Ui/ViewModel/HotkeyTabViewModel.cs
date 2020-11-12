@@ -150,7 +150,7 @@ namespace Dolphin.Ui.ViewModel
             var oldHotkey = Hotkeys[actionAllocationToChange];
             settingsService.SetPaused(true, true);
 
-            var result = messageBoxService.ShowCustomDialog<ChangeHotkeyDialogViewModel>(this, "changeHotkey", oldHotkey, actionAllocationToChange);
+            var result = messageBoxService.ShowCustomDialog<ChangeHotkeyDialogViewModel>(this, oldHotkey, actionAllocationToChange);
             var viewModel = result.Item2;
             if (result.Item1 == true && oldHotkey != viewModel.Hotkey)
             {

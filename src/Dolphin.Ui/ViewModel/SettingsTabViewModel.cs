@@ -155,7 +155,7 @@ namespace Dolphin.Ui.ViewModel
         {
             //messageBoxService.ShowYesNo(this, "Reset settings", "Are you sure you want to reset the settings?", MessageBoxImage.Warning);
 
-            var result = messageBoxService.ShowCustomDialog<ResetSettingsDialogViewModel>(this, "resetSettings");
+            var result = messageBoxService.ShowCustomDialog<ResetSettingsDialogViewModel>(this);
             if (result.Item1 == true)
             {
                 foreach (var s in result.Item2.SettingsToReset)

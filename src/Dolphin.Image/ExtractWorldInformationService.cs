@@ -41,10 +41,8 @@ namespace Dolphin.Image
                 @event.WindowExtraInformation.Add(ExtractGemUpsLeft(picture));
             }
 
-            if (@event.IsLocationChanged || @event.IsWindowChanged)
-            {
-                Publish(@event);
-            }
+            //if (@event.IsLocationChanged || @event.IsWindowChanged)
+            Publish(@event);
         }
 
         public void Publish(WorldInformationChangedEvent @event)
@@ -68,6 +66,8 @@ namespace Dolphin.Image
 
         private WorldLocation ExtractLocation(Bitmap picture)
         {
+            if (IsVisible(WorldLocation.LoadingScreen, picture, 0.95f)) return WorldLocation.LoadingScreen;
+
             if (IsVisible(WorldLocation.Grift, picture, 0.92f)) return WorldLocation.Grift;
 
             if (IsVisible(WorldLocation.Menu, picture, 0.96f)) return WorldLocation.Menu;
@@ -76,8 +76,7 @@ namespace Dolphin.Image
             var riftPart = imageService.CropWorldLocation(picture, WorldLocation.Rift);
             for (int i = 0; i < 8; i++)
             {
-                // resourceImage = resourceService.Load(WorldLocation.Rift);
-                // if (ImageHelper.Compare(riftPart))
+                // resourceImage = resourceService.Load(WorldLocation.Rift); if (ImageHelper.Compare(riftPart))
             }
 
             return default;

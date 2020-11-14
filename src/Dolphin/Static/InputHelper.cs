@@ -54,10 +54,7 @@ namespace Dolphin
             SendClick(handle, button, point);
         }
 
-        /// if (pressAlt)  bool pressAlt = false
-        /// {
-        ///     lParam = (0x01 << 28);
-        /// }
+        /// if (pressAlt) bool pressAlt = false { lParam = (0x01 << 28); }
         public static void SendKey(IntPtr handle, Keys key)
         {
             WindowHelper.PostMessage(handle, WM_KEYDOWN, (uint)key, 0);

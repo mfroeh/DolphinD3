@@ -3,8 +3,6 @@ using MvvmDialogs;
 using MvvmDialogs.FrameworkDialogs.OpenFile;
 using System;
 using System.ComponentModel;
-using System.IO;
-using System.Reflection;
 using System.Windows;
 using Unity;
 
@@ -12,8 +10,8 @@ namespace Dolphin.Ui
 {
     public class MessageBoxService : IMessageBoxService
     {
-        private readonly IUnityContainer unityContainer;
         private readonly IDialogService dialogService;
+        private readonly IUnityContainer unityContainer;
 
         public MessageBoxService(IUnityContainer unityContainer, IDialogService dialogService)
         {
@@ -63,6 +61,13 @@ namespace Dolphin.Ui
             afterDialog.Invoke(result);
         }
 
+        public string ShowOpenFileDialog(INotifyPropertyChanged parentViewModel, OpenFileDialogSettings settings)
+        {
+            var sucess = dialogService.ShowOpenFileDialog(parentViewModel, settings);
+
+            return sucess == true ? settings.FileName : "";
+        }
+
         public MessageBoxResult ShowYesNo(INotifyPropertyChanged parentViewmodel, string title, string message, MessageBoxImage icon = MessageBoxImage.None)
         {
             return dialogService.ShowMessageBox(parentViewmodel, message, title, MessageBoxButton.YesNo, icon);
@@ -85,13 +90,6 @@ namespace Dolphin.Ui
             var result = ShowYesNoCancel(parentViewModel, title, message, icon);
 
             afterDialog.Invoke(result);
-        }
-
-        public string ShowOpenFileDialog(INotifyPropertyChanged parentViewModel, OpenFileDialogSettings settings)
-        {
-            var sucess = dialogService.ShowOpenFileDialog(parentViewModel, settings);
-
-            return sucess == true ? settings.FileName : "";
         }
     }
 }

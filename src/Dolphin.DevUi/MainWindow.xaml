@@ -88,7 +88,7 @@
                 <ComboBox ItemsSource="{Binding PossibleWindow}" SelectedItem="{Binding SelectedWindow}" />
 
                 <Label Content="Location" />
-                <ComboBox ItemsSource="{Binding PossibleLocation}" SelectedItem="{Binding SelectedLocation}" />
+                <ComboBox ItemsSource="{Binding PossibleLocation}" SelectedItem="{Binding SelectedWorldLocation}" />
 
                 <Label Content="Gem up" />
                 <ComboBox ItemsSource="{Binding PossibleGemUp}" SelectedItem="{Binding SelectedGemUp}" />

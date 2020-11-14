@@ -80,7 +80,7 @@ namespace Dolphin.Image
                 var template = resourceService.Load(playerClass);
                 var match = ImageHelper.Compare(picturePart, template);
 
-                if (match >= 0.99)
+                if (match >= 0.95) // Todo:
                 {
                     newPlayerClass = playerClass;
                     break;

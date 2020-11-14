@@ -32,26 +32,29 @@ namespace Dolphin.Image
         public static Point SkillbarSkill5Active = new Point { X = 1290, Y = 1345 };
         public static Point SkillbarSkill5TopLeft = new Point { X = 1295, Y = 1342 };
 
-        #endregion Skill
+        public static Point SkillOffset = new Point(25, 15);
+        public static Point SkillMouseOffset = new Point(22, 12);
 
-        // TODO: ALL STILL 1920 x 1080
+        #endregion Skill
 
         #region WorldLocation
 
-        public static Point LocationGrift = new Point { X = 1738, Y = 31 };
-        public static Point LocationMenuSymbol = new Point { X = 1481, Y = 985 };
-        public static Point LocationRiftLevel = new Point { X = 1884, Y = 7 };
-        public static Point LocationRiftSpeakToOrek = new Point { X = 1680, Y = 428 };
+        public static Point LocationGrift = new Point { X = 2320, Y = 40 };  // TODO: Doesnt work
+        public static Point LocationMenuSymbol = new Point { X = 2000, Y = 1328 };
+        public static Point LocationRiftLevel = new Point { X = 1884, Y = 7 };  // TODO: STILL 1920 x 1080
+        public static Point LocationRiftSpeakToOrek = new Point { X = 1680, Y = 428 };  // TODO: STILL 1920 x 1080
 
         #endregion WorldLocation
 
         #region Window
 
-        public static Point WindowKadala = new Point { X = 243, Y = 47 };
-        public static Point WindowObelisk = new Point { X = 298, Y = 128 };
-        public static Point WindowStartGame = new Point { X = 169, Y = 508 };
-        public static Point WindowUrshi = new Point { X = 185, Y = 127 };
-        public static Point WindowUrshiGemUp = new Point { X = 295, Y = 542 };
+        public static Point WindowKadala = new Point { X = 330, Y = 87 };
+        public static Point WindowObelisk = new Point { X = 330, Y = 87 };
+        public static Point WindowStartGame = new Point { X = 226, Y = 679 };
+        public static Point WindowUrshi = new Point { X = 330, Y = 87 };
+        public static Point WindowUrshiGemUp = new Point { X = 389, Y = 722 }; 
+
+        public static Point LocationLoadingScreen = new Point(1260, 722);
 
         #endregion Window
     }

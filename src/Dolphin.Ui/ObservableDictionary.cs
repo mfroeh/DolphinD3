@@ -27,18 +27,21 @@ namespace Dolphin.Ui
         }
 
         /// <summary>
-        /// Initializes an instance of the class using another dictionary as
-        /// the key/value store.
+        /// Initializes an instance of the class using another dictionary as the key/value store.
         /// </summary>
         public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
         {
             this.dictionary = dictionary;
         }
 
-        /// <summary>Event raised when the collection changes.</summary>
+        /// <summary>
+        /// Event raised when the collection changes.
+        /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged = (sender, args) => { };
 
-        /// <summary>Event raised when a property on the collection changes.</summary>
+        /// <summary>
+        /// Event raised when a property on the collection changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = (sender, args) => { };
 
         /// <summary>
@@ -103,18 +106,26 @@ namespace Dolphin.Ui
         #region IDictionary<TKey,TValue> Members
 
         /// <summary>
-        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the keys of the <see cref="T:System.Collections.Generic.IDictionary`2" />.
+        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of
+        /// the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
         /// </summary>
-        /// <returns>An <see cref="T:System.Collections.Generic.ICollection`1" /> containing the keys of the object that implements <see cref="T:System.Collections.Generic.IDictionary`2" />.</returns>
+        /// <returns>
+        /// An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the
+        /// object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+        /// </returns>
         public ICollection<TKey> Keys
         {
             get { return dictionary.Keys; }
         }
 
         /// <summary>
-        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2" />.
+        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values
+        /// in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
         /// </summary>
-        /// <returns>An <see cref="T:System.Collections.Generic.ICollection`1" /> containing the values in the object that implements <see cref="T:System.Collections.Generic.IDictionary`2" />.</returns>
+        /// <returns>
+        /// An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the
+        /// object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+        /// </returns>
         public ICollection<TValue> Values
         {
             get { return dictionary.Values; }
@@ -132,7 +143,7 @@ namespace Dolphin.Ui
         }
 
         /// <summary>
-        /// Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2" />.
+        /// Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
         /// </summary>
         /// <param name="key">The object to use as the key of the element to add.</param>
         /// <param name="value">The object to use as the value of the element to add.</param>
@@ -142,11 +153,13 @@ namespace Dolphin.Ui
         }
 
         /// <summary>
-        /// Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2" /> contains an element with the specified key.
+        /// Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains
+        /// an element with the specified key.
         /// </summary>
-        /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2" />.</param>
+        /// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param>
         /// <returns>
-        /// true if the <see cref="T:System.Collections.Generic.IDictionary`2" /> contains an element with the key; otherwise, false.
+        /// true if the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element
+        /// with the key; otherwise, false.
         /// </returns>
         public bool ContainsKey(TKey key)
         {
@@ -154,11 +167,12 @@ namespace Dolphin.Ui
         }
 
         /// <summary>
-        /// Removes the element with the specified key from the <see cref="T:System.Collections.Generic.IDictionary`2" />.
+        /// Removes the element with the specified key from the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
         /// </summary>
         /// <param name="key">The key of the element to remove.</param>
         /// <returns>
-        /// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key" /> was not found in the original <see cref="T:System.Collections.Generic.IDictionary`2" />.
+        /// true if the element is successfully removed; otherwise, false. This method also returns
+        /// false if <paramref name="key"/> was not found in the original <see cref="T:System.Collections.Generic.IDictionary`2"/>.
         /// </returns>
         public bool Remove(TKey key)
         {
@@ -169,9 +183,15 @@ namespace Dolphin.Ui
         /// Gets the value associated with the specified key.
         /// </summary>
         /// <param name="key">The key whose value to get.</param>
-        /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value" /> parameter. This parameter is passed uninitialized.</param>
+        /// <param name="value">
+        /// When this method returns, the value associated with the specified key, if the key is
+        /// found; otherwise, the default value for the type of the <paramref name="value"/>
+        /// parameter. This parameter is passed uninitialized.
+        /// </param>
         /// <returns>
-        /// true if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2" /> contains an element with the specified key; otherwise, false.
+        /// true if the object that implements <see
+        /// cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the
+        /// specified key; otherwise, false.
         /// </returns>
         public bool TryGetValue(TKey key, out TValue value)
         {

@@ -1,4 +1,5 @@
-﻿using Dolphin.Image;
+﻿using Dolphin.Enum;
+using Dolphin.Image;
 using Dolphin.Service;
 using Dolphin.Ui.Dialog;
 using Dolphin.Ui.View;
@@ -95,6 +96,7 @@ namespace Dolphin.Ui
             var extractPlayerService = container.Resolve<IExtractInformationService>("extractPlayerInformation");
             var extractWorldService = container.Resolve<IExtractInformationService>("extractWorldInformation");
             var _settings = container.Resolve<Settings>();
+            var modelService = container.Resolve<IModelService>();
 
             while (true)
             {
@@ -110,26 +112,24 @@ namespace Dolphin.Ui
 
                         continue;
                     }
-
                     var image = captureService.CaptureWindow("Diablo III64");
 
-                    //image.Save("test.png");
-
+                    extractWorldService.Extract(image);
+                    if (modelService.World.CurrentLocation == WorldLocation.LoadingScreen || modelService.World.CurrentLocation == WorldLocation.Menu)
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+                    else
                     {
                         if (_settings.SmartFeatureSettings.SkillCastingEnabled)
                         {
                             extractSkillService.Extract(image);
                             extractPlayerService.Extract(image);
                         }
-
-                        if (_settings.SmartFeatureSettings.SmartActionsEnabled)
-                        {
-                            // extractWorldService.Extract(image);
-                        }
-                        watch.Stop();
                         Trace.WriteLine(watch.ElapsedMilliseconds);
+                        Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
                     }
-                    Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dolphin.Enum;
+using System;
 using System.Windows.Forms;
 
 namespace Dolphin.Service
@@ -50,11 +51,11 @@ namespace Dolphin.Service
             if (condition.Invoke())
             {
                 Execute.AndForgetAsync(action);
-                logService.AddEntry(this, $"Clicking skill... [{@event.SkillName}][{@event.SkillIndex}]");
+                logService.AddEntry(this, $"Clicking skill... [{@event.SkillName}][{@event.SkillIndex}]", LogLevel.Debug);
             }
             else
             {
-                logService.AddEntry(this, $"Condition for skill not fulfilled... [{@event.SkillName}][{@event.SkillIndex}]");
+                logService.AddEntry(this, $"Condition for skill not fulfilled... [{@event.SkillName}][{@event.SkillIndex}]", LogLevel.Debug);
             }
         }
     }

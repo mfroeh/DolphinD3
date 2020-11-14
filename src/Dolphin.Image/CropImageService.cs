@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System;
 using System.Drawing;
 
 namespace Dolphin.Image
@@ -91,11 +92,11 @@ namespace Dolphin.Image
             Point offset;
             if (index >= 4)
             {
-                offset = TransformFrom1440p(new Point(22, 22));
+                offset = TransformFrom1440p(CommonImageCoordinate.SkillMouseOffset);
             }
             else
             {
-                offset = TransformFrom1440p(new Point(25, 25));
+                offset = TransformFrom1440p(CommonImageCoordinate.SkillOffset);
             }
 
             var skillMiddleRectangle = new Point(skillbar.X + offset.X, skillbar.Y + offset.Y);
@@ -203,6 +204,11 @@ namespace Dolphin.Image
                 case WorldLocation.Menu:
                     size = TransformFrom1440p(CommonImageSize.LocationMenu);
                     point = TransformFrom1440p(CommonImageCoordinate.LocationMenuSymbol);
+                    break;
+
+                case WorldLocation.LoadingScreen:
+                    size = TransformFrom1440p(CommonImageSize.LocationLoadingScreen);
+                    point = TransformFrom1440p(CommonImageCoordinate.LocationLoadingScreen);
                     break;
 
                 default:

@@ -16,9 +16,9 @@ namespace Dolphin.Service
             this.savePath = "log.txt";
         }
 
-        public Log InternalLog => internalLog;
-
         public event EventHandler<LogEntryEventArgs> EntryAdded;
+
+        public Log InternalLog => internalLog;
 
         public void AddEntry(object origin, string message, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {

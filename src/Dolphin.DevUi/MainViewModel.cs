@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Input;
 using Window = Dolphin.Enum.Window;
 
@@ -16,6 +16,8 @@ namespace Dolphin.DevUi
         private readonly ICaptureWindowService captureWindowService;
 
         private readonly ISaveImageService imageService;
+
+        private string status;
 
         public MainViewModel(ICaptureWindowService captureWindowService, ISaveImageService imageService)
         {
@@ -72,15 +74,16 @@ namespace Dolphin.DevUi
 
         public IList<int> PossibleGemUp => new List<int> { 1, 2, 3, 4, 5 };
 
-        public IList<WorldLocation> PossibleLocation => new List<WorldLocation> { WorldLocation.Grift, WorldLocation.Menu };
+        public IList<WorldLocation> PossibleLocation => System.Enum.GetValues(typeof(WorldLocation)).Cast<WorldLocation>().Where(x => x != WorldLocation.None).ToList();
 
-        public IList<Window> PossibleWindow => new List<Window> { Window.AcceptGrift, Window.Kadala, Window.Obelisk, Window.StartGame, Window.Urshi };
+        public IList<Window> PossibleWindow => System.Enum.GetValues(typeof(Window)).Cast<Window>().Where(x => x != Window.None).ToList();
 
         public int SelectedGemUp { get; set; } = 5;
 
         public Window SelectedWindow { get; set; } = Window.Urshi;
 
-        private string status;
+        public WorldLocation SelectedWorldLocation { get; set; } = WorldLocation.Grift;
+
         public string Status
         {
             get => status;
@@ -90,8 +93,6 @@ namespace Dolphin.DevUi
                 RaisePropertyChanged(nameof(Status));
             }
         }
-
-        public WorldLocation SelectedWorldLocation { get; set; } = WorldLocation.Grift;
 
         private void ExecuteSaveAction(Action<Bitmap> action)
         {

@@ -1,9 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Dolphin.Service
@@ -297,6 +295,24 @@ namespace Dolphin.Service
             }
         }
 
+        public void SkillCastLoop(IntPtr handle, CancellationTokenSource tokenSource, SkillCastConfiguration configuration, IList<Keys> skillKeybindings)
+        {
+            foreach (var index in configuration.SkillIndices)
+            {
+                var delay = configuration.Delays[index];
+
+                var key = index <= 3 ? skillKeybindings[index] : default;
+                Execute.AndForgetAsync(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
+            }
+
+            while (!IsCancelled(tokenSource))
+            {
+                Thread.Sleep(20);
+            }
+
+            return;
+        }
+
         public void SwapArmour(IntPtr handle, Keys openInventoryKey, uint swapItemAmount)
         {
             // Allow different spots
@@ -380,24 +396,6 @@ namespace Dolphin.Service
                     Thread.Sleep(100);
                 }
             }
-        }
-
-        public void SkillCastLoop(IntPtr handle, CancellationTokenSource tokenSource, SkillCastConfiguration configuration, IList<Keys> skillKeybindings)
-        {
-            foreach (var index in configuration.SkillIndices)
-            {
-                var delay = configuration.Delays[index];
-
-                var key = index <= 3 ? skillKeybindings[index] : default;
-                Execute.AndForgetAsync(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
-            }
-
-            while (!IsCancelled(tokenSource))
-            {
-                Thread.Sleep(20);
-            }
-
-            return;
         }
 
         private void SendKeyWithDelay(IntPtr handle, CancellationTokenSource tokenSource, int index, int delay, Keys key = default)

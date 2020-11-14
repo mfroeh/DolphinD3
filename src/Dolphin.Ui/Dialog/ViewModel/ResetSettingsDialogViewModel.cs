@@ -5,8 +5,6 @@ namespace Dolphin.Ui.Dialog
 {
     public class ResetSettingsDialogViewModel : DialogViewModelBase
     {
-        public IDictionary<string, bool> SettingsStatus { get; set; }
-
         public ResetSettingsDialogViewModel()
         {
             SettingsStatus = new Dictionary<string, bool>();
@@ -19,6 +17,8 @@ namespace Dolphin.Ui.Dialog
             SettingsStatus[nameof(Settings.SmartFeatureSettings)] = default;
             SettingsStatus[nameof(Settings.UiSettings)] = default;
         }
+
+        public IDictionary<string, bool> SettingsStatus { get; set; }
 
         public IList<string> SettingsToReset { get; set; }
 

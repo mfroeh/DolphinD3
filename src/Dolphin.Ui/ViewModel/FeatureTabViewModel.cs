@@ -1,12 +1,10 @@
 ﻿using Dolphin.Enum;
 using Dolphin.Ui.Dialog;
-using MvvmDialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Unity;
 
 namespace Dolphin.Ui.ViewModel
 {
@@ -190,6 +188,17 @@ namespace Dolphin.Ui.ViewModel
 
         #region Private Methods
 
+        private void ChangeSkillCastProfileDialog(SkillCastConfiguration skillCastProfile)
+        {
+            var result = messageBoxService.ShowCustomDialog<ChangeSkillCastProfileDialogViewModel>(this, skillCastProfile);
+            if (result.Item1 == true)
+            {
+                var index = SkillCastProfiles.IndexOf(skillCastProfile);
+                SkillCastProfiles.Remove(skillCastProfile);
+                SkillCastProfiles.Insert(index, skillCastProfile);
+            }
+        }
+
         private void ChangeSkillEnabled(SkillName name)
         {
             EnabledSkills[name] = !EnabledSkills[name];
@@ -215,17 +224,6 @@ namespace Dolphin.Ui.ViewModel
             else
             {
                 settingsService.SmartFeatureSettings.EnabledSmartActions.Add(smartAction);
-            }
-        }
-
-        private void ChangeSkillCastProfileDialog(SkillCastConfiguration skillCastProfile)
-        {
-            var result = messageBoxService.ShowCustomDialog<ChangeSkillCastProfileDialogViewModel>(this, skillCastProfile);
-            if (result.Item1 == true)
-            {
-                var index = SkillCastProfiles.IndexOf(skillCastProfile);
-                SkillCastProfiles.Remove(skillCastProfile);
-                SkillCastProfiles.Insert(index, skillCastProfile);
             }
         }
 

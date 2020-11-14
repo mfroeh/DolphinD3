@@ -1,7 +1,6 @@
 ﻿using Dolphin.Enum;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Input;
 
 namespace Dolphin.Ui.ViewModel
@@ -13,8 +12,8 @@ namespace Dolphin.Ui.ViewModel
         private readonly IEventBus eventBus;
         private readonly IHandleService handleService;
         private readonly IModelService modelService;
-        private readonly ISettingsService settingsService;
         private readonly IStartProcessService processService;
+        private readonly ISettingsService settingsService;
         private ICommand negateSuspendedCommand;
 
         #endregion Private Fields

@@ -1,18 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Forms;
 
 namespace Dolphin
 {
     public class SkillCastConfiguration
     {
+        public IDictionary<int, int> Delays { get; set; }
+
         public string Name { get; set; }
 
         public IList<int> SkillIndices { get; set; }
-
-        public IDictionary<int, int> Delays { get; set; }
 
         // For Ui - I know this violates MVVM but I cba rightnow
         public string SkillsAndDelays

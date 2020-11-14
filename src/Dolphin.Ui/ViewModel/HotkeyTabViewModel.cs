@@ -1,7 +1,6 @@
 ﻿using Dolphin.Enum;
 using Dolphin.Service;
 using Dolphin.Ui.Dialog;
-using MvvmDialogs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;

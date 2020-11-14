@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 

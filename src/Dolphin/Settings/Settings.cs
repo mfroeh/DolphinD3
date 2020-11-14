@@ -13,12 +13,9 @@ namespace Dolphin
             get
             {
                 var dict = new Dictionary<ActionName, Hotkey>();
-                foreach (var @enum in System.Enum.GetValues(typeof(ActionName)).Cast<ActionName>())
+                foreach (var @enum in EnumHelper.GetValues<ActionName>())
                 {
-                    if (@enum != ActionName.None)
-                    {
-                        dict[@enum] = null;
-                    }
+                    dict[@enum] = null;
                 }
 
                 dict[ActionName.Pause] = new Hotkey(Keys.F10);

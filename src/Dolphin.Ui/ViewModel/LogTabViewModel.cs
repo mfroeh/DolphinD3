@@ -77,7 +77,7 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public IEnumerable<LogLevel> PossibleLogLevel => System.Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
+        public IEnumerable<LogLevel> PossibleLogLevel => EnumHelper.GetValues<LogLevel>(false);
 
         public LogEntry SelectedLogItem { get; set; }
 

@@ -19,11 +19,13 @@ namespace Dolphin
         public static Point EscapeLowerDifficulty = new Point { X = 1700, Y = 400 };
         public static Point InventoryTopLeftSpot = new Point { X = 1425, Y = 580 };
         public static Point InventoryTopRightSpot = new Point { X = 1875, Y = 580 };
-        public static Point PortalAccept = new Point { X = 260, Y = 850 };
-        public static Point PortalGriftButton = new Point { X = 270, Y = 480 };
-        public static Point PortalRiftButton = new Point { X = 270, Y = 300 };
+        public static Point ObeliskAccept = new Point { X = 260, Y = 850 };
+        public static Point ObeliskGriftButton = new Point { X = 270, Y = 480 };
+        public static Point ObeliskRiftButton = new Point { X = 270, Y = 300 };
         public static Point UrshiFirstGem = new Point { X = 100, Y = 640 };
         public static Point UrshiUpgrade = new Point { X = 280, Y = 550 };
+        public static Point StartGame = new Point { X = 235, Y = 515 };
+        public static Point AcceptGriftButton = new Point { X = 0, Y = 0 }; // TODO
 
         #endregion General
 
@@ -74,7 +76,9 @@ namespace Dolphin
         public static Point KadalaTab1 = new Point { X = 515, Y = 220 };
         public static Point KadalaTab2 = new Point { X = 515, Y = 350 };
         public static Point KadalaTab3 = new Point { X = 515, Y = 480 };
+        public static Point AcceptGriftEmpowerBox = new Point { X = 0, Y = 0 }; // TODO
 
+        public static Point ObeliskEmpower = new Point { X = 215, Y = 615 };
         #endregion Kadala
     }
 }

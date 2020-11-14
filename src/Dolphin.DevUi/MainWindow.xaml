@@ -75,8 +75,8 @@
                     Content="Clip world location" />
                 <Button
                     Margin="8"
-                    Command="{Binding ClipUrshiGemUp}"
-                    Content="Clip urshi gem up" />
+                    Command="{Binding ClipExtraInformation}"
+                    Content="Clip extra information" />
             </StackPanel>
         </GroupBox>
         <GroupBox
@@ -90,8 +90,8 @@
                 <Label Content="Location" />
                 <ComboBox ItemsSource="{Binding PossibleLocation}" SelectedItem="{Binding SelectedWorldLocation}" />
 
-                <Label Content="Gem up" />
-                <ComboBox ItemsSource="{Binding PossibleGemUp}" SelectedItem="{Binding SelectedGemUp}" />
+                <Label Content="Extra information" />
+                <ComboBox ItemsSource="{Binding PossibleExtraInformation}" SelectedItem="{Binding SelectedExtraInformation}" />
             </StackPanel>
         </GroupBox>
         <GroupBox

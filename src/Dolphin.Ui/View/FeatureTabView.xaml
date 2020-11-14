@@ -297,7 +297,12 @@
                     CommandParameter="{x:Static enum:SmartActionName.AcceptGriftPopup}"
                     Content="Accept grift popup"
                     IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)AcceptGriftPopup]}" />
-
+                <CheckBox
+                    Grid.Row="1"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Content="Empower"
+                    IsChecked="{Binding EmpowerGrifts}" />
                 <CheckBox
                     Grid.Column="1"
                     Margin="{adonisUi:Space Top=0,

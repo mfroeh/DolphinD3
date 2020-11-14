@@ -36,7 +36,7 @@ namespace Dolphin.Ui.ViewModel
             this.messageBoxService = messageBoxService;
 
             Hotkeys = new Dictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
-            ItemTypes = System.Enum.GetValues(typeof(ItemType)).Cast<ItemType>().ToList();
+            ItemTypes = EnumHelper.GetValues<ItemType>(false).ToList();
 
             selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
             spareColumns = settingsService.Settings.MacroSettings.SpareColumns;

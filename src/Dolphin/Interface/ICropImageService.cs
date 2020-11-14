@@ -5,22 +5,24 @@ namespace Dolphin
 {
     public interface ICropImageService
     {
-        public Bitmap CropHealthbar(Bitmap image);
+        Bitmap CropHealthbar(Bitmap image);
 
-        public Bitmap CropPlayerClass(Bitmap image);
+        Bitmap CropPlayerClass(Bitmap image);
 
-        public Bitmap CropPrimaryResource(Bitmap image, PlayerClass playerClass);
+        Bitmap CropPrimaryResource(Bitmap image, PlayerClass playerClass);
 
-        public Bitmap CropSecondaryResource(Bitmap image, PlayerClass playerClass);
+        Bitmap CropSecondaryResource(Bitmap image, PlayerClass playerClass);
 
-        public Bitmap CropSkill(Bitmap image, int index);
+        Bitmap CropSkill(Bitmap image, int index);
 
-        public Bitmap CropSkillActive(Bitmap image, int index);
+        Bitmap CropSkillActive(Bitmap image, int index);
 
-        public Bitmap CropUrshiGemUp(Bitmap image);
+        Bitmap CropWindow(Bitmap image, Window window);
 
-        public Bitmap CropWindow(Bitmap image, Window window);
+        Bitmap CropWorldLocation(Bitmap image, WorldLocation location);
 
-        public Bitmap CropWorldLocation(Bitmap image, WorldLocation location);
+        Bitmap CropWindowExtraInformation(Bitmap image, ExtraInformation extraInformation);
+
+        Bitmap CropWindowExtraInformation(Bitmap image, Window window);
     }
 }

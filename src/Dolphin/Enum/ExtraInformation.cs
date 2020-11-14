@@ -7,6 +7,8 @@
         Urshi_4 = 2,
         Urshi_3 = 3,
         Urshi_2 = 4,
-        Urshi_1 = 5
+        Urshi_1 = 5,
+        ObeliskIsEmpowered = 6,
+        AcceptGriftIsEmpowered = 7
     }
 }

@@ -23,6 +23,11 @@ namespace Dolphin.DevUi
         {
             this.imageService = imageService;
             this.captureWindowService = captureWindowService;
+
+            // Set defaults
+            SelectedExtraInformation = PossibleExtraInformation.FirstOrDefault();
+            SelectedWindow = PossibleWindow.FirstOrDefault();
+            SelectedWorldLocation = PossibleLocation.FirstOrDefault();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -54,7 +59,7 @@ namespace Dolphin.DevUi
 
         public ICommand ClipSecondaryResourceDH => new RelayCommand((o) => ExecuteSaveAction(imageService.SavePlayerResourceSecondaryDemonHunter));
 
-        public ICommand ClipUrshiGemUp => new RelayCommand((o) => ExecuteSaveAction(imageService.SaveUrshiGemUp, SelectedGemUp));
+        public ICommand ClipExtraInformation => new RelayCommand((o) => ExecuteSaveAction(imageService.SaveExtraInformation, SelectedExtraInformation));
 
         public ICommand ClipWindow => new RelayCommand((o) => ExecuteSaveAction(imageService.SaveWindow, SelectedWindow));
 
@@ -72,17 +77,17 @@ namespace Dolphin.DevUi
             }
         }
 
-        public IList<int> PossibleGemUp => new List<int> { 1, 2, 3, 4, 5 };
+        public IList<ExtraInformation> PossibleExtraInformation => EnumHelper.GetValues<ExtraInformation>().ToList();
 
-        public IList<WorldLocation> PossibleLocation => System.Enum.GetValues(typeof(WorldLocation)).Cast<WorldLocation>().Where(x => x != WorldLocation.None).ToList();
+        public IList<WorldLocation> PossibleLocation => EnumHelper.GetValues<WorldLocation>().ToList();
 
-        public IList<Window> PossibleWindow => System.Enum.GetValues(typeof(Window)).Cast<Window>().Where(x => x != Window.None).ToList();
+        public IList<Window> PossibleWindow => EnumHelper.GetValues<Window>().ToList();
 
-        public int SelectedGemUp { get; set; } = 5;
+        public ExtraInformation SelectedExtraInformation { get; set; }
 
-        public Window SelectedWindow { get; set; } = Window.Urshi;
+        public Window SelectedWindow { get; set; }
 
-        public WorldLocation SelectedWorldLocation { get; set; } = WorldLocation.Grift;
+        public WorldLocation SelectedWorldLocation { get; set; }
 
         public string Status
         {

@@ -5,6 +5,8 @@ namespace Dolphin
 {
     public class SmartFeatureSettings
     {
+        public bool EmpowerGrifts { get; set; }
+
         public IList<SkillName> EnabledSkills { get; set; }
 
         public IList<SmartActionName> EnabledSmartActions { get; set; }

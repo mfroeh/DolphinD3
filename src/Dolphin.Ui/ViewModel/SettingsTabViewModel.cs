@@ -32,7 +32,7 @@ namespace Dolphin.Ui.ViewModel
             this.settingsService = settingsService;
             this.messageBoxService = messageBoxService;
 
-            PossibleKeys = System.Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList();
+            PossibleKeys = EnumHelper.GetValues<Keys>().ToList();
             SkillKeybindings = new ObservableCollection<Keys>(settingsService.Settings.SkillKeybindings);
             OtherKeybindings = new ObservableDictionary<CommandKeybinding, Keys>(settingsService.Settings.OtherKeybindings);
             updateInterval = settingsService.SmartFeatureSettings.UpdateInterval;

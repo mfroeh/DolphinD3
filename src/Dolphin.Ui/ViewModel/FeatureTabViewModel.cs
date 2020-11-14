@@ -17,6 +17,7 @@ namespace Dolphin.Ui.ViewModel
         private ICommand addSkillCastProfile;
         private ICommand changeSelectedSkillCastProfile;
         private ICommand deleteSelectedSkillCastProfile;
+        private bool empowerGrifts;
         private bool isOpenRift;
         private SkillCastConfiguration selectedSkillCastConfiguration;
         private bool skillCastingEnabled;
@@ -34,7 +35,7 @@ namespace Dolphin.Ui.ViewModel
             this.messageBoxService = messageBoxService;
 
             EnabledSkills = new ObservableDictionary<SkillName, bool>();
-            foreach (var playerClass in System.Enum.GetValues(typeof(PlayerClass)).Cast<PlayerClass>())
+            foreach (var playerClass in EnumHelper.GetValues<PlayerClass>())
             {
                 foreach (var skill in playerClass.PossibleSkills())
                 {
@@ -43,12 +44,9 @@ namespace Dolphin.Ui.ViewModel
             }
 
             EnabledSmartActions = new ObservableDictionary<SmartActionName, bool>();
-            foreach (var actionName in System.Enum.GetValues(typeof(SmartActionName)).Cast<SmartActionName>())
+            foreach (var actionName in EnumHelper.GetValues<SmartActionName>())
             {
-                if (actionName != SmartActionName.None)
-                {
-                    EnabledSmartActions[actionName] = settingsService.IsSmartActionEnabled(actionName);
-                }
+                EnabledSmartActions[actionName] = settingsService.IsSmartActionEnabled(actionName);
             }
 
             smartActionsEnabled = settingsService.SmartFeatureSettings.SmartActionsEnabled;
@@ -57,6 +55,8 @@ namespace Dolphin.Ui.ViewModel
 
             SkillCastProfiles = new ObservableCollection<SkillCastConfiguration>(settingsService.SkillCastSettings.SkillCastConfigurations);
             SelectedSkillCastProfile = SkillCastProfiles.FirstOrDefault();
+
+            EmpowerGrifts = settingsService.SmartFeatureSettings.EmpowerGrifts;
         }
 
         #endregion Public Constructors
@@ -114,6 +114,17 @@ namespace Dolphin.Ui.ViewModel
                 });
 
                 return deleteSelectedSkillCastProfile;
+            }
+        }
+
+        public bool EmpowerGrifts
+        {
+            get => empowerGrifts;
+            set
+            {
+                empowerGrifts = value;
+                settingsService.SmartFeatureSettings.EmpowerGrifts = value;
+                RaisePropertyChanged(nameof(EmpowerGrifts));
             }
         }
 

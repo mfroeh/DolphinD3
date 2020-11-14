@@ -73,10 +73,8 @@ namespace Dolphin.Image
             var oldClass = modelService.Player.Class;
 
             var newPlayerClass = PlayerClass.None;
-            foreach (var playerClass in System.Enum.GetValues(typeof(PlayerClass)).Cast<PlayerClass>())
+            foreach (var playerClass in EnumHelper.GetValues<PlayerClass>())
             {
-                if (playerClass is PlayerClass.None) continue;
-
                 var template = resourceService.Load(playerClass);
                 var match = ImageHelper.Compare(picturePart, template);
 

@@ -142,14 +142,6 @@ namespace Dolphin.Image
             return ImageHelper.CropImage(image, new Rectangle(skillActive, skillActiveSize));
         }
 
-        public Bitmap CropUrshiGemUp(Bitmap image)
-        {
-            var point = TransformFrom1440p(CommonImageCoordinate.WindowUrshiGemUp);
-            var size = TransformFrom1440p(CommonImageSize.WindowUrhsiGemUp);
-
-            return ImageHelper.CropImage(image, new Rectangle(point, size));
-        }
-
         public Bitmap CropWindow(Bitmap image, Window window)
         {
             Point point;
@@ -179,6 +171,57 @@ namespace Dolphin.Image
 
                 default:
                     return null;
+            }
+
+            return ImageHelper.CropImage(image, new Rectangle(point, size));
+        }
+
+        public Bitmap CropWindowExtraInformation(Bitmap image, Window window)
+        {
+            switch (window)
+            {
+                case Window.Urshi:
+                    return CropWindowExtraInformation(image, ExtraInformation.Urshi_1);
+
+                case Window.Obelisk:
+                    return CropWindowExtraInformation(image, ExtraInformation.ObeliskIsEmpowered);
+
+                case Window.AcceptGrift:
+                    return CropWindowExtraInformation(image, ExtraInformation.AcceptGriftIsEmpowered);
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public Bitmap CropWindowExtraInformation(Bitmap image, ExtraInformation extraInformation)
+        {
+            Point point;
+            Size size;
+
+            switch (extraInformation)
+            {
+                case ExtraInformation.Urshi_1:
+                case ExtraInformation.Urshi_2:
+                case ExtraInformation.Urshi_3:
+                case ExtraInformation.Urshi_4:
+                case ExtraInformation.Urshi_5:
+                    point = TransformFrom1440p(CommonImageCoordinate.WindowUrshiGemUp);
+                    size = TransformFrom1440p(CommonImageSize.WindowUrhsiGemUp);
+                    break;
+
+                case ExtraInformation.ObeliskIsEmpowered:
+                    point = TransformFrom1440p(CommonImageCoordinate.WindowObeliskEmpowered);
+                    size = TransformFrom1440p(CommonImageSize.WindowObeliskEmpowered);
+                    break;
+
+                case ExtraInformation.AcceptGriftIsEmpowered:
+                    point = TransformFrom1440p(CommonImageCoordinate.WindowAcceptGriftEmpowered);
+                    size = TransformFrom1440p(CommonImageSize.WindowAcceptGriftEmpowered);
+                    break;
+
+                default:
+                    throw new NotImplementedException();
             }
 
             return ImageHelper.CropImage(image, new Rectangle(point, size));

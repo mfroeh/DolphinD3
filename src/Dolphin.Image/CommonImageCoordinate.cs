@@ -32,8 +32,8 @@ namespace Dolphin.Image
         public static Point SkillbarSkill5Active = new Point { X = 1290, Y = 1345 };
         public static Point SkillbarSkill5TopLeft = new Point { X = 1295, Y = 1342 };
 
-        public static Point SkillOffset = new Point(25, 15);
         public static Point SkillMouseOffset = new Point(22, 12);
+        public static Point SkillOffset = new Point(25, 15);
 
         #endregion Skill
 
@@ -48,13 +48,15 @@ namespace Dolphin.Image
 
         #region Window
 
+        public static Point LocationLoadingScreen = new Point(1260, 722);
+        public static Point WindowAcceptGrift = new Point(0, 0); // TODO
+        public static Point WindowAcceptGriftEmpowered = new Point(0, 0); // TODO
         public static Point WindowKadala = new Point { X = 330, Y = 87 };
         public static Point WindowObelisk = new Point { X = 330, Y = 87 };
+        public static Point WindowObeliskEmpowered = new Point { X = 290, Y = 820 };
         public static Point WindowStartGame = new Point { X = 226, Y = 679 };
         public static Point WindowUrshi = new Point { X = 330, Y = 87 };
-        public static Point WindowUrshiGemUp = new Point { X = 389, Y = 722 }; 
-
-        public static Point LocationLoadingScreen = new Point(1260, 722);
+        public static Point WindowUrshiGemUp = new Point { X = 389, Y = 722 };
 
         #endregion Window
     }

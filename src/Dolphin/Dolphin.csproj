@@ -75,6 +75,7 @@
     <Compile Include="Interface\IPoolSpotService.cs" />
     <Compile Include="Interface\ITransformService.cs" />
     <Compile Include="Interface\ITravelInformationService.cs" />
+    <Compile Include="Static\EnumHelper.cs" />
     <Compile Include="Static\Execute.cs" />
     <Compile Include="Event\HotkeyPressedEvent.cs" />
     <Compile Include="Event\IEvent.cs" />
@@ -483,6 +484,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\WorldLocation\LoadingScreen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\ExtraInformation\ObeliskIsEmpowered.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

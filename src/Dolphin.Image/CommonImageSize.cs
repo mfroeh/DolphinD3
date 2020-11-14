@@ -34,9 +34,11 @@ namespace Dolphin.Image
         public static Size WindowStartGame = new Size { Width = 180, Height = 10 };
         public static Size WindowUrhsiGemUp = new Size { Width = 48, Height = 20 };
         public static Size WindowUrshi = new Size { Width = 30, Height = 30 };
-
+        public static Size WindowObeliskEmpowered = new Size { Width = 10, Height = 10 };
         public static Size LocationLoadingScreen = new Size { Width = 50, Height = 23 };
 
+        public static Size WindowAcceptGrift = new Size { Height = 0, Width = 0 }; // TODO
+        public static Size WindowAcceptGriftEmpowered = new Size { Height = 0, Width = 0 }; // TODO
         #endregion Window
     }
 }

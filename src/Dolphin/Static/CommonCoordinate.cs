@@ -26,7 +26,9 @@ namespace Dolphin
         public static Point UrshiUpgrade = new Point { X = 280, Y = 550 };
         public static Point StartGame = new Point { X = 235, Y = 515 };
         public static Point AcceptGriftButton = new Point { X = 0, Y = 0 }; // TODO
+        public static Point AcceptGriftEmpowerBox = new Point { X = 0, Y = 0 }; // TODO
 
+        public static Point ObeliskEmpower = new Point { X = 215, Y = 615 };
         #endregion General
 
         #region Map
@@ -76,9 +78,6 @@ namespace Dolphin
         public static Point KadalaTab1 = new Point { X = 515, Y = 220 };
         public static Point KadalaTab2 = new Point { X = 515, Y = 350 };
         public static Point KadalaTab3 = new Point { X = 515, Y = 480 };
-        public static Point AcceptGriftEmpowerBox = new Point { X = 0, Y = 0 }; // TODO
-
-        public static Point ObeliskEmpower = new Point { X = 215, Y = 615 };
         #endregion Kadala
     }
 }

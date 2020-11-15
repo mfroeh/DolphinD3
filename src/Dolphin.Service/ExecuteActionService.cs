@@ -92,6 +92,9 @@ namespace Dolphin.Service
             if (handle.IsDefault() || @event.NewOpenWindow == default) return;
 
             var actionName = settingsService.GetSmartActionName(@event.NewOpenWindow);
+            
+            if (!settingsService.IsSmartActionEnabled(actionName)) return;
+
             if (actionName == SmartActionName.UpgradeGem)
             {
                 if (tokenSource == null)

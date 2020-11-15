@@ -31,10 +31,5 @@ namespace Dolphin.Ui.View
 
             e.Handled = true;
         }
-
-        private void TabItem_Selected(object sender, RoutedEventArgs e)
-        {
-            ((MainViewModel)DataContext).Children.First(x => x is HotkeyTabViewModel).RaisePropertyChanged(nameof(HotkeyTabViewModel.SkillCastProfiles));
-        }
     }
 }

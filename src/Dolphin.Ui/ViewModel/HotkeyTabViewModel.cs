@@ -21,9 +21,6 @@ namespace Dolphin.Ui.ViewModel
         private ConvertingSpeed convertingSpeed;
         private bool empowered;
         private bool pickGem;
-        private ItemType selectedItem;
-
-        private uint spareColumns;
 
         #endregion Private Fields
 
@@ -36,10 +33,7 @@ namespace Dolphin.Ui.ViewModel
             this.messageBoxService = messageBoxService;
 
             Hotkeys = new Dictionary<ActionName, Hotkey>(settingsService.Settings.Hotkeys);
-            ItemTypes = EnumHelper.GetValues<ItemType>(false).ToList();
 
-            selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
-            spareColumns = settingsService.Settings.MacroSettings.SpareColumns;
             empowered = settingsService.Settings.MacroSettings.Empowered;
             pickGem = settingsService.Settings.MacroSettings.PickGemYourself;
             convertingSpeed = settingsService.Settings.MacroSettings.ConvertingSpeed;
@@ -82,8 +76,6 @@ namespace Dolphin.Ui.ViewModel
 
         public IDictionary<ActionName, Hotkey> Hotkeys { get; }
 
-        public IList<ItemType> ItemTypes { get; }
-
         public bool PickGemYourself
         {
             get => pickGem;
@@ -92,46 +84,6 @@ namespace Dolphin.Ui.ViewModel
                 pickGem = value;
                 settingsService.Settings.MacroSettings.PickGemYourself = value;
                 RaisePropertyChanged(nameof(Empowered));
-            }
-        }
-
-        public ItemType SelectedGambleItem
-        {
-            get
-            {
-                return selectedItem;
-            }
-            set
-            {
-                selectedItem = value;
-                settingsService.Settings.MacroSettings.SelectedGambleItem = value;
-                RaisePropertyChanged(nameof(SelectedGambleItem));
-            }
-        }
-
-        public int SelectedSkillCastProfile
-        {
-            get => settingsService.SkillCastSettings.SelectedIndex;
-            set
-            {
-                settingsService.SkillCastSettings.SelectedIndex = value;
-                RaisePropertyChanged(nameof(SelectedSkillCastProfile));
-            }
-        }
-
-        public IList<string> SkillCastProfiles
-        {
-            get => settingsService.SkillCastSettings.SkillCastConfigurations.Select(x => x.Name).ToList();
-        }
-
-        public uint SpareColumnIndex
-        {
-            get => spareColumns;
-            set
-            {
-                spareColumns = value;
-                settingsService.Settings.MacroSettings.SpareColumns = spareColumns;
-                RaisePropertyChanged(nameof(SpareColumnIndex));
             }
         }
 

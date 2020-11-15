@@ -18,12 +18,18 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0">
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="{adonisUi:Space Top=0,
+                                    Left=0,
+                                    Right=0}">
             <GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -261,7 +267,11 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Grid.Column="0">
+        <GroupBox
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{adonisUi:Space Left=0,
+                                    Right=0}">
             <GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -361,7 +371,112 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Profiles">
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox
+                Grid.Column="0"
+                Margin="{adonisUi:Space Left=0}"
+                Header="Action settings">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Margin="{adonisUi:Space Left=0, Bottom=0}" Content="Skillcast profile" />
+
+                    <ComboBox
+                        Grid.Column="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0,
+                                                Right=.5}"
+                        ItemsSource="{Binding SkillCastProfiles}"
+                        SelectedIndex="{Binding SelectedSkillCastProfile}" />
+
+                    <Label
+                        Grid.Row="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0}"
+                        VerticalAlignment="Center">
+                        Columns to spare
+                    </Label>
+                    <ComboBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0,
+                                                Right=.5}"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
+                        SelectedIndex="{Binding SpareColumnIndex}">
+                        <ComboBoxItem>0</ComboBoxItem>
+                        <ComboBoxItem>1</ComboBoxItem>
+                        <ComboBoxItem>2</ComboBoxItem>
+                        <ComboBoxItem>3</ComboBoxItem>
+                    </ComboBox>
+                    <Label
+                        Grid.Row="2"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0}"
+                        VerticalAlignment="Center">
+                        Item to gamble
+                    </Label>
+                    <ComboBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0,
+                                                Right=.5}"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
+                        ItemsSource="{Binding ItemTypes}"
+                        SelectedItem="{Binding SelectedGambleItem}" />
+
+                </Grid>
+            </GroupBox>
+            <GroupBox
+                Grid.Column="1"
+                Margin="{adonisUi:Space Right=0}"
+                Header="Poolspots">
+                <DataGrid
+                    MaxHeight="250"
+                    Margin="{adonisUi:Space Top=0}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserReorderColumns="True"
+                    CanUserSortColumns="True"
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True"
+                    ItemsSource="{Binding PoolSpots}"
+                    SelectionMode="Single"
+                    VerticalScrollBarVisibility="Visible">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Binding="{Binding Act}"
+                            Header="Act"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding Name}"
+                            Header="Waypoint"
+                            IsReadOnly="True" />
+                        <DataGridCheckBoxColumn Binding="{Binding Enabled}" Header="Enabled" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
+
+
+
+        <GroupBox Grid.Row="3" Header="Skillcast profiles">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -380,8 +495,8 @@
                     EnableColumnVirtualization="True"
                     EnableRowVirtualization="True"
                     FrozenColumnCount="1"
-                    ItemsSource="{Binding SkillCastProfiles}"
-                    SelectedItem="{Binding SelectedSkillCastProfile}"
+                    ItemsSource="{Binding SkillCastProfiles_}"
+                    SelectedItem="{Binding SelectedSkillCastProfile_}"
                     SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn
@@ -405,19 +520,19 @@
                         Margin="{adonisUi:Space Left=0,
                                                 Right=0,
                                                 Top=0}"
-                        Command="{Binding AddSkillCastProfile}"
+                        Command="{Binding AddSkillCastProfile_}"
                         Content="Add new" />
                     <Button
                         Margin="{adonisUi:Space Left=0,
                                                 Right=0,
                                                 Top=0}"
-                        Command="{Binding ChangeSelectedSkillCastProfile}"
+                        Command="{Binding ChangeSelectedSkillCastProfile_}"
                         Content="Change" />
                     <Button
                         Margin="{adonisUi:Space Left=0,
                                                 Right=0,
                                                 Top=0}"
-                        Command="{Binding DeleteSelectedSkillCastProfile}"
+                        Command="{Binding DeleteSelectedSkillCastProfile_}"
                         Content="Delete" />
                 </StackPanel>
             </Grid>

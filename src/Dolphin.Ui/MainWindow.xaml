@@ -26,10 +26,7 @@
                     <TabItem DataContext="{Binding Children[4]}" Header="Overview">
                         <view:OverviewTabView />
                     </TabItem>
-                    <TabItem
-                        DataContext="{Binding Children[0]}"
-                        Header="Hotkey"
-                        Selector.Selected="TabItem_Selected">
+                    <TabItem DataContext="{Binding Children[0]}" Header="Hotkey">
                         <view:HotkeyTabView />
                     </TabItem>
                     <TabItem DataContext="{Binding Children[1]}" Header="Enabled features">

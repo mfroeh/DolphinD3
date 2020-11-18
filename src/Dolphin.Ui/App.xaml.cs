@@ -106,7 +106,9 @@ namespace Dolphin.Ui
                     var handle = handleService.GetHandle("Diablo III64");
                     if (handle.IsDefault()
                         || _settings.IsPaused
-                        || !(_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled))
+                        || !(_settings.SmartFeatureSettings.SmartActionsEnabled || _settings.SmartFeatureSettings.SkillCastingEnabled)
+                        || handle.ClientRectangle.Width != 2560 || handle.ClientRectangle.Height != 1440
+                        )
                     {
                         Thread.Sleep((int)_settings.SmartFeatureSettings.UpdateInterval);
 

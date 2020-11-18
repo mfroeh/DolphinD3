@@ -43,6 +43,7 @@
                         VerticalAlignment="Center"
                         Content="Enabled"
                         IsChecked="{Binding SkillCastingEnabled}"
+                        IsEnabled="False"
                         Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                 </Grid>
             </GroupBox.Header>
@@ -281,6 +282,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Smart actions" />
                     <CheckBox
+                        IsEnabled="False"
                         Grid.Column="2"
                         VerticalAlignment="Center"
                         Content="Enabled"

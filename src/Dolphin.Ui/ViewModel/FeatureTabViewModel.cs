@@ -1,12 +1,11 @@
 ﻿using Dolphin.Enum;
 using Dolphin.Ui.Dialog;
-using MvvmDialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Unity;
 
 namespace Dolphin.Ui.ViewModel
 {
@@ -16,15 +15,18 @@ namespace Dolphin.Ui.ViewModel
 
         private readonly IMessageBoxService messageBoxService;
         private readonly ISettingsService settingsService;
-        private ICommand addSkillCastProfile;
-        private ICommand changeSelectedSkillCastProfile;
-        private ICommand deleteSelectedSkillCastProfile;
+        private ICommand addSkillCastProfile_;
+        private ICommand changeSelectedSkillCastProfile_;
+        private ICommand deleteSelectedSkillCastProfile_;
+        private bool empowerGrifts;
         private bool isOpenRift;
-        private SkillCastConfiguration selectedSkillCastConfiguration;
+        private ItemType selectedItem;
+        private SkillCastConfiguration selectedSkillCastConfiguration_;
         private bool skillCastingEnabled;
         private ICommand skillCheckboxClicked;
         private ICommand smartActionCheckboxClicked;
         private bool smartActionsEnabled;
+        private uint spareColumns;
 
         #endregion Private Fields
 
@@ -36,7 +38,7 @@ namespace Dolphin.Ui.ViewModel
             this.messageBoxService = messageBoxService;
 
             EnabledSkills = new ObservableDictionary<SkillName, bool>();
-            foreach (var playerClass in System.Enum.GetValues(typeof(PlayerClass)).Cast<PlayerClass>())
+            foreach (var playerClass in EnumHelper.GetValues<PlayerClass>())
             {
                 foreach (var skill in playerClass.PossibleSkills())
                 {
@@ -45,77 +47,103 @@ namespace Dolphin.Ui.ViewModel
             }
 
             EnabledSmartActions = new ObservableDictionary<SmartActionName, bool>();
-            foreach (var actionName in System.Enum.GetValues(typeof(SmartActionName)).Cast<SmartActionName>())
+            foreach (var actionName in EnumHelper.GetValues<SmartActionName>())
             {
-                if (actionName != SmartActionName.None)
-                {
-                    EnabledSmartActions[actionName] = settingsService.IsSmartActionEnabled(actionName);
-                }
+                EnabledSmartActions[actionName] = settingsService.IsSmartActionEnabled(actionName);
             }
 
             smartActionsEnabled = settingsService.SmartFeatureSettings.SmartActionsEnabled;
             skillCastingEnabled = settingsService.SmartFeatureSettings.SkillCastingEnabled;
             isOpenRift = settingsService.SmartFeatureSettings.IsOpenRift;
 
-            SkillCastProfiles = new ObservableCollection<SkillCastConfiguration>(settingsService.SkillCastSettings.SkillCastConfigurations);
-            SelectedSkillCastProfile = SkillCastProfiles.FirstOrDefault();
+            SkillCastProfiles_ = new ObservableCollection<SkillCastConfiguration>(settingsService.SkillCastSettings.SkillCastConfigurations);
+            SelectedSkillCastProfile_ = SkillCastProfiles_.FirstOrDefault();
+            EmpowerGrifts = settingsService.SmartFeatureSettings.EmpowerGrifts;
+
+            // New
+            PoolSpots = new BindingList<Waypoint>(settingsService.MacroSettings.Poolspots);
+            PoolSpots.ListChanged += PoolSpotsChangedHandler;
+
+            ItemTypes = EnumHelper.GetValues<ItemType>(false).ToList();
+            selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
+            spareColumns = settingsService.Settings.MacroSettings.SpareColumns;
+
+            SkillsCheckboxEnabled = false;
+            SmartActionCheckboxEnabled = false;
         }
 
         #endregion Public Constructors
 
         #region Public Properties
 
-        public ICommand AddSkillCastProfile
+        public bool SkillsCheckboxEnabled { get; set; }
+
+        public bool SmartActionCheckboxEnabled { get; set; }
+
+        public ICommand AddSkillCastProfile_
         {
             get
             {
-                addSkillCastProfile = addSkillCastProfile ?? new RelayCommand((o) =>
+                addSkillCastProfile_ = addSkillCastProfile_ ?? new RelayCommand((o) =>
                 {
-                    var profile = new SkillCastConfiguration
+                    var profile_ = new SkillCastConfiguration
                     {
                         Name = Guid.NewGuid().ToString(),
                         SkillIndices = new List<int>(),
                         Delays = new Dictionary<int, int>()
                     };
-                    SkillCastProfiles.Add(profile);
-                    settingsService.SkillCastSettings.SkillCastConfigurations.Add(profile);
+                    SkillCastProfiles_.Add(profile_);
+                    settingsService.SkillCastSettings.SkillCastConfigurations.Add(profile_);
 
-                    SelectedSkillCastProfile = profile;
-                    ChangeSkillCastProfileDialog(profile);
+                    SelectedSkillCastProfile_ = profile_;
+                    ChangeSkillCastProfileDialog_(profile_);
                 });
 
-                return addSkillCastProfile;
+                return addSkillCastProfile_;
             }
         }
 
-        public ICommand ChangeSelectedSkillCastProfile
+        public ICommand ChangeSelectedSkillCastProfile_
         {
             get
             {
-                changeSelectedSkillCastProfile = changeSelectedSkillCastProfile ?? new RelayCommand((o) =>
+                changeSelectedSkillCastProfile_ = changeSelectedSkillCastProfile_ ?? new RelayCommand((o) =>
                 {
-                    if (SelectedSkillCastProfile != default)
+                    if (SelectedSkillCastProfile_ != default)
                     {
-                        ChangeSkillCastProfileDialog(SelectedSkillCastProfile);
+                        ChangeSkillCastProfileDialog_(SelectedSkillCastProfile_);
                     }
                 });
 
-                return changeSelectedSkillCastProfile;
+                return changeSelectedSkillCastProfile_;
             }
         }
 
-        public ICommand DeleteSelectedSkillCastProfile
+        public ICommand DeleteSelectedSkillCastProfile_
         {
             get
             {
-                deleteSelectedSkillCastProfile = deleteSelectedSkillCastProfile ?? new RelayCommand((o) =>
+                deleteSelectedSkillCastProfile_ = deleteSelectedSkillCastProfile_ ?? new RelayCommand((o) =>
                 {
-                    settingsService.SkillCastSettings.SkillCastConfigurations.Remove(SelectedSkillCastProfile);
-                    SkillCastProfiles.Remove(SelectedSkillCastProfile);
-                    SelectedSkillCastProfile = SkillCastProfiles.FirstOrDefault();
+                    settingsService.SkillCastSettings.SkillCastConfigurations.Remove(SelectedSkillCastProfile_);
+                    SkillCastProfiles_.Remove(SelectedSkillCastProfile_);
+                    SelectedSkillCastProfile_ = SkillCastProfiles_.FirstOrDefault();
+                    RaisePropertyChanged(nameof(SelectedSkillCastProfile));
+                    RaisePropertyChanged(nameof(SkillCastProfiles));
                 });
 
-                return deleteSelectedSkillCastProfile;
+                return deleteSelectedSkillCastProfile_;
+            }
+        }
+
+        public bool EmpowerGrifts
+        {
+            get => empowerGrifts;
+            set
+            {
+                empowerGrifts = value;
+                settingsService.SmartFeatureSettings.EmpowerGrifts = value;
+                RaisePropertyChanged(nameof(EmpowerGrifts));
             }
         }
 
@@ -133,13 +161,41 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public SkillCastConfiguration SelectedSkillCastProfile
+        public IList<ItemType> ItemTypes { get; }
+
+        public BindingList<Waypoint> PoolSpots { get; set; }
+
+        public ItemType SelectedGambleItem
         {
-            get => selectedSkillCastConfiguration;
+            get
+            {
+                return selectedItem;
+            }
             set
             {
-                selectedSkillCastConfiguration = value;
+                selectedItem = value;
+                settingsService.Settings.MacroSettings.SelectedGambleItem = value;
+                RaisePropertyChanged(nameof(SelectedGambleItem));
+            }
+        }
+
+        public int SelectedSkillCastProfile
+        {
+            get => settingsService.SkillCastSettings.SelectedIndex;
+            set
+            {
+                settingsService.SkillCastSettings.SelectedIndex = value;
                 RaisePropertyChanged(nameof(SelectedSkillCastProfile));
+            }
+        }
+
+        public SkillCastConfiguration SelectedSkillCastProfile_
+        {
+            get => selectedSkillCastConfiguration_;
+            set
+            {
+                selectedSkillCastConfiguration_ = value;
+                RaisePropertyChanged(nameof(SelectedSkillCastProfile_));
             }
         }
 
@@ -154,7 +210,12 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        public ObservableCollection<SkillCastConfiguration> SkillCastProfiles { get; set; }
+        public IList<string> SkillCastProfiles
+        {
+            get => settingsService.SkillCastSettings.SkillCastConfigurations.Select(x => x.Name).ToList();
+        }
+
+        public ObservableCollection<SkillCastConfiguration> SkillCastProfiles_ { get; set; }
 
         public ICommand SkillCheckboxClicked
         {
@@ -186,9 +247,34 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
+        public uint SpareColumnIndex
+        {
+            get => spareColumns;
+            set
+            {
+                spareColumns = value;
+                settingsService.Settings.MacroSettings.SpareColumns = spareColumns;
+                RaisePropertyChanged(nameof(SpareColumnIndex));
+            }
+        }
+
         #endregion Public Properties
 
         #region Private Methods
+
+        private void ChangeSkillCastProfileDialog_(SkillCastConfiguration skillCastProfile)
+        {
+            var result = messageBoxService.ShowCustomDialog<ChangeSkillCastProfileDialogViewModel>(this, skillCastProfile);
+            if (result.Item1 == true)
+            {
+                var index = SkillCastProfiles_.IndexOf(skillCastProfile);
+                SkillCastProfiles_.Remove(skillCastProfile);
+                SkillCastProfiles_.Insert(index, skillCastProfile);
+
+                RaisePropertyChanged(nameof(SelectedSkillCastProfile));
+                RaisePropertyChanged(nameof(SkillCastProfiles));
+            }
+        }
 
         private void ChangeSkillEnabled(SkillName name)
         {
@@ -218,15 +304,9 @@ namespace Dolphin.Ui.ViewModel
             }
         }
 
-        private void ChangeSkillCastProfileDialog(SkillCastConfiguration skillCastProfile)
+        private void PoolSpotsChangedHandler(object o, ListChangedEventArgs e)
         {
-            var result = messageBoxService.ShowCustomDialog<ChangeSkillCastProfileDialogViewModel>(this, skillCastProfile);
-            if (result.Item1 == true)
-            {
-                var index = SkillCastProfiles.IndexOf(skillCastProfile);
-                SkillCastProfiles.Remove(skillCastProfile);
-                SkillCastProfiles.Insert(index, skillCastProfile);
-            }
+            settingsService.MacroSettings.Poolspots = PoolSpots.ToList();
         }
 
         #endregion Private Methods

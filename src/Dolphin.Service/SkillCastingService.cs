@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dolphin.Enum;
+using System;
 using System.Windows.Forms;
 
 namespace Dolphin.Service
@@ -8,10 +9,12 @@ namespace Dolphin.Service
         private readonly IConditionFinderService conditionFinderService;
         private readonly IHandleService handleService;
         private readonly ILogService logService;
+        private readonly IModelService modelService;
         private readonly ISettingsService settingsService;
 
-        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService, IHandleService handleService, ILogService logService) : base(eventBus)
+        public SkillCastingService(IEventBus eventBus, ISettingsService settingsService, IConditionFinderService conditionFinderService, IModelService modelService, IHandleService handleService, ILogService logService) : base(eventBus)
         {
+            this.modelService = modelService;
             this.settingsService = settingsService;
             this.logService = logService;
             this.conditionFinderService = conditionFinderService;
@@ -47,14 +50,16 @@ namespace Dolphin.Service
             }
 
             var condition = conditionFinderService.FindCondition(@event.SkillName);
-            if (condition.Invoke())
+            if (condition.Invoke(modelService.Player,
+                                 modelService.World,
+                                 modelService.GetSkill(@event.SkillIndex)))
             {
                 Execute.AndForgetAsync(action);
-                logService.AddEntry(this, $"Clicking skill... [{@event.SkillName}][{@event.SkillIndex}]");
+                logService.AddEntry(this, $"Clicking skill... [{@event.SkillName}][{@event.SkillIndex}]", LogLevel.Debug);
             }
             else
             {
-                logService.AddEntry(this, $"Condition for skill not fulfilled... [{@event.SkillName}][{@event.SkillIndex}]");
+                logService.AddEntry(this, $"Condition for skill not fulfilled... [{@event.SkillName}][{@event.SkillIndex}]", LogLevel.Debug);
             }
         }
     }

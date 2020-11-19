@@ -1,5 +1,4 @@
 ﻿using Dolphin.Enum;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Dolphin
@@ -8,10 +7,10 @@ namespace Dolphin
     {
         public LogLevel DisplayLogLevel { get; set; }
 
+        public IDictionary<string, string> ExecuteablePaths { get; set; }
+
         public bool IsDark { get; set; }
 
         public bool LogPaused { get; set; }
-
-        public IDictionary<string, string> ExecuteablePaths { get; set; }
     }
 }

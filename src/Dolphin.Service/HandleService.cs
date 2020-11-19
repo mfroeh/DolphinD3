@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,15 +7,15 @@ namespace Dolphin.Service
 {
     public class HandleService : IHandleService
     {
-        private IDictionary<string, WindowInformation> handles = new Dictionary<string, WindowInformation>();
         private readonly ILogService logService;
-
-        public event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
+        private IDictionary<string, WindowInformation> handles = new Dictionary<string, WindowInformation>();
 
         public HandleService(ILogService logService)
         {
             this.logService = logService;
         }
+
+        public event EventHandler<HandleChangedEventArgs> HandleStatusChanged;
 
         public WindowInformation GetHandle(string processName)
         {

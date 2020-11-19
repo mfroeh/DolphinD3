@@ -129,12 +129,25 @@ namespace Dolphin.Service
             switch (actionName)
             {
                 case SmartActionName.AcceptGriftPopup:
+                    {
+                        var isEmpowered = (bool)@params[0];
+                        bool clickIt = (isEmpowered && settingsService.SmartFeatureSettings.EmpowerGrifts) || (!isEmpowered && settingsService.SmartFeatureSettings.EmpowerGrifts);
+                        return () => actionService.AcceptGriftPopup(handle, clickIt);
+                    }
                 case SmartActionName.OpenRiftGrift:
+                    if (settingsService.SmartFeatureSettings.IsOpenRift)
+                        return () => actionService.OpenRift(handle);
+                    else
+                        return () => actionService.OpenGrift(handle);
+
                 case SmartActionName.StartGame:
+                    return () => actionService.StartGame(handle);
+
                 case SmartActionName.Gamble:
-                    return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);
+                    return FindAction(ActionName.Gamble, handle);
 
                 default:
+                    return () => logService.AddEntry(this, $"Automatic actions are not yet implemented.", LogLevel.Debug);
                     throw new NotImplementedException();
             }
         }

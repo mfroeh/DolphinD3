@@ -4,9 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
-using Unity;
-using WK.Libraries.HotkeyListenerNS;
 
 namespace Dolphin.Service
 {
@@ -95,25 +92,34 @@ namespace Dolphin.Service
             if (handle.IsDefault() || @event.NewOpenWindow == default) return;
 
             var actionName = settingsService.GetSmartActionName(@event.NewOpenWindow);
-            if (actionName == SmartActionName.UpgradeGem && tokenSource == null)
-            {
-                tokenSource = new CancellationTokenSource();
-                var macro = actionFinderService.FindSmartAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
+            
+            if (!settingsService.IsSmartActionEnabled(actionName)) return;
 
-                ExecuteAndResetTokenSourceAsync(macro);
-                logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
-            }
-            else if (actionName == SmartActionName.Gamble && tokenSource == null)
+            if (actionName == SmartActionName.UpgradeGem)
             {
-                tokenSource = new CancellationTokenSource();
-                var action = actionFinderService.FindSmartAction(actionName, handle.Handle);
-
-                ExecuteAndResetTokenSourceAsync(() =>
+                if (tokenSource == null)
                 {
-                    action.Invoke();
-                    Thread.Sleep(200);
-                });
-                logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
+                    tokenSource = new CancellationTokenSource();
+                    var macro = actionFinderService.FindSmartAction(actionName, handle.Handle, tokenSource, (int)@event.WindowExtraInformation[0]);
+
+                    ExecuteAndResetTokenSourceAsync(macro);
+                    logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
+                }
+            }
+            else if (actionName == SmartActionName.Gamble)
+            {
+                if (tokenSource == null)
+                {
+                    tokenSource = new CancellationTokenSource();
+                    var action = actionFinderService.FindSmartAction(actionName, handle.Handle);
+
+                    ExecuteAndResetTokenSourceAsync(() =>
+                    {
+                        action.Invoke();
+                        Thread.Sleep(200);
+                    });
+                    logService.AddEntry(this, $"Beginning to execute action... [{actionName}][{@event.NewOpenWindow}]");
+                }
             }
             else if (actionName != default)
             {

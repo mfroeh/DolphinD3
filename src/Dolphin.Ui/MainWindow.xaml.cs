@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace Dolphin.Ui.View
@@ -31,11 +30,6 @@ namespace Dolphin.Ui.View
             System.Diagnostics.Process.Start(((Hyperlink)sender).NavigateUri.OriginalString);
 
             e.Handled = true;
-        }
-
-        private void TabItem_Selected(object sender, RoutedEventArgs e)
-        {
-            ((MainViewModel)DataContext).Children.First(x => x is HotkeyTabViewModel).RaisePropertyChanged(nameof(HotkeyTabViewModel.SkillCastProfiles));
         }
     }
 }

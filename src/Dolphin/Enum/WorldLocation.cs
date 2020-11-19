@@ -5,6 +5,7 @@
         None = 0,
         Rift = 1,
         Grift = 2,
-        Menu = 3
+        Menu = 3,
+        LoadingScreen = 4,
     }
 }

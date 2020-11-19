@@ -34,10 +34,11 @@
             Header="General">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -195,10 +196,11 @@
             Header="Traveling">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -358,11 +360,11 @@
             Header="During rift">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -487,23 +489,6 @@
                 <Label
                     Grid.Row="4"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="{adonisUi:Space Left=0,
-                                            Bottom=0}"
-                    Content="Skillcast profile" />
-
-                <ComboBox
-                    Grid.Row="4"
-                    Grid.Column="3"
-                    Margin="{adonisUi:Space Left=0,
-                                            Bottom=0,
-                                            Right=.5}"
-                    ItemsSource="{Binding SkillCastProfiles}"
-                    SelectedIndex="{Binding SelectedSkillCastProfile}" />
-
-                <Label
-                    Grid.Row="5"
-                    Grid.Column="0"
                     Margin="{adonisUi:Space Left=0,
                                             Bottom=0,
                                             Right=.5}"
@@ -511,7 +496,7 @@
                     Gem options
                 </Label>
                 <WrapPanel
-                    Grid.Row="5"
+                    Grid.Row="4"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Margin="{adonisUi:Space Left=0,
@@ -542,10 +527,9 @@
             Header="Post rift">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -638,47 +622,6 @@
                     CommandParameter="{x:Static enum:ActionName.Gamble}">
                     Change
                 </Button>
-
-                <Label
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Margin="{adonisUi:Space Left=0,
-                                            Bottom=0}"
-                    VerticalAlignment="Center">
-                    Spare columns
-                </Label>
-                <ComboBox
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    Margin="{adonisUi:Space Left=0,
-                                            Bottom=0,
-                                            Right=.5}"
-                    adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
-                    adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
-                    SelectedIndex="{Binding SpareColumnIndex}">
-                    <ComboBoxItem>0</ComboBoxItem>
-                    <ComboBoxItem>1</ComboBoxItem>
-                    <ComboBoxItem>2</ComboBoxItem>
-                    <ComboBoxItem>3</ComboBoxItem>
-                </ComboBox>
-                <Label
-                    Grid.Row="4"
-                    Grid.Column="0"
-                    Margin="{adonisUi:Space Left=0,
-                                            Bottom=0}"
-                    VerticalAlignment="Center">
-                    Gamble item
-                </Label>
-                <ComboBox
-                    Grid.Row="4"
-                    Grid.Column="3"
-                    Margin="{adonisUi:Space Left=0,
-                                            Bottom=0,
-                                            Right=.5}"
-                    adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
-                    adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
-                    ItemsSource="{Binding ItemTypes}"
-                    SelectedItem="{Binding SelectedGambleItem}" />
             </Grid>
         </GroupBox>
         <GroupBox
@@ -688,9 +631,10 @@
             Header="Cube converter">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -829,15 +773,16 @@
         <GroupBox
             Grid.Row="2"
             Grid.Column="1"
-            Margin="{adonisUi:Space Left=0}"
+            Margin="{adonisUi:Space Right=0}"
             Header="Suspend skill casting">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>

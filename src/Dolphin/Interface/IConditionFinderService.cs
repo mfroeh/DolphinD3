@@ -5,6 +5,6 @@ namespace Dolphin
 {
     public interface IConditionFinderService
     {
-        Func<bool> FindCondition(SkillName skillName);
+        ConditionFunction FindCondition(SkillName skillName);
     }
 }

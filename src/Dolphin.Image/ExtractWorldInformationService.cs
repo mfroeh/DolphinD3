@@ -1,4 +1,5 @@
 ﻿using Dolphin.Enum;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Dolphin.Image
@@ -36,15 +37,10 @@ namespace Dolphin.Image
             modelService.World.OpenWindow = window;
             @event.NewOpenWindow = window;
 
-            if (window == Window.Urshi)
-            {
-                @event.WindowExtraInformation.Add(ExtractGemUpsLeft(picture));
-            }
+            @event.WindowExtraInformation.Add(ExtractExtraInformation(picture, window));
 
-            if (@event.IsLocationChanged || @event.IsWindowChanged)
-            {
-                Publish(@event);
-            }
+            //if (@event.IsLocationChanged || @event.IsWindowChanged)
+            Publish(@event);
         }
 
         public void Publish(WorldInformationChangedEvent @event)
@@ -52,22 +48,46 @@ namespace Dolphin.Image
             eventBus.Publish(@event);
         }
 
-        private int ExtractGemUpsLeft(Bitmap picture)
+        private int ExtractGemUpsLeft(Bitmap gemUpPart)
         {
-            var imagePart = imageService.CropUrshiGemUp(picture);
-
             for (int i = 1; i < 6; i++)
             {
                 var original = resourceService.Load(System.Enum.Parse(typeof(ExtraInformation), $"Urshi_{i}"));
 
-                if (ImageHelper.Compare(imagePart, original) >= 0.95f) return i;
+                if (ImageHelper.Compare(gemUpPart, original) >= 0.95f) return i;
             }
 
             return default;
         }
 
+        private object ExtractExtraInformation(Bitmap picture, Window window)
+        {
+            var imagePart = imageService.CropWindowExtraInformation(picture, Window.Urshi);
+
+            switch (window)
+            {
+                case Window.Urshi:
+                    return ExtractGemUpsLeft(imagePart);
+                case Window.AcceptGrift:
+                    return ExtractEmpoweredTicked(picture, false);
+                    // case Window.Obelisk:
+                    //    return ExtractEmpoweredTicked(picture, true);
+            }
+
+            return default;
+        }
+
+        private bool ExtractEmpoweredTicked(Bitmap picture, bool isObelisk)
+        {
+            var original = isObelisk ? resourceService.Load(ExtraInformation.ObeliskIsEmpowered) : resourceService.Load(ExtraInformation.AcceptGriftIsEmpowered);
+
+            return ImageHelper.Compare(picture, original) >= 0.95f;
+        }
+
         private WorldLocation ExtractLocation(Bitmap picture)
         {
+            if (IsVisible(WorldLocation.LoadingScreen, picture, 0.95f)) return WorldLocation.LoadingScreen;
+
             if (IsVisible(WorldLocation.Grift, picture, 0.92f)) return WorldLocation.Grift;
 
             if (IsVisible(WorldLocation.Menu, picture, 0.96f)) return WorldLocation.Menu;
@@ -76,8 +96,7 @@ namespace Dolphin.Image
             var riftPart = imageService.CropWorldLocation(picture, WorldLocation.Rift);
             for (int i = 0; i < 8; i++)
             {
-                // resourceImage = resourceService.Load(WorldLocation.Rift);
-                // if (ImageHelper.Compare(riftPart))
+                // resourceImage = resourceService.Load(WorldLocation.Rift); if (ImageHelper.Compare(riftPart))
             }
 
             return default;
@@ -90,7 +109,12 @@ namespace Dolphin.Image
                 if (IsVisible(Window.StartGame, picture, 0.95f)) return Window.StartGame;
             }
 
-            if (IsVisible(Window.Urshi, picture, 0.95f)) return Window.Urshi;
+            var windows = new List<Window> { Window.Urshi, Window.Kadala,  Window.Obelisk }; //TODO: Window.AcceptGrift
+
+            foreach (var window in windows)
+            {
+                if (IsVisible(window, picture, 0.95f)) return window;
+            }
 
             return default;
         }

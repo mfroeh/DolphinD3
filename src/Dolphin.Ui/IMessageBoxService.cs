@@ -20,6 +20,8 @@ namespace Dolphin.Ui
 
         void ShowOKCancel(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.None);
 
+        string ShowOpenFileDialog(INotifyPropertyChanged parentViewModel, OpenFileDialogSettings settings);
+
         MessageBoxResult ShowYesNo(INotifyPropertyChanged parentViewModel, string title, string message, MessageBoxImage icon = MessageBoxImage.None);
 
         void ShowYesNo(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.None);
@@ -27,7 +29,5 @@ namespace Dolphin.Ui
         MessageBoxResult ShowYesNoCancel(INotifyPropertyChanged parentViewModel, string title, string message, MessageBoxImage icon = MessageBoxImage.Question);
 
         void ShowYesNoCancel(INotifyPropertyChanged parentViewModel, string title, string message, Action<MessageBoxResult> afterDialog, MessageBoxImage icon = MessageBoxImage.Question);
-
-        string ShowOpenFileDialog(INotifyPropertyChanged parentViewModel, OpenFileDialogSettings settings);
     }
 }

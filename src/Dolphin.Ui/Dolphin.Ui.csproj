@@ -24,15 +24,17 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>dolphin.ico</ApplicationIcon>
@@ -1118,9 +1120,6 @@
     <Resource Include="Resource\Skill\Superstitious.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\Skill\Svg.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resource\Skill\Swarm.png" />
   </ItemGroup>
   <ItemGroup>
@@ -1262,6 +1261,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="dolphin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Skill\WarCry.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Skill\MantraOfConviction.png" />
+    <Resource Include="Resource\Skill\MantraOfEvasion.png" />
+    <Resource Include="Resource\Skill\MantraOfHealing.png" />
+    <Resource Include="Resource\Skill\MantraOfRetribution.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

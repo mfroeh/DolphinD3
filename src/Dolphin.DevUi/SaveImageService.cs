@@ -102,13 +102,13 @@ namespace Dolphin.DevUi
             }
         }
 
-        public void SaveUrshiGemUp(Bitmap bitmap, int gemUp)
+        public void SaveExtraInformation(Bitmap bitmap, ExtraInformation extraInformation)
         {
             Directory.CreateDirectory($"{OutputDirectoryDated}/ExtraInformation");
 
-            var image = cropWindowService.CropUrshiGemUp(bitmap);
+            var image = cropWindowService.CropWindowExtraInformation(bitmap, extraInformation);
 
-            image.Save($"{OutputDirectoryDated}/ExtraInformation/Urshi_{gemUp}.png");
+            image.Save($"{OutputDirectoryDated}/ExtraInformation/{extraInformation}.png");
         }
 
         public void SaveWindow(Bitmap bitmap, Window window)

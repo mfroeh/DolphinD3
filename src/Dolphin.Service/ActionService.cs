@@ -1,9 +1,7 @@
 ﻿using Dolphin.Enum;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Dolphin.Service
@@ -161,6 +159,27 @@ namespace Dolphin.Service
             InputHelper.SendKey(handle, openInventoryKey);
         }
 
+        // TODO: Check empowered
+        public void AcceptGriftPopup(IntPtr handle, bool clickEmpower)
+        {
+            var acceptGrift = transformService.TransformCoordinate(CommonCoordinate.AcceptGriftButton);
+            var empower = transformService.TransformCoordinate(CommonCoordinate.AcceptGriftEmpowerBox);
+
+            if (clickEmpower)
+            {
+                InputHelper.SendClick(handle, MouseButtons.Left, empower);
+            }
+
+            InputHelper.SendClick(handle, MouseButtons.Left, acceptGrift);
+        }
+
+        public void StartGame(IntPtr handle)
+        {
+            var startGame = transformService.TransformCoordinate(CommonCoordinate.StartGame);
+
+            InputHelper.SendClick(handle, MouseButtons.Left, startGame);
+        }
+
         public void Gamble(IntPtr handle, ItemType gambleItem)
         {
             var coordinates = travelService.GetKadalaCoordinates(gambleItem);
@@ -172,7 +191,7 @@ namespace Dolphin.Service
 
             for (int i = 0; i < 60; i++)
             {
-                InputHelper.SendClick(handle, MouseButtons.Left, item);
+                InputHelper.SendClick(handle, MouseButtons.Right, item);
             }
         }
 
@@ -207,8 +226,8 @@ namespace Dolphin.Service
 
         public void OpenGrift(IntPtr handle)
         {
-            var grift = transformService.TransformCoordinate(CommonCoordinate.PortalGriftButton);
-            var accept = transformService.TransformCoordinate(CommonCoordinate.PortalAccept);
+            var grift = transformService.TransformCoordinate(CommonCoordinate.ObeliskGriftButton);
+            var accept = transformService.TransformCoordinate(CommonCoordinate.ObeliskAccept);
 
             InputHelper.SendClick(handle, MouseButtons.Left, grift);
             InputHelper.SendClick(handle, MouseButtons.Left, accept);
@@ -216,8 +235,8 @@ namespace Dolphin.Service
 
         public void OpenRift(IntPtr handle)
         {
-            var rift = transformService.TransformCoordinate(CommonCoordinate.PortalRiftButton);
-            var accept = transformService.TransformCoordinate(CommonCoordinate.PortalAccept);
+            var rift = transformService.TransformCoordinate(CommonCoordinate.ObeliskRiftButton);
+            var accept = transformService.TransformCoordinate(CommonCoordinate.ObeliskAccept);
 
             InputHelper.SendClick(handle, MouseButtons.Left, rift);
             InputHelper.SendClick(handle, MouseButtons.Left, accept);
@@ -295,6 +314,24 @@ namespace Dolphin.Service
                     InputHelper.SendKey(handle, Keys.Enter);
                 }
             }
+        }
+
+        public void SkillCastLoop(IntPtr handle, CancellationTokenSource tokenSource, SkillCastConfiguration configuration, IList<Keys> skillKeybindings)
+        {
+            foreach (var index in configuration.SkillIndices)
+            {
+                var delay = configuration.Delays[index];
+
+                var key = index <= 3 ? skillKeybindings[index] : default;
+                Execute.AndForgetAsync(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
+            }
+
+            while (!IsCancelled(tokenSource))
+            {
+                Thread.Sleep(20);
+            }
+
+            return;
         }
 
         public void SwapArmour(IntPtr handle, Keys openInventoryKey, uint swapItemAmount)
@@ -380,24 +417,6 @@ namespace Dolphin.Service
                     Thread.Sleep(100);
                 }
             }
-        }
-
-        public void SkillCastLoop(IntPtr handle, CancellationTokenSource tokenSource, SkillCastConfiguration configuration, IList<Keys> skillKeybindings)
-        {
-            foreach (var index in configuration.SkillIndices)
-            {
-                var delay = configuration.Delays[index];
-
-                var key = index <= 3 ? skillKeybindings[index] : default;
-                Execute.AndForgetAsync(() => SendKeyWithDelay(handle, tokenSource, index, delay, key));
-            }
-
-            while (!IsCancelled(tokenSource))
-            {
-                Thread.Sleep(20);
-            }
-
-            return;
         }
 
         private void SendKeyWithDelay(IntPtr handle, CancellationTokenSource tokenSource, int index, int delay, Keys key = default)

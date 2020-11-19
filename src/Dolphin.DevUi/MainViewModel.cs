@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Input;
 using Window = Dolphin.Enum.Window;
 
@@ -17,10 +17,17 @@ namespace Dolphin.DevUi
 
         private readonly ISaveImageService imageService;
 
+        private string status;
+
         public MainViewModel(ICaptureWindowService captureWindowService, ISaveImageService imageService)
         {
             this.imageService = imageService;
             this.captureWindowService = captureWindowService;
+
+            // Set defaults
+            SelectedExtraInformation = PossibleExtraInformation.FirstOrDefault();
+            SelectedWindow = PossibleWindow.FirstOrDefault();
+            SelectedWorldLocation = PossibleLocation.FirstOrDefault();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -52,7 +59,7 @@ namespace Dolphin.DevUi
 
         public ICommand ClipSecondaryResourceDH => new RelayCommand((o) => ExecuteSaveAction(imageService.SavePlayerResourceSecondaryDemonHunter));
 
-        public ICommand ClipUrshiGemUp => new RelayCommand((o) => ExecuteSaveAction(imageService.SaveUrshiGemUp, SelectedGemUp));
+        public ICommand ClipExtraInformation => new RelayCommand((o) => ExecuteSaveAction(imageService.SaveExtraInformation, SelectedExtraInformation));
 
         public ICommand ClipWindow => new RelayCommand((o) => ExecuteSaveAction(imageService.SaveWindow, SelectedWindow));
 
@@ -70,17 +77,18 @@ namespace Dolphin.DevUi
             }
         }
 
-        public IList<int> PossibleGemUp => new List<int> { 1, 2, 3, 4, 5 };
+        public IList<ExtraInformation> PossibleExtraInformation => EnumHelper.GetValues<ExtraInformation>().ToList();
 
-        public IList<WorldLocation> PossibleLocation => new List<WorldLocation> { WorldLocation.Grift, WorldLocation.Menu };
+        public IList<WorldLocation> PossibleLocation => EnumHelper.GetValues<WorldLocation>().ToList();
 
-        public IList<Window> PossibleWindow => new List<Window> { Window.AcceptGrift, Window.Kadala, Window.Obelisk, Window.StartGame, Window.Urshi };
+        public IList<Window> PossibleWindow => EnumHelper.GetValues<Window>().ToList();
 
-        public int SelectedGemUp { get; set; } = 5;
+        public ExtraInformation SelectedExtraInformation { get; set; }
 
-        public Window SelectedWindow { get; set; } = Window.Urshi;
+        public Window SelectedWindow { get; set; }
 
-        private string status;
+        public WorldLocation SelectedWorldLocation { get; set; }
+
         public string Status
         {
             get => status;
@@ -90,8 +98,6 @@ namespace Dolphin.DevUi
                 RaisePropertyChanged(nameof(Status));
             }
         }
-
-        public WorldLocation SelectedWorldLocation { get; set; } = WorldLocation.Grift;
 
         private void ExecuteSaveAction(Action<Bitmap> action)
         {

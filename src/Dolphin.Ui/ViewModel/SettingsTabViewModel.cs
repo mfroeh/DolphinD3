@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -33,14 +32,11 @@ namespace Dolphin.Ui.ViewModel
             this.settingsService = settingsService;
             this.messageBoxService = messageBoxService;
 
-            PossibleKeys = System.Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList();
+            PossibleKeys = EnumHelper.GetValues<Keys>().ToList();
             SkillKeybindings = new ObservableCollection<Keys>(settingsService.Settings.SkillKeybindings);
             OtherKeybindings = new ObservableDictionary<CommandKeybinding, Keys>(settingsService.Settings.OtherKeybindings);
             updateInterval = settingsService.SmartFeatureSettings.UpdateInterval;
-            PoolSpots = new BindingList<Waypoint>(settingsService.MacroSettings.Poolspots);
             ExecuteablePaths = new Dictionary<string, string>(settingsService.UiSettings.ExecuteablePaths);
-
-            PoolSpots.ListChanged += PoolSpotsChangedHandler;
         }
 
         #endregion Public Constructors
@@ -75,8 +71,6 @@ namespace Dolphin.Ui.ViewModel
                 RaisePropertyChanged(nameof(OtherKeybindings));
             }
         }
-
-        public BindingList<Waypoint> PoolSpots { get; set; }
 
         public ICollection<Keys> PossibleKeys { get; }
 
@@ -144,11 +138,6 @@ namespace Dolphin.Ui.ViewModel
             settingsService.UiSettings.ExecuteablePaths[name] = newPath;
             ExecuteablePaths[name] = newPath;
             RaisePropertyChanged(nameof(ExecuteablePaths));
-        }
-
-        private void PoolSpotsChangedHandler(object o, ListChangedEventArgs e)
-        {
-            settingsService.MacroSettings.Poolspots = PoolSpots.ToList();
         }
 
         private void ShowResetDialog(object o)

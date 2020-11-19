@@ -60,7 +60,6 @@
                 Content="SmartFeatureSettings"
                 IsChecked="{Binding SettingsStatus[SmartFeatureSettings]}" />
 
-
             <CheckBox
                 Margin="{adonisUi:Space Left=0}"
                 Content="UiSettings"

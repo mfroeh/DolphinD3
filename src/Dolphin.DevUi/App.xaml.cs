@@ -1,6 +1,5 @@
 ﻿using Dolphin.Image;
 using Dolphin.Service;
-using System.Diagnostics;
 using System.Windows;
 
 namespace Dolphin.DevUi
@@ -13,7 +12,7 @@ namespace Dolphin.DevUi
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+
             var logService = new LogService(new Log());
             var handleService = new HandleService(logService);
             var transformService = new TransformService(handleService);

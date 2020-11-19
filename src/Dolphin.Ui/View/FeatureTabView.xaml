@@ -18,12 +18,18 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0">
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="{adonisUi:Space Top=0,
+                                    Left=0,
+                                    Right=0}">
             <GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -37,9 +43,11 @@
                         VerticalAlignment="Center"
                         Content="Enabled"
                         IsChecked="{Binding SkillCastingEnabled}"
+                        IsEnabled="{Binding SkillsCheckboxEnabled}"
                         Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                 </Grid>
             </GroupBox.Header>
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
@@ -50,218 +58,396 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <GroupBox
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="{adonisUi:Space Bottom=0,
-                                            Right=1,
-                                            Left=0,
-                                            Top=1}"
-                    Header="Demonhunter">
+                <GroupBox Margin="{adonisUi:Space Left=0, Top=0}" Header="Demonhunter">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="64" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                        </Grid.ColumnDefinitions>
+                        <WrapPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Companion.png" />
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Source="pack://application:,,,/Resource/Skill/Companion.png" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Companion}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Companion]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.Companion}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Companion]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Vengeance.png" />
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Source="pack://application:,,,/Resource/Skill/FanOfKnives.png" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Vengeance}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Vengeance]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.FanOfKnives}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)FanOfKnives]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            Source="pack://application:,,,/Resource/Skill/Preperation.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Preperation.png" />
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.Preperation}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Preperation]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Preperation}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Preperation]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="6"
-                            Source="pack://application:,,,/Resource/Skill/ShadowPower.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/ShadowPower.png" />
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="6"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.ShadowPower}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)ShadowPower]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.ShadowPower}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)ShadowPower]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="8"
-                            Source="pack://application:,,,/Resource/Skill/Vengeance.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/SmokeScreen.png" />
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="8"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.Vengeance}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Vengeance]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.SmokeScreen}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)SmokeScreen]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/FanOfKnives.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.FanOfKnives}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)FanOfKnives]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+                        </WrapPanel>
                     </Grid>
                 </GroupBox>
 
                 <GroupBox
-                    Grid.Row="0"
                     Grid.Column="1"
-                    Margin="{adonisUi:Space Bottom=0,
-                                            Right=0,
-                                            Left=1,
-                                            Top=1}"
-                    Header="Demonhunter">
+                    Margin="{adonisUi:Space Right=0,
+                                            Top=0}"
+                    Header="Necromancer">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="64" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="10" />
-                            <RowDefinition Height="64" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                            <ColumnDefinition Width="8" />
-                            <ColumnDefinition Width="64" />
-                        </Grid.ColumnDefinitions>
+                        <WrapPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/LandOfTheDead.png" />
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Source="pack://application:,,,/Resource/Skill/LandOfTheDead.png" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.LandOfTheDead}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)LandOfTheDead]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.LandOfTheDead}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)LandOfTheDead]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Simulacrum.png" />
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Source="pack://application:,,,/Resource/Skill/Simulacrum.png" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Simulacrum}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Simulacrum]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.Simulacrum}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Simulacrum]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            Source="pack://application:,,,/Resource/Skill/SkeletalMage.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/SkeletalMage.png" />
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.SkeletalMage}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)SkeletalMage]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.SkeletalMage}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)SkeletalMage]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="6"
-                            Source="pack://application:,,,/Resource/Skill/Devour.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Devour.png" />
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="6"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.Devour}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Devour]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Devour}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Devour]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <Image
-                            Grid.Row="0"
-                            Grid.Column="8"
-                            Source="pack://application:,,,/Resource/Skill/BoneArmor.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/BoneArmor.png" />
 
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="8"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.BoneArmor}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)BoneArmor]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.BoneArmor}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)BoneArmor]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
 
-                        <Image
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Source="pack://application:,,,/Resource/Skill/CommandSkeletons.png" />
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/CommandSkeletons.png" />
 
-                        <CheckBox
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            Margin="20,5,10,-5"
-                            Command="{Binding SkillCheckboxClicked}"
-                            CommandParameter="{x:Static enum:SkillName.CommandSkeletons}"
-                            IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)CommandSkeletons]}"
-                            Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.CommandSkeletons}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)CommandSkeletons]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+                        </WrapPanel>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox
+                    Grid.Row="1"
+                    Margin="{adonisUi:Space Left=0}"
+                    Header="Barbarian">
+                    <Grid>
+                        <WrapPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/IgnorePain.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.IgnorePain}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)IgnorePain]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/ThreateningShout.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.ThreateningShout}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)ThreateningShout]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/WrathOfTheBerserker.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.WrathOfTheBerserker}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)WrathOfTheBerserker]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Sprint.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Sprint}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Sprint]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/WarCry.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.WarCry}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)WarCry]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/BattleRage.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.BattleRage}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)BattleRage]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+                        </WrapPanel>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="{adonisUi:Space Left=0}"
+                    Header="Monk">
+                    <Grid>
+                        <WrapPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Epiphany.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Epiphany}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Epiphany]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/BlindingFlash.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.BlindingFlash}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)BlindingFlash]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/Serenity.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.Serenity}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)Serenity]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/MantraOfHealing.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.MantraOfHealing}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)MantraOfHealing]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/BreathOfHeaven.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.BreathOfHeaven}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)BreathOfHeaven]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="{adonisUi:Space Left=0, Top=0}" Orientation="Vertical">
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    Source="pack://application:,,,/Resource/Skill/InnerSanctuary.png" />
+
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SkillCheckboxClicked}"
+                                    CommandParameter="{x:Static enum:SkillName.InnerSanctuary}"
+                                    IsChecked="{Binding Path=EnabledSkills[(enum:SkillName)InnerSanctuary]}"
+                                    Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            </StackPanel>
+                        </WrapPanel>
                     </Grid>
                 </GroupBox>
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Grid.Column="0">
+        <GroupBox
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{adonisUi:Space Left=0,
+                                    Right=0}">
             <GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -275,6 +461,7 @@
                         VerticalAlignment="Center"
                         Content="Enabled"
                         IsChecked="{Binding SmartActionsEnabled}"
+                        IsEnabled="{Binding SmartActionsCheckboxEnabled}"
                         Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                 </Grid>
             </GroupBox.Header>
@@ -297,7 +484,12 @@
                     CommandParameter="{x:Static enum:SmartActionName.AcceptGriftPopup}"
                     Content="Accept grift popup"
                     IsChecked="{Binding Path=EnabledSmartActions[(enum:SmartActionName)AcceptGriftPopup]}" />
-
+                <CheckBox
+                    Grid.Row="1"
+                    Margin="{adonisUi:Space Top=0,
+                                            Left=0}"
+                    Content="Empower"
+                    IsChecked="{Binding EmpowerGrifts}" />
                 <CheckBox
                     Grid.Column="1"
                     Margin="{adonisUi:Space Top=0,
@@ -356,7 +548,112 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Profiles">
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox
+                Grid.Column="0"
+                Margin="{adonisUi:Space Left=0}"
+                Header="Action settings">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Margin="{adonisUi:Space Left=0, Bottom=0}" Content="Skillcast profile" />
+
+                    <ComboBox
+                        Grid.Column="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0,
+                                                Right=.5}"
+                        ItemsSource="{Binding SkillCastProfiles}"
+                        SelectedIndex="{Binding SelectedSkillCastProfile}" />
+
+                    <Label
+                        Grid.Row="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0}"
+                        VerticalAlignment="Center">
+                        Columns to spare
+                    </Label>
+                    <ComboBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0,
+                                                Right=.5}"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
+                        SelectedIndex="{Binding SpareColumnIndex}">
+                        <ComboBoxItem>0</ComboBoxItem>
+                        <ComboBoxItem>1</ComboBoxItem>
+                        <ComboBoxItem>2</ComboBoxItem>
+                        <ComboBoxItem>3</ComboBoxItem>
+                    </ComboBox>
+                    <Label
+                        Grid.Row="2"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0}"
+                        VerticalAlignment="Center">
+                        Item to gamble
+                    </Label>
+                    <ComboBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="{adonisUi:Space Left=0,
+                                                Bottom=0,
+                                                Right=.5}"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="NeverExpand"
+                        adonisExtensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
+                        ItemsSource="{Binding ItemTypes}"
+                        SelectedItem="{Binding SelectedGambleItem}" />
+
+                </Grid>
+            </GroupBox>
+            <GroupBox
+                Grid.Column="1"
+                Margin="{adonisUi:Space Right=0}"
+                Header="Poolspots">
+                <DataGrid
+                    MaxHeight="250"
+                    Margin="{adonisUi:Space Top=0}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserReorderColumns="True"
+                    CanUserSortColumns="True"
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True"
+                    ItemsSource="{Binding PoolSpots}"
+                    SelectionMode="Single"
+                    VerticalScrollBarVisibility="Visible">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Binding="{Binding Act}"
+                            Header="Act"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding Name}"
+                            Header="Waypoint"
+                            IsReadOnly="True" />
+                        <DataGridCheckBoxColumn Binding="{Binding Enabled}" Header="Enabled" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
+
+
+
+        <GroupBox Grid.Row="3" Header="Skillcast profiles">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -375,8 +672,8 @@
                     EnableColumnVirtualization="True"
                     EnableRowVirtualization="True"
                     FrozenColumnCount="1"
-                    ItemsSource="{Binding SkillCastProfiles}"
-                    SelectedItem="{Binding SelectedSkillCastProfile}"
+                    ItemsSource="{Binding SkillCastProfiles_}"
+                    SelectedItem="{Binding SelectedSkillCastProfile_}"
                     SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn
@@ -400,19 +697,19 @@
                         Margin="{adonisUi:Space Left=0,
                                                 Right=0,
                                                 Top=0}"
-                        Command="{Binding AddSkillCastProfile}"
+                        Command="{Binding AddSkillCastProfile_}"
                         Content="Add new" />
                     <Button
                         Margin="{adonisUi:Space Left=0,
                                                 Right=0,
                                                 Top=0}"
-                        Command="{Binding ChangeSelectedSkillCastProfile}"
+                        Command="{Binding ChangeSelectedSkillCastProfile_}"
                         Content="Change" />
                     <Button
                         Margin="{adonisUi:Space Left=0,
                                                 Right=0,
                                                 Top=0}"
-                        Command="{Binding DeleteSelectedSkillCastProfile}"
+                        Command="{Binding DeleteSelectedSkillCastProfile_}"
                         Content="Delete" />
                 </StackPanel>
             </Grid>

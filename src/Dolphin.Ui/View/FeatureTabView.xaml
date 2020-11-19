@@ -461,7 +461,7 @@
                         VerticalAlignment="Center"
                         Content="Enabled"
                         IsChecked="{Binding SmartActionsEnabled}"
-                        IsEnabled="{Binding SmartActionsCheckboxEnabled}"
+                        IsEnabled="{Binding SmartActionCheckboxEnabled}"
                         Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                 </Grid>
             </GroupBox.Header>

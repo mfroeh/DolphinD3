@@ -24,7 +24,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <WrapPanel
             Grid.Row="0"
@@ -45,8 +45,8 @@
         </WrapPanel>
         <Grid Grid.Row="0" Grid.Column="1">
             <DataGrid
-                MaxHeight="300"
-                Margin="{adonisUi:Space Top=0}"
+                MaxHeight="500"
+                Margin="{adonisUi:Space}"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 CanUserReorderColumns="True"

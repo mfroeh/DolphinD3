@@ -91,6 +91,8 @@ namespace Dolphin.Ui.ViewModel
 
         public uint DiabloProcessId { get; set; }
 
+        public string SmartFeaturesSupported { get; set; }
+
         public ICommand NegateSuspendedCommand
         {
             get
@@ -154,9 +156,15 @@ namespace Dolphin.Ui.ViewModel
             if (e.ProcessName == "Diablo III64")
             {
                 var newHandle = e.NewHandle;
+                var rect = newHandle.ClientRectangle;
 
                 PropertySetter(newHandle.ProcessId, nameof(DiabloProcessId));
-                PropertySetter($"{newHandle.ClientRectangle.Width}x{newHandle.ClientRectangle.Height}", nameof(DiabloClientRectangle));
+                PropertySetter($"{rect.Width}x{rect.Height}", nameof(DiabloClientRectangle));
+
+                if (VersionInformation.SupportedResolutions.Contains(rect.Size))
+                    PropertySetter("", nameof(SmartFeaturesSupported));
+                else
+                    PropertySetter("Smart features not supported for resolution.", nameof(SmartFeaturesSupported));
             }
         }
 

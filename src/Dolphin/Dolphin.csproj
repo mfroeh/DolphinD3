@@ -114,6 +114,7 @@
     <Compile Include="Enum\SkillName.cs" />
     <Compile Include="Settings\Waypoint.cs" />
     <Compile Include="Static\WindowHelper.cs" />
+    <Compile Include="VersionInformation.cs" />
     <Compile Include="WindowInformation.cs" />
   </ItemGroup>
   <ItemGroup>

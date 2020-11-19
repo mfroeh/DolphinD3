@@ -89,7 +89,10 @@
                     IsReadOnly="True"
                     Text="{Binding OpenWindow, Mode=OneWay}" />
             </WrapPanel>
-
+            <Label
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                Content="{Binding SmartFeaturesSupported}" />
             <WrapPanel
                 Grid.Row="0"
                 Grid.Column="4"

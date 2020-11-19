@@ -9,8 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:Dolphin.Ui.View"
     Title="Dolphin"
-    Width="800"
-    Height="450"
+    Width="1200"
+    Height="675"
     WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:EnumBooleanConverter x:Key="EnumBooleanConverter" />

@@ -109,7 +109,7 @@ namespace Dolphin.Image
                 if (IsVisible(Window.StartGame, picture, 0.95f)) return Window.StartGame;
             }
 
-            var windows = new List<Window> { Window.Urshi, Window.Kadala, Window.AcceptGrift, Window.Obelisk };
+            var windows = new List<Window> { Window.Urshi, Window.Kadala,  Window.Obelisk }; //TODO: Window.AcceptGrift
 
             foreach (var window in windows)
             {

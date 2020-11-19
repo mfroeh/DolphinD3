@@ -67,11 +67,18 @@ namespace Dolphin.Ui.ViewModel
             ItemTypes = EnumHelper.GetValues<ItemType>(false).ToList();
             selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
             spareColumns = settingsService.Settings.MacroSettings.SpareColumns;
+
+            SkillsCheckboxEnabled = true;
+            SmartActionCheckboxEnabled = true;
         }
 
         #endregion Public Constructors
 
         #region Public Properties
+
+        public bool SkillsCheckboxEnabled { get; set; }
+
+        public bool SmartActionCheckboxEnabled { get; set; }
 
         public ICommand AddSkillCastProfile_
         {

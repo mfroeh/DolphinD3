@@ -21,7 +21,7 @@ namespace Dolphin
                 {
                     foreach (var item in Delays.OrderBy(x => x.Key))
                     {
-                        @string += $"{item.Key}.Skill: {item.Value}, ";
+                        @string += $"{item.Key + 1}.Skill: {item.Value}, ";
                     }
                 }
                 @string += "}";

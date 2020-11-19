@@ -14,25 +14,18 @@ namespace Dolphin.Service
             this.logService = logService;
         }
 
-        public Func<bool> FindCondition(SkillName skillName)
+        public ConditionFunction FindCondition(SkillName skillName)
         {
-            var property = typeof(Condition).GetField(skillName.ToString());
+            var condition = typeof(Condition).GetMethod(skillName.ToString());
 
-            if (property == null)
+            if (condition == null)
             {
-                logService.AddEntry(this, $"{skillName} has no condition defined, defaulting to just return true.");
+                logService.AddEntry(this, $"{skillName} has no condition defined, defaulting to return cast inside grift / rift.", LogLevel.Debug);
 
-                return () => true;
+                condition = typeof(Condition).GetMethod(nameof(Condition.DefaultAlways));
             }
 
-            var conditionFunction = (Func<Player, World, Skill, bool>)property?.GetValue(null);
-
-            var skill = modelService.GetSkill(skillName);
-
-            return () =>
-            {
-                return conditionFunction.Invoke(modelService.Player, modelService.World, skill);
-            };
+            return (ConditionFunction)Delegate.CreateDelegate(typeof(ConditionFunction), condition);
         }
     }
 }

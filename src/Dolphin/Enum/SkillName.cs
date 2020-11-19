@@ -74,6 +74,7 @@ namespace Dolphin.Enum
                     yield return SkillName.FanOfKnives;
                     yield return SkillName.Preperation;
                     yield return SkillName.Companion;
+                    yield return SkillName.SmokeScreen;
                     yield break;
                 case PlayerClass.MonkFemale:
                 case PlayerClass.MonkMale:

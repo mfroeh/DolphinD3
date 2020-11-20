@@ -39,7 +39,7 @@ namespace Dolphin.Image
 
         #region WorldLocation
 
-        public static Point LocationGrift = new Point { X = 2320, Y = 42 };  // TODO: Doesnt work
+        public static Point LocationGrift = new Point { X = 2300, Y = 43 };  // Dont know if sufficient for gr 100+
         public static Point LocationMenuSymbol = new Point { X = 2000, Y = 1328 };
         public static Point LocationRiftLevel = new Point { X = 1884, Y = 7 };  // TODO: STILL 1920 x 1080
         public static Point LocationRiftSpeakToOrek = new Point { X = 1680, Y = 428 };  // TODO: STILL 1920 x 1080

@@ -68,8 +68,8 @@ namespace Dolphin.Ui.ViewModel
             selectedItem = settingsService.Settings.MacroSettings.SelectedGambleItem;
             spareColumns = settingsService.Settings.MacroSettings.SpareColumns;
 
-            SkillsCheckboxEnabled = false;
-            SmartActionCheckboxEnabled = false;
+            SkillsCheckboxEnabled = true;
+            SmartActionCheckboxEnabled = true;
         }
 
         #endregion Public Constructors

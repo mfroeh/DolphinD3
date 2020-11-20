@@ -26,6 +26,8 @@ namespace Dolphin.Service
 
         private void OnSkilCanBeCasted(object o, SkillCanBeCastedEvent @event)
         {
+            if (!settingsService.SmartFeatureSettings.SkillCastingEnabled) return;
+
             var handle = handleService.GetHandle("Diablo III64");
             if (handle.IsDefault() ||
                 !settingsService.SkillIsEnabled(@event.SkillName) ||

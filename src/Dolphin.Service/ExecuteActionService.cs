@@ -88,6 +88,8 @@ namespace Dolphin.Service
 
         private void OnWorldInformationChanged(object o, WorldInformationChangedEvent @event)
         {
+            if (!settingsService.SmartFeatureSettings.SmartActionsEnabled) return;
+
             var handle = handleService.GetHandle("Diablo III64");
             if (handle.IsDefault() || @event.NewOpenWindow == default) return;
 

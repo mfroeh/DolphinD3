@@ -19,7 +19,7 @@ namespace Dolphin.Image
 
         #region World
 
-        public static Size LocationGriftText = new Size { Width = 50, Height = 16 }; // TODO: STILL 1920 x 1080
+        public static Size LocationGriftText = new Size { Width = 70, Height = 14 }; // Dont know if this is sufficient for gr 100 +
         public static Size LocationMenu = new Size { Width = 32, Height = 42 };
         public static Size LocationRiftLevel = new Size { Width = 15, Height = 14 };  // TODO: STILL 1920 x 1080
         public static Size WorldNephalemRift = new Size { Width = 25, Height = 14 };  // TODO: STILL 1920 x 1080

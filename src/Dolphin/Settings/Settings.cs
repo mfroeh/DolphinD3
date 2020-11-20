@@ -78,34 +78,13 @@ namespace Dolphin
                 var configuration = new SkillCastConfiguration
                 {
                     SkillIndices = new List<int> { 0 },
-                    Delays = new Dictionary<int, int> { { 0, 250 } },
+                    Delays = new Dictionary<int, int> { { 0, 250 }, { 1, 500 } },
                     Name = "Profile 1"
-                };
-
-                var configuration2 = new SkillCastConfiguration
-                {
-                    SkillIndices = new List<int> { 0 },
-                    Delays = new Dictionary<int, int> { { 0, 250 } },
-                    Name = "Profile 2"
-                };
-
-                var configuration3 = new SkillCastConfiguration
-                {
-                    SkillIndices = new List<int> { 0 },
-                    Delays = new Dictionary<int, int> { { 0, 250 } },
-                    Name = "Profile 3"
-                };
-
-                var configuration4 = new SkillCastConfiguration
-                {
-                    SkillIndices = new List<int> { 0 },
-                    Delays = new Dictionary<int, int> { { 0, 250 } },
-                    Name = "Profile 4"
                 };
 
                 return new SkillCastSettings
                 {
-                    SkillCastConfigurations = new List<SkillCastConfiguration> { configuration, configuration2, configuration3, configuration4 },
+                    SkillCastConfigurations = new List<SkillCastConfiguration> { configuration },
                     SelectedIndex = 0
                 };
             }
@@ -119,22 +98,8 @@ namespace Dolphin
             {
                 return new SmartFeatureSettings
                 {
-                    EnabledSkills = new List<SkillName>
-                                                {
-                                                    SkillName.Devour,
-                                                    SkillName.LandOfTheDead,
-                                                    SkillName.SkeletalMage,
-                                                    SkillName.BoneArmor,
-                                                    SkillName.Simulacrum
-                                                },
-                    EnabledSmartActions = new List<SmartActionName>
-                                                    {
-                                                        SmartActionName.Gamble,
-                                                        SmartActionName.AcceptGriftPopup,
-                                                        SmartActionName.OpenRiftGrift,
-                                                        SmartActionName.UpgradeGem,
-                                                        SmartActionName.StartGame
-                                                    },
+                    EnabledSkills = new List<SkillName>(),
+                    EnabledSmartActions = new List<SmartActionName>(),
                     IsOpenRift = true,
                     SkillSuspensionStatus = new bool[6],
                     UpdateInterval = 100
